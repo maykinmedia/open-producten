@@ -1,0 +1,19 @@
+-c ci.txt
+
+# Helpers
+pip-tools
+bump2version
+gitpython
+
+# Code formatting
+black
+isort[colors]
+# flake8 -> pins importlib-metadata < 4.3 on Python < 3.10, which conflicts with other packages
+
+# Debug tooling
+django-debug-toolbar
+django-extensions
+
+# Documentation
+sphinx
+sphinx_rtd_theme

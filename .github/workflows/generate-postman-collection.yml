@@ -1,0 +1,32 @@
+name: generate-postman-collection
+
+on:
+  push:
+    paths:
+      - "src/open_producten/api/v*/openapi.yaml"
+      - ".github/workflows/generate-postman-collection.yml"
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ 'v1' ]
+
+    name: Run with version $
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install -g openapi-to-postmanv2
+      - name: Create tests folder
+        run: mkdir -p ./tests/postman
+      - name: Generate Postman collection
+        run: openapi2postmanv2 -s ./src/open_producten/api/$/openapi.yaml -o ./tests/postman/collection.json --pretty

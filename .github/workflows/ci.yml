@@ -1,0 +1,302 @@
+name: Run build pipeline
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  push:
+    branches:
+      - main
+      - stable/*
+    tags:
+      - '*'
+  pull_request:
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: maykinmedia/open_producten
+  DJANGO_SETTINGS_MODULE: open_producten.conf.ci
+  DOCKER_BUILDKIT: '1'
+
+jobs:
+  tests:
+    name: Run the Django test suite
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        # Needed because the postgres container does not provide a healthcheck
+        options:
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up backend environment
+        uses: maykinmedia/setup-django-backend@v1
+        with:
+          python-version: '3.10.9'
+          optimize-postgres: 'yes'
+          pg-service: 'postgres'
+          setup-node: 'yes'
+          # apt-packages: 'gettext postgresql-client'  # the default
+          # npm-ci-flags: '--legacy-peer-deps' -> preferably use a .npmrc file
+
+      # Any additional services -> create docker-compose setups in a (new) `docker`
+      # subdirectory.
+      # - name: Start CI docker services
+      #   run: |
+      #     docker-compose -f docker-compose.ci.yml up -d
+      #   working-directory: docker
+
+      - name: Run tests
+        run: |
+          python src/manage.py compilemessages
+          python src/manage.py collectstatic --noinput --link
+          coverage run src/manage.py test src
+        env:
+          SECRET_KEY: dummy
+          DB_USER: postgres
+          DB_PASSWORD: ''
+
+      - name: Publish coverage report
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: $
+
+      # API projects: implement the necessary scripts for this. You can take a look
+      # at open-forms for inspiration, using drf-spectacular.
+      # - name: Generate OAS
+      #   run: ./bin/generate_oas.sh openapi.yaml
+
+      # - name: Store generated OAS
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: open_producten-oas
+      #     path: openapi.yaml
+      #     retention-days: 1
+
+  # docs:
+  #   name: Build and check documentation
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.9'
+
+  #     # - name: Install OS dependencies
+  #     #   run: |
+  #     #     sudo apt-get update
+  #     #     sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+
+  #     - name: Install dependencies
+  #       run: |
+  #         pip install -r requirements/ci.txt
+
+  #     - name: Build and test docs
+  #       working-directory: docs
+  #       run: pytest check_sphinx.py -v --tb=auto
+
+  docker_build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set tag
+        id: vars
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name (if present at all)
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          # PRs result in version 'merge' -> transform that into 'latest'
+          [ "$VERSION" == "merge" ] && VERSION=latest
+
+          echo "tag=${VERSION}" >> $GITHUB_OUTPUT
+          echo "git_hash=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Build the production Docker image
+        run: |
+          docker build . \
+            --tag $IMAGE_NAME:$RELEASE_VERSION \
+            --build-arg COMMIT_HASH=${{ steps.vars.outputs.git_hash }} \
+            --build-arg RELEASE=${{ steps.vars.outputs.tag }} \
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+
+      - run: docker image save -o image.tar $IMAGE_NAME:${{ steps.vars.outputs.tag }}
+      - name: Store image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1
+
+  # API projects: implement the necessary scripts for this. You can take a look
+  # at open-forms for inspiration, using drf-spectacular.
+  # oas-up-to-date:
+  #   needs: tests
+  #   name: Check for unexepected OAS changes
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download generated OAS
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: open_producten-oas
+  #     - name: Check for OAS changes
+  #       run: |
+  #         diff openapi.yaml src/openapi.yaml
+  #     - name: Write failure markdown
+  #       if: ${{ failure() }}
+  #       run: |
+  #         echo 'Run the following command locally and commit the changes' >> $GITHUB_STEP_SUMMARY
+  #         echo '' >> $GITHUB_STEP_SUMMARY
+  #         echo '```bash' >> $GITHUB_STEP_SUMMARY
+  #         echo './bin/generate_oas.sh' >> $GITHUB_STEP_SUMMARY
+  #         echo '```' >> $GITHUB_STEP_SUMMARY
+  #
+  # oas-lint:
+  #   needs: oas-up-to-date
+  #   name: Validate OAS
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download generated OAS
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: open_producten-oas
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version-file: '.nvmrc'
+  #     - name: Install spectral
+  #       run: npm install -g @stoplight/spectral@5.9.2
+  #     - name: Run OAS linter
+  #       run: spectral lint ./openapi.yaml
+
+  # oas-postman:
+  #   needs: oas-up-to-date
+  #   name: Generate Postman collection from OAS
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download generated OAS
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: open_producten-oas
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version-file: '.nvmrc'
+  #     - name: Install dependencies
+  #       run: npm install -g openapi-to-postmanv2
+  #     - name: Create tests folder
+  #       run: mkdir -p ./tests/postman
+  #     - name: Generate Postman collection
+  #       run: openapi2postmanv2 -s ./openapi.yaml -o ./tests/postman/collection.json --pretty
+
+  # oas-generate-sdks:
+  #   needs: oas-up-to-date
+  #   name: Generate SDKs from OAS
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download generated OAS
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: open_producten-oas
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version-file: '.nvmrc'
+  #     - name: Install dependencies
+  #       run: npm install -g @openapitools/openapi-generator-cli@2.4.2
+  #     - name: Validate schema
+  #       run: openapi-generator-cli validate -i ./openapi.yaml
+  #     - name: Generate Java client
+  #       run:
+  #         openapi-generator-cli generate -i ./openapi.yaml
+  #         --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \ -o
+  #         ./sdks/java -g java
+  #         --additional-properties=dateLibrary=java8,java8=true,optionalProjectFile=false,optionalAssemblyInfo=false
+  #     - name: Generate .NET Core client
+  #       run:
+  #         openapi-generator-cli generate -i ./openapi.yaml
+  #         --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \ -o
+  #         ./sdks/netcore -g csharp-netcore
+  #         --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false
+  #     - name: Generate .NET Full Framework client
+  #       run:
+  #         openapi-generator-cli generate -i ./openapi.yaml
+  #         --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \ -o
+  #         ./sdks/net -g csharp
+  #         --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false
+  #     - name: Generate Python client
+  #       run:
+  #         openapi-generator-cli generate -i ./openapi.yaml
+  #         --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \ -o
+  #         ./sdks/python -g python
+  #         --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false+
+
+  docker_push:
+    needs:
+      - tests
+      - docker_build
+      # - oas-lint
+      # - oas-postman
+      # - oas-generate-sdks
+
+    name: Push Docker image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' # Exclude PRs
+
+    steps:
+      # This will include the updated OAS (if updated) from the update-oas job.
+      - uses: actions/checkout@v3
+
+      - name: Download built image
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-image
+
+      - name: Set tag
+        id: vars
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name (if present at all)
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          echo "tag=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Load image
+        run: |
+          docker image load -i image.tar
+
+      - name: Log into registry
+        run:
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }}
+          --password-stdin
+
+      - name: Push the Docker image (production)
+        run: docker push $IMAGE_NAME:$RELEASE_VERSION
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}

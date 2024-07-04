@@ -1,0 +1,10 @@
+SECRET_KEY="django-insecure-@4wj9(+*bu7*v&%on7+e_8!d1ckl%r=6+sz$#d2$!pw^@lb0+="
+DB_NAME="open_producten"
+DB_USER="open_producten"
+#
+# For peer authentication via unix domain socket
+# these should be kept empty.
+#
+DB_PASSWORD=""
+DB_HOST=""
+DB_PORT=""

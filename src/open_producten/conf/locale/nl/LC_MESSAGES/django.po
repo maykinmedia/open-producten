@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-13 20:35+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: foobar/accounts/models.py:18
+msgid "username"
+msgstr "gebruikersnaam"
+
+#: foobar/accounts/models.py:22
+msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr ""
+"Vereist. 150 tekens of minder. Alleen letters, cijfers en @/,/+/-/_ tekens "
+"zijn toegestaan."
+
+#: foobar/accounts/models.py:26
+msgid "A user with that username already exists."
+msgstr "Een gebruiker met deze gebruikersnaam bestaat al."
+
+#: foobar/accounts/models.py:29
+msgid "first name"
+msgstr "voornaam"
+
+#: foobar/accounts/models.py:30
+msgid "last name"
+msgstr "achternaam"
+
+#: foobar/accounts/models.py:31
+msgid "email address"
+msgstr "e-mailadres"
+
+#: foobar/accounts/models.py:33
+msgid "staff status"
+msgstr "stafstatus"
+
+#: foobar/accounts/models.py:35
+msgid "Designates whether the user can log into this admin site."
+msgstr "Bepaalt of de gebruiker zich op deze beheerwebsite kan aanmelden."
+
+#: foobar/accounts/models.py:38
+msgid "active"
+msgstr "actief"
+
+#: foobar/accounts/models.py:41
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+"Bepaalt of deze gebruiker als actief dient te worden behandeld. U kunt dit "
+"uitvinken in plaats van een gebruiker te verwijderen."
+
+#: foobar/accounts/models.py:45
+msgid "date joined"
+msgstr "datum toegetreden"
+
+#: foobar/accounts/models.py:53
+msgid "user"
+msgstr "gebruiker"
+
+#: foobar/accounts/models.py:54
+msgid "users"
+msgstr "gebruikers"
+
+#: foobar/accounts/utils.py:18
+msgid "You need to be superuser to create other superusers."
+msgstr ""
+"U dient een supergebruiker te zijn om andere supergebruikers aan te maken."
+
+#: foobar/accounts/utils.py:44
+msgid "You cannot create or update a user with more permissions than yourself."
+msgstr "U kunt een gebruiker niet meer rechten geven dan u zelf heeft."
+
+#: foobar/templates/admin/base_site.html:5
+#: foobar/templates/admin/base_site.html:24
+msgid "Administration"
+msgstr "Beheer"
+
+#: foobar/templates/admin/base_site.html:41
+msgid "View 2fa profile"
+msgstr "Tweestapsauthenticatie beheren"
+
+#: foobar/templates/admin/base_site.html:44
+msgid "Change password"
+msgstr "Wachtwoord wijzigen"
+
+#: foobar/templates/admin/base_site.html:46
+msgid "Log out"
+msgstr "Afmelden"
+
+#: foobar/templates/admin/base_site__admintools.html:4
+msgid "admin"
+msgstr "beheer"
+
+#: foobar/templates/admin/base_site__admintools.html:17
+msgid "administration"
+msgstr "beheer"
+
+#: foobar/templates/hijack/contrib/admin/button.html:6
+msgid "hijack"
+msgstr "overnemen"
+
+#: foobar/templates/hijack/contrib/admin/button.html:8
+#, python-format
+msgid "Hijack %(username)s"
+msgstr "Inloggen als %(username)s"
+
+#: foobar/templates/samples/pager.html:8 foobar/templates/samples/pager.html:10
+msgid "Previous"
+msgstr "Vorige"
+
+#: foobar/templates/samples/pager.html:16
+#: foobar/templates/samples/pager.html:18
+msgid "Next"
+msgstr "Volgende"
+
+#: foobar/utils/management/commands/clear_cache.py:10
+msgid "Clear given cache only"
+msgstr "Leeg alleen de opgegeven cache"
+
+#: foobar/utils/validators.py:22
+#, python-format
+msgid "The provided value contains an invalid character: %s"
+msgstr "Uw invoer bevat een ongeldig teken: %s"
+
+#: foobar/utils/validators.py:30
+msgid "Invalid mobile phonenumber."
+msgstr "Ongeldig mobiel telefoonnumer."
+
+#: foobar/utils/validators.py:50
+msgid "Invalid postal code."
+msgstr "Ongeldige postcode."

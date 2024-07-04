@@ -1,0 +1,25 @@
+# Core python libraries
+Pillow  # handle images
+psycopg2  # database driver
+python-dotenv  # environment variables for secrets
+python-decouple  # processing of envvar configs
+
+# Framework libraries
+django ~= 4.2
+django-admin-index
+django-axes
+django-hijack
+django-redis
+django-rosetta
+maykin-2fa
+
+# API libraries
+# djangorestframework
+# django-extra-fields
+# django-filter
+# drf-yasg  # api documentation
+
+# WSGI servers & monitoring - production oriented
+uwsgi
+sentry-sdk  # error monitoring
+elastic-apm  # Elastic APM integration

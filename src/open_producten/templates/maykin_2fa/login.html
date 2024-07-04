@@ -1,0 +1,21 @@
+{% extends "maykin_2fa/login.html" %}
+{% load i18n %}
+
+
+{% block footer %}
+    <div id="footer"></div>
+{% endblock %}
+
+
+{% block extra_login_options %}
+{#Include additional (OIDC) authentication options here #}
+{% endblock %}
+
+
+{% block extra_recovery_options %}
+<li>
+    <a href="URL_TO_TICKET_OR_SUPPORT_SYSTEM">
+        {% trans 'Contact support' %}
+    </a>
+</li>
+{% endblock extra_recovery_options %}

@@ -1,0 +1,67 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en" class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}Open_Producten{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{% static 'ico/favicon.svg' %}" sizes="any" rel="icon" type="image/svg+xml" />
+        <link href="{% static 'ico/favicon-96x96.png' %}" sizes="96x96" rel="icon" type="image/png" />
+        <link href="{% static 'ico/favicon-32x32.png' %}" sizes="32x32" rel="icon" type="image/png" />
+        <link href="{% static 'ico/favicon.png' %}" sizes="16x16" rel="icon" type="image/png" />
+        <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
+        <link href="{% static 'bundles/open_producten-css.css' %}" media="all" rel="stylesheet" />
+        {% block extra_css %}{% endblock %}
+    </head>
+
+    <body class="view__body">
+        <main>
+            {% block content %}
+                Override <code>{% verbatim %}{% block content %}{% endverbatim %}</code>
+                to get some actual content.
+            {% endblock %}
+        </main>
+
+        <footer class="footer container">
+            <div class="footer__row">
+              <div class="footer__col footer__col--small">
+                <img src="{% static 'ico/favicon-96x96.png' %}" alt="Maykin logo" height="48">
+                <p>
+                  Developed by <a class="link" href="https://www.maykinmedia.nl">Maykin</a><br>
+                  within the <a class="link" href="https://opengem.nl">Open Gemeente Initiatief</a> &copy; 2024<br>
+                  
+                </p>
+              </div>
+              <div class="footer__col">
+                <h5 class="footer__header">open_producten</h5>
+                <ul class="footer__list">
+                  <li><a class="link link--muted" href="https://hub.docker.com/r/maykinmedia/open_producten">Docker images</a></li>
+                  <li><a class="link link--muted" href="https://github.com/maykinmedia/open_producten">Code on Github</a></li>
+                </ul>
+              </div>
+              <div class="footer__col">
+                <h5 class="footer__header">Other</h5>
+                <ul class="footer__list">
+                  <li>Report <a class="link link--muted" href="https://github.com/maykinmedia/open_producten/issues">issues</a> for questions, bugs or wishes</li>
+                  <li>Read more on <a class="link link--muted" href="https://commonground.nl/">Common Ground</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="footer__row">
+              <div class="footer__col">
+                <code>{{ settings.RELEASE }}</code>
+              </div>
+              <div class="footer__col footer__col--right">
+                <code>{{ settings.GIT_SHA|default:"" }}</code>
+              </div>
+            </div>
+          </footer>
+        
+        {% if dsn %}
+            <script src="https://browser.sentry-cdn.com/5.10.1/bundle.min.js" integrity="sha384-sAOze6ZTBIpiWBF3VlUteSInM4rYpjxrejp1wMmmKqA9clRZ1vZJ36Ihmt1ilTrG" crossorigin="anonymous"></script>
+            <script>Sentry.init({ dsn: '{{ dsn }}'});</script>
+        {% endif %}
+        <script src="{% static 'bundles/open_producten-js.js' %}"></script>
+
+    </body>
+</html>
