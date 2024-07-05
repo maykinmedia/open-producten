@@ -2,9 +2,8 @@
 Pillow  # handle images
 
 open-api-framework
-
+django-treebeard
 # Framework libraries
-# django-hijack
 # django-rosetta
 
 # API libraries

@@ -15,8 +15,10 @@ INSTALLED_APPS += [
     # 'hijack',
     # 'hijack.contrib.admin',
     # Project applications.
+    "treebeard",
     "open_producten.accounts",
     "open_producten.utils",
+    "open_producten.producttypes",
 ]
 
 MIDDLEWARE += [
