@@ -463,7 +463,7 @@ notifications-api-common==0.2.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
-open-api-framework==0.5.0
+open-api-framework==0.6.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt

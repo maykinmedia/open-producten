@@ -532,7 +532,7 @@ notifications-api-common==0.2.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   commonground-api-common
-open-api-framework==0.5.0
+open-api-framework==0.6.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt

@@ -66,10 +66,3 @@ ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
 # HIJACK_INSERT_BEFORE = (
 #     '<div class='content'>'  # note that this only applies to the admin
 # )
-
-
-# needed until open-api-framework is updated
-# Use custom callback view to handle admin login error situations
-# NOTE the AdminLoginFailure view for mozilla-django-oidc-db should be added to the projects
-# urlpatterns to properly catch errors
-OIDC_CALLBACK_CLASS = "mozilla_django_oidc_db.views.OIDCCallbackView"
