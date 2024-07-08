@@ -42,6 +42,8 @@ billiard==4.2.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   celery
+black==24.4.2
+    # via -r requirements/test-tools.in
 bleach==6.1.0
     # via
     #   -c requirements/base.txt
@@ -86,6 +88,7 @@ click==8.1.7
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   black
     #   celery
     #   click-didyoumean
     #   click-plugins
@@ -458,6 +461,8 @@ mozilla-django-oidc-db==0.19.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
+mypy-extensions==1.0.0
+    # via black
 notifications-api-common==0.2.2
     # via
     #   -c requirements/base.txt
@@ -481,7 +486,10 @@ packaging==24.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   black
     #   drf-yasg
+pathspec==0.12.1
+    # via black
 phonenumberslite==8.13.40
     # via
     #   -c requirements/base.txt
@@ -492,7 +500,9 @@ pillow==10.4.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
 platformdirs==4.2.2
-    # via pylint
+    # via
+    #   black
+    #   pylint
 prometheus-client==0.20.0
     # via
     #   -c requirements/base.txt

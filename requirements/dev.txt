@@ -53,7 +53,10 @@ billiard==4.2.0
     #   -r requirements/ci.txt
     #   celery
 black==24.4.2
-    # via -r requirements/dev.in
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/dev.in
 bleach==6.1.0
     # via
     #   -c requirements/ci.txt
@@ -526,7 +529,10 @@ mozilla-django-oidc-db==0.19.0
     #   -r requirements/ci.txt
     #   open-api-framework
 mypy-extensions==1.0.0
-    # via black
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   black
 notifications-api-common==0.2.2
     # via
     #   -c requirements/ci.txt
@@ -555,7 +561,10 @@ packaging==24.1
     #   drf-yasg
     #   sphinx
 pathspec==0.12.1
-    # via black
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   black
 phonenumberslite==8.13.40
     # via
     #   -c requirements/ci.txt
