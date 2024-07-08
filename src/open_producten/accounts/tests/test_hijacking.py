@@ -1,9 +1,7 @@
 from django.test import TestCase
 from django.urls import NoReverseMatch, reverse
 
-
 from .factories import UserFactory
-
 
 
 class HijackSecurityTests(TestCase):

@@ -6,7 +6,10 @@ from django.utils.module_loading import import_string
 
 
 class BeatConfigTests(SimpleTestCase):
-    @skipIf(not hasattr(settings, "CELERY_BEAT_SCHEDULE"), "Project does not have celery (beat config)")
+    @skipIf(
+        not hasattr(settings, "CELERY_BEAT_SCHEDULE"),
+        "Project does not have celery (beat config)",
+    )
     def test_task_references_correct(self):
         """
         Assert that the task import paths in the Beat config are valid.

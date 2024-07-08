@@ -67,9 +67,7 @@ MAYKIN_2FA_ALLOW_MFA_BYPASS_BACKENDS = AUTHENTICATION_BACKENDS
 INSTALLED_APPS += [
     "django_jenkins",
 ]
-PROJECT_APPS = [
-    app for app in INSTALLED_APPS if app.startswith("open_producten.")
-]
+PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith("open_producten.")]
 JENKINS_TASKS = (
     # 'django_jenkins.tasks.run_pylint',  # Pylint < 2.0 does not run on Python 3.7+
     # "django_jenkins.tasks.run_pep8",  # -> renamed to pycodestyle, but django-jenkins hasn't been updated in 6 years

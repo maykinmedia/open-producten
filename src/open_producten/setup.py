@@ -9,6 +9,7 @@ they are available for Django settings initialization.
     do NOT import anything Django related here, as this file needs to be loaded
     before Django is initialized.
 """
+
 import logging
 import os
 from pathlib import Path
@@ -40,9 +41,7 @@ def monkeypatch_requests():
     try:
         from requests import Session
     except ModuleNotFoundError:
-        logger.debug(
-            "Attempt to patch requests, but the library is not installed"
-        )
+        logger.debug("Attempt to patch requests, but the library is not installed")
         return
 
     if hasattr(Session, "_original_request"):

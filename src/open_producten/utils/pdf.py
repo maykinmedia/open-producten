@@ -10,6 +10,7 @@ with a context into a PDF document (bytes output). You can use "external" styles
 in these templates, and they will be resolved through django's staticfiles machinery
 by the custom :class:`UrlFetcher`.
 """
+
 import logging
 import mimetypes
 from io import BytesIO
@@ -49,7 +50,6 @@ def get_base_url() -> str:
 
 
 class UrlFetcher:
-
     """
     URL fetcher that skips the network for /static/* files.
     """

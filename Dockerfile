@@ -82,7 +82,7 @@ COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 COPY --from=backend-build /app/src/ /app/src/
 
 # copy frontend build statics
-COPY --from=frontend-build /app/src/open_producten/static /app/src/open_producten/static
+# COPY --from=frontend-build /app/src/open_producten/static /app/src/open_producten/static
 
 # copy source code
 COPY ./src /app/src

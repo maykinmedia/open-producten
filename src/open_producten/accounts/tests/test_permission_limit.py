@@ -49,14 +49,20 @@ class PasswordResetViewTests(TestCase):
         super().setUp()
 
         self.superuser = UserFactory.create(
-            username="superuser", password="secret", superuser=True,
+            username="superuser",
+            password="secret",
+            superuser=True,
         )
         self.other_superuser = UserFactory.create(
-            username="other_superuser", password="secret", superuser=True,
+            username="other_superuser",
+            password="secret",
+            superuser=True,
         )
 
         self.less_perms_staff_user = UserFactory.create(
-            username="less_perms_staff_user", password="secret", is_staff=True,
+            username="less_perms_staff_user",
+            password="secret",
+            is_staff=True,
         )
         for p in Permission.objects.filter(
             content_type=ContentType.objects.get(app_label="accounts", model="user")
@@ -64,7 +70,9 @@ class PasswordResetViewTests(TestCase):
             self.less_perms_staff_user.user_permissions.add(p)
 
         self.more_perms_staff_user = UserFactory.create(
-            username="more_perms_staff_user", password="secret", is_staff=True,
+            username="more_perms_staff_user",
+            password="secret",
+            is_staff=True,
         )
         for p in Permission.objects.all():
             self.more_perms_staff_user.user_permissions.add(p)

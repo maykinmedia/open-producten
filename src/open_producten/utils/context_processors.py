@@ -10,9 +10,7 @@ def settings(request):
     )
 
     context = {
-        "settings": {
-            k: getattr(django_settings, k, None) for k in public_settings
-        },
+        "settings": {k: getattr(django_settings, k, None) for k in public_settings},
     }
 
     if hasattr(django_settings, "SENTRY_CONFIG"):
