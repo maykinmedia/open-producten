@@ -110,15 +110,6 @@ msgstr "beheer"
 msgid "administration"
 msgstr "beheer"
 
-#: foobar/templates/hijack/contrib/admin/button.html:6
-msgid "hijack"
-msgstr "overnemen"
-
-#: foobar/templates/hijack/contrib/admin/button.html:8
-#, python-format
-msgid "Hijack %(username)s"
-msgstr "Inloggen als %(username)s"
-
 #: foobar/templates/samples/pager.html:8 foobar/templates/samples/pager.html:10
 msgid "Previous"
 msgstr "Vorige"

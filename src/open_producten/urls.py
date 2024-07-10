@@ -37,7 +37,6 @@ urlpatterns = [
     # Use custom login views for the admin + support hardware tokens
     path("admin/", include((urlpatterns, "maykin_2fa"))),
     path("admin/", include((webauthn_urlpatterns, "two_factor"))),
-    path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
     path(
         "reset/<uidb64>/<token>/",
