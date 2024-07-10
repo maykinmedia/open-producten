@@ -12,18 +12,11 @@ INSTALLED_APPS += [
     # 'django.contrib.humanize',
     # 'django.contrib.sitemaps',
     # External applications.
-    # 'hijack',
-    # 'hijack.contrib.admin',
     # Project applications.
     "treebeard",
     "open_producten.accounts",
     "open_producten.utils",
     "open_producten.producttypes",
-]
-
-MIDDLEWARE += [
-    # 'django.middleware.locale.LocaleMiddleware',
-    # 'hijack.middleware.HijackUserMiddleware',
 ]
 
 #
@@ -60,11 +53,3 @@ REQUESTS_DEFAULT_TIMEOUT = (10, 30)
 ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
     "open_producten.utils.django_two_factor_auth.should_display_dropdown_menu"
 )
-
-#
-# DJANGO-HIJACK
-#
-# HIJACK_PERMISSION_CHECK = 'maykin_2fa.hijack.superusers_only_and_is_verified'
-# HIJACK_INSERT_BEFORE = (
-#     '<div class='content'>'  # note that this only applies to the admin
-# )
