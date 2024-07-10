@@ -12,6 +12,7 @@ class Field(models.Model):
 
     class FieldTypes(models.TextChoices):
         """Formio field types used in Open Forms."""
+
         BSN = "bsn"
         CHECKBOX = "checkbox"
         COSIGN = "Cosign"
@@ -44,8 +45,8 @@ class Field(models.Model):
     product_type = models.ForeignKey(
         ProductType,
         on_delete=models.CASCADE,
-        verbose_name=_("Product"),
-        help_text=_("The product that this field is part of"),
+        verbose_name=_("Product Type"),
+        help_text=_("The product type that this field is part of"),
         related_name="fields",
     )
     is_required = models.BooleanField(default=False)

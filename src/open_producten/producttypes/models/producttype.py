@@ -3,9 +3,26 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.core.models import BaseModel
+
+from .category import Category
 from .condition import Condition
 from .tag import Tag
 from .upn import Upn
+
+
+class CategoryProductType(models.Model):
+    """
+    explicit many2many through model
+    """
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    product = models.ForeignKey("ProductType", on_delete=models.CASCADE)
+    order_with_respect_to = "category"
+
+    def get_product_name(self):
+        return self.product.name
+
+    get_product_name.short_description = _("Name")
 
 
 class ProductType(BaseModel):
@@ -73,12 +90,12 @@ class ProductType(BaseModel):
         verbose_name=_("Uniform Product name"),
         on_delete=models.CASCADE,
         help_text=_("Uniform product name defined by Dutch gov"),
-        related_name="producttypes",
+        related_name="product_types",
     )
 
     conditions = models.ManyToManyField(
         Condition,
-        related_name="producttypes",
+        related_name="product_types",
         verbose_name=_("Conditions"),
         blank=True,
         help_text=_("Conditions applicable for the product type"),
@@ -88,8 +105,17 @@ class ProductType(BaseModel):
         Tag,
         verbose_name=_("Tags"),
         blank=True,
-        related_name="products",
+        related_name="product_types",
         help_text=_("Tags which the product is linked to"),
+    )
+
+    categories = models.ManyToManyField(
+        Category,
+        verbose_name=_("Categories"),
+        blank=True,
+        related_name="product_types",
+        help_text=_("Categories which the product is linked to"),
+        through=CategoryProductType,
     )
 
     class Meta:
