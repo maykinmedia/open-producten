@@ -17,9 +17,9 @@ from open_producten.accounts.views.password_reset import PasswordResetView
 monkeypatch_admin()
 
 handler500 = "open_producten.utils.views.server_error"
-admin.site.site_header = "open_producten admin"
-admin.site.site_title = "open_producten admin"
-admin.site.index_title = "open_producten dashboard"
+admin.site.site_header = "Open Producten admin"
+admin.site.site_title = "Open Producten admin"
+admin.site.index_title = "Open Producten dashboard"
 
 # URL routing
 
