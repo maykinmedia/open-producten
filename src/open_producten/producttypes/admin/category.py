@@ -33,27 +33,32 @@ class CategoryAdminForm(movenodeform_factory(Category)):
                     _("Parent nodes have to be published in order to publish a child.")
                 )
 
+        if (
+            not published
+            and self.instance.get_children().filter(published=True).exists()
+        ):
+            raise forms.ValidationError(
+                _("Parent nodes cannot be unpublished if they have published children.")
+            )
+
 
 class CategoryAdminFormSet(BaseModelFormSet):
     def clean(self):
-        for row in self.cleaned_data:
-            current_node = row["id"]
-            children = current_node.get_children()
+
+        data = {
+            form.cleaned_data["id"]: form.cleaned_data["published"]
+            for form in self.forms
+        }
+
+        for category, published in data.items():
+            children = category.get_children()
+
             if children:
-                if not row["published"] and children.published().exists():
+                if not published and any([data[child] for child in children]):
                     raise forms.ValidationError(
-                        _(
-                            "Parent nodes cannot be unpublished if they have published children."
-                        )
+                        _("Parent nodes cannot be unpublished with published children.")
                     )
-            if (
-                row["published"]
-                and not current_node.is_root()
-                and not current_node.get_parent().published
-            ):
-                raise forms.ValidationError(
-                    _("Parent nodes have to be published in order to publish a child.")
-                )
+
         return super().clean()
 
 

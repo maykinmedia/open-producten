@@ -13,6 +13,7 @@ from .producttype import ProductType
 class Price(BaseModel):
     product_type = models.ForeignKey(
         ProductType,
+        verbose_name=_("Product type"),
         on_delete=models.CASCADE,
         related_name="prices",
         help_text=_("The product type that this price belongs to"),
@@ -27,6 +28,7 @@ class Price(BaseModel):
     class Meta:
         verbose_name = _("Price")
         verbose_name_plural = _("Prices")
+        unique_together = ("product_type", "valid_from")
 
     def __str__(self):
         return f"{self.product_type.name} {self.valid_from}"
@@ -35,6 +37,7 @@ class Price(BaseModel):
 class PriceOption(BaseModel):
     price = models.ForeignKey(
         Price,
+        verbose_name=_("Price"),
         on_delete=models.CASCADE,
         related_name="options",
         help_text=_("The price this option belongs to"),
@@ -50,7 +53,7 @@ class PriceOption(BaseModel):
     description = models.CharField(
         verbose_name=_("Description"),
         max_length=100,
-        help_text=_("The description of the option"),
+        help_text=_("Short description of the option"),
     )
 
     class Meta:

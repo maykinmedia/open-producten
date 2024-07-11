@@ -9,8 +9,14 @@ from .producttype import ProductType
 
 
 class Field(BaseModel):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=255, help_text=_("The name of the field")
+    )
+    description = models.TextField(
+        verbose_name=_("Description"),
+        help_text=_("Short description of the field"),
+        max_length=300,
+    )
 
     class FieldTypes(models.TextChoices):
         """Formio field types used in Open Forms."""

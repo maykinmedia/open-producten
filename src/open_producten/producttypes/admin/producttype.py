@@ -10,7 +10,7 @@ from .link import LinkInline
 from .question import QuestionInline
 
 
-class ProductAdminForm(forms.ModelForm):
+class ProductTypeAdminForm(forms.ModelForm):
     class Meta:
         model = ProductType
         fields = "__all__"
@@ -43,7 +43,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name",)
     save_on_top = True
-    form = ProductAdminForm
+    form = ProductTypeAdminForm
     inlines = (FileInline, LinkInline, QuestionInline, FieldInline)
 
     def get_queryset(self, request):
