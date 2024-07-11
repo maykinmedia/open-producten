@@ -1,3 +1,4 @@
+from .category import CategoryAdmin
 from .condition import ConditionAdmin
 from .file import FileAdmin
 from .link import LinkAdmin
@@ -16,4 +17,5 @@ __all__ = [
     "TagAdmin",
     "UniformProductNameAdmin",
     "PriceAdmin",
+    "CategoryAdmin",
 ]
