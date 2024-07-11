@@ -64,7 +64,6 @@ class CategoryAdmin(TreeAdmin):
         CategoryProductTypeInline,
         QuestionInline,
     )
-    prepopulated_fields = {"slug": ("name",)}
     search_fields = ("name",)
     list_display = (
         "name",
@@ -78,7 +77,6 @@ class CategoryAdmin(TreeAdmin):
             {
                 "fields": (
                     "name",
-                    "slug",
                     "description",
                     "icon",
                     "image",

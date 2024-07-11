@@ -4,9 +4,15 @@ from django.conf import settings
 from django.core.checks import Error, Warning, register
 from django.forms import ModelForm
 
+from treebeard.forms import MoveNodeForm
+
 
 def get_subclasses(cls):
     for subclass in cls.__subclasses__():
+
+        # MoveNodeForm from treebeard has _meta.fields = None and no Meta inner class.
+        if subclass is MoveNodeForm:
+            continue
         yield from get_subclasses(subclass)
         yield subclass
 
