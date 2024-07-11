@@ -76,9 +76,10 @@ CACHES = {
 ELASTIC_APM["DEBUG"] = True
 
 # Django debug toolbar
-INSTALLED_APPS += ["debug_toolbar"]
-MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
-INTERNAL_IPS = ("127.0.0.1",)
+if "test" not in sys.argv:
+    INSTALLED_APPS += ["debug_toolbar"]
+    MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
+    INTERNAL_IPS = ("127.0.0.1",)
 
 # None of the authentication backends require two-factor authentication.
 if config("DISABLE_2FA", default=False):

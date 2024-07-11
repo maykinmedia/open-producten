@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from treebeard.exceptions import InvalidMoveToDescendant
@@ -54,21 +53,6 @@ class Category(MP_Node, BaseModel):
 
     def __str__(self):
         return self.name
-
-    def get_build_slug(self):
-        if self.is_root():
-            build_slug = self.slug
-        else:
-            build_slug = "/".join(
-                list(self.get_ancestors().values_list("slug", flat=True))
-            )
-            build_slug += f"/{self.slug}"
-        return build_slug
-
-    def get_absolute_url(self):
-        return reverse(
-            "products:category_detail", kwargs={"slug": self.get_build_slug()}
-        )
 
     def move(self, target, pos=None):
         return PublishedMoveHandler(self, target, pos).process()

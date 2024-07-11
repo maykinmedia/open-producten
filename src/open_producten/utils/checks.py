@@ -3,6 +3,7 @@ import os
 from django.conf import settings
 from django.core.checks import Error, Warning, register
 from django.forms import ModelForm
+
 from treebeard.forms import MoveNodeForm
 
 
