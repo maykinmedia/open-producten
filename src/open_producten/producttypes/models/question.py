@@ -14,7 +14,7 @@ class Question(models.Model):
         blank=True,
         null=True,
     )
-    product = models.ForeignKey(
+    product_type = models.ForeignKey(
         ProductType,
         verbose_name=_("Product type"),
         on_delete=models.CASCADE,
@@ -31,13 +31,15 @@ class Question(models.Model):
         verbose_name_plural = _("Questions")
 
     def clean(self):
-        if self.category and self.product:
+        if self.category and self.product_type:
             raise ValidationError(
-                "A question cannot have both a category and a product"
+                "A question cannot have both a category and a product type"
             )
 
-        if not self.category and not self.product:
-            raise ValidationError("A question must have either a category or a product")
+        if not self.category and not self.product_type:
+            raise ValidationError(
+                "A question must have either a category or a product type"
+            )
 
     def __str__(self):
         return self.question

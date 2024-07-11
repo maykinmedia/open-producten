@@ -16,25 +16,25 @@ class CategoryProductType(models.Model):
     """
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    product = models.ForeignKey("ProductType", on_delete=models.CASCADE)
+    product_type = models.ForeignKey("ProductType", on_delete=models.CASCADE)
     order_with_respect_to = "category"
 
     def get_product_name(self):
-        return self.product.name
+        return self.product_type.name
 
     get_product_name.short_description = _("Name")
 
 
 class ProductType(BaseModel):
     name = models.CharField(
-        verbose_name=_("Name"), max_length=100, help_text=_("Name of the product")
+        verbose_name=_("Name"), max_length=100, help_text=_("Name of the product type")
     )
 
     slug = models.SlugField(
         verbose_name=_("Slug"),
         max_length=100,
         unique=True,
-        help_text=_("Slug of the product"),
+        help_text=_("Slug of the product type"),
     )
 
     summary = models.TextField(

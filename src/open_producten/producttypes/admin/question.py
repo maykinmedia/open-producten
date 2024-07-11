@@ -19,7 +19,7 @@ class QuestionAdmin(OrderedModelAdmin):
     list_display = (
         "question",
         "category",
-        "product",
+        "product_type",
     )
     search_fields = (
         "question",
