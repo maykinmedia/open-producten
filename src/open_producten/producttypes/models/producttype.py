@@ -21,10 +21,10 @@ class CategoryProductType(models.Model):
     product_type = models.ForeignKey("ProductType", on_delete=models.CASCADE)
     order_with_respect_to = "category"
 
-    def get_product_name(self):
+    def get_product_type_name(self):
         return self.product_type.name
 
-    get_product_name.short_description = _("Name")
+    get_product_type_name.short_description = _("Name")
 
 
 class ProductType(BaseModel):

@@ -3,14 +3,14 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext as _
 
-from ..models import Category, ProductType
 from .field import FieldInline
 from .file import FileInline
 from .link import LinkInline
 from .question import QuestionInline
+from ..models import Category, ProductType
 
 
-class ProductAdminForm(forms.ModelForm):
+class ProductTypeAdminForm(forms.ModelForm):
     class Meta:
         model = ProductType
         fields = "__all__"
@@ -44,7 +44,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     ordering = ("name",)
     save_on_top = True
-    form = ProductAdminForm
+    form = ProductTypeAdminForm
     inlines = (FileInline, LinkInline, QuestionInline, FieldInline)
 
     def get_queryset(self, request):

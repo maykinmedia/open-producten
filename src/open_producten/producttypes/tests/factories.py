@@ -24,7 +24,7 @@ class UpnFactory(factory.django.DjangoModelFactory):
 
 
 class ProductTypeFactory(factory.django.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f"product {n}")
+    name = factory.Sequence(lambda n: f"product type {n}")
     slug = factory.LazyAttribute(lambda a: slugify(a.name))
     summary = factory.Faker("sentence")
     content = factory.Faker("paragraph")
@@ -44,13 +44,13 @@ class ProductTypeFactory(factory.django.DjangoModelFactory):
                 self.categories.add(category)
 
     @factory.post_generation
-    def related_products(self, create, extracted, **kwargs):
+    def related_product_types(self, create, extracted, **kwargs):
         if not create:
             return
 
         if extracted:
-            for related_product in extracted:
-                self.related_products.add(related_product)
+            for related_product_type in extracted:
+                self.related_product_types.add(related_product_type)
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):
