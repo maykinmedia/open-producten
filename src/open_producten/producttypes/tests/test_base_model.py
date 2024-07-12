@@ -10,8 +10,7 @@ from .factories import ConditionFactory
 class TestBaseModel(TestCase):
     @freeze_time("2024-01-01")
     def setUp(self):
-        self.model = ConditionFactory()
-        self.model.save()
+        self.model = ConditionFactory.create()
 
     def test_created_on_is_set(self):
         self.assertEqual(

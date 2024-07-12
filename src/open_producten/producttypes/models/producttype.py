@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -124,3 +126,8 @@ class ProductType(BaseModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def current_price(self):
+        now = date.today()
+        return self.prices.filter(start_date__lte=now).order_by("start_date").last()

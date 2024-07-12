@@ -22,12 +22,6 @@ class Condition(BaseModel):
         verbose_name=_("Negative text"),
         help_text=_("Description how not to meet the condition"),
     )
-    rule = models.TextField(
-        verbose_name=_("Rule"),
-        blank=True,
-        default="",
-        help_text=_("Rule for the automated check"),
-    )
 
     class Meta:
         verbose_name = _("Condition")

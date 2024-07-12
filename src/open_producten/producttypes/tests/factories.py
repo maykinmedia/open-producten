@@ -1,9 +1,11 @@
-import factory
 from django.utils.text import slugify
+
+import factory
 
 from ..models import (
     Category,
     Condition,
+    Field,
     Price,
     PriceOption,
     ProductType,
@@ -79,7 +81,6 @@ class ConditionFactory(factory.django.DjangoModelFactory):
     question = factory.Faker("word")
     positive_text = factory.Faker("word")
     negative_text = factory.Faker("word")
-    rule = factory.Faker("word")
 
     class Meta:
         model = Condition
@@ -95,6 +96,7 @@ class QuestionFactory(factory.django.DjangoModelFactory):
 
 class PriceFactory(factory.django.DjangoModelFactory):
     start_date = factory.Faker("date")
+    product_type = factory.SubFactory(ProductTypeFactory)
 
     class Meta:
         model = Price
@@ -106,3 +108,12 @@ class PriceOptionFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PriceOption
+
+
+class FieldFactory(factory.django.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"field {n}")
+    description = factory.Faker("sentence")
+    product_type = factory.SubFactory(ProductTypeFactory)
+
+    class Meta:
+        model = Field

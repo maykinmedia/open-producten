@@ -12,13 +12,15 @@ class TestQuestion(TestCase):
         pass
 
     def test_error_when_linked_to_type_and_category(self):
-        question = QuestionFactory(product_type=self.productType, category=self.category)
+        question = QuestionFactory.build(
+            product_type=self.productType, category=self.category
+        )
 
         with self.assertRaises(ValidationError):
             question.clean()
 
     def test_error_when_not_linked_to_type_or_category(self):
-        question = QuestionFactory()
+        question = QuestionFactory.build()
 
         with self.assertRaises(ValidationError):
             question.clean()
