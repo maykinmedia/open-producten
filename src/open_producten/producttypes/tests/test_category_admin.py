@@ -1,18 +1,21 @@
 from django.test import TestCase
 
 from ..admin.category import CategoryAdminForm
-from ..models import Category
 from .factories import CategoryFactory
+
+
+def create_form(data, instance=None):
+    return CategoryAdminForm(
+        instance=instance,
+        data=data,
+    )
 
 
 class TestCategoryAdminForm(TestCase):
 
     def setUp(self):
-        self.parent: Category = CategoryFactory.create(published=False)
         self.data = {
             "name": "test",
-            "published": True,
-            "_ref_node_id": self.parent.id,
             "_position": "first-child",
             "slug": "test",
             "path": "0005",
@@ -21,7 +24,10 @@ class TestCategoryAdminForm(TestCase):
         }
 
     def test_parent_nodes_must_be_published(self):
-        form = CategoryAdminForm(data=self.data)
+        parent = CategoryFactory.create(published=False)
+        data = self.data | {"published": True, "_ref_node_id": parent.id}
+
+        form = create_form(data)
 
         self.assertEquals(
             form.errors,
@@ -32,39 +38,18 @@ class TestCategoryAdminForm(TestCase):
             },
         )
 
-        self.parent.published = True
-        self.parent.save()
+        parent.published = True
+        parent.save()
 
-        form = CategoryAdminForm(data=self.data)
+        form = create_form(data)
         self.assertEquals(form.errors, {})
 
     def test_parent_nodes_cannot_be_unpublished_with_published_children(self):
-        def create_form(instance):
-            return CategoryAdminForm(
-                instance=instance,
-                data=self.data | {"published": False, "_ref_node_id": None},
-            )
+        parent = CategoryFactory.create(published=False)
+        parent.add_child(**{"name": "child", "slug": "child", "published": True})
+        data = self.data | {"published": False, "_ref_node_id": None}
 
-        def get_category():
-            return Category.objects.get(pk=self.parent.id)
-
-        form = create_form(self.parent)
-
-        self.assertEquals(form.errors, {})
-
-        child = get_category().add_child(
-            **{"name": "child", "slug": "child", "published": False}
-        )
-        parent = get_category()
-        form = create_form(parent)
-
-        self.assertEquals(form.errors, {})
-
-        child.published = True
-        child.save()
-
-        parent = get_category()
-        form = create_form(parent)
+        form = create_form(data, parent)
 
         self.assertEquals(
             form.errors,
@@ -74,15 +59,3 @@ class TestCategoryAdminForm(TestCase):
                 ]
             },
         )
-
-
-# TODO
-class TestCategoryAdminFormSet(TestCase):
-    def setUp(self):
-        pass
-
-    def test_parent_nodes_cannot_be_unpublished_with_published_children(self):
-        pass
-
-    def test_parent_nodes_must_be_published_to_publish_children(self):
-        pass
