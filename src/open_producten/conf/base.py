@@ -17,6 +17,7 @@ INSTALLED_APPS += [
     "open_producten.accounts",
     "open_producten.utils",
     "open_producten.producttypes",
+    "open_producten.products",
 ]
 
 #

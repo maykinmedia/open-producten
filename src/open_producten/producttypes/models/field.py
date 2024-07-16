@@ -6,6 +6,32 @@ from django.utils.translation import gettext_lazy as _
 from .producttype import ProductType
 
 
+class FieldTypes(models.TextChoices):
+    """Formio field types used in Open Forms."""
+
+    BSN = "bsn"  # STR
+    CHECKBOX = "checkbox"  # BOOL
+    COSIGN = "Cosign"  # STR
+    CURRENCY = "currency"  # STR
+    DATE = "date"  # DATE
+    DATETIME = "datetime"  # DATETIME
+    EMAIL = "email"  # STR
+    FILE = "file"  # STR
+    IBAN = "iban"  # STR
+    LICENSE_PLATE = "licenseplate"  # STR
+    MAP = "map"  # STR (remove brackets)
+    NUMBER = "number"  # INT
+    PASSWORD = "password"  # STR
+    PHONE_NUMBER = "phoneNumber"  # STR
+    POSTCODE = "postcode"  # STR
+    RADIO = "radio"  # STR
+    SELECT = "select"  # STR (remove brackets)
+    SELECT_BOXES = "selectBoxes"  # STR
+    SIGNATURE = "signature"  # STR
+    TEXTFIELD = "textfield"  # STR
+    TIME = "time"  # TIME
+
+
 class Field(models.Model):
     name = models.CharField(
         verbose_name=_("Name"), max_length=100, help_text=_("The name of the field")
@@ -15,31 +41,6 @@ class Field(models.Model):
         help_text=_("Short description of the field"),
         max_length=300,
     )
-
-    class FieldTypes(models.TextChoices):
-        """Formio field types used in Open Forms."""
-
-        BSN = "bsn"
-        CHECKBOX = "checkbox"
-        COSIGN = "Cosign"
-        CURRENCY = "currency"
-        DATE = "date"
-        DATETIME = "datetime"
-        EMAIL = "email"
-        FILE = "file"
-        IBAN = "iban"
-        LICENSE_PLATE = "licenseplate"
-        MAP = "map"
-        NUMBER = "number"
-        PASSWORD = "password"
-        PHONE_NUMBER = "phoneNumber"
-        POSTCODE = "postcode"
-        RADIO = "radio"
-        SELECT = "select"
-        SELECT_BOXES = "selectBoxes"
-        SIGNATURE = "signature"
-        TEXTFIELD = "textfield"
-        TIME = "time"
 
     type = models.CharField(
         max_length=255,

@@ -1,6 +1,6 @@
 from .category import Category
 from .condition import Condition
-from .field import Field
+from .field import Field, FieldTypes
 from .file import File
 from .link import Link
 from .price import Price, PriceOption
@@ -16,6 +16,7 @@ __all__ = [
     "Condition",
     "Link",
     "Field",
+    "FieldTypes",
     "Price",
     "PriceOption",
     "ProductType",
