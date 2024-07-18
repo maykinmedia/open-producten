@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.producttypes.models import Field, FieldTypes
+from open_producten.utils.validators import validate_postal_code
 
 from .product import Product
 from .validators import (
@@ -21,7 +22,7 @@ class Data(models.Model):
     field = models.ForeignKey(
         Field,
         verbose_name=_("Field"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         help_text=_("The field that this data belongs to"),
         related_name="data",
     )
@@ -87,9 +88,7 @@ class Data(models.Model):
         ),
         # FieldTypes.PASSWORD STR
         FieldTypes.PHONE_NUMBER: lambda data: None,  # TODO
-        FieldTypes.POSTCODE: lambda data: validate_regex(
-            data, r"[1-9][0-9]{3} ?[A-Z]{2}", FieldTypes.POSTCODE
-        ),
+        FieldTypes.POSTCODE: lambda data: validate_postal_code(data),
         FieldTypes.SIGNATURE: lambda data: validate_regex(
             data, r"^data:image/png;base64,.*$", FieldTypes.SIGNATURE
         ),

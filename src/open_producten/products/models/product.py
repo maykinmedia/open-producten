@@ -57,26 +57,5 @@ class Product(BaseModel):
                 "A product must be linked to a bsn or kvk number (or both)"
             )
 
-        if self.id:
-            self.validate_fields()
-
-    def validate_fields(self):
-        """Validates that all required fields are present and checks if all fields are part of product type."""
-        filled_in_fields = self.data.only("field_id", "field__name").all()
-        fields = self.product_type.fields.only("id", "name", "required").all()
-
-        required_field_ids = [field.id for field in fields if field.required]
-
-        for filled_field in filled_in_fields:
-            if filled_field not in fields:
-                raise ValidationError(
-                    f"field {filled_field.name} is not part of {self.product_type.name}"
-                )
-            else:
-                required_field_ids.remove(filled_field.id)
-
-        if required_field_ids:
-            raise ValidationError("Missing required fields.")
-
     def __str__(self):
         return f"{self.bsn if self.bsn else self.kvk} {self.product_type.name}"
