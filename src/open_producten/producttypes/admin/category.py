@@ -2,12 +2,11 @@ from django import forms
 from django.contrib import admin
 from django.forms import BaseModelFormSet
 from django.utils.translation import gettext as _
-
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
 
-from ..models import Category, CategoryProductType
 from .question import QuestionInline
+from ..models import Category, CategoryProductType
 
 
 class CategoryProductTypeInline(admin.TabularInline):
@@ -44,24 +43,21 @@ class CategoryAdminForm(movenodeform_factory(Category)):
 
 class CategoryAdminFormSet(BaseModelFormSet):
     def clean(self):
-        for row in self.cleaned_data:
-            current_node = row["id"]
-            children = current_node.get_children()
+
+        data = {
+            form.cleaned_data["id"]: form.cleaned_data["published"]
+            for form in self.forms
+        }
+
+        for category, published in data.items():
+            children = category.get_children()
+
             if children:
-                if not row["published"] and children.filter(published=True).exists():
+                if not published and any([data[child] for child in children]):
                     raise forms.ValidationError(
-                        _(
-                            "Parent nodes cannot be unpublished if they have published children."
-                        )
+                        _("Parent nodes cannot be unpublished with published children.")
                     )
-            if (
-                row["published"]
-                and not current_node.is_root()
-                and not current_node.get_parent().published
-            ):
-                raise forms.ValidationError(
-                    _("Parent nodes have to be published in order to publish a child.")
-                )
+
         return super().clean()
 
 

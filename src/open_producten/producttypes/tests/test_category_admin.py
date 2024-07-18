@@ -1,7 +1,11 @@
+from django.core.exceptions import ValidationError
+from django.forms import modelformset_factory
 from django.test import TestCase
 
-from ..admin.category import CategoryAdminForm
+from open_producten.core.test_helpers import build_formset_data
 from .factories import CategoryFactory
+from ..admin.category import CategoryAdmin, CategoryAdminForm, CategoryAdminFormSet
+from ..models import Category
 
 
 def create_form(data, instance=None):
@@ -59,3 +63,32 @@ class TestCategoryAdminForm(TestCase):
                 ]
             },
         )
+
+
+class TestCategoryAdminFormSet(TestCase):
+
+    def setUp(self):
+        self.formset = modelformset_factory(
+            model=Category,
+            formset=CategoryAdminFormSet,
+            fields=CategoryAdmin.list_editable,
+        )
+
+        self.parent = CategoryFactory.create(published=True)
+        self.child = self.parent.add_child(
+            **{"name": "child", "slug": "child", "published": True}
+        )
+
+    def test_parent_nodes_cannot_be_unpublished_with_published_children(self):
+        data = build_formset_data(
+            "form",
+            {
+                "id": self.parent.id,  # published off
+            },
+            {"id": self.child.id, "published": "on"},
+        )
+
+        object_formset = self.formset(data)
+
+        with self.assertRaises(ValidationError):
+            object_formset.clean()
