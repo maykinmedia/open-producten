@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from open_producten.producttypes.tests.factories import ProductTypeFactory
+
 from .factories import ProductFactory
 
 

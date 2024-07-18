@@ -137,12 +137,12 @@ class TestData(TestCase):
             DataFactory.build(field=field, data="abc").clean()
 
         with self.assertRaises(ValidationError):
-            DataFactory.build(field=field, data="20240101").clean()
+            DataFactory.build(field=field, data="20241001").clean()
 
         with self.assertRaises(ValidationError):
-            DataFactory.build(field=field, data="2024-13-01").clean()
+            DataFactory.build(field=field, data="2023-13-01").clean()
 
-        DataFactory.build(field=field, data="2024-01-01T12:00:00+02:00").clean()
+        DataFactory.build(field=field, data="2024-01-01T13:00:00+02:00").clean()
 
     def test_clean_email(self):
         field = FieldFactory.create(type=FieldTypes.EMAIL)
@@ -151,7 +151,7 @@ class TestData(TestCase):
             DataFactory.build(field=field, data="abcde").clean()
 
         with self.assertRaises(ValidationError):
-            DataFactory.build(field=field, data="abcde@").clean()
+            DataFactory.build(field=field, data="xyz@").clean()
 
         with self.assertRaises(ValidationError):
             DataFactory.build(field=field, data="abcde@gmail.").clean()
@@ -164,8 +164,16 @@ class TestData(TestCase):
     def test_clean_iban(self):  # TODO
         pass
 
-    def test_clean_license_plate(self):  # TODO
-        pass
+    def test_clean_license_plate(self):
+        field = FieldFactory.create(type=FieldTypes.LICENSE_PLATE)
+
+        with self.assertRaises(ValidationError):
+            DataFactory.build(field=field, data="abcde").clean()
+
+        with self.assertRaises(ValidationError):
+            DataFactory.build(field=field, data="abc123ad").clean()
+
+        DataFactory.build(field=field, data="123-aaa-123").clean()
 
     def test_clean_map(self):
         field = FieldFactory.create(type=FieldTypes.MAP)
@@ -188,8 +196,14 @@ class TestData(TestCase):
         DataFactory.build(field=field, data="42.12").clean()
         DataFactory.build(field=field, data="42.1294323").clean()
 
-    def test_clean_phone_number(self):  # TODO
-        pass
+    def test_clean_phone_number(self):
+        field = FieldFactory.create(type=FieldTypes.PHONE_NUMBER)
+
+        with self.assertRaises(ValidationError):
+            DataFactory.build(field=field, data="abcde").clean()
+
+        DataFactory.build(field=field, data="0612165228").clean()
+        DataFactory.build(field=field, data="+31 6 12 16 52 28").clean()
 
     def test_clean_postcode(self):
         field = FieldFactory.create(type=FieldTypes.POSTCODE)
@@ -248,11 +262,9 @@ class TestData(TestCase):
         field = FieldFactory.create(type=FieldTypes.SIGNATURE)
 
         with self.assertRaises(ValidationError):
-            DataFactory.build(field=field, data="iajwdoi").clean()
+            DataFactory.build(field=field, data="signature").clean()
 
-        DataFactory.build(
-            field=field, data="data:image/png;base64,iiuAWDAWDhsefiuhseifuhaA"
-        ).clean()
+        DataFactory.build(field=field, data="data:image/png;base64,A812EEAa").clean()
 
     def test_clean_time(self):
         field = FieldFactory.create(type=FieldTypes.TIME)

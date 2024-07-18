@@ -78,8 +78,12 @@ class Data(models.Model):
             data, r"^.+@.+\..+$", FieldTypes.EMAIL
         ),
         FieldTypes.FILE: lambda data: None,  # TODO
-        FieldTypes.IBAN: lambda data: None,  # TODO
-        FieldTypes.LICENSE_PLATE: lambda data: None,  # TODO
+        FieldTypes.IBAN: lambda data: None,  # TODO package?
+        FieldTypes.LICENSE_PLATE: lambda data: validate_regex(
+            data,
+            r"^[a-zA-Z0-9]{1,3}-[a-zA-Z0-9]{1,3}-[a-zA-Z0-9]{1,3}$",
+            FieldTypes.LICENSE_PLATE,
+        ),
         FieldTypes.MAP: lambda data: validate_regex(
             data, r"^\d+\.?\d*,\d+\.?\d*$", FieldTypes.MAP
         ),
@@ -87,7 +91,9 @@ class Data(models.Model):
             data, r"^\d+\.?\d*$", FieldTypes.NUMBER
         ),
         # FieldTypes.PASSWORD STR
-        FieldTypes.PHONE_NUMBER: lambda data: None,  # TODO
+        FieldTypes.PHONE_NUMBER: lambda data: validate_regex(
+            data, r"^[+0-9][- 0-9]+$", FieldTypes.PHONE_NUMBER
+        ),
         FieldTypes.POSTCODE: lambda data: validate_postal_code(data),
         FieldTypes.SIGNATURE: lambda data: validate_regex(
             data, r"^data:image/png;base64,.*$", FieldTypes.SIGNATURE
