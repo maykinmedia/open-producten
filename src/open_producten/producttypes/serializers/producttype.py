@@ -22,7 +22,7 @@ class SimpleCategorySerializer(serializers.ModelSerializer):
 class ProductTypeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     tag_ids = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Tag.objects.all(), default=[]
+        many=True, queryset=Tag.objects.all(), default=[], write_only=True
     )
 
     related_product_types = serializers.PrimaryKeyRelatedField(
@@ -33,7 +33,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         queryset=UniformProductName.objects.all()
     )
 
-    conditions = ConditionSerializer(many=True, default=[], read_only=True)
+    conditions = ConditionSerializer(many=True, read_only=True)
     condition_ids = serializers.PrimaryKeyRelatedField(
         many=True, write_only=True, queryset=Condition.objects.all(), default=[]
     )
@@ -59,36 +59,36 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         uniform_product_name_id = validated_data.pop("uniform_product_name")
 
-        related_product_type_ids = validated_data.pop("related_product_types")
-        category_ids = validated_data.pop("category_ids")
-        condition_ids = validated_data.pop("condition_ids")
-        tag_ids = validated_data.pop("tag_ids")
+        related_product_types = validated_data.pop("related_product_types")
+        categories = validated_data.pop("category_ids")
+        conditions = validated_data.pop("condition_ids")
+        tags = validated_data.pop("tag_ids")
 
         product_type = ProductType.objects.create(
             **validated_data, uniform_product_name=uniform_product_name_id
         )
 
-        product_type.related_product_types.set(related_product_type_ids)
-        product_type.categories.set(category_ids)
-        product_type.tags.set(tag_ids)
-        product_type.conditions.set(condition_ids)
+        product_type.related_product_types.set(related_product_types)
+        product_type.categories.set(categories)
+        product_type.tags.set(tags)
+        product_type.conditions.set(conditions)
 
         product_type.save()
 
         return product_type
 
     def update(self, instance, validated_data):
-        related_product_type_ids = validated_data.pop("related_product_types")
-        category_ids = validated_data.pop("category_ids")
-        condition_ids = validated_data.pop("condition_ids")
-        tag_ids = validated_data.pop("tag_ids")
+        related_product_types = validated_data.pop("related_product_types")
+        categories = validated_data.pop("category_ids")
+        conditions = validated_data.pop("condition_ids")
+        tags = validated_data.pop("tag_ids")
 
         instance = super().update(instance, validated_data)
 
-        instance.related_product_types.set(related_product_type_ids)
-        instance.categories.set(category_ids)
-        instance.tags.set(tag_ids)
-        instance.conditions.set(condition_ids)
+        instance.related_product_types.set(related_product_types)
+        instance.categories.set(categories)
+        instance.tags.set(tags)
+        instance.conditions.set(conditions)
 
         instance.save()
 

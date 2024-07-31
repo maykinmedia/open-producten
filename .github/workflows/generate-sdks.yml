@@ -12,11 +12,11 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ 'v1' ]
+    #    strategy:
+    #      matrix:
+    #        version: [ 'v1' ]
 
-    name: Run with version $
+    name: Run with version v1
 
     steps:
       - uses: actions/checkout@v4
@@ -30,13 +30,13 @@ jobs:
         id: vars
         run: echo ::set-output name=oas::./src/openapi.yaml
       - name: Validate schema
-        run: openapi-generator-cli validate -i $
+        run: openapi-generator-cli validate -i ${{ steps.vars.outputs.oas }}
       - name: Generate Java client
-        run: openapi-generator-cli generate -i $ --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
+        run: openapi-generator-cli generate -i ${{ steps.vars.outputs.oas }} --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
           -o ./sdks/java -g java --additional-properties=dateLibrary=java8,java8=true,optionalProjectFile=false,optionalAssemblyInfo=false
       - name: Generate .NET client
-        run: openapi-generator-cli generate -i $ --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
+        run: openapi-generator-cli generate -i ${{ steps.vars.outputs.oas }} --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
           -o ./sdks/net -g csharp --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false
       - name: Generate Python client
-        run: openapi-generator-cli generate -i $ --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
+        run: openapi-generator-cli generate -i ${{ steps.vars.outputs.oas }} --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
           -o ./sdks/python -g python --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false+

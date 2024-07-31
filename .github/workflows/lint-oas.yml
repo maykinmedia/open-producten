@@ -12,11 +12,11 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ 'v1' ]
+    #    strategy:
+    #      matrix:
+    #        version: [ 'v1' ]
 
-    name: Run with version $
+    name: Run with version v1
 
     steps:
       - uses: actions/checkout@v4

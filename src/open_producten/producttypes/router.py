@@ -1,6 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
 from open_producten.producttypes.views import (
+    CategoryQuestionViewSet,
     CategoryViewSet,
     ProductTypeFieldViewSet,
     ProductTypeLinkViewSet,
@@ -33,3 +34,8 @@ ProductTypesRouter.register(
 )
 
 ProductTypesRouter.register("categories", CategoryViewSet, basename="category")
+ProductTypesRouter.register(
+    "categories/(?P<id>[^/.]+)/questions",
+    CategoryQuestionViewSet,
+    basename="category-question",
+)

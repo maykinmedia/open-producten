@@ -17,6 +17,7 @@ from .factories import (
 
 
 class TestProducttypeViewSet(APITestCase):
+
     def setUp(self):
         upn = UniformProductNameFactory.create()
 

@@ -10,11 +10,11 @@ paths:
     get:
       operationId: categories_list
       tags:
-      - categories
+        - categories
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -27,7 +27,7 @@ paths:
     post:
       operationId: categories_create
       tags:
-      - categories
+        - categories
       requestBody:
         content:
           application/json:
@@ -35,9 +35,9 @@ paths:
               $ref: '#/components/schemas/Category'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -45,22 +45,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Category'
           description: ''
-  /api/v1/categories/{slug}/:
+  /api/v1/categories/{id}/:
     get:
       operationId: categories_retrieve
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the category
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Category.
+          required: true
       tags:
-      - categories
+        - categories
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -71,14 +72,15 @@ paths:
     put:
       operationId: categories_update
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the category
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Category.
+          required: true
       tags:
-      - categories
+        - categories
       requestBody:
         content:
           application/json:
@@ -86,36 +88,9 @@ paths:
               $ref: '#/components/schemas/Category'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Category'
-          description: ''
-    patch:
-      operationId: categories_partial_update
-      parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the category
-        required: true
-      tags:
-      - categories
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedCategory'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -126,18 +101,146 @@ paths:
     delete:
       operationId: categories_destroy
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the category
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Category.
+          required: true
       tags:
-      - categories
+        - categories
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '204':
+          description: No response body
+  /api/v1/categories/{id}/questions/:
+    get:
+      operationId: categories_questions_list
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+          description: ''
+    post:
+      operationId: categories_questions_create
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+  /api/v1/categories/{id}/questions/{id}/:
+    get:
+      operationId: categories_questions_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    put:
+      operationId: categories_questions_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    delete:
+      operationId: categories_questions_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '204':
           description: No response body
@@ -145,11 +248,11 @@ paths:
     get:
       operationId: producttypes_list
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -162,7 +265,7 @@ paths:
     post:
       operationId: producttypes_create
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -170,9 +273,9 @@ paths:
               $ref: '#/components/schemas/ProductType'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -180,22 +283,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
-  /api/v1/producttypes/{slug}/:
+  /api/v1/producttypes/{id}/:
     get:
       operationId: producttypes_retrieve
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the product type
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -206,14 +310,15 @@ paths:
     put:
       operationId: producttypes_update
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the product type
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -221,36 +326,9 @@ paths:
               $ref: '#/components/schemas/ProductType'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductType'
-          description: ''
-    patch:
-      operationId: producttypes_partial_update
-      parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the product type
-        required: true
-      tags:
-      - producttypes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedProductType'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -261,36 +339,39 @@ paths:
     delete:
       operationId: producttypes_destroy
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-          description: Slug of the product type
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{slug}/fields/:
+  /api/v1/producttypes/{id}/fields/:
     get:
       operationId: producttypes_fields_list
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Field.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -303,13 +384,15 @@ paths:
     post:
       operationId: producttypes_fields_create
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Field.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -317,9 +400,9 @@ paths:
               $ref: '#/components/schemas/Field'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -327,27 +410,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Field'
           description: ''
-  /api/v1/producttypes/{slug}/fields/{id}/:
+  /api/v1/producttypes/{id}/fields/{id}/:
     get:
       operationId: producttypes_fields_retrieve
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Field.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Field.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -358,19 +437,15 @@ paths:
     put:
       operationId: producttypes_fields_update
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Field.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Field.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -378,41 +453,9 @@ paths:
               $ref: '#/components/schemas/Field'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Field'
-          description: ''
-    patch:
-      operationId: producttypes_fields_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Field.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
-      tags:
-      - producttypes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedField'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -423,41 +466,39 @@ paths:
     delete:
       operationId: producttypes_fields_destroy
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Field.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Field.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{slug}/links/:
+  /api/v1/producttypes/{id}/links/:
     get:
       operationId: producttypes_links_list
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -470,13 +511,15 @@ paths:
     post:
       operationId: producttypes_links_create
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -484,9 +527,9 @@ paths:
               $ref: '#/components/schemas/Link'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -494,27 +537,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
-  /api/v1/producttypes/{slug}/links/{id}/:
+  /api/v1/producttypes/{id}/links/{id}/:
     get:
       operationId: producttypes_links_retrieve
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Product type link.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -525,19 +564,15 @@ paths:
     put:
       operationId: producttypes_links_update
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Product type link.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -545,41 +580,9 @@ paths:
               $ref: '#/components/schemas/Link'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Link'
-          description: ''
-    patch:
-      operationId: producttypes_links_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Product type link.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
-      tags:
-      - producttypes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedLink'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -590,41 +593,39 @@ paths:
     delete:
       operationId: producttypes_links_destroy
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Product type link.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{slug}/prices/:
+  /api/v1/producttypes/{id}/prices/:
     get:
       operationId: producttypes_prices_list
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Price.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -637,13 +638,15 @@ paths:
     post:
       operationId: producttypes_prices_create
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Price.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -651,9 +654,9 @@ paths:
               $ref: '#/components/schemas/Price'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -661,27 +664,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Price'
           description: ''
-  /api/v1/producttypes/{slug}/prices/{id}/:
+  /api/v1/producttypes/{id}/prices/{id}/:
     get:
       operationId: producttypes_prices_retrieve
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Price.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Price.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -692,19 +691,15 @@ paths:
     put:
       operationId: producttypes_prices_update
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Price.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Price.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -712,41 +707,9 @@ paths:
               $ref: '#/components/schemas/Price'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Price'
-          description: ''
-    patch:
-      operationId: producttypes_prices_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Price.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
-      tags:
-      - producttypes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedPrice'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -757,41 +720,39 @@ paths:
     delete:
       operationId: producttypes_prices_destroy
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Price.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Price.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{slug}/questions/:
+  /api/v1/producttypes/{id}/questions/:
     get:
       operationId: producttypes_questions_list
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -804,13 +765,15 @@ paths:
     post:
       operationId: producttypes_questions_create
       parameters:
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -818,9 +781,9 @@ paths:
               $ref: '#/components/schemas/Question'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -828,27 +791,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Question'
           description: ''
-  /api/v1/producttypes/{slug}/questions/{id}/:
+  /api/v1/producttypes/{id}/questions/{id}/:
     get:
       operationId: producttypes_questions_retrieve
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Question.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -859,19 +818,15 @@ paths:
     put:
       operationId: producttypes_questions_update
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Question.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       requestBody:
         content:
           application/json:
@@ -879,41 +834,9 @@ paths:
               $ref: '#/components/schemas/Question'
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Question'
-          description: ''
-    patch:
-      operationId: producttypes_questions_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Question.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
-      tags:
-      - producttypes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedQuestion'
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -924,23 +847,19 @@ paths:
     delete:
       operationId: producttypes_questions_destroy
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this Question.
-        required: true
-      - in: path
-        name: slug
-        schema:
-          type: string
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
       tags:
-      - producttypes
+        - producttypes
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
       responses:
         '204':
           description: No response body
@@ -949,6 +868,15 @@ components:
     Category:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        parent_category:
+          type: string
+          format: uuid
+          writeOnly: true
+          nullable: true
         product_types:
           type: array
           items:
@@ -958,31 +886,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Question'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
         published:
           type: boolean
-          description: Whether the object is accessible with the api.
+          description: Whether the object is accessible through the API.
         created_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
+          description: The datetime at which the object was created.
         updated_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
+          description: The datetime at which the object was last changed.
         name:
           type: string
           title: Naam
           description: Name of the category
           maxLength: 100
-        slug:
-          type: string
-          description: Slug of the category
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
         description:
           type: string
           description: Description of the category
@@ -998,30 +927,16 @@ components:
           title: Afbeelding
           description: Image of the category
       required:
-      - created_on
-      - name
-      - product_types
-      - questions
-      - slug
-      - updated_on
+        - created_on
+        - id
+        - name
+        - parent_category
+        - product_types
+        - questions
+        - updated_on
     Condition:
       type: object
       properties:
-        published:
-          type: boolean
-          description: Whether the object is accessible with the api.
-        created_on:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
-        updated_on:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
         name:
           type: string
           title: Naam
@@ -1037,12 +952,10 @@ components:
           type: string
           description: Description how not to meet the condition
       required:
-      - created_on
-      - name
-      - negative_text
-      - positive_text
-      - question
-      - updated_on
+        - name
+        - negative_text
+        - positive_text
+        - question
     Field:
       type: object
       properties:
@@ -1050,14 +963,14 @@ components:
           type: string
           title: Naam
           description: The name of the field
-          maxLength: 100
+          maxLength: 255
         description:
           type: string
           description: Short description of the field
           maxLength: 300
         type:
           allOf:
-          - $ref: '#/components/schemas/TypeEnum'
+            - $ref: '#/components/schemas/TypeEnum'
           description: |-
             The formio type of the field
 
@@ -1092,8 +1005,8 @@ components:
           nullable: true
           description: The Choices that can be selected in the form
       required:
-      - description
-      - name
+        - description
+        - name
     Link:
       type: object
       properties:
@@ -1108,267 +1021,8 @@ components:
           description: Url of the link
           maxLength: 200
       required:
-      - name
-      - url
-    PatchedCategory:
-      type: object
-      properties:
-        product_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleProductType'
-          readOnly: true
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-        published:
-          type: boolean
-          description: Whether the object is accessible with the api.
-        created_on:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
-        updated_on:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
-        name:
-          type: string
-          title: Naam
-          description: Name of the category
-          maxLength: 100
-        slug:
-          type: string
-          description: Slug of the category
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
-        description:
-          type: string
-          description: Description of the category
-        icon:
-          type: string
-          format: uri
-          nullable: true
-          description: Icon of the category
-        image:
-          type: string
-          format: uri
-          nullable: true
-          title: Afbeelding
-          description: Image of the category
-    PatchedField:
-      type: object
-      properties:
-        name:
-          type: string
-          title: Naam
-          description: The name of the field
-          maxLength: 100
-        description:
-          type: string
-          description: Short description of the field
-          maxLength: 300
-        type:
-          allOf:
-          - $ref: '#/components/schemas/TypeEnum'
-          description: |-
-            The formio type of the field
-
-            * `bsn` - Bsn
-            * `checkbox` - Checkbox
-            * `Cosign` - Cosign
-            * `currency` - Currency
-            * `date` - Date
-            * `datetime` - Datetime
-            * `email` - Email
-            * `file` - File
-            * `iban` - Iban
-            * `licenseplate` - License Plate
-            * `map` - Map
-            * `number` - Number
-            * `password` - Password
-            * `phoneNumber` - Phone Number
-            * `postcode` - Postcode
-            * `radio` - Radio
-            * `select` - Select
-            * `selectBoxes` - Select Boxes
-            * `signature` - Signature
-            * `textfield` - Textfield
-            * `time` - Time
-        is_required:
-          type: boolean
-        choices:
-          type: array
-          items:
-            type: string
-            maxLength: 100
-          nullable: true
-          description: The Choices that can be selected in the form
-    PatchedLink:
-      type: object
-      properties:
-        name:
-          type: string
-          title: Naam
-          description: Name for the link
-          maxLength: 100
-        url:
-          type: string
-          format: uri
-          description: Url of the link
-          maxLength: 200
-    PatchedPrice:
-      type: object
-      properties:
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/PriceOption'
-          default: []
-        start_date:
-          type: string
-          format: date
-          description: The start date for this price
-    PatchedProductType:
-      type: object
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tag'
-          readOnly: true
-        tag_slugs:
-          type: array
-          items:
-            type: string
-            description: Slug of the tag
-            default: []
-          default: []
-        related_product_types:
-          type: array
-          items:
-            type: string
-            description: Slug of the product type
-            default: []
-          default: []
-        uniform_product_name:
-          type: integer
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Condition'
-          readOnly: true
-          default: []
-        condition_ids:
-          type: array
-          items:
-            type: integer
-            writeOnly: true
-            default: []
-          writeOnly: true
-          default: []
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleCategory'
-          readOnly: true
-        category_slugs:
-          type: array
-          items:
-            type: string
-            description: Slug of the category
-            writeOnly: true
-            default: []
-          writeOnly: true
-          default: []
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-          readOnly: true
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-          readOnly: true
-        prices:
-          type: array
-          items:
-            $ref: '#/components/schemas/Price'
-          readOnly: true
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/Link'
-          readOnly: true
-        published:
-          type: boolean
-          description: Whether the object is accessible with the api.
-        created_on:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
-        updated_on:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
-        name:
-          type: string
-          title: Naam
-          description: Name of the product type
-          maxLength: 100
-        slug:
-          type: string
-          description: Slug of the product type
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
-        summary:
-          type: string
-          title: Samenvatting
-          description: Short description of the product, limited to 300 characters.
-          maxLength: 300
-        icon:
-          type: string
-          format: uri
-          nullable: true
-          description: Icon of the product type
-        image:
-          type: string
-          format: uri
-          nullable: true
-          title: Afbeelding
-          description: Main image of the product type
-        form_link:
-          type: string
-          format: uri
-          description: Action link to request the product.
-          maxLength: 200
-        content:
-          type: string
-          description: Product content with build-in WYSIWYG editor.
-        keywords:
-          type: array
-          items:
-            type: string
-            maxLength: 100
-          description: List of keywords for search
-    PatchedQuestion:
-      type: object
-      properties:
-        question:
-          type: string
-          maxLength: 250
-        answer:
-          type: string
+        - name
+        - url
     Price:
       type: object
       properties:
@@ -1376,81 +1030,84 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PriceOption'
-          default: []
-        start_date:
+          default: [ ]
+        valid_from:
           type: string
           format: date
-          description: The start date for this price
+          title: Start date
+          description: The date at which this price is valid
       required:
-      - start_date
+        - valid_from
     PriceOption:
       type: object
       properties:
         id:
-          type: integer
-        cost:
+          type: string
+          format: uuid
+        amount:
           type: string
           format: decimal
           pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          title: Price
           description: The cost of the price option
         description:
           type: string
           description: Short description of the option
           maxLength: 100
       required:
-      - description
+        - description
     ProductType:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         tags:
           type: array
           items:
             $ref: '#/components/schemas/Tag'
           readOnly: true
-        tag_slugs:
+        tag_ids:
           type: array
           items:
             type: string
-            description: Slug of the tag
-            default: []
-          default: []
+            format: uuid
+          writeOnly: true
+          default: [ ]
         related_product_types:
           type: array
           items:
             type: string
-            description: Slug of the product type
-            default: []
-          default: []
+            format: uuid
+          default: [ ]
         uniform_product_name:
-          type: integer
+          type: string
+          format: uuid
         conditions:
           type: array
           items:
             $ref: '#/components/schemas/Condition'
           readOnly: true
-          default: []
         condition_ids:
           type: array
           items:
-            type: integer
-            writeOnly: true
-            default: []
+            type: string
+            format: uuid
           writeOnly: true
-          default: []
+          default: [ ]
         categories:
           type: array
           items:
             $ref: '#/components/schemas/SimpleCategory'
           readOnly: true
-        category_slugs:
+        category_ids:
           type: array
           items:
             type: string
-            description: Slug of the category
-            writeOnly: true
-            default: []
+            format: uuid
           writeOnly: true
-          default: []
+          default: [ ]
         questions:
           type: array
           items:
@@ -1473,33 +1130,26 @@ components:
           readOnly: true
         published:
           type: boolean
-          description: Whether the object is accessible with the api.
+          description: Whether the object is accessible through the API.
         created_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
+          description: The datetime at which the object was created.
         updated_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
+          description: The datetime at which the object was last changed.
         name:
           type: string
           title: Naam
           description: Name of the product type
           maxLength: 100
-        slug:
-          type: string
-          description: Slug of the product type
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
         summary:
           type: string
           title: Samenvatting
-          description: Short description of the product, limited to 300 characters.
+          description: Short description of the product type, limited to 300 characters.
           maxLength: 300
         icon:
           type: string
@@ -1515,11 +1165,11 @@ components:
         form_link:
           type: string
           format: uri
-          description: Action link to request the product.
+          description: Action link to request the product type.
           maxLength: 200
         content:
           type: string
-          description: Product content with build-in WYSIWYG editor.
+          description: Product type content with build-in WYSIWYG editor.
         keywords:
           type: array
           items:
@@ -1527,19 +1177,19 @@ components:
             maxLength: 100
           description: List of keywords for search
       required:
-      - categories
-      - conditions
-      - content
-      - created_on
-      - fields
-      - links
-      - name
-      - prices
-      - questions
-      - slug
-      - tags
-      - uniform_product_name
-      - updated_on
+        - categories
+        - conditions
+        - content
+        - created_on
+        - fields
+        - id
+        - links
+        - name
+        - prices
+        - questions
+        - tags
+        - uniform_product_name
+        - updated_on
     Question:
       type: object
       properties:
@@ -1549,36 +1199,29 @@ components:
         answer:
           type: string
       required:
-      - answer
-      - question
+        - answer
+        - question
     SimpleCategory:
       type: object
       properties:
         published:
           type: boolean
-          description: Whether the object is accessible with the api.
+          description: Whether the object is accessible through the API.
         created_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
+          description: The datetime at which the object was created.
         updated_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
+          description: The datetime at which the object was last changed.
         name:
           type: string
           title: Naam
           description: Name of the category
           maxLength: 100
-        slug:
-          type: string
-          description: Slug of the category
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
         description:
           type: string
           description: Description of the category
@@ -1594,10 +1237,9 @@ components:
           title: Afbeelding
           description: Image of the category
       required:
-      - created_on
-      - name
-      - slug
-      - updated_on
+        - created_on
+        - name
+        - updated_on
     SimpleProductType:
       type: object
       properties:
@@ -1605,33 +1247,26 @@ components:
           $ref: '#/components/schemas/Upn'
         published:
           type: boolean
-          description: Whether the object is accessible with the api.
+          description: Whether the object is accessible through the API.
         created_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date the object was created. This field is automatically
-            set.
+          description: The datetime at which the object was created.
         updated_on:
           type: string
           format: date-time
           readOnly: true
-          description: The date when the object was last changed. This field is automatically
-            set.
+          description: The datetime at which the object was last changed.
         name:
           type: string
           title: Naam
           description: Name of the product type
           maxLength: 100
-        slug:
-          type: string
-          description: Slug of the product type
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
         summary:
           type: string
           title: Samenvatting
-          description: Short description of the product, limited to 300 characters.
+          description: Short description of the product type, limited to 300 characters.
           maxLength: 300
         icon:
           type: string
@@ -1647,11 +1282,11 @@ components:
         form_link:
           type: string
           format: uri
-          description: Action link to request the product.
+          description: Action link to request the product type.
           maxLength: 200
         content:
           type: string
-          description: Product content with build-in WYSIWYG editor.
+          description: Product type content with build-in WYSIWYG editor.
         keywords:
           type: array
           items:
@@ -1659,12 +1294,11 @@ components:
             maxLength: 100
           description: List of keywords for search
       required:
-      - content
-      - created_on
-      - name
-      - slug
-      - uniform_product_name
-      - updated_on
+        - content
+        - created_on
+        - name
+        - uniform_product_name
+        - updated_on
     Tag:
       type: object
       properties:
@@ -1675,20 +1309,14 @@ components:
           title: Naam
           description: Name of the tag
           maxLength: 100
-        slug:
-          type: string
-          description: Slug of the tag
-          maxLength: 100
-          pattern: ^[-a-zA-Z0-9_]+$
         icon:
           type: string
           format: uri
           nullable: true
           description: Icon of the tag
       required:
-      - name
-      - slug
-      - type
+        - name
+        - type
     TagType:
       type: object
       properties:
@@ -1698,30 +1326,30 @@ components:
           description: Name of the tag type
           maxLength: 100
       required:
-      - name
+        - name
     TypeEnum:
       enum:
-      - bsn
-      - checkbox
-      - Cosign
-      - currency
-      - date
-      - datetime
-      - email
-      - file
-      - iban
-      - licenseplate
-      - map
-      - number
-      - password
-      - phoneNumber
-      - postcode
-      - radio
-      - select
-      - selectBoxes
-      - signature
-      - textfield
-      - time
+        - bsn
+        - checkbox
+        - Cosign
+        - currency
+        - date
+        - datetime
+        - email
+        - file
+        - iban
+        - licenseplate
+        - map
+        - number
+        - password
+        - phoneNumber
+        - postcode
+        - radio
+        - select
+        - selectBoxes
+        - signature
+        - textfield
+        - time
       type: string
       description: |-
         * `bsn` - Bsn
@@ -1759,7 +1387,7 @@ components:
           description: Url to the upn definition.
           maxLength: 200
       required:
-      - name
+        - name
   securitySchemes:
     basicAuth:
       type: http
