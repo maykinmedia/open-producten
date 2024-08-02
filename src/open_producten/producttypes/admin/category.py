@@ -43,6 +43,7 @@ class CategoryAdminForm(movenodeform_factory(Category)):
 
 class CategoryAdminFormSet(BaseModelFormSet):
     def clean(self):
+        super().clean()
 
         data = {
             form.cleaned_data["id"]: form.cleaned_data["published"]
@@ -57,8 +58,6 @@ class CategoryAdminFormSet(BaseModelFormSet):
                     raise forms.ValidationError(
                         _("Parent nodes cannot be unpublished with published children.")
                     )
-
-        return super().clean()
 
 
 @admin.register(Category)
