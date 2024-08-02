@@ -53,3 +53,52 @@ REQUESTS_DEFAULT_TIMEOUT = (10, 30)
 ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
     "open_producten.utils.django_two_factor_auth.should_display_dropdown_menu"
 )
+
+#
+# Django rest framework
+#
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+    ],
+}
+
+#
+# SPECTACULAR - OpenAPI schema generation
+#
+
+_DESCRIPTION = """
+Open Producten is an API to manage product types and products.
+"""
+
+API_VERSION = "0.0.1"
+
+SPECTACULAR_SETTINGS = {
+    "SCHEMA_PATH_PREFIX": "/api/v1",
+    "TITLE": "Open Producten API",
+    "DESCRIPTION": _DESCRIPTION,
+    # "POSTPROCESSING_HOOKS": [
+    #     "drf_spectacular.hooks.postprocess_schema_enums",
+    #     "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
+    # ],
+    "TOS": None,
+    # Optional: MAY contain "name", "url", "email"
+    # "CONTACT": {
+    #     "url": "https://github.com/maykinmedia/open-producten",
+    #     "email": "support@maykinmedia.nl",
+    # },
+    # Optional: MUST contain "name", MAY contain URL
+    # "LICENSE": {
+    #     "name": "UNLICENSED",
+    # },
+    "VERSION": API_VERSION,
+    # Tags defined in the global scope
+    "TAGS": [],
+    # Optional: MUST contain 'url', may contain "description"
+    # "EXTERNAL_DOCS": {
+    #     "description": "Functional and technical documentation",
+    #     "url": "https://open-producten.readthedocs.io/",
+    # },
+}

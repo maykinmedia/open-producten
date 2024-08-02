@@ -1,12 +1,12 @@
 name: lint-oas
 
 on:
-  #  push:
-  #    paths:
-  #      - "src/open_producten/api/v*/openapi.yaml"
-  #      - .github/workflows/lint-oas.yml
-  #    branches:
-  #      - '**'
+  push:
+    paths:
+      - "src/openapi.yaml"
+      - .github/workflows/lint-oas.yml
+    branches:
+      - '**'
   workflow_dispatch:
 
 jobs:
@@ -27,4 +27,4 @@ jobs:
       - name: Install spectral
         run: npm install -g @stoplight/spectral@5
       - name: Run OAS linter
-        run: spectral lint ./src/open_producten/api/$/openapi.yaml
+        run: spectral lint ./src/openapi.yaml

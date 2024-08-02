@@ -20,9 +20,6 @@ class CategoryProductType(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     product_type = models.ForeignKey("ProductType", on_delete=models.CASCADE)
 
-    class Meta:
-        order_with_respect_to = "category"
-
 
 class ProductType(BasePublishableModel):
     name = models.CharField(

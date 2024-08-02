@@ -1,12 +1,12 @@
 name: generate-sdks
 
 on:
-  #  push:
-  #    paths:
-  #      - "src/open_producten/api/v*/openapi.yaml"
-  #      - ".github/workflows/generate-sdks.yml"
-  #    branches:
-  #      - '**'
+  push:
+    paths:
+      - "src/openapi.yaml"
+      - ".github/workflows/generate-sdks.yml"
+    branches:
+      - '**'
   workflow_dispatch:
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
         run: npm install -g @openapitools/openapi-generator-cli
       - name: Determing oas path
         id: vars
-        run: echo ::set-output name=oas::./src/open_producten/api/$/openapi.yaml
+        run: echo ::set-output name=oas::./src/openapi.yaml
       - name: Validate schema
         run: openapi-generator-cli validate -i $
       - name: Generate Java client

@@ -15,6 +15,7 @@ class Question(BaseModel):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+        related_name="questions",
     )
     product_type = models.ForeignKey(
         ProductType,
@@ -22,6 +23,7 @@ class Question(BaseModel):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+        related_name="questions",
     )
     question = models.CharField(verbose_name=_("Question"), max_length=250)
     answer = models.TextField(verbose_name=_("Answer"))
@@ -29,7 +31,6 @@ class Question(BaseModel):
     class Meta:
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
-        order_with_respect_to = "category"
 
     def clean(self):
         if self.category and self.product_type:

@@ -1,12 +1,12 @@
 name: generate-postman-collection
 
 on:
-  #  push:
-  #    paths:
-  #      - "src/open_producten/api/v*/openapi.yaml"
-  #      - ".github/workflows/generate-postman-collection.yml"
-  #    branches:
-  #      - '**'
+  push:
+    paths:
+      - "src/openapi.yaml"
+      - ".github/workflows/generate-postman-collection.yml"
+    branches:
+      - '**'
   workflow_dispatch:
 
 jobs:
@@ -29,4 +29,4 @@ jobs:
       - name: Create tests folder
         run: mkdir -p ./tests/postman
       - name: Generate Postman collection
-        run: openapi2postmanv2 -s ./src/open_producten/api/$/openapi.yaml -o ./tests/postman/collection.json --pretty
+        run: openapi2postmanv2 -s ./src/openapi.yaml -o ./tests/postman/collection.json --pretty

@@ -32,10 +32,8 @@ class Tag(BaseModel):
     )
     type = models.ForeignKey(
         TagType,
-        null=True,
-        blank=True,
         verbose_name=_("Type"),
-        on_delete=models.SET_NULL,
+        on_delete=models.RESTRICT,
         related_name="tags",
         help_text=_("The related tag type"),
     )

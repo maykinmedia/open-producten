@@ -7,10 +7,16 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from maykin_2fa import monkeypatch_admin
 from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
 
 from open_producten.accounts.views.password_reset import PasswordResetView
+from open_producten.producttypes.router import ProductTypesRouter
 
 # Configure admin
 
@@ -50,6 +56,36 @@ urlpatterns = [
     ),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
+    path(
+        "api/",
+        include(
+            [
+                path(
+                    "v1/",
+                    include(
+                        [
+                            path(
+                                "schema/",
+                                SpectacularAPIView.as_view(schema=None),
+                                name="schema",
+                            ),
+                            path(
+                                "schema/swagger-ui/",
+                                SpectacularSwaggerView.as_view(url_name="schema"),
+                                name="swagger-ui",
+                            ),
+                            path(
+                                "schema/redoc/",
+                                SpectacularRedocView.as_view(url_name="schema"),
+                                name="redoc",
+                            ),
+                            path("", include(ProductTypesRouter.urls)),
+                        ]
+                    ),
+                )
+            ]
+        ),
+    ),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static

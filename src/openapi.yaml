@@ -1,0 +1,1770 @@
+openapi: 3.0.3
+info:
+  title: Open Producten API
+  version: 0.0.1
+  description: |2
+
+    Open Producten is an API to manage product types and products.
+paths:
+  /api/v1/categories/:
+    get:
+      operationId: categories_list
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+    post:
+      operationId: categories_create
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/v1/categories/{slug}/:
+    get:
+      operationId: categories_retrieve
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the category
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: categories_update
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the category
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the category
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: categories_destroy
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the category
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypes/:
+    get:
+      operationId: producttypes_list
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductType'
+          description: ''
+    post:
+      operationId: producttypes_create
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductType'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+  /api/v1/producttypes/{slug}/:
+    get:
+      operationId: producttypes_retrieve
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the product type
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+    put:
+      operationId: producttypes_update
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the product type
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductType'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+    patch:
+      operationId: producttypes_partial_update
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the product type
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductType'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+    delete:
+      operationId: producttypes_destroy
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          description: Slug of the product type
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypes/{slug}/fields/:
+    get:
+      operationId: producttypes_fields_list
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Field'
+          description: ''
+    post:
+      operationId: producttypes_fields_create
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Field'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+          description: ''
+  /api/v1/producttypes/{slug}/fields/{id}/:
+    get:
+      operationId: producttypes_fields_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Field.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+          description: ''
+    put:
+      operationId: producttypes_fields_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Field.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Field'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+          description: ''
+    patch:
+      operationId: producttypes_fields_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Field.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedField'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+          description: ''
+    delete:
+      operationId: producttypes_fields_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Field.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypes/{slug}/links/:
+    get:
+      operationId: producttypes_links_list
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Link'
+          description: ''
+    post:
+      operationId: producttypes_links_create
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Link'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+  /api/v1/producttypes/{slug}/links/{id}/:
+    get:
+      operationId: producttypes_links_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product type link.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+    put:
+      operationId: producttypes_links_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product type link.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Link'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+    patch:
+      operationId: producttypes_links_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product type link.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLink'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+    delete:
+      operationId: producttypes_links_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Product type link.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypes/{slug}/prices/:
+    get:
+      operationId: producttypes_prices_list
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+          description: ''
+    post:
+      operationId: producttypes_prices_create
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Price'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+          description: ''
+  /api/v1/producttypes/{slug}/prices/{id}/:
+    get:
+      operationId: producttypes_prices_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Price.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+          description: ''
+    put:
+      operationId: producttypes_prices_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Price.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Price'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+          description: ''
+    patch:
+      operationId: producttypes_prices_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Price.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPrice'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+          description: ''
+    delete:
+      operationId: producttypes_prices_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Price.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypes/{slug}/questions/:
+    get:
+      operationId: producttypes_questions_list
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+          description: ''
+    post:
+      operationId: producttypes_questions_create
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+  /api/v1/producttypes/{slug}/questions/{id}/:
+    get:
+      operationId: producttypes_questions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Question.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    put:
+      operationId: producttypes_questions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Question.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    patch:
+      operationId: producttypes_questions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Question.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedQuestion'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    delete:
+      operationId: producttypes_questions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Question.
+        required: true
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        product_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleProductType'
+          readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Name of the category
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the category
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Description of the category
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the category
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Afbeelding
+          description: Image of the category
+      required:
+      - created_on
+      - name
+      - product_types
+      - questions
+      - slug
+      - updated_on
+    Condition:
+      type: object
+      properties:
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Short name of the condition
+          maxLength: 100
+        question:
+          type: string
+          description: Question used in the question-answer game
+        positive_text:
+          type: string
+          description: Description how to meet the condition
+        negative_text:
+          type: string
+          description: Description how not to meet the condition
+      required:
+      - created_on
+      - name
+      - negative_text
+      - positive_text
+      - question
+      - updated_on
+    Field:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Naam
+          description: The name of the field
+          maxLength: 100
+        description:
+          type: string
+          description: Short description of the field
+          maxLength: 300
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          description: |-
+            The formio type of the field
+
+            * `bsn` - Bsn
+            * `checkbox` - Checkbox
+            * `Cosign` - Cosign
+            * `currency` - Currency
+            * `date` - Date
+            * `datetime` - Datetime
+            * `email` - Email
+            * `file` - File
+            * `iban` - Iban
+            * `licenseplate` - License Plate
+            * `map` - Map
+            * `number` - Number
+            * `password` - Password
+            * `phoneNumber` - Phone Number
+            * `postcode` - Postcode
+            * `radio` - Radio
+            * `select` - Select
+            * `selectBoxes` - Select Boxes
+            * `signature` - Signature
+            * `textfield` - Textfield
+            * `time` - Time
+        is_required:
+          type: boolean
+        choices:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          nullable: true
+          description: The Choices that can be selected in the form
+      required:
+      - description
+      - name
+    Link:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Naam
+          description: Name for the link
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Url of the link
+          maxLength: 200
+      required:
+      - name
+      - url
+    PatchedCategory:
+      type: object
+      properties:
+        product_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleProductType'
+          readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Name of the category
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the category
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Description of the category
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the category
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Afbeelding
+          description: Image of the category
+    PatchedField:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Naam
+          description: The name of the field
+          maxLength: 100
+        description:
+          type: string
+          description: Short description of the field
+          maxLength: 300
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          description: |-
+            The formio type of the field
+
+            * `bsn` - Bsn
+            * `checkbox` - Checkbox
+            * `Cosign` - Cosign
+            * `currency` - Currency
+            * `date` - Date
+            * `datetime` - Datetime
+            * `email` - Email
+            * `file` - File
+            * `iban` - Iban
+            * `licenseplate` - License Plate
+            * `map` - Map
+            * `number` - Number
+            * `password` - Password
+            * `phoneNumber` - Phone Number
+            * `postcode` - Postcode
+            * `radio` - Radio
+            * `select` - Select
+            * `selectBoxes` - Select Boxes
+            * `signature` - Signature
+            * `textfield` - Textfield
+            * `time` - Time
+        is_required:
+          type: boolean
+        choices:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          nullable: true
+          description: The Choices that can be selected in the form
+    PatchedLink:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Naam
+          description: Name for the link
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Url of the link
+          maxLength: 200
+    PatchedPrice:
+      type: object
+      properties:
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceOption'
+          default: []
+        start_date:
+          type: string
+          format: date
+          description: The start date for this price
+    PatchedProductType:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          readOnly: true
+        tag_slugs:
+          type: array
+          items:
+            type: string
+            description: Slug of the tag
+            default: []
+          default: []
+        related_product_types:
+          type: array
+          items:
+            type: string
+            description: Slug of the product type
+            default: []
+          default: []
+        uniform_product_name:
+          type: integer
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Condition'
+          readOnly: true
+          default: []
+        condition_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+            default: []
+          writeOnly: true
+          default: []
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleCategory'
+          readOnly: true
+        category_slugs:
+          type: array
+          items:
+            type: string
+            description: Slug of the category
+            writeOnly: true
+            default: []
+          writeOnly: true
+          default: []
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          readOnly: true
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+          readOnly: true
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+          readOnly: true
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+          readOnly: true
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Name of the product type
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the product type
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        summary:
+          type: string
+          title: Samenvatting
+          description: Short description of the product, limited to 300 characters.
+          maxLength: 300
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the product type
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Afbeelding
+          description: Main image of the product type
+        form_link:
+          type: string
+          format: uri
+          description: Action link to request the product.
+          maxLength: 200
+        content:
+          type: string
+          description: Product content with build-in WYSIWYG editor.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: List of keywords for search
+    PatchedQuestion:
+      type: object
+      properties:
+        question:
+          type: string
+          maxLength: 250
+        answer:
+          type: string
+    Price:
+      type: object
+      properties:
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceOption'
+          default: []
+        start_date:
+          type: string
+          format: date
+          description: The start date for this price
+      required:
+      - start_date
+    PriceOption:
+      type: object
+      properties:
+        id:
+          type: integer
+        cost:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          description: The cost of the price option
+        description:
+          type: string
+          description: Short description of the option
+          maxLength: 100
+      required:
+      - description
+    ProductType:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          readOnly: true
+        tag_slugs:
+          type: array
+          items:
+            type: string
+            description: Slug of the tag
+            default: []
+          default: []
+        related_product_types:
+          type: array
+          items:
+            type: string
+            description: Slug of the product type
+            default: []
+          default: []
+        uniform_product_name:
+          type: integer
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Condition'
+          readOnly: true
+          default: []
+        condition_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+            default: []
+          writeOnly: true
+          default: []
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleCategory'
+          readOnly: true
+        category_slugs:
+          type: array
+          items:
+            type: string
+            description: Slug of the category
+            writeOnly: true
+            default: []
+          writeOnly: true
+          default: []
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          readOnly: true
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+          readOnly: true
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+          readOnly: true
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+          readOnly: true
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Name of the product type
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the product type
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        summary:
+          type: string
+          title: Samenvatting
+          description: Short description of the product, limited to 300 characters.
+          maxLength: 300
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the product type
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Afbeelding
+          description: Main image of the product type
+        form_link:
+          type: string
+          format: uri
+          description: Action link to request the product.
+          maxLength: 200
+        content:
+          type: string
+          description: Product content with build-in WYSIWYG editor.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: List of keywords for search
+      required:
+      - categories
+      - conditions
+      - content
+      - created_on
+      - fields
+      - links
+      - name
+      - prices
+      - questions
+      - slug
+      - tags
+      - uniform_product_name
+      - updated_on
+    Question:
+      type: object
+      properties:
+        question:
+          type: string
+          maxLength: 250
+        answer:
+          type: string
+      required:
+      - answer
+      - question
+    SimpleCategory:
+      type: object
+      properties:
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Name of the category
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the category
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Description of the category
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the category
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Afbeelding
+          description: Image of the category
+      required:
+      - created_on
+      - name
+      - slug
+      - updated_on
+    SimpleProductType:
+      type: object
+      properties:
+        uniform_product_name:
+          $ref: '#/components/schemas/Upn'
+        published:
+          type: boolean
+          description: Whether the object is accessible with the api.
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date the object was created. This field is automatically
+            set.
+        updated_on:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date when the object was last changed. This field is automatically
+            set.
+        name:
+          type: string
+          title: Naam
+          description: Name of the product type
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the product type
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        summary:
+          type: string
+          title: Samenvatting
+          description: Short description of the product, limited to 300 characters.
+          maxLength: 300
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the product type
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Afbeelding
+          description: Main image of the product type
+        form_link:
+          type: string
+          format: uri
+          description: Action link to request the product.
+          maxLength: 200
+        content:
+          type: string
+          description: Product content with build-in WYSIWYG editor.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: List of keywords for search
+      required:
+      - content
+      - created_on
+      - name
+      - slug
+      - uniform_product_name
+      - updated_on
+    Tag:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TagType'
+        name:
+          type: string
+          title: Naam
+          description: Name of the tag
+          maxLength: 100
+        slug:
+          type: string
+          description: Slug of the tag
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          description: Icon of the tag
+      required:
+      - name
+      - slug
+      - type
+    TagType:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Naam
+          description: Name of the tag type
+          maxLength: 100
+      required:
+      - name
+    TypeEnum:
+      enum:
+      - bsn
+      - checkbox
+      - Cosign
+      - currency
+      - date
+      - datetime
+      - email
+      - file
+      - iban
+      - licenseplate
+      - map
+      - number
+      - password
+      - phoneNumber
+      - postcode
+      - radio
+      - select
+      - selectBoxes
+      - signature
+      - textfield
+      - time
+      type: string
+      description: |-
+        * `bsn` - Bsn
+        * `checkbox` - Checkbox
+        * `Cosign` - Cosign
+        * `currency` - Currency
+        * `date` - Date
+        * `datetime` - Datetime
+        * `email` - Email
+        * `file` - File
+        * `iban` - Iban
+        * `licenseplate` - License Plate
+        * `map` - Map
+        * `number` - Number
+        * `password` - Password
+        * `phoneNumber` - Phone Number
+        * `postcode` - Postcode
+        * `radio` - Radio
+        * `select` - Select
+        * `selectBoxes` - Select Boxes
+        * `signature` - Signature
+        * `textfield` - Textfield
+        * `time` - Time
+    Upn:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Naam
+          description: Uniform product name
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Url to the upn definition.
+          maxLength: 200
+      required:
+      - name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: open_producten_sessionid

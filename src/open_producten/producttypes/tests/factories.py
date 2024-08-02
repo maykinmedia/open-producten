@@ -4,11 +4,14 @@ from ..models import (
     Category,
     Condition,
     Field,
+    File,
+    Link,
     Price,
     PriceOption,
     ProductType,
     Question,
     Tag,
+    TagType,
     UniformProductName,
 )
 
@@ -64,8 +67,16 @@ class CategoryFactory(factory.django.DjangoModelFactory):
         return Category.add_root(**kwargs)
 
 
+class TagTypeFactory(factory.django.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"tag type {n}")
+
+    class Meta:
+        model = TagType
+
+
 class TagFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f"tag {n}")
+    type = factory.SubFactory(TagTypeFactory)
 
     class Meta:
         model = Tag
@@ -98,7 +109,6 @@ class PriceFactory(factory.django.DjangoModelFactory):
 
 
 class PriceOptionFactory(factory.django.DjangoModelFactory):
-    price = factory.Faker("price")
     description = factory.Faker("sentence")
 
     class Meta:
@@ -112,3 +122,20 @@ class FieldFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Field
+
+
+class FileFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    file = factory.django.FileField(filename="test_file.txt")
+
+    class Meta:
+        model = File
+
+
+class LinkFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    name = factory.Sequence(lambda n: f"link {n}")
+    url = factory.Faker("url")
+
+    class Meta:
+        model = Link
