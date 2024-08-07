@@ -59,8 +59,8 @@ class BaseLocation(BaseModel):
 
 class Location(BaseLocation):
     class Meta:
-        verbose_name = _("Product location")
-        verbose_name_plural = _("Product locations")
+        verbose_name = _("Location")
+        verbose_name_plural = _("Locations")
 
     def __str__(self) -> str:
         return f"{self.name}: {self.address_str}"

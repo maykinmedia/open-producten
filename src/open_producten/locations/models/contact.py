@@ -14,40 +14,40 @@ class Contact(models.Model):
         blank=True,
         related_name="product_contacts",
         on_delete=models.SET_NULL,
-        help_text=_("The organisation of the product contact"),
+        help_text=_("The organisation of the contact"),
     )
     first_name = models.CharField(
         verbose_name=_("First name"),
         max_length=255,
-        help_text=_("First name of the product contact"),
+        help_text=_("First name of the contact"),
     )
     last_name = models.CharField(
         verbose_name=_("Last name"),
         max_length=255,
-        help_text=_("Last name of the product contact"),
+        help_text=_("Last name of the contact"),
     )
     email = models.EmailField(
         verbose_name=_("Email address"),
         blank=True,
-        help_text=_("The email address of the product contact"),
+        help_text=_("The email address of the contact"),
     )
     phone_number = models.CharField(
         verbose_name=_("Phone number"),
         blank=True,
         max_length=15,
         validators=[validate_phone_number],
-        help_text=_("The phone number of the product contact"),
+        help_text=_("The phone number of the contact"),
     )
     role = models.CharField(
         verbose_name=_("Rol"),
         blank=True,
         max_length=100,
-        help_text=_("The role/function of the product contact"),
+        help_text=_("The role/function of the contact"),
     )
 
     class Meta:
-        verbose_name = _("Product contact")
-        verbose_name_plural = _("Product contacts")
+        verbose_name = _("Contact")
+        verbose_name_plural = _("Contacts")
 
     def __str__(self):
         if self.organisation:
