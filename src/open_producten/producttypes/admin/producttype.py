@@ -39,6 +39,9 @@ class ProductTypeAdmin(admin.ModelAdmin):
         "related_product_types",
         "tags",
         "conditions",
+        "organisations",
+        "contacts",
+        "locations",
     )
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
