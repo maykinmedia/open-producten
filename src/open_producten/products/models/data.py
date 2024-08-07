@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.producttypes.models import Field, FieldTypes
-from open_producten.utils.validators import validate_postal_code
+from open_producten.utils.validators import validate_phone_number, validate_postal_code
 
 from .product import Product
 from .validators import (
@@ -87,7 +87,7 @@ class Data(models.Model):
             data, r"^\d+\.?\d*$", FieldTypes.NUMBER
         ),
         # FieldTypes.PASSWORD STR
-        FieldTypes.PHONE_NUMBER: lambda data: None,  # TODO
+        FieldTypes.PHONE_NUMBER: lambda data: validate_phone_number(data),
         FieldTypes.POSTCODE: lambda data: validate_postal_code(data),
         FieldTypes.SIGNATURE: lambda data: validate_regex(
             data, r"^data:image/png;base64,.*$", FieldTypes.SIGNATURE

@@ -188,8 +188,14 @@ class TestData(TestCase):
         DataFactory.build(field=field, data="42.12").clean()
         DataFactory.build(field=field, data="42.1294323").clean()
 
-    def test_clean_phone_number(self):  # TODO
-        pass
+    def test_clean_phone_number(self):
+        field = FieldFactory.create(type=FieldTypes.PHONE_NUMBER)
+
+        with self.assertRaises(ValidationError):
+            DataFactory.build(field=field, data="abcde").clean()
+
+        DataFactory.build(field=field, data="0613165228").clean()
+        DataFactory.build(field=field, data="+31 6 13165228").clean()
 
     def test_clean_postcode(self):
         field = FieldFactory.create(type=FieldTypes.POSTCODE)

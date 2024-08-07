@@ -18,6 +18,7 @@ INSTALLED_APPS += [
     "open_producten.utils",
     "open_producten.producttypes",
     "open_producten.products",
+    "open_producten.locations",
 ]
 
 #

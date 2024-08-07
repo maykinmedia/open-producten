@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.core.models import BaseModel
+from open_producten.locations.models import Contact, Location, Organisation
 
 from .category import Category
 from .condition import Condition
@@ -118,6 +119,30 @@ class ProductType(BaseModel):
         related_name="product_types",
         help_text=_("Categories which the product is linked to"),
         through=CategoryProductType,
+    )
+
+    organisations = models.ManyToManyField(
+        Organisation,
+        verbose_name=_("Organisations"),
+        blank=True,
+        related_name="products",
+        help_text=_("Organisations which provides this product"),
+    )
+
+    contacts = models.ManyToManyField(
+        Contact,
+        verbose_name=_("Product contacts"),
+        related_name="products",
+        blank=True,
+        help_text=_("The contacts responsible for the product"),
+    )
+
+    locations = models.ManyToManyField(
+        Location,
+        verbose_name=_("Product locations"),
+        related_name="products",
+        blank=True,
+        help_text=_("Locations where the product is available at."),
     )
 
     class Meta:
