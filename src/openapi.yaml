@@ -45,6 +45,149 @@ paths:
               schema:
                 $ref: '#/components/schemas/Category'
           description: ''
+  /api/v1/categories/{category_id}/questions/:
+    get:
+      operationId: categories_questions_list
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - categories
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+          description: ''
+    post:
+      operationId: categories_questions_create
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+  /api/v1/categories/{category_id}/questions/{id}/:
+    get:
+      operationId: categories_questions_retrieve
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    put:
+      operationId: categories_questions_update
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    delete:
+      operationId: categories_questions_destroy
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Question.
+          required: true
+      tags:
+        - categories
+      security:
+        - cookieAuth: [ ]
+        - basicAuth: [ ]
+        - { }
+      responses:
+        '204':
+          description: No response body
   /api/v1/categories/{id}/:
     get:
       operationId: categories_retrieve
@@ -107,133 +250,6 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Category.
-          required: true
-      tags:
-        - categories
-      security:
-        - cookieAuth: [ ]
-        - basicAuth: [ ]
-        - { }
-      responses:
-        '204':
-          description: No response body
-  /api/v1/categories/{id}/questions/:
-    get:
-      operationId: categories_questions_list
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Question.
-          required: true
-      tags:
-        - categories
-      security:
-        - cookieAuth: [ ]
-        - basicAuth: [ ]
-        - { }
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Question'
-          description: ''
-    post:
-      operationId: categories_questions_create
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Question.
-          required: true
-      tags:
-        - categories
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Question'
-        required: true
-      security:
-        - cookieAuth: [ ]
-        - basicAuth: [ ]
-        - { }
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Question'
-          description: ''
-  /api/v1/categories/{id}/questions/{id}/:
-    get:
-      operationId: categories_questions_retrieve
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Question.
-          required: true
-      tags:
-        - categories
-      security:
-        - cookieAuth: [ ]
-        - basicAuth: [ ]
-        - { }
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Question'
-          description: ''
-    put:
-      operationId: categories_questions_update
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Question.
-          required: true
-      tags:
-        - categories
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Question'
-        required: true
-      security:
-        - cookieAuth: [ ]
-        - basicAuth: [ ]
-        - { }
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Question'
-          description: ''
-    delete:
-      operationId: categories_questions_destroy
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Question.
           required: true
       tags:
         - categories
@@ -355,16 +371,16 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{id}/fields/:
+  /api/v1/producttypes/{product_type_id}/fields/:
     get:
       operationId: producttypes_fields_list
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Field.
+            description: The product type that this field is part of
           required: true
       tags:
         - producttypes
@@ -385,11 +401,11 @@ paths:
       operationId: producttypes_fields_create
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Field.
+            description: The product type that this field is part of
           required: true
       tags:
         - producttypes
@@ -410,7 +426,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Field'
           description: ''
-  /api/v1/producttypes/{id}/fields/{id}/:
+  /api/v1/producttypes/{product_type_id}/fields/{id}/:
     get:
       operationId: producttypes_fields_retrieve
       parameters:
@@ -420,6 +436,13 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Field.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: The product type that this field is part of
           required: true
       tags:
         - producttypes
@@ -443,6 +466,13 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Field.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: The product type that this field is part of
           required: true
       tags:
         - producttypes
@@ -473,6 +503,13 @@ paths:
             format: uuid
           description: A UUID string identifying this Field.
           required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: The product type that this field is part of
+          required: true
       tags:
         - producttypes
       security:
@@ -482,16 +519,16 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{id}/links/:
+  /api/v1/producttypes/{product_type_id}/links/:
     get:
       operationId: producttypes_links_list
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Product type link.
+            description: Related product type
           required: true
       tags:
         - producttypes
@@ -512,11 +549,11 @@ paths:
       operationId: producttypes_links_create
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Product type link.
+            description: Related product type
           required: true
       tags:
         - producttypes
@@ -537,7 +574,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
-  /api/v1/producttypes/{id}/links/{id}/:
+  /api/v1/producttypes/{product_type_id}/links/{id}/:
     get:
       operationId: producttypes_links_retrieve
       parameters:
@@ -547,6 +584,13 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Product type link.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Related product type
           required: true
       tags:
         - producttypes
@@ -570,6 +614,13 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Product type link.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Related product type
           required: true
       tags:
         - producttypes
@@ -600,6 +651,13 @@ paths:
             format: uuid
           description: A UUID string identifying this Product type link.
           required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Related product type
+          required: true
       tags:
         - producttypes
       security:
@@ -609,16 +667,16 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{id}/prices/:
+  /api/v1/producttypes/{product_type_id}/prices/:
     get:
       operationId: producttypes_prices_list
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Price.
+            description: The product type that this price belongs to
           required: true
       tags:
         - producttypes
@@ -639,11 +697,11 @@ paths:
       operationId: producttypes_prices_create
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Price.
+            description: The product type that this price belongs to
           required: true
       tags:
         - producttypes
@@ -664,7 +722,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Price'
           description: ''
-  /api/v1/producttypes/{id}/prices/{id}/:
+  /api/v1/producttypes/{product_type_id}/prices/{id}/:
     get:
       operationId: producttypes_prices_retrieve
       parameters:
@@ -674,6 +732,13 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Price.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: The product type that this price belongs to
           required: true
       tags:
         - producttypes
@@ -697,6 +762,13 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Price.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: The product type that this price belongs to
           required: true
       tags:
         - producttypes
@@ -727,6 +799,13 @@ paths:
             format: uuid
           description: A UUID string identifying this Price.
           required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: The product type that this price belongs to
+          required: true
       tags:
         - producttypes
       security:
@@ -736,16 +815,15 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producttypes/{id}/questions/:
+  /api/v1/producttypes/{product_type_id}/questions/:
     get:
       operationId: producttypes_questions_list
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Question.
           required: true
       tags:
         - producttypes
@@ -766,11 +844,10 @@ paths:
       operationId: producttypes_questions_create
       parameters:
         - in: path
-          name: id
+          name: product_type_id
           schema:
             type: string
             format: uuid
-          description: A UUID string identifying this Question.
           required: true
       tags:
         - producttypes
@@ -791,7 +868,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Question'
           description: ''
-  /api/v1/producttypes/{id}/questions/{id}/:
+  /api/v1/producttypes/{product_type_id}/questions/{id}/:
     get:
       operationId: producttypes_questions_retrieve
       parameters:
@@ -801,6 +878,12 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Question.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
           required: true
       tags:
         - producttypes
@@ -824,6 +907,12 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Question.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
           required: true
       tags:
         - producttypes
@@ -853,6 +942,12 @@ paths:
             type: string
             format: uuid
           description: A UUID string identifying this Question.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
           required: true
       tags:
         - producttypes

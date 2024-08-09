@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-
 from rest_framework.viewsets import ModelViewSet
 
 from open_producten.producttypes.models import (
@@ -33,11 +32,11 @@ class ProductTypeViewSet(BaseModelViewSet):
 class ProductTypeChildViewSet(BaseModelViewSet):
 
     def get_queryset(self):
-        return self.queryset.filter(product_type_id=self.kwargs["id"])
+        return self.queryset.filter(product_type_id=self.kwargs["product_type_id"])
 
     def perform_create(self, serializer):
         serializer.save(
-            product_type=get_object_or_404(ProductType, id=self.kwargs["id"])
+            product_type=get_object_or_404(ProductType, id=self.kwargs["product_type_id"])
         )
 
 
@@ -70,10 +69,10 @@ class CategoryViewSet(BaseModelViewSet):
 class CategoryChildViewSet(BaseModelViewSet):
 
     def get_queryset(self):
-        return self.queryset.filter(category_id=self.kwargs["id"])
+        return self.queryset.filter(category_id=self.kwargs["category_id"])
 
     def perform_create(self, serializer):
-        serializer.save(category=get_object_or_404(Category, id=self.kwargs["id"]))
+        serializer.save(category=get_object_or_404(Category, id=self.kwargs["category_id"]))
 
 
 class CategoryQuestionViewSet(CategoryChildViewSet):

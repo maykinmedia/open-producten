@@ -13,29 +13,29 @@ from open_producten.producttypes.views import (
 ProductTypesRouter = DefaultRouter()
 ProductTypesRouter.register("producttypes", ProductTypeViewSet, basename="producttype")
 ProductTypesRouter.register(
-    "producttypes/(?P<id>[^/.]+)/links",
+    "producttypes/(?P<product_type_id>[^/.]+)/links",
     ProductTypeLinkViewSet,
     basename="producttype-link",
 )
 ProductTypesRouter.register(
-    "producttypes/(?P<id>[^/.]+)/prices",
+    "producttypes/(?P<product_type_id>[^/.]+)/prices",
     ProductTypePriceViewSet,
     basename="producttype-price",
 )
 ProductTypesRouter.register(
-    "producttypes/(?P<id>[^/.]+)/questions",
+    "producttypes/(?P<product_type_id>[^/.]+)/questions",
     ProductTypeQuestionViewSet,
     basename="producttype-question",
 )
 ProductTypesRouter.register(
-    "producttypes/(?P<id>[^/.]+)/fields",
+    "producttypes/(?P<product_type_id>[^/.]+)/fields",
     ProductTypeFieldViewSet,
     basename="producttype-field",
 )
 
 ProductTypesRouter.register("categories", CategoryViewSet, basename="category")
 ProductTypesRouter.register(
-    "categories/(?P<id>[^/.]+)/questions",
+    "categories/(?P<category_id>[^/.]+)/questions",
     CategoryQuestionViewSet,
     basename="category-question",
 )
