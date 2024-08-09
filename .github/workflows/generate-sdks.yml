@@ -1,12 +1,12 @@
 name: generate-sdks
 
 on:
-  push:
-    paths:
-      - "src/open_producten/api/v*/openapi.yaml"
-      - ".github/workflows/generate-sdks.yml"
-    branches:
-      - '**'
+  #  push:
+  #    paths:
+  #      - "src/open_producten/api/v*/openapi.yaml"
+  #      - ".github/workflows/generate-sdks.yml"
+  #    branches:
+  #      - '**'
   workflow_dispatch:
 
 jobs:

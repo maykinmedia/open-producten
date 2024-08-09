@@ -192,6 +192,7 @@ django==4.2.13
     #   django-setup-configuration
     #   django-simple-certmanager
     #   django-solo
+    #   django-treebeard
     #   django-two-factor-auth
     #   djangorestframework
     #   djangorestframework-inclusions
@@ -314,6 +315,10 @@ django-solo==2.3.0
     #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
+django-treebeard==4.7.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-two-factor-auth[phonenumberslite,webauthn]==1.16.0
     # via
     #   -c requirements/ci.txt
