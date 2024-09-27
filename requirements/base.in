@@ -11,3 +11,4 @@ django-treebeard
 
 
 django-localflavor
+uuid-utils

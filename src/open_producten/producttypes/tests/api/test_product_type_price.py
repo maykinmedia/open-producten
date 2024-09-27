@@ -1,9 +1,9 @@
 import datetime
-import uuid
 from decimal import Decimal
 
 from django.forms import model_to_dict
 
+import uuid_utils.compat as uuid
 from freezegun import freeze_time
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
@@ -153,7 +153,7 @@ class TestProductTypePrice(BaseApiTestCase):
 
     def test_update_price_with_option_with_unknown_id_returns_error(self):
         price = self._create_price()
-        non_existing_id = uuid.uuid4()
+        non_existing_id = uuid.uuid7()
 
         data = {
             "valid_from": price.valid_from,
@@ -266,7 +266,7 @@ class TestProductTypePrice(BaseApiTestCase):
         price = self._create_price()
         option = PriceOptionFactory.create(price=price)
         option_of_other_price = PriceOptionFactory.create(price=PriceFactory.create())
-        non_existing_option = uuid.uuid4()
+        non_existing_option = uuid.uuid7()
 
         data = {
             "options": [

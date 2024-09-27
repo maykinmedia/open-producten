@@ -1,6 +1,6 @@
 import datetime
-import uuid
 
+import uuid_utils.compat as uuid
 from freezegun import freeze_time
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
@@ -331,7 +331,7 @@ class TestProduct(BaseApiTestCase):
         )
         product = self._create_product()
 
-        dummy_id = uuid.uuid4()
+        dummy_id = uuid.uuid7()
 
         data = self.data | {
             "product_type_id": self.product_type.id,
