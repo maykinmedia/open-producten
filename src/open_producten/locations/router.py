@@ -16,10 +16,10 @@ LocationRouter.register("locations", LocationViewSet, basename="locations")
 LocationRouter.register("organisations", OrganisationViewSet, basename="organisations")
 LocationRouter.register("contacts", ContactViewSet, basename="contacts")
 LocationRouter.register(
-    "organisations/neighbourhoods", NeighbourhoodViewSet, basename="neighbourhoods"
+    "neighbourhoods", NeighbourhoodViewSet, basename="neighbourhoods"
 )
 LocationRouter.register(
-    "organisations/types", OrganisationTypeViewSet, basename="organisationtypes"
+    "organisationtypes", OrganisationTypeViewSet, basename="organisationtypes"
 )
 
 location_urlpatterns = [
