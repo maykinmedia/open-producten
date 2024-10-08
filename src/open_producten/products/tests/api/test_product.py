@@ -27,7 +27,15 @@ def product_to_dict(product):
 
     product_dict["product_type"] = model_to_dict_with_id(
         product.product_type,
-        exclude=("categories", "conditions", "tags", "related_product_types"),
+        exclude=(
+            "categories",
+            "conditions",
+            "tags",
+            "related_product_types",
+            "contacts",
+            "locations",
+            "organisations",
+        ),
     )
     product_dict["product_type"][
         "uniform_product_name"

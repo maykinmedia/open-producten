@@ -3,6 +3,11 @@ from django.forms import model_to_dict
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
+from open_producten.locations.tests.factories import (
+    ContactFactory,
+    LocationFactory,
+    OrganisationFactory,
+)
 from open_producten.producttypes.models import Link, ProductType, Tag
 from open_producten.producttypes.tests.factories import (
     CategoryFactory,
@@ -153,6 +158,42 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(
             ProductType.objects.first().conditions.first().name, condition.name
+        )
+
+    def test_create_product_type_with_location(self):
+        location = LocationFactory.create()
+
+        data = self.data | {"location_ids": [location.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            ProductType.objects.first().locations.first().name, location.name
+        )
+
+    def test_create_product_type_with_organisation(self):
+        organisation = OrganisationFactory.create()
+
+        data = self.data | {"organisation_ids": [organisation.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            ProductType.objects.first().organisations.first().name, organisation.name
+        )
+
+    def test_create_product_type_with_contact(self):
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            ProductType.objects.first().contacts.first().first_name, contact.first_name
         )
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):

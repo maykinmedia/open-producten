@@ -16,7 +16,15 @@ class SimpleProductTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductType
-        exclude = ("categories", "conditions", "tags", "related_product_types")
+        exclude = (
+            "categories",
+            "conditions",
+            "tags",
+            "related_product_types",
+            "organisations",
+            "locations",
+            "contacts",
+        )
 
 
 class CategorySerializer(serializers.ModelSerializer):
