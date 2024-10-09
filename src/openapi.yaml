@@ -439,6 +439,666 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/contacts/:
+    get:
+      operationId: contacts_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+      tags:
+        - contacts
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContactList'
+          description: ''
+    post:
+      operationId: contacts_create
+      tags:
+        - contacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+  /api/v1/contacts/{id}/:
+    get:
+      operationId: contacts_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacts
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    put:
+      operationId: contacts_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    patch:
+      operationId: contacts_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContact'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    delete:
+      operationId: contacts_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacts
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/locations/:
+    get:
+      operationId: locations_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+      tags:
+        - locations
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLocationList'
+          description: ''
+    post:
+      operationId: locations_create
+      tags:
+        - locations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+  /api/v1/locations/{id}/:
+    get:
+      operationId: locations_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Location.
+          required: true
+      tags:
+        - locations
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+    put:
+      operationId: locations_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Location.
+          required: true
+      tags:
+        - locations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+    patch:
+      operationId: locations_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Location.
+          required: true
+      tags:
+        - locations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLocation'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+    delete:
+      operationId: locations_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Location.
+          required: true
+      tags:
+        - locations
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/neighbourhoods/:
+    get:
+      operationId: neighbourhoods_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+      tags:
+        - neighbourhoods
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNeighbourhoodList'
+          description: ''
+    post:
+      operationId: neighbourhoods_create
+      tags:
+        - neighbourhoods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Neighbourhood'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Neighbourhood'
+          description: ''
+  /api/v1/neighbourhoods/{id}/:
+    get:
+      operationId: neighbourhoods_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Neighbourhood.
+          required: true
+      tags:
+        - neighbourhoods
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Neighbourhood'
+          description: ''
+    put:
+      operationId: neighbourhoods_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Neighbourhood.
+          required: true
+      tags:
+        - neighbourhoods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Neighbourhood'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Neighbourhood'
+          description: ''
+    patch:
+      operationId: neighbourhoods_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Neighbourhood.
+          required: true
+      tags:
+        - neighbourhoods
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNeighbourhood'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Neighbourhood'
+          description: ''
+    delete:
+      operationId: neighbourhoods_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Neighbourhood.
+          required: true
+      tags:
+        - neighbourhoods
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organisations/:
+    get:
+      operationId: organisations_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+      tags:
+        - organisations
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganisationList'
+          description: ''
+    post:
+      operationId: organisations_create
+      tags:
+        - organisations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+          description: ''
+  /api/v1/organisations/{id}/:
+    get:
+      operationId: organisations_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation.
+          required: true
+      tags:
+        - organisations
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+          description: ''
+    put:
+      operationId: organisations_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation.
+          required: true
+      tags:
+        - organisations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+          description: ''
+    patch:
+      operationId: organisations_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation.
+          required: true
+      tags:
+        - organisations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganisation'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+          description: ''
+    delete:
+      operationId: organisations_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation.
+          required: true
+      tags:
+        - organisations
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organisationtypes/:
+    get:
+      operationId: organisationtypes_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+      tags:
+        - organisationtypes
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganisationTypeList'
+          description: ''
+    post:
+      operationId: organisationtypes_create
+      tags:
+        - organisationtypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationType'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationType'
+          description: ''
+  /api/v1/organisationtypes/{id}/:
+    get:
+      operationId: organisationtypes_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation type.
+          required: true
+      tags:
+        - organisationtypes
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationType'
+          description: ''
+    put:
+      operationId: organisationtypes_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation type.
+          required: true
+      tags:
+        - organisationtypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationType'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationType'
+          description: ''
+    patch:
+      operationId: organisationtypes_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation type.
+          required: true
+      tags:
+        - organisationtypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganisationType'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationType'
+          description: ''
+    delete:
+      operationId: organisationtypes_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisation type.
+          required: true
+      tags:
+        - organisationtypes
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
   /api/v1/products/:
     get:
       operationId: products_list
@@ -1769,6 +2429,50 @@ components:
         - negative_text
         - positive_text
         - question
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organisation:
+          allOf:
+            - $ref: '#/components/schemas/Organisation'
+          readOnly: true
+        organisation_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        first_name:
+          type: string
+          description: First name of the contact
+          maxLength: 255
+        last_name:
+          type: string
+          description: Last name of the contact
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          title: Email address
+          description: The email address of the contact
+          maxLength: 254
+        phone_number:
+          type: string
+          description: The phone number of the contact
+          maxLength: 15
+        role:
+          type: string
+          title: Rol
+          description: The role/function of the contact
+          maxLength: 100
+      required:
+        - first_name
+        - id
+        - last_name
+        - organisation
+        - organisation_id
     Data:
       type: object
       properties:
@@ -1891,6 +2595,135 @@ components:
         - id
         - name
         - url
+    Location:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        phone_number:
+          type: string
+          maxLength: 15
+        street:
+          type: string
+          description: Address street
+          maxLength: 250
+        house_number:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          description: Address postcode
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        city:
+          type: string
+          description: Address city
+          maxLength: 250
+      required:
+        - city
+        - id
+        - postcode
+    Neighbourhood:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Neighbourhood name
+          maxLength: 100
+      required:
+        - id
+        - name
+    Organisation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        neighbourhood:
+          allOf:
+            - $ref: '#/components/schemas/Neighbourhood'
+          readOnly: true
+        type:
+          allOf:
+            - $ref: '#/components/schemas/OrganisationType'
+          readOnly: true
+        neighbourhood_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        type_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        phone_number:
+          type: string
+          maxLength: 15
+        street:
+          type: string
+          description: Address street
+          maxLength: 250
+        house_number:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          description: Address postcode
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        city:
+          type: string
+          description: Address city
+          maxLength: 250
+        logo:
+          type: string
+          format: uri
+          nullable: true
+          description: Logo of the organisation
+      required:
+        - city
+        - id
+        - neighbourhood
+        - neighbourhood_id
+        - postcode
+        - type
+        - type_id
+    OrganisationType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Organisation type
+          maxLength: 100
+      required:
+        - id
+        - name
     PaginatedCategoryList:
       type: object
       required:
@@ -1937,6 +2770,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Condition'
+    PaginatedContactList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
     PaginatedFieldList:
       type: object
       required:
@@ -1983,6 +2839,98 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Link'
+    PaginatedLocationList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+    PaginatedNeighbourhoodList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Neighbourhood'
+    PaginatedOrganisationList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organisation'
+    PaginatedOrganisationTypeList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisationType'
     PaginatedPriceList:
       type: object
       required:
@@ -2199,6 +3147,44 @@ components:
         negative_text:
           type: string
           description: Description how not to meet the condition
+    PatchedContact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organisation:
+          allOf:
+            - $ref: '#/components/schemas/Organisation'
+          readOnly: true
+        organisation_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        first_name:
+          type: string
+          description: First name of the contact
+          maxLength: 255
+        last_name:
+          type: string
+          description: Last name of the contact
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          title: Email address
+          description: The email address of the contact
+          maxLength: 254
+        phone_number:
+          type: string
+          description: The phone number of the contact
+          maxLength: 15
+        role:
+          type: string
+          title: Rol
+          description: The role/function of the contact
+          maxLength: 100
     PatchedField:
       type: object
       properties:
@@ -2265,6 +3251,117 @@ components:
           format: uri
           description: Url of the link
           maxLength: 200
+    PatchedLocation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        phone_number:
+          type: string
+          maxLength: 15
+        street:
+          type: string
+          description: Address street
+          maxLength: 250
+        house_number:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          description: Address postcode
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        city:
+          type: string
+          description: Address city
+          maxLength: 250
+    PatchedNeighbourhood:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Neighbourhood name
+          maxLength: 100
+    PatchedOrganisation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        neighbourhood:
+          allOf:
+            - $ref: '#/components/schemas/Neighbourhood'
+          readOnly: true
+        type:
+          allOf:
+            - $ref: '#/components/schemas/OrganisationType'
+          readOnly: true
+        neighbourhood_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        type_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        phone_number:
+          type: string
+          maxLength: 15
+        street:
+          type: string
+          description: Address street
+          maxLength: 250
+        house_number:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          description: Address postcode
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        city:
+          type: string
+          description: Address city
+          maxLength: 250
+        logo:
+          type: string
+          format: uri
+          nullable: true
+          description: Logo of the organisation
+    PatchedOrganisationType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Organisation type
+          maxLength: 100
     PatchedPrice:
       type: object
       properties:
@@ -2307,14 +3404,10 @@ components:
             type: string
             format: uuid
           default: [ ]
-        uniform_product_name_id:
-          type: string
-          format: uuid
-          writeOnly: true
         uniform_product_name:
-          allOf:
-            - $ref: '#/components/schemas/UniformProductName'
-          readOnly: true
+          type: string
+          format: uri
+          description: Uri to the upn definition.
         conditions:
           type: array
           items:
@@ -2338,6 +3431,42 @@ components:
             type: string
             format: uuid
           writeOnly: true
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+          readOnly: true
+        location_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        organisations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organisation'
+          readOnly: true
+        organisation_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+          readOnly: true
+        contact_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
         questions:
           type: array
           items:
@@ -2408,24 +3537,6 @@ components:
             type: string
             maxLength: 100
           description: List of keywords for search
-        organisations:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Organisations which provides this product
-        contacts:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: The contacts responsible for the product
-        locations:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Locations where the product is available at.
     PatchedProductUpdate:
       type: object
       properties:
@@ -2644,14 +3755,10 @@ components:
             type: string
             format: uuid
           default: [ ]
-        uniform_product_name_id:
-          type: string
-          format: uuid
-          writeOnly: true
         uniform_product_name:
-          allOf:
-            - $ref: '#/components/schemas/UniformProductName'
-          readOnly: true
+          type: string
+          format: uri
+          description: Uri to the upn definition.
         conditions:
           type: array
           items:
@@ -2675,6 +3782,42 @@ components:
             type: string
             format: uuid
           writeOnly: true
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+          readOnly: true
+        location_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        organisations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organisation'
+          readOnly: true
+        organisation_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+          readOnly: true
+        contact_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
         questions:
           type: array
           items:
@@ -2745,40 +3888,24 @@ components:
             type: string
             maxLength: 100
           description: List of keywords for search
-        organisations:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Organisations which provides this product
-        contacts:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: The contacts responsible for the product
-        locations:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: Locations where the product is available at.
       required:
         - categories
         - category_ids
         - conditions
+        - contacts
         - content
         - created_on
         - fields
         - files
         - id
         - links
+        - locations
         - name
+        - organisations
         - prices
         - questions
         - tags
         - uniform_product_name
-        - uniform_product_name_id
         - updated_on
     ProductTypeCurrentPrice:
       type: object
@@ -2798,7 +3925,7 @@ components:
         upl_uri:
           type: string
           format: uri
-          description: Url to the upn definition.
+          description: Uri to the upn definition.
           readOnly: true
         current_price:
           allOf:
@@ -2928,7 +4055,9 @@ components:
           format: uuid
           readOnly: true
         uniform_product_name:
-          $ref: '#/components/schemas/UniformProductName'
+          type: string
+          format: uri
+          description: Uri to the upn definition.
         published:
           type: boolean
           description: Whether the object is accessible through the API.
@@ -3086,25 +4215,6 @@ components:
         * `signature` - Signature
         * `textfield` - Textfield
         * `time` - Time
-    UniformProductName:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          description: Uniform product name
-          maxLength: 100
-        url:
-          type: string
-          format: uri
-          description: Url to the upn definition.
-          maxLength: 200
-      required:
-        - id
-        - name
   securitySchemes:
     tokenAuth:
       type: apiKey

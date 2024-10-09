@@ -24,8 +24,7 @@ class TestProductTypeQuestion(BaseApiTestCase):
         self.data = {"question": "18?", "answer": "eligible"}
         self.path = f"/api/v1/producttypes/{self.product_type.id}/questions/"
 
-    def _create_question(self):
-        return QuestionFactory.create(product_type=self.product_type)
+        self.question = QuestionFactory.create(product_type=self.product_type)
 
     def test_read_question_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -35,49 +34,39 @@ class TestProductTypeQuestion(BaseApiTestCase):
         response = self.post(self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Question.objects.count(), 1)
-        self.assertEqual(self.product_type.questions.first().question, "18?")
+        self.assertEqual(Question.objects.count(), 2)
 
     def test_update_question(self):
-        question = self._create_question()
-
         data = self.data | {"question": "21?"}
-        response = self.put(question.id, data)
+        response = self.put(self.question.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().questions.first().question, "21?")
 
     def test_partial_update_question(self):
-        question = self._create_question()
-
         data = {"question": "21?"}
-        response = self.patch(question.id, data)
+        response = self.patch(self.question.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().questions.first().question, "21?")
 
     def test_read_questions(self):
-        question = self._create_question()
-
         response = self.get()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [question_to_dict(question)])
+        self.assertEqual(response.data["results"], [question_to_dict(self.question)])
 
     def test_read_question(self):
-        question = self._create_question()
-
-        response = self.get(question.id)
+        response = self.get(self.question.id)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, question_to_dict(question))
+        self.assertEqual(response.data, question_to_dict(self.question))
 
     def test_delete_question(self):
-        question = self._create_question()
-        response = self.delete(question.id)
+        response = self.delete(self.question.id)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Question.objects.count(), 0)

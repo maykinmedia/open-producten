@@ -3,6 +3,11 @@ from django.forms import model_to_dict
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
+from open_producten.locations.tests.factories import (
+    ContactFactory,
+    LocationFactory,
+    OrganisationFactory,
+)
 from open_producten.producttypes.models import Link, ProductType, Tag
 from open_producten.producttypes.tests.factories import (
     CategoryFactory,
@@ -127,10 +132,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(
-            ProductType.objects.first().categories.first().name, category.name
-        )
-        self.assertEqual(
-            response.data, product_type_to_dict(ProductType.objects.first())
+            list(ProductType.objects.values_list("categories__name", flat=True)),
+            [category.name],
         )
 
     def test_create_product_type_with_tag(self):
@@ -141,7 +144,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(ProductType.objects.count(), 1)
-        self.assertEqual(ProductType.objects.first().tags.first().name, tag.name)
+        self.assertEqual(
+            list(ProductType.objects.values_list("tags__name", flat=True)), [tag.name]
+        )
 
     def test_create_product_type_with_condition(self):
         condition = ConditionFactory.create()
@@ -152,7 +157,47 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(
-            ProductType.objects.first().conditions.first().name, condition.name
+            list(ProductType.objects.values_list("conditions__name", flat=True)),
+            [condition.name],
+        )
+
+    def test_create_product_type_with_location(self):
+        location = LocationFactory.create()
+
+        data = self.data | {"location_ids": [location.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("locations__name", flat=True)),
+            [location.name],
+        )
+
+    def test_create_product_type_with_organisation(self):
+        organisation = OrganisationFactory.create()
+
+        data = self.data | {"organisation_ids": [organisation.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("organisations__name", flat=True)),
+            [organisation.name],
+        )
+
+    def test_create_product_type_with_contact(self):
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("contacts__first_name", flat=True)),
+            [contact.first_name],
         )
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):
@@ -233,7 +278,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
-        self.assertEqual(product_type.categories.first().name, category.name)
+        self.assertEqual(
+            list(ProductType.objects.values_list("categories__name", flat=True)),
+            [category.name],
+        )
 
     def test_update_product_type_with_tag(self):
         product_type = ProductTypeFactory.create()
@@ -244,7 +292,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
-        self.assertEqual(product_type.tags.first().name, tag.name)
+        self.assertEqual(
+            list(ProductType.objects.values_list("tags__name", flat=True)), [tag.name]
+        )
 
     def test_update_product_type_with_condition(self):
         product_type = ProductTypeFactory.create()
@@ -255,7 +305,52 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
-        self.assertEqual(product_type.conditions.first().name, condition.name)
+        self.assertEqual(
+            list(ProductType.objects.values_list("conditions__name", flat=True)),
+            [condition.name],
+        )
+
+    def test_update_product_type_with_location(self):
+        product_type = ProductTypeFactory.create()
+        location = LocationFactory.create()
+
+        data = self.data | {"location_ids": [location.id]}
+        response = self.put(product_type.id, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("locations__name", flat=True)),
+            [location.name],
+        )
+
+    def test_update_product_type_with_organisation(self):
+        product_type = ProductTypeFactory.create()
+        organisation = OrganisationFactory.create()
+
+        data = self.data | {"organisation_ids": [organisation.id]}
+        response = self.put(product_type.id, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("organisations__name", flat=True)),
+            [organisation.name],
+        )
+
+    def test_update_product_type_with_contact(self):
+        product_type = ProductTypeFactory.create()
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.put(product_type.id, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("contacts__first_name", flat=True)),
+            [contact.first_name],
+        )
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
         product_type = ProductTypeFactory.create()

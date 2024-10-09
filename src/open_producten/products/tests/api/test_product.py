@@ -27,7 +27,15 @@ def product_to_dict(product):
 
     product_dict["product_type"] = model_to_dict_with_id(
         product.product_type,
-        exclude=("categories", "conditions", "tags", "related_product_types"),
+        exclude=(
+            "categories",
+            "conditions",
+            "tags",
+            "related_product_types",
+            "contacts",
+            "locations",
+            "organisations",
+        ),
     )
     product_dict["product_type"][
         "uniform_product_name"
@@ -225,6 +233,7 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Product.objects.count(), 1)
+        self.assertEqual(Product.objects.first().end_date, data["end_date"])
 
     def test_update_product_without_bsn_or_kvk(self):
         product = self._create_product()
