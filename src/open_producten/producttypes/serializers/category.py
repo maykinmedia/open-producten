@@ -47,7 +47,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         exclude = ("path", "depth", "numchild")
 
-    def _handle_relations(self, instance, product_types):
+    def _handle_relations(self, instance, product_types: list[ProductType]):
         errors = dict()
         if product_types is not None:
             build_array_duplicates_error_message(

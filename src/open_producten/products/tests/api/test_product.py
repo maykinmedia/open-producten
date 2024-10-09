@@ -233,6 +233,7 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Product.objects.count(), 1)
+        self.assertEqual(Product.objects.first().end_date, data["end_date"])
 
     def test_update_product_without_bsn_or_kvk(self):
         product = self._create_product()

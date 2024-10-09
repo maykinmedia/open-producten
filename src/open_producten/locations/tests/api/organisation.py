@@ -35,8 +35,7 @@ class TestOrganisation(BaseApiTestCase):
         }
         self.path = "/api/v1/organisations/"
 
-    def _create_organisation(self):
-        return OrganisationFactory.create()
+        self.organisation = OrganisationFactory.create()
 
     def test_read_organisation_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -46,46 +45,41 @@ class TestOrganisation(BaseApiTestCase):
         response = self.post(self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Organisation.objects.count(), 1)
+        self.assertEqual(Organisation.objects.count(), 2)
 
     def test_update_organisation(self):
-        organisation = self._create_organisation()
-
         data = self.data | {"name": "updated"}
-        response = self.put(organisation.id, data)
+        response = self.put(self.organisation.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Organisation.objects.count(), 1)
+        self.assertEqual(Organisation.objects.first().name, "updated")
 
     def test_partial_update_organisation(self):
-        organisation = self._create_organisation()
-
         data = {"name": "updated"}
-        response = self.patch(organisation.id, data)
+        response = self.patch(self.organisation.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Organisation.objects.count(), 1)
+        self.assertEqual(Organisation.objects.first().name, "updated")
 
     def test_read_organisations(self):
-        organisation = self._create_organisation()
-
         response = self.get()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [organisation_to_dict(organisation)])
+        self.assertEqual(
+            response.data["results"], [organisation_to_dict(self.organisation)]
+        )
 
     def test_read_organisation(self):
-        organisation = self._create_organisation()
-
-        response = self.get(organisation.id)
+        response = self.get(self.organisation.id)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, organisation_to_dict(organisation))
+        self.assertEqual(response.data, organisation_to_dict(self.organisation))
 
     def test_delete_organisation(self):
-        organisation = self._create_organisation()
-        response = self.delete(organisation.id)
+        response = self.delete(self.organisation.id)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Organisation.objects.count(), 0)

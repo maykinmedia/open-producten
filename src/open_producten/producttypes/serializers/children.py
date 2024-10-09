@@ -32,7 +32,7 @@ class PriceSerializer(serializers.ModelSerializer):
         model = Price
         exclude = ("product_type",)
 
-    def validate_options(self, options):
+    def validate_options(self, options: list[PriceOption]) -> list[PriceOption]:
         if len(options) == 0:
             raise serializers.ValidationError("At least one option is required")
         return options

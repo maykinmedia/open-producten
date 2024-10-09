@@ -17,12 +17,11 @@ class TestCategoryQuestion(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
-        self.category = CategoryFactory.create()
+        category = CategoryFactory.create()
         self.data = {"question": "18?", "answer": "eligible"}
-        self.path = f"/api/v1/categories/{self.category.id}/questions/"
+        self.path = f"/api/v1/categories/{category.id}/questions/"
 
-    def _create_question(self):
-        return QuestionFactory.create(category=self.category)
+        self.question = QuestionFactory.create(category=category)
 
     def test_read_question_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -32,49 +31,39 @@ class TestCategoryQuestion(BaseApiTestCase):
         response = self.post(self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Question.objects.count(), 1)
-        self.assertEqual(self.category.questions.first().question, "18?")
+        self.assertEqual(Question.objects.count(), 2)
 
     def test_update_question(self):
-        question = self._create_question()
-
         data = self.data | {"question": "21?"}
-        response = self.put(question.id, data)
+        response = self.put(self.question.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(Category.objects.first().questions.first().question, "21?")
 
     def test_partial_update_question(self):
-        question = self._create_question()
-
         data = {"question": "21?"}
-        response = self.patch(question.id, data)
+        response = self.patch(self.question.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(Category.objects.first().questions.first().question, "21?")
 
     def test_read_questions(self):
-        question = self._create_question()
-
         response = self.get()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [question_to_dict(question)])
+        self.assertEqual(response.data["results"], [question_to_dict(self.question)])
 
     def test_read_question(self):
-        question = self._create_question()
-
-        response = self.get(question.id)
+        response = self.get(self.question.id)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, question_to_dict(question))
+        self.assertEqual(response.data, question_to_dict(self.question))
 
     def test_delete_question(self):
-        question = self._create_question()
-        response = self.delete(question.id)
+        response = self.delete(self.question.id)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Question.objects.count(), 0)

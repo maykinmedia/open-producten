@@ -100,22 +100,23 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         model = ProductType
         fields = "__all__"
 
-    def validate_category_ids(self, category_ids):
-        if len(category_ids) == 0:
+    def validate_category_ids(self, categories: list[Category]) -> list[Category]:
+        if len(categories) == 0:
             raise serializers.ValidationError("At least one category is required")
-        return category_ids
+        return categories
 
     def _handle_relations(
         self,
+        *,
         instance,
-        related_product_types,
-        categories,
-        tags,
-        conditions,
-        locations,
-        organisations,
-        contacts,
-    ):
+        related_product_types: list[ProductType],
+        categories: list[Category],
+        tags: list[Tag],
+        conditions: list[Condition],
+        locations: list[Condition],
+        organisations: list[Organisation],
+        contacts: list[Contact],
+    ) -> None:
         errors = dict()
         if related_product_types is not None:
             build_array_duplicates_error_message(
@@ -159,14 +160,14 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         product_type = ProductType.objects.create(**validated_data)
 
         self._handle_relations(
-            product_type,
-            related_product_types,
-            categories,
-            tags,
-            conditions,
-            locations,
-            organisations,
-            contacts,
+            instance=product_type,
+            related_product_types=related_product_types,
+            categories=categories,
+            tags=tags,
+            conditions=conditions,
+            locations=locations,
+            organisations=organisations,
+            contacts=contacts,
         )
         product_type.save()
 
@@ -184,14 +185,14 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
         instance = super().update(instance, validated_data)
         self._handle_relations(
-            instance,
-            related_product_types,
-            categories,
-            tags,
-            conditions,
-            locations,
-            organisations,
-            contacts,
+            instance=instance,
+            related_product_types=related_product_types,
+            categories=categories,
+            tags=tags,
+            conditions=conditions,
+            locations=locations,
+            organisations=organisations,
+            contacts=contacts,
         )
 
         instance.save()

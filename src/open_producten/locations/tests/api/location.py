@@ -18,8 +18,7 @@ class TestLocation(BaseApiTestCase):
         self.data = {"name": "locatie", "postcode": "1111 AA", "city": "Amsterdam"}
         self.path = "/api/v1/locations/"
 
-    def _create_location(self):
-        return LocationFactory.create()
+        self.location = LocationFactory.create()
 
     def test_read_location_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -29,46 +28,39 @@ class TestLocation(BaseApiTestCase):
         response = self.post(self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Location.objects.count(), 1)
+        self.assertEqual(Location.objects.count(), 2)
 
     def test_update_location(self):
-        location = self._create_location()
-
         data = self.data | {"name": "updated"}
-        response = self.put(location.id, data)
+        response = self.put(self.location.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Location.objects.count(), 1)
+        self.assertEqual(Location.objects.first().name, "updated")
 
     def test_partial_update_location(self):
-        location = self._create_location()
-
         data = {"name": "updated"}
-        response = self.patch(location.id, data)
+        response = self.patch(self.location.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Location.objects.count(), 1)
+        self.assertEqual(Location.objects.first().name, "updated")
 
     def test_read_locations(self):
-        location = self._create_location()
-
         response = self.get()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [location_to_dict(location)])
+        self.assertEqual(response.data["results"], [location_to_dict(self.location)])
 
     def test_read_location(self):
-        location = self._create_location()
-
-        response = self.get(location.id)
+        response = self.get(self.location.id)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, location_to_dict(location))
+        self.assertEqual(response.data, location_to_dict(self.location))
 
     def test_delete_location(self):
-        location = self._create_location()
-        response = self.delete(location.id)
+        response = self.delete(self.location.id)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Location.objects.count(), 0)

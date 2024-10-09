@@ -74,7 +74,10 @@ class TestCategoryViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Category.objects.count(), 1)
-        self.assertEqual(Category.objects.first().product_types.first(), product_type)
+        self.assertEqual(
+            list(Category.objects.values_list("product_types", flat=True)),
+            [product_type.id],
+        )
 
     def test_create_parent_with_duplicate_product_types_returns_error(self):
         product_type = ProductTypeFactory.create()

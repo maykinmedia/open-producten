@@ -31,8 +31,7 @@ class TestContact(BaseApiTestCase):
         }
         self.path = "/api/v1/contacts/"
 
-    def _create_contact(self):
-        return ContactFactory.create()
+        self.contact = ContactFactory.create()
 
     def test_read_contact_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -42,46 +41,39 @@ class TestContact(BaseApiTestCase):
         response = self.post(self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Contact.objects.count(), 1)
+        self.assertEqual(Contact.objects.count(), 2)
 
     def test_update_contact(self):
-        contact = self._create_contact()
-
-        data = self.data | {"name": "updated"}
-        response = self.put(contact.id, data)
+        data = self.data | {"first_name": "updated"}
+        response = self.put(self.contact.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Contact.objects.count(), 1)
+        self.assertEqual(Contact.objects.first().first_name, "updated")
 
     def test_partial_update_contact(self):
-        contact = self._create_contact()
-
-        data = {"name": "updated"}
-        response = self.patch(contact.id, data)
+        data = {"first_name": "updated"}
+        response = self.patch(self.contact.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Contact.objects.count(), 1)
+        self.assertEqual(Contact.objects.first().first_name, "updated")
 
     def test_read_contacts(self):
-        contact = self._create_contact()
-
         response = self.get()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [contact_to_dict(contact)])
+        self.assertEqual(response.data["results"], [contact_to_dict(self.contact)])
 
     def test_read_contact(self):
-        contact = self._create_contact()
-
-        response = self.get(contact.id)
+        response = self.get(self.contact.id)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, contact_to_dict(contact))
+        self.assertEqual(response.data, contact_to_dict(self.contact))
 
     def test_delete_contact(self):
-        contact = self._create_contact()
-        response = self.delete(contact.id)
+        response = self.delete(self.contact.id)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Contact.objects.count(), 0)

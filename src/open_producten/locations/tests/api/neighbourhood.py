@@ -18,8 +18,7 @@ class TestNeighbourhood(BaseApiTestCase):
         self.data = {"name": "buurt"}
         self.path = "/api/v1/neighbourhoods/"
 
-    def _create_neighbourhood(self):
-        return NeighbourhoodFactory.create()
+        self.neighbourhood = NeighbourhoodFactory.create()
 
     def test_read_neighbourhood_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -29,48 +28,41 @@ class TestNeighbourhood(BaseApiTestCase):
         response = self.post(self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Neighbourhood.objects.count(), 1)
+        self.assertEqual(Neighbourhood.objects.count(), 2)
 
     def test_update_neighbourhood(self):
-        neighbourhood = self._create_neighbourhood()
-
         data = self.data | {"name": "updated"}
-        response = self.put(neighbourhood.id, data)
+        response = self.put(self.neighbourhood.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Neighbourhood.objects.count(), 1)
+        self.assertEqual(Neighbourhood.objects.first().name, "updated")
 
     def test_partial_update_neighbourhood(self):
-        neighbourhood = self._create_neighbourhood()
-
         data = {"name": "updated"}
-        response = self.patch(neighbourhood.id, data)
+        response = self.patch(self.neighbourhood.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Neighbourhood.objects.count(), 1)
+        self.assertEqual(Neighbourhood.objects.first().name, "updated")
 
     def test_read_neighbourhoods(self):
-        neighbourhood = self._create_neighbourhood()
-
         response = self.get()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
-            response.data["results"], [neighbourhood_to_dict(neighbourhood)]
+            response.data["results"], [neighbourhood_to_dict(self.neighbourhood)]
         )
 
     def test_read_neighbourhood(self):
-        neighbourhood = self._create_neighbourhood()
-
-        response = self.get(neighbourhood.id)
+        response = self.get(self.neighbourhood.id)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, neighbourhood_to_dict(neighbourhood))
+        self.assertEqual(response.data, neighbourhood_to_dict(self.neighbourhood))
 
     def test_delete_neighbourhood(self):
-        neighbourhood = self._create_neighbourhood()
-        response = self.delete(neighbourhood.id)
+        response = self.delete(self.neighbourhood.id)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Neighbourhood.objects.count(), 0)
