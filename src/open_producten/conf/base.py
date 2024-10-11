@@ -102,6 +102,6 @@ TINYMCE_DEFAULT_CONFIG = {  # TODO: light/dark mode based on browser settings
     "bold italic backcolor | alignleft aligncenter "
     "alignright alignjustify | bullist numlist outdent indent | "
     "removeformat",
-    "skin": "oxide-dark",
-    "content_css": "dark",
 }
+
+TINYMCE_EXTRA_MEDIA = {"js": ["initTinymce.js"]}
