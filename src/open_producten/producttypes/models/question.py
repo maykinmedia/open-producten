@@ -2,6 +2,8 @@ from django.core.validators import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tinymce import models as tinymce_models
+
 from open_producten.utils.models import BaseModel
 
 from .category import Category
@@ -26,7 +28,7 @@ class Question(BaseModel):
         related_name="questions",
     )
     question = models.CharField(verbose_name=_("Question"), max_length=250)
-    answer = models.TextField(verbose_name=_("Answer"))
+    answer = tinymce_models.HTMLField(verbose_name=_("Answer"))
 
     class Meta:
         verbose_name = _("Question")

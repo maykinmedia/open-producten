@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tinymce import models as tinymce_models
 from treebeard.exceptions import InvalidMoveToDescendant
 from treebeard.mp_tree import MP_MoveHandler, MP_Node
 
@@ -22,7 +23,7 @@ class Category(MP_Node, BasePublishableModel):
         verbose_name=_("Name"), max_length=100, help_text=_("Name of the category")
     )
 
-    description = models.TextField(
+    description = tinymce_models.HTMLField(
         verbose_name=_("Description"),
         blank=True,
         default="",

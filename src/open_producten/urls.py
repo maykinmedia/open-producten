@@ -83,6 +83,7 @@ urlpatterns = [
             ]
         ),
     ),
+    path("tinymce/", include("tinymce.urls")),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
