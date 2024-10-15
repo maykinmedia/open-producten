@@ -9,7 +9,6 @@
         <link href="{% static 'ico/favicon-32x32.png' %}" sizes="32x32" rel="icon" type="image/png" />
         <link href="{% static 'ico/favicon.png' %}" sizes="16x16" rel="icon" type="image/png" />
         <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
-        <link href="{% static 'bundles/open_producten-css.css' %}" media="all" rel="stylesheet" />
         {% block extra_css %}{% endblock %}
     </head>
 
@@ -28,7 +27,7 @@
                 <p>
                   Developed by <a class="link" href="https://www.maykinmedia.nl">Maykin</a><br>
                   within the <a class="link" href="https://opengem.nl">Open Gemeente Initiatief</a> &copy; 2024<br>
-                  
+
                 </p>
               </div>
               <div class="footer__col">
@@ -56,7 +55,7 @@
               </div>
             </div>
           </footer>
-        
+
         {% if dsn %}
             <script src="https://browser.sentry-cdn.com/5.10.1/bundle.min.js" integrity="sha384-sAOze6ZTBIpiWBF3VlUteSInM4rYpjxrejp1wMmmKqA9clRZ1vZJ36Ihmt1ilTrG" crossorigin="anonymous"></script>
             <script>Sentry.init({ dsn: '{{ dsn }}'});</script>
