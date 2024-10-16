@@ -17,12 +17,24 @@ INSTALLED_APPS += [
     "localflavor",
     "treebeard",
     "tinymce",
+    "django.contrib.gis",
     "open_producten.accounts",
     "open_producten.utils",
     "open_producten.producttypes",
     "open_producten.products",
     "open_producten.locations",
 ]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgis",
+        "NAME": config("DB_NAME", PROJECT_DIRNAME),
+        "USER": config("DB_USER", PROJECT_DIRNAME),
+        "PASSWORD": config("DB_PASSWORD", PROJECT_DIRNAME),
+        "HOST": config("DB_HOST", "localhost"),
+        "PORT": config("DB_PORT", 5432),
+    }
+}
 
 #
 # Custom settings
@@ -105,3 +117,12 @@ TINYMCE_DEFAULT_CONFIG = {  # TODO: light/dark mode based on browser settings
 }
 
 TINYMCE_EXTRA_MEDIA = {"js": ["initTinymce.js"]}
+
+#
+# geopy
+#
+
+GEOPY_APP = "Openproducten"
+GEOPY_TIMEOUT = 10  # in seconds
+LOCATIESERVER_DOMAIN = "api.pdok.nl/bzk/locatieserver/search/v3_1"
+GEOCODER = "open_producten.utils.geocode.PdocLocatieserver"
