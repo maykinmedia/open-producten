@@ -105,6 +105,7 @@ jobs:
         with:
           python-version: '3.11'
           setup-node: 'no'
+          apt-packages: 'gdal-bin'
       - name: Run makemigrations to check for missing migrations
         run: |
           src/manage.py makemigrations \

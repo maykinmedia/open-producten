@@ -44,7 +44,7 @@ jobs:
           optimize-postgres: 'yes'
           pg-service: 'postgres'
           setup-node: 'no'
-          # apt-packages: 'gettext postgresql-client'  # the default
+          apt-packages: 'gdal-bin'
           # npm-ci-flags: '--legacy-peer-deps' -> preferably use a .npmrc file
 
       # Any additional services -> create docker-compose setups in a (new) `docker`
