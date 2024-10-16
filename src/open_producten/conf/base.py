@@ -27,7 +27,7 @@ INSTALLED_APPS += [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgis",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": config("DB_NAME", PROJECT_DIRNAME),
         "USER": config("DB_USER", PROJECT_DIRNAME),
         "PASSWORD": config("DB_PASSWORD", PROJECT_DIRNAME),
