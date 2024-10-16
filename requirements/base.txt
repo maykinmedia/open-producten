@@ -198,6 +198,10 @@ gemma-zds-client==2.0.0
     # via
     #   commonground-api-common
     #   notifications-api-common
+geographiclib==2.0
+    # via geopy
+geopy==2.4.1
+    # via -r requirements/base.in
 glom==23.5.0
     # via mozilla-django-oidc-db
 humanize==4.9.0

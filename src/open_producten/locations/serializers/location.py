@@ -10,9 +10,20 @@ from open_producten.locations.models import (
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    coordinates = serializers.SerializerMethodField()
+
     class Meta:
         model = Location
         fields = "__all__"
+
+    def get_coordinates(self, obj) -> list:
+        return obj.coordinates.coords
+
+    def validate_coordinates(self, value):
+        if len(value) != 2:
+            raise serializers.ValidationError(
+                "Coordinates must be an array with 2 values."
+            )
 
 
 class NeighbourhoodSerializer(serializers.ModelSerializer):
@@ -39,9 +50,20 @@ class OrganisationSerializer(serializers.ModelSerializer):
         write_only=True, queryset=OrganisationType.objects.all(), source="type"
     )
 
+    coordinates = serializers.SerializerMethodField()
+
     class Meta:
         model = Organisation
         fields = "__all__"
+
+    def get_coordinates(self, obj) -> list:
+        return obj.coordinates.coords
+
+    def validate_coordinates(self, value):
+        if len(value) != 2:
+            raise serializers.ValidationError(
+                "Coordinates must be an array with 2 values."
+            )
 
 
 class ContactSerializer(serializers.ModelSerializer):
