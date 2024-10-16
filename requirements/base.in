@@ -8,6 +8,6 @@ django-treebeard
 
 # API libraries
 # django-extra-fields
-
+geopy
 
 django-localflavor

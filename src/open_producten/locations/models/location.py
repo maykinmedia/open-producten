@@ -1,6 +1,11 @@
+from django.contrib.gis.db.models import PointField
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from geopy.exc import GeopyError
+
+from open_producten.utils.geocode import geocode_address
 from open_producten.utils.models import BaseModel
 from open_producten.utils.validators import validate_phone_number, validate_postal_code
 
@@ -40,6 +45,11 @@ class BaseLocation(BaseModel):
     )
     city = models.CharField(_("city"), max_length=250, help_text=_("Address city"))
 
+    coordinates = PointField(
+        _("coordinates"),
+        help_text=_("Geo coordinates of the location"),
+    )
+
     class Meta:
         abstract = True
 
@@ -47,6 +57,38 @@ class BaseLocation(BaseModel):
     def address(self) -> str:
         postcode = self.postcode.replace(" ", "")
         return f"{self.street} {self.house_number}, {postcode} {self.city}"
+
+    def clean(self):
+        super().clean()
+        self.clean_geometry()
+
+    def clean_geometry(self):
+        model = self.__class__
+        # # if address is not changed - do nothing
+        if (
+            not self._state.adding
+            and self.address == model.objects.get(id=self.id).address
+        ):
+            return
+
+        # locate geo coordinates using address string
+        try:
+            coordinates = geocode_address(self.address)
+        except GeopyError as exc:
+            raise ValidationError(
+                _("Locating geo coordinates has failed: %(exc)s") % {"exc": exc}
+            )
+        except IndexError:
+            raise ValidationError(_("No location data was provided"))
+
+        if not coordinates:
+            raise ValidationError(
+                _(
+                    "Geo coordinates of the address can't be found. "
+                    "Make sure that the address data are correct"
+                )
+            )
+        self.coordinates = coordinates
 
 
 class Location(BaseLocation):

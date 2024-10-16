@@ -20,7 +20,7 @@ You need the following libraries and/or programs:
 
 * `Python`_ - check the ``Dockerfile`` for the required version.
 * Python `Virtualenv`_ and `Pip`_
-* `PostgreSQL`_
+* `PostgreSQL`_ with PostGIS extension
 * `Node.js`_
 * `npm`_
 
