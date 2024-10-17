@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tinymce import models as tinymce_models
+
 from open_producten.utils.models import BaseModel
 
 from .producttype import ProductType
@@ -37,7 +39,7 @@ class Field(BaseModel):
     name = models.CharField(
         verbose_name=_("Name"), max_length=255, help_text=_("The name of the field")
     )
-    description = models.TextField(
+    description = tinymce_models.HTMLField(
         verbose_name=_("Description"),
         help_text=_("Short description of the field"),
         max_length=300,

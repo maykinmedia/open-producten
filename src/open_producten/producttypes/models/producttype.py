@@ -4,6 +4,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from tinymce import models as tinymce_models
+
 from open_producten.locations.models import Contact, Location, Organisation
 from open_producten.utils.models import BasePublishableModel
 
@@ -11,6 +13,8 @@ from .category import Category
 from .condition import Condition
 from .tag import Tag
 from .upn import UniformProductName
+
+# from ...utils.models import HTMLField
 
 
 class CategoryProductType(models.Model):
@@ -27,7 +31,7 @@ class ProductType(BasePublishableModel):
         verbose_name=_("Name"), max_length=100, help_text=_("Name of the product type")
     )
 
-    summary = models.TextField(
+    summary = tinymce_models.HTMLField(
         verbose_name=_("Summary"),
         default="",
         max_length=300,
@@ -57,7 +61,7 @@ class ProductType(BasePublishableModel):
         help_text=_("Action link to request the product type."),
     )
 
-    content = models.TextField(
+    content = tinymce_models.HTMLField(
         verbose_name=_("Content"),
         help_text=_("Product type content with build-in WYSIWYG editor."),
     )
