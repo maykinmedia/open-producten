@@ -1,3 +1,6 @@
+from unittest.mock import Mock, patch
+
+from django.contrib.gis.geos import Point
 from django.forms import model_to_dict
 
 from rest_framework.exceptions import ErrorDetail
@@ -161,6 +164,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [condition.name],
         )
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def test_create_product_type_with_location(self):
         location = LocationFactory.create()
 
@@ -174,6 +181,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [location.name],
         )
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def test_create_product_type_with_organisation(self):
         organisation = OrganisationFactory.create()
 
@@ -187,6 +198,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [organisation.name],
         )
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def test_create_product_type_with_contact(self):
         contact = ContactFactory.create()
 
@@ -310,6 +325,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [condition.name],
         )
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def test_update_product_type_with_location(self):
         product_type = ProductTypeFactory.create()
         location = LocationFactory.create()
@@ -324,6 +343,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [location.name],
         )
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def test_update_product_type_with_organisation(self):
         product_type = ProductTypeFactory.create()
         organisation = OrganisationFactory.create()
@@ -338,6 +361,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [organisation.name],
         )
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def test_update_product_type_with_contact(self):
         product_type = ProductTypeFactory.create()
         contact = ContactFactory.create()

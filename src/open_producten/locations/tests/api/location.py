@@ -1,3 +1,7 @@
+from unittest.mock import Mock, patch
+
+from django.contrib.gis.geos import Point
+
 from rest_framework.test import APIClient
 
 from open_producten.locations.models import Location
@@ -11,8 +15,16 @@ def location_to_dict(location):
     return model_to_dict_with_id(location)
 
 
+@patch(
+    "open_producten.locations.models.location.geocode_address",
+    new=Mock(return_value=Point((4.84303667, 52.38559043))),
+)
 class TestLocation(BaseApiTestCase):
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def setUp(self):
         super().setUp()
         self.data = {"name": "locatie", "postcode": "1111 AA", "city": "Amsterdam"}

@@ -58,9 +58,9 @@ class BaseLocation(BaseModel):
         postcode = self.postcode.replace(" ", "")
         return f"{self.street} {self.house_number}, {postcode} {self.city}"
 
-    def clean(self):
-        super().clean()
+    def save(self, *args, **kwargs):
         self.clean_geometry()
+        super().save(*args, **kwargs)
 
     def clean_geometry(self):
         model = self.__class__

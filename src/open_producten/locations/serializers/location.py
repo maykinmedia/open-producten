@@ -19,12 +19,6 @@ class LocationSerializer(serializers.ModelSerializer):
     def get_coordinates(self, obj) -> list:
         return obj.coordinates.coords
 
-    def validate_coordinates(self, value):
-        if len(value) != 2:
-            raise serializers.ValidationError(
-                "Coordinates must be an array with 2 values."
-            )
-
 
 class NeighbourhoodSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,12 +52,6 @@ class OrganisationSerializer(serializers.ModelSerializer):
 
     def get_coordinates(self, obj) -> list:
         return obj.coordinates.coords
-
-    def validate_coordinates(self, value):
-        if len(value) != 2:
-            raise serializers.ValidationError(
-                "Coordinates must be an array with 2 values."
-            )
 
 
 class ContactSerializer(serializers.ModelSerializer):

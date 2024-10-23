@@ -1,3 +1,7 @@
+from unittest.mock import Mock, patch
+
+from django.contrib.gis.geos import Point
+
 from rest_framework.test import APIClient
 
 from open_producten.locations.models import Organisation
@@ -20,8 +24,16 @@ def organisation_to_dict(organisation):
     return organisation_dict
 
 
+@patch(
+    "open_producten.locations.models.location.geocode_address",
+    new=Mock(return_value=Point((4.84303667, 52.38559043))),
+)
 class TestOrganisation(BaseApiTestCase):
 
+    @patch(
+        "open_producten.locations.models.location.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
     def setUp(self):
         super().setUp()
         organisation_type = OrganisationTypeFactory.create()
