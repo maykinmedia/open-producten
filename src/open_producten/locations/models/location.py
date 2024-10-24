@@ -58,20 +58,10 @@ class BaseLocation(BaseModel):
         postcode = self.postcode.replace(" ", "")
         return f"{self.street} {self.house_number}, {postcode} {self.city}"
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         self.clean_geometry()
-        super().save(*args, **kwargs)
 
     def clean_geometry(self):
-        model = self.__class__
-        # # if address is not changed - do nothing
-        if (
-            not self._state.adding
-            and self.address == model.objects.get(id=self.id).address
-        ):
-            return
-
-        # locate geo coordinates using address string
         try:
             coordinates = geocode_address(self.address)
         except GeopyError as exc:

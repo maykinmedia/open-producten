@@ -124,5 +124,5 @@ TINYMCE_EXTRA_MEDIA = {"js": ["initTinymce.js"]}
 
 GEOPY_APP = "Openproducten"
 GEOPY_TIMEOUT = 10  # in seconds
-LOCATIESERVER_DOMAIN = "api.pdok.nl/bzk/locatieserver/search/v3_1"
+LOCATION_SERVICE_URL = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/free"
 GEOCODER = "open_producten.utils.geocode.PdocLocatieserver"

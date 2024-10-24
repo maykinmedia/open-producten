@@ -17,14 +17,12 @@ class PdocLocatieserver(Geocoder):
     Documentation: https://www.pdok.nl/restful-api/-/article/pdok-locatieserver-1#
     """
 
-    geocode_path = "/free"
-
     def __init__(
         self,
         *,
         timeout=DEFAULT_SENTINEL,
         proxies=DEFAULT_SENTINEL,
-        domain=settings.LOCATIESERVER_DOMAIN,
+        url=settings.LOCATION_SERVICE_URL,
         scheme="https",
         user_agent=None,
         ssl_context=DEFAULT_SENTINEL,
@@ -39,8 +37,7 @@ class PdocLocatieserver(Geocoder):
             adapter_factory=adapter_factory,
         )
 
-        self.domain = domain.strip("/")
-        self.api = "{}://{}{}".format(self.scheme, self.domain, self.geocode_path)
+        self.url = url.strip("/")
 
     def geocode(
         self,
@@ -65,7 +62,7 @@ class PdocLocatieserver(Geocoder):
         :param fl: List of fields to display
         """
 
-        url = furl(self.api).add({"q": query, "fq": fq, "fl": fl}).url
+        url = furl(self.url).add({"q": query, "fq": fq, "fl": fl}).url
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         callback = self._parse_json
         return self._call_geocoder(url, callback, timeout=timeout)

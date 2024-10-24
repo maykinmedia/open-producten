@@ -19,6 +19,16 @@ class LocationSerializer(serializers.ModelSerializer):
     def get_coordinates(self, obj) -> list:
         return obj.coordinates.coords
 
+    def create(self, validated_data: dict) -> Location:
+        location = Location(**validated_data)
+        location.clean()
+        return location.save()
+
+    def update(self, instance, validated_data: dict) -> Location:
+        location = super().update(instance, validated_data)
+        location.clean()
+        return location.save()
+
 
 class NeighbourhoodSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,6 +62,16 @@ class OrganisationSerializer(serializers.ModelSerializer):
 
     def get_coordinates(self, obj) -> list:
         return obj.coordinates.coords
+
+    def create(self, validated_data: dict) -> Location:
+        organisation = Organisation(**validated_data)
+        organisation.clean()
+        return organisation.save()
+
+    def update(self, instance, validated_data: dict) -> Location:
+        organisation = super().update(instance, validated_data)
+        organisation.clean()
+        return organisation.save()
 
 
 class ContactSerializer(serializers.ModelSerializer):
