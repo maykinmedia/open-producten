@@ -1,15 +1,17 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
 from ..models import Neighbourhood, Organisation, OrganisationType
 
 
 @admin.register(Organisation)
-class OrganisationAdmin(admin.ModelAdmin):
+class OrganisationAdmin(admin.GISModelAdmin):
     list_display = ("name", "type")
     list_filter = ("type__name", "city")
     search_fields = ("name",)
     ordering = ("name",)
+    readonly_fields = ["coordinates"]
+    modifiable = False
 
     fieldsets = (
         (
@@ -19,7 +21,7 @@ class OrganisationAdmin(admin.ModelAdmin):
         (_("Contact"), {"fields": ("email", "phone_number")}),
         (
             _("Address"),
-            {"fields": ("street", "house_number", "postcode", "city")},
+            {"fields": ("street", "house_number", "postcode", "city", "coordinates")},
         ),
     )
 

@@ -433,6 +433,15 @@ gemma-zds-client==2.0.0
     #   -r requirements/ci.txt
     #   commonground-api-common
     #   notifications-api-common
+geographiclib==2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   geopy
+geopy==2.4.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 gitdb==4.0.11
     # via gitpython
 gitpython==3.1.43

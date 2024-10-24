@@ -10,9 +10,24 @@ from open_producten.locations.models import (
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    coordinates = serializers.SerializerMethodField()
+
     class Meta:
         model = Location
         fields = "__all__"
+
+    def get_coordinates(self, obj) -> list:
+        return obj.coordinates.coords
+
+    def create(self, validated_data: dict) -> Location:
+        location = Location(**validated_data)
+        location.clean()
+        return location.save()
+
+    def update(self, instance, validated_data: dict) -> Location:
+        location = super().update(instance, validated_data)
+        location.clean()
+        return location.save()
 
 
 class NeighbourhoodSerializer(serializers.ModelSerializer):
@@ -39,9 +54,24 @@ class OrganisationSerializer(serializers.ModelSerializer):
         write_only=True, queryset=OrganisationType.objects.all(), source="type"
     )
 
+    coordinates = serializers.SerializerMethodField()
+
     class Meta:
         model = Organisation
         fields = "__all__"
+
+    def get_coordinates(self, obj) -> list:
+        return obj.coordinates.coords
+
+    def create(self, validated_data: dict) -> Location:
+        organisation = Organisation(**validated_data)
+        organisation.clean()
+        return organisation.save()
+
+    def update(self, instance, validated_data: dict) -> Location:
+        organisation = super().update(instance, validated_data)
+        organisation.clean()
+        return organisation.save()
 
 
 class ContactSerializer(serializers.ModelSerializer):
