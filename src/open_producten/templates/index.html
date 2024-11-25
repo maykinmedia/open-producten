@@ -1,0 +1,43 @@
+{% extends "master.html" %}
+
+{% block content %}
+
+  <div class="title">
+    <h1 class="title__header">{{ settings.PROJECT_NAME }} API</h1>
+    <p class="title__description">{{ settings.SITE_TITLE }}</p>
+  </div>
+
+  <div class="container container--center">
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item" data-id="nl">Nederlands</li>
+        <li class="nav__item" data-id="en">English</li>
+      </ul>
+
+      <div class="nav__content">
+        <div class="nav__pane" id="nl">
+          WIP TEKST
+        </div>
+        <div class="nav__pane" id="en">
+          WIP TEXT
+        </div>
+      </div>
+    </nav>
+
+    <p>
+      <b>Licensed under the <a class="link" href="https://github.com/maykinmedia/open-producten/blob/main/LICENSE.md">
+        European Union Public License (EUPL) 1.2</a></b>
+    </p>
+
+    <p>
+      <a href="{% url "schema" version=version %}" class="button"><i class="fas fa-file-alt"></i> Open API specification</a>
+      <a href="{% url "api-root" version=version %}" class="button"><i class="fas fa-wifi"></i> API root</a>
+    </p>
+
+    <p>
+      <a href="{% url 'admin:index' %}" class="button button--alert"><i class="fas fa-lock"></i> Administration</a>
+    </p>
+
+  </div>
+
+{% endblock %}

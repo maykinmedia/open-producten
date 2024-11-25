@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-25 16:08+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: open_producten/accounts/models.py:18
+msgid "username"
+msgstr ""
+
+#: open_producten/accounts/models.py:22
+msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr ""
+
+#: open_producten/accounts/models.py:26
+msgid "A user with that username already exists."
+msgstr ""
+
+#: open_producten/accounts/models.py:29
+msgid "first name"
+msgstr ""
+
+#: open_producten/accounts/models.py:30
+msgid "last name"
+msgstr ""
+
+#: open_producten/accounts/models.py:31
+msgid "email address"
+msgstr ""
+
+#: open_producten/accounts/models.py:33
+msgid "staff status"
+msgstr ""
+
+#: open_producten/accounts/models.py:35
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+
+#: open_producten/accounts/models.py:38
+msgid "active"
+msgstr ""
+
+#: open_producten/accounts/models.py:41
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: open_producten/accounts/models.py:45
+msgid "date joined"
+msgstr ""
+
+#: open_producten/accounts/models.py:53
+msgid "user"
+msgstr ""
+
+#: open_producten/accounts/models.py:54
+msgid "users"
+msgstr ""
+
+#: open_producten/accounts/utils.py:18
+msgid "You need to be superuser to create other superusers."
+msgstr ""
+
+#: open_producten/accounts/utils.py:44
+msgid "You cannot create or update a user with more permissions than yourself."
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:9
+#: open_producten/producttypen/models/tag.py:25
+msgid "name"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:11
+msgid "Name of the tag type"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:16
+msgid "tag type"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:17
+msgid "tag types"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:25
+msgid "Name of the tag"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:28
+msgid "icon"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:31
+msgid "Icon of the tag"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:35
+msgid "type"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:38
+msgid "The related tag type"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:42
+msgid "tag"
+msgstr ""
+
+#: open_producten/producttypen/models/tag.py:43
+msgid "tags"
+msgstr ""
+
+#: open_producten/templates/admin/base_site.html:5
+#: open_producten/templates/admin/base_site.html:21
+msgid "Administration"
+msgstr ""
+
+#: open_producten/templates/admin/base_site.html:32
+msgid "View site"
+msgstr ""
+
+#: open_producten/templates/admin/base_site.html:38
+msgid "Account security"
+msgstr ""
+
+#: open_producten/templates/admin/base_site.html:41
+msgid "Change password"
+msgstr ""
+
+#: open_producten/templates/admin/base_site.html:43
+msgid "Log out"
+msgstr ""
+
+#: open_producten/templates/maykin_2fa/login.html:18
+msgid "Contact support"
+msgstr ""
+
+#: open_producten/templates/samples/pager.html:8
+#: open_producten/templates/samples/pager.html:10
+msgid "Previous"
+msgstr ""
+
+#: open_producten/templates/samples/pager.html:16
+#: open_producten/templates/samples/pager.html:18
+msgid "Next"
+msgstr ""
+
+#: open_producten/utils/management/commands/clear_cache.py:10
+msgid "Clear given cache only"
+msgstr ""
+
+#: open_producten/utils/models.py:16
+msgid "Published"
+msgstr ""
+
+#: open_producten/utils/models.py:18
+msgid "Whether the object is accessible through the API."
+msgstr ""
+
+#: open_producten/utils/models.py:21
+msgid "Created on"
+msgstr ""
+
+#: open_producten/utils/models.py:23
+msgid "The datetime at which the object was created."
+msgstr ""
+
+#: open_producten/utils/models.py:26
+msgid "Updated on"
+msgstr ""
+
+#: open_producten/utils/models.py:28
+msgid "The datetime at which the object was last changed."
+msgstr ""
+
+#: open_producten/utils/templates/utils/includes/version_info.html:4
+#, python-format
+msgid "version %(RELEASE)s"
+msgstr ""
+
+#: open_producten/utils/templates/utils/includes/version_info.html:8
+#, python-format
+msgid "GIT SHA: %(GIT_SHA)s"
+msgstr ""
+
+#: open_producten/utils/tests/test_validators.py:24
+#: open_producten/utils/validators.py:23
+#, python-format
+msgid "The provided value contains an invalid character: %s"
+msgstr ""
+
+#: open_producten/utils/tests/test_validators.py:61
+#: open_producten/utils/validators.py:52
+msgid "Invalid postal code."
+msgstr ""
+
+#: open_producten/utils/tests/test_validators.py:85
+#: open_producten/utils/validators.py:32
+msgid "Invalid mobile phonenumber."
+msgstr ""

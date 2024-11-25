@@ -1,0 +1,170 @@
+name: Run build pipeline
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  push:
+    branches:
+      - main
+      - stable/*
+    tags:
+      - '*'
+  pull_request:
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: maykinmedia/open-producten
+  DJANGO_SETTINGS_MODULE: open_producten.conf.ci
+  DOCKER_BUILDKIT: '1'
+
+jobs:
+
+  setup:
+    name: Set up the build variables
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+      git_hash: ${{ steps.vars.outputs.git_hash }}
+
+    steps:
+      - name: Extract version information
+        id: vars
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name (if present at all)
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          # PRs result in version 'merge' -> transform that into 'latest'
+          [ "$VERSION" == "merge" ] && VERSION=latest
+
+          echo "tag=${VERSION}" >> $GITHUB_OUTPUT
+          echo "git_hash=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+  tests:
+    name: Run the Django test suite
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        # Needed because the postgres container does not provide a healthcheck
+        options: >-
+          --name postgres
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up backend environment
+        uses: maykinmedia/setup-django-backend@v1.3
+        with:
+          python-version: '3.11'
+          optimize-postgres: 'yes'
+          pg-service: 'postgres'
+          setup-node: 'yes'
+          apt-packages: 'gdal-bin'
+
+      - name: Run tests
+        run: |
+          python src/manage.py compilemessages
+          python src/manage.py collectstatic --noinput --link
+          coverage run src/manage.py test src
+        env:
+          SECRET_KEY: dummy
+          DB_USER: postgres
+          DB_PASSWORD: ''
+
+      - name: Publish coverage report
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # docs:
+  #   name: Build and check documentation
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: maykinmedia/setup-django-backend@v1.3
+  #       with:
+  #         python-version: '3.11'
+  #         setup-node: 'no'
+  #         # apt-packages: 'gettext postgresql-client'  # the default
+
+  #     - name: Build and test docs
+  #       run: |
+  #         export OPENSSL_CONF=$(pwd)/openssl.conf
+  #         pytest check_sphinx.py -v --tb=auto
+  #       working-directory: docs
+
+  docker_build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.image_build.outputs.image_tag }}
+
+    needs:
+      - setup
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the production Docker image
+        id: image_build
+        run: |
+          image_tag="$IMAGE_NAME:$RELEASE_VERSION"
+          echo "image_tag=${image_tag}" >> $GITHUB_OUTPUT
+          docker build . \
+            --tag $image_tag \
+            --build-arg COMMIT_HASH=${{ needs.setup.outputs.git_hash }} \
+            --build-arg RELEASE=${{ needs.setup.outputs.tag }} \
+        env:
+          RELEASE_VERSION: ${{ needs.setup.outputs.tag }}
+
+      - run: docker image save -o image.tar $IMAGE_NAME:${{ needs.setup.outputs.tag }}
+      - name: Store image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1
+
+  docker_push:
+    needs:
+      - tests
+      - docker_build
+
+    name: Push Docker image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' # Exclude PRs
+
+    steps:
+      - name: Download built image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load image
+        run: |
+          docker image load -i image.tar
+
+      - name: Log into registry
+        run:
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }}
+          --password-stdin
+
+      - name: Push the Docker image (production)
+        run: docker push ${{ needs.docker_build.outputs.image_tag }}

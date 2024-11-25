@@ -1,0 +1,15 @@
+@use './themes/dark' as dark-theme;
+@use './themes/light' as light-theme;
+
+/**
+ * Dark/light theme specific variables should typically be specified in their
+ * respective `./themes/[theme].scss` files!
+ */
+
+:root {
+  /* Form input element dimensions */
+  --input-field-size: 20em;  // django-original: 20em;
+}
+
+@include light-theme.styles;
+@include dark-theme.styles;

@@ -1,0 +1,179 @@
+/*
+Generic admin styling overrides.
+
+DO NOT PUT/TARGET ANY APP-SPECIFIC RULES HERE.
+*/
+
+/* Overrides */
+body {
+  &.change-form {
+    line-height: 1.15;
+  }
+}
+
+/**
+ * Branding
+ */
+#branding h1 {
+  a:link,
+  a:visited {
+    font-weight: bold;
+  }
+}
+
+@mixin user-tool-link {
+  border-bottom: none;
+  text-decoration: underline;
+
+  &:focus,
+  &:hover {
+    color: var(--header-link-color);
+    text-decoration: none;
+  }
+}
+
+#user-tools a,
+#logout-form button {
+  @include user-tool-link;
+}
+
+div.breadcrumbs {
+  a {
+    &:focus,
+    &:hover {
+      color: var(--breadcrumbs-link-hover);
+    }
+  }
+}
+
+/* Important is used because Django templates include their own style, after ours */
+#changelist-filter {
+  a:focus,
+  a:hover {
+    color: var(--link-fg) !important;
+  }
+
+  li.selected a {
+    color: var(--link-fg) !important;
+
+    &:focus,
+    &:hover {
+      color: var(--primary) !important;
+    }
+  }
+}
+
+/* Calendar & time widget */
+.calendar caption,
+.calendarbox h2 {
+  background: var(--calendar-widget-background) !important;
+  color: var(--calendar-widget-color) !important;
+}
+
+.calendar td,
+.timelist {
+  a {
+    &:focus,
+    &:hover {
+      background: var(--link-fg) !important;
+    }
+  }
+}
+
+.module.clockbox h2 {
+  /* Match the clock widget with the calendar widget */
+  background: var(--calendar-widget-background) !important;
+  color: var(--calendar-widget-color) !important;
+  font-weight: bold !important;
+}
+
+@mixin icon-override($iconUrl) {
+  background: none;
+  color: var(--body-fg);
+  position: relative;
+
+  // need to use pseudo element, otherwise the text in the same element is not visible
+  // because of the mask clipping
+  &:before {
+    display: block;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    margin-right: 2px;
+    background: var(--body-fg) !important;
+    color: var(--body-fg);
+    mask-image: url($iconUrl);
+    mask-repeat: no-repeat;
+    mask-size: 14px 14px;
+    mask-position: 0px 0px;
+  }
+}
+
+/* Icons */
+.addlink {
+  @include icon-override('../img/admin/plus-square-regular.svg');
+}
+
+.object-tools a.addlink {
+  &:before {
+    display: none;
+  }
+}
+
+.changelink,
+.inlinechangelink {
+  @include icon-override('../img/admin/edit-regular.svg');
+}
+.deletelink {
+  background: url("../img/admin/trash-alt-regular.svg") 0 0/14px 14px no-repeat;
+}
+.datetimeshortcuts .clock-icon {
+  @include icon-override('../img/admin/clock-regular.svg');
+  background: none !important;
+}
+.datetimeshortcuts .date-icon {
+  @include icon-override('../img/admin/calendar-alt-regular.svg');
+  background: none !important;
+}
+
+/* Footer */
+
+.version {
+  color: var(--body-fg);
+  padding: 0 30px;
+  font-size: smaller;
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * Environment information
+ */
+.env-info {
+  display: block;
+  align-self: center;
+  padding-inline: 8px;
+  padding-block: 5px;
+  background-color: var(--admin-env-info-background-color, var(--secondary));
+  color: var(--admin-env-info-color, var(--primary-fg));
+  border-radius: 4px;
+}
+
+/**
+ * Django form field lengths
+ */
+.change-form {
+  .vTextField {
+    width: var(--input-field-size);
+  }
+}
+
+/**
+ * Django form related widget
+ */
+.related-widget-wrapper {
+  display: inline-block;
+}

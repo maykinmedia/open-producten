@@ -1,0 +1,14 @@
+# Core python libraries
+Pillow  # handle images
+
+open-api-framework
+django-treebeard
+# Framework libraries
+# django-rosetta
+
+# API libraries
+# django-extra-fields
+django-tinymce
+geopy
+django-open-forms-client
+django-localflavor

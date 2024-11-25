@@ -1,0 +1,123 @@
+/*
+ Project/app specific overrides, coupled to the data model.
+
+ Generic overrides should go in _admin_theme.scss
+ */
+
+@use 'microscope-sass/lib/bem';
+
+.djai-dropdown-menu {
+  // by default, the header has 40px padding on both sides. To make the border stretch
+  // full width, set negative margins and positive paddings. On mobile and tablet these
+  // values are 15px and 30px respectively.
+  --custom-djai-padding: 40px;
+  margin-inline: calc(-1 * var(--custom-djai-padding));
+  padding-inline: var(--custom-djai-padding);
+
+  // use full width on mobile & tablet
+  width: 100%;
+
+  /* Added to attach to body/breadcrumbs */
+  border-bottom: var(--custom-djai-border-bottom-width) solid var(--custom-djai-border-bottom-color);
+
+  & &__drop {
+    min-width: 250px !important;
+  }
+
+  // remove the header padding on mobile and tablet
+  @at-root #header {
+    padding-block-end: 0 !important;
+
+    // overwrite admin '#header a:link' rule which is otherwise more specific
+    .djai-dropdown-menu .djai-dropdown-menu__item--active:link,
+    .djai-dropdown-menu .djai-dropdown-menu__item--active:visited {
+      color: var(--djai-tab-fg--active);
+
+      &:hover {
+        color: var(--djai-tab-fg--hover);
+      }
+    }
+
+    // remove the border height from the breadcrumbs padding
+    @at-root div.breadcrumbs {
+      padding-top: calc(10px - var(--custom-djai-border-bottom-width)); // 10px is original django value
+    }
+
+    /* uncomment for sticky breadcrumbs. note that you probably want to tweak the 'inset-block-start' value */
+    // @at-root #container > nav:has(.breadcrumbs) {
+    //   position: sticky;
+    //   inset-block-start: calc(84px + var(--custom-djai-border-bottom-width));
+    //   z-index: 2; // must be higher than the following content z-index (set to 1 by admin-index)
+
+    //   @at-root #container #header {
+    //     // admin-index sets z-index of 2 on header, breadcrumbs follow -> must be larger than the breadcrumbs z-index
+    //     z-index: 3;
+    //   }
+    // }
+
+    @at-root body.login #header {
+      padding-block-end: 15px !important;
+    }
+  }
+}
+
+// See admin/css/responsive.css for the Django admin breakpoints.
+
+@media (max-width: 1024px) {
+  .djai-dropdown-menu {
+    --custom-djai-padding: 30px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 767px) {
+  .djai-dropdown-menu {
+    --custom-djai-padding: 15px;
+  }
+}
+
+
+/* Extra login links in admin login screen */
+.admin-login-option {
+  text-align: center;
+  clear: both;
+  padding-top: 1em;
+
+  @include bem.modifier('disabled') {
+    display: block;
+  }
+}
+
+.admin-login-divider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-block-start: 1em;
+  &:after,
+  &:before {
+    content: '';
+    display: block;
+    border-bottom: 1px solid var(--border-color);
+    flex-grow: 1;
+  }
+  > span {
+    flex-shrink: 0;
+    padding-inline: 10px;
+  }
+}
+
+/**
+ * mozilla-django-oidc-db
+ * hide the regular admin login form by default if OIDC is enabled
+ */
+
+#login-form {
+  &:has(~ .admin-login-option--oidc) {
+    display: block;
+  }
+
+  &.login-form--enabled {
+    display: block;
+  }
+}
