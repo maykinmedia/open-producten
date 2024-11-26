@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from tinymce import models as tinymce_models
+from markdownx.models import MarkdownxField
 from treebeard.exceptions import InvalidMoveToDescendant
 from treebeard.mp_tree import MP_MoveHandler, MP_Node
 
@@ -25,7 +25,7 @@ class Onderwerp(MP_Node, BasePublishableModel):
         verbose_name=_("naam"), max_length=100, help_text=_("Naam van het onderwerp.")
     )
 
-    beschrijving = tinymce_models.HTMLField(
+    beschrijving = MarkdownxField(
         verbose_name=_("beschrijving"),
         blank=True,
         default="",

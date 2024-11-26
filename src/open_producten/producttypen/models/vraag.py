@@ -2,7 +2,7 @@ from django.core.validators import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from tinymce import models as tinymce_models
+from markdownx.models import MarkdownxField
 
 from open_producten.utils.models import BaseModel
 
@@ -28,7 +28,7 @@ class Vraag(BaseModel):
         related_name="vragen",
     )
     vraag = models.CharField(verbose_name=_("vraag"), max_length=250)
-    antwoord = tinymce_models.HTMLField(verbose_name=_("antwoord"))
+    antwoord = MarkdownxField(verbose_name=_("antwoord"))
 
     class Meta:
         verbose_name = _("Vraag")

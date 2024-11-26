@@ -19,8 +19,7 @@ INSTALLED_APPS += [
     "rest_framework.authtoken",
     "localflavor",
     "treebeard",
-    "tinymce",
-    "openformsclient",
+    "markdownx",
     "django.contrib.gis",
     "open_producten.accounts",
     "open_producten.utils",
@@ -72,6 +71,11 @@ ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
 ADMIN_INDEX_SHOW_REMAINING_APPS = False
 
 #
+# markdownx
+#
+MARKDOWNX_EDITOR_RESIZABLE = False
+
+#
 # Django rest framework
 #
 REST_FRAMEWORK = {
@@ -107,22 +111,6 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "TOS": None,
     "VERSION": API_VERSION,
 }
-
-TINYMCE_DEFAULT_CONFIG = {  # TODO: light/dark mode based on browser settings
-    "height": 200,
-    "menubar": False,
-    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
-    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
-    "code,wordcount",
-    "toolbar": "undo redo | formatselect | "
-    "bold italic backcolor | alignleft aligncenter "
-    "alignright alignjustify | bullist numlist outdent indent | "
-    "removeformat",
-    "skin": "oxide-dark",
-    "content_css": "dark",
-}
-
-TINYMCE_EXTRA_MEDIA = {"js": ["initTinymce.js"]}
 
 #
 # geopy
