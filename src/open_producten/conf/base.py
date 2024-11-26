@@ -24,7 +24,7 @@ INSTALLED_APPS += [
     "django.contrib.gis",
     "open_producten.accounts",
     "open_producten.utils",
-    # "open_producten.producttypen",
+    "open_producten.producttypen",
     # "open_producten.products",
     # "open_producten.locations",
 ]
