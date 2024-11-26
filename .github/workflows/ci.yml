@@ -74,7 +74,7 @@ jobs:
           python-version: '3.11'
           optimize-postgres: 'yes'
           pg-service: 'postgres'
-          setup-node: 'yes'
+          setup-node: 'no'
           apt-packages: 'gdal-bin'
 
       - name: Run tests

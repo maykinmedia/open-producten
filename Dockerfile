@@ -26,26 +26,26 @@ RUN pip install -r requirements/production.txt
 
 
 # Stage 2 - Install frontend deps and build assets
-FROM node:20-bookworm-slim AS frontend-build
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-# copy configuration/build files
-COPY ./build /app/build/
-COPY ./*.json ./*.js ./.babelrc /app/
-
-# install WITH dev tooling
-RUN npm ci
-
-# copy source code
-COPY ./src /app/src
-
-# build frontend
-RUN npm run build
+#FROM node:20-bookworm-slim AS frontend-build
+#
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#        git \
+#    && rm -rf /var/lib/apt/lists/*
+#
+#WORKDIR /app
+#
+## copy configuration/build files
+#COPY ./build /app/build/
+#COPY ./*.json ./*.js ./.babelrc /app/
+#
+## install WITH dev tooling
+#RUN npm ci
+#
+## copy source code
+#COPY ./src /app/src
+#
+## build frontend
+#RUN npm run build
 
 
 # Stage 3 - Build docker image suitable for production

@@ -8,14 +8,20 @@
 
 
 {% block extra_login_options %}
-{#Include additional (OIDC) authentication options here #}
+    {% get_solo 'mozilla_django_oidc_db.OpenIDConnectConfig' as oidc_config %}
+    {% if oidc_config.enabled %}
+        <div class="admin-login-divider"><span>{% trans 'or' %}</span></div>
+        <div class="admin-login-option admin-login-option--oidc">
+            <a href="{% url 'oidc_authentication_init' %}">
+                {% trans 'Login with organization account' %}
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}
 
 
 {% block extra_recovery_options %}
-<li>
-    <a href="URL_TO_TICKET_OR_SUPPORT_SYSTEM">
+    <li>
         {% trans 'Contact support' %}
-    </a>
-</li>
+    </li>
 {% endblock extra_recovery_options %}
