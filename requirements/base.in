@@ -8,7 +8,7 @@ django-treebeard
 
 # API libraries
 # django-extra-fields
-django-tinymce
+django-markdownx
 geopy
 django-localflavor
 

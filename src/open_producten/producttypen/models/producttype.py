@@ -4,7 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from tinymce import models as tinymce_models
+from markdownx.models import MarkdownxField
 
 # from open_producten.locations.models import Contact, Location, Organisation
 from open_producten.utils.models import BasePublishableModel
@@ -36,7 +36,7 @@ class ProductType(BasePublishableModel):
         help_text=_("Korte beschrijving van het product type, maximaal 300 karakters."),
     )
 
-    beschrijving = tinymce_models.HTMLField(
+    beschrijving = MarkdownxField(
         verbose_name=_("beschrijving"),
         help_text=_("Product type beschrijving met WYSIWYG editor."),
     )

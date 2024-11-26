@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from markdownx.admin import MarkdownxModelAdmin
 from ordered_model.admin import OrderedModelAdmin
 
 from ..models import Vraag
 
 
 @admin.register(Vraag)
-class VraagAdmin(OrderedModelAdmin):
+class VraagAdmin(OrderedModelAdmin, MarkdownxModelAdmin):
     list_filter = ("onderwerp",)
     list_display = (
         "vraag",

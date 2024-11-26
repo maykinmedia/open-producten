@@ -151,8 +151,8 @@ django==4.2.17
     #   django-jsonform
     #   django-localflavor
     #   django-log-outgoing-requests
+    #   django-markdownx
     #   django-markup
-    #   django-open-forms-client
     #   django-otp
     #   django-phonenumber-field
     #   django-privates
@@ -164,7 +164,6 @@ django==4.2.17
     #   django-setup-configuration
     #   django-simple-certmanager
     #   django-solo
-    #   django-tinymce
     #   django-treebeard
     #   django-two-factor-auth
     #   djangorestframework
@@ -231,15 +230,15 @@ django-log-outgoing-requests==0.6.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
+django-markdownx==4.0.7
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 django-markup==1.9.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
-django-open-forms-client==0.4.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
 django-ordered-model==3.7.4
     # via
     #   -c requirements/base.txt
@@ -301,14 +300,9 @@ django-solo==2.4.0
     #   -r requirements/base.txt
     #   commonground-api-common
     #   django-log-outgoing-requests
-    #   django-open-forms-client
     #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
-django-tinymce==4.1.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
 django-treebeard==4.7.1
     # via
     #   -c requirements/base.txt
@@ -492,6 +486,7 @@ markdown==3.7
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-markdownx
     #   django-markup
 markupsafe==3.0.2
     # via
@@ -560,6 +555,7 @@ pillow==11.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-markdownx
 platformdirs==4.3.6
     # via
     #   black
@@ -686,7 +682,6 @@ requests==2.32.3
     #   commonground-api-common
     #   coreapi
     #   django-log-outgoing-requests
-    #   django-open-forms-client
     #   gemma-zds-client
     #   mozilla-django-oidc
     #   open-api-framework
