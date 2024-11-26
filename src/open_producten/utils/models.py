@@ -12,17 +12,17 @@ class BaseModel(models.Model):
 
 
 class BasePublishableModel(BaseModel):
-    published = models.BooleanField(
+    gepubliceerd = models.BooleanField(
         verbose_name=_("Published"),
         default=False,
         help_text=_("Whether the object is accessible through the API."),
     )
-    created_on = models.DateTimeField(
+    aanmaak_datum = models.DateTimeField(
         verbose_name=_("Created on"),
         auto_now_add=True,
         help_text=_("The datetime at which the object was created."),
     )
-    updated_on = models.DateTimeField(
+    update_datum = models.DateTimeField(
         verbose_name=_("Updated on"),
         auto_now=True,
         help_text=_("The datetime at which the object was last changed."),

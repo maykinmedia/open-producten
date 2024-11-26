@@ -10,7 +10,6 @@ django-treebeard
 # django-extra-fields
 django-tinymce
 geopy
-django-open-forms-client
 django-localflavor
 
 # waiting for > 2.0.1
