@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from markdownx.models import MarkdownxField
 
-# from open_producten.locations.models import Contact, Location, Organisation
+from open_producten.locaties.models import Contact, Locatie, Organisatie
 from open_producten.utils.models import BasePublishableModel
 
 from .thema import Thema
@@ -56,29 +56,29 @@ class ProductType(BasePublishableModel):
         help_text=_("thema's waaraan het product type is gelinkt."),
     )
 
-    # organisations = models.ManyToManyField(
-    #     Organisation,
-    #     verbose_name=_("Organisations"),
-    #     blank=True,
-    #     related_name="products",
-    #     help_text=_("Organisations which provides this product"),
-    # )
-    #
-    # contacts = models.ManyToManyField(
-    #     Contact,
-    #     verbose_name=_("Contacts"),
-    #     related_name="products",
-    #     blank=True,
-    #     help_text=_("The contacts responsible for the product"),
-    # )
-    #
-    # locations = models.ManyToManyField(
-    #     Location,
-    #     verbose_name=_("Locations"),
-    #     related_name="products",
-    #     blank=True,
-    #     help_text=_("Locations where the product is available at."),
-    # )
+    organisaties = models.ManyToManyField(
+        Organisatie,
+        verbose_name=_("organisaties"),
+        blank=True,
+        related_name="product_typen",
+        help_text=_("organisaties die dit het product aanbieden."),
+    )
+
+    contacten = models.ManyToManyField(
+        Contact,
+        verbose_name=_("contacten"),
+        related_name="product_typen",
+        blank=True,
+        help_text=_("De contacten verantwoordelijk voor het product type."),
+    )
+
+    locaties = models.ManyToManyField(
+        Locatie,
+        verbose_name=_("locaties"),
+        related_name="product_typen",
+        blank=True,
+        help_text=_("De locaties waar het product beschikbaar is."),
+    )
 
     class Meta:
         verbose_name = _("Product type")
@@ -87,13 +87,13 @@ class ProductType(BasePublishableModel):
     def __str__(self):
         return self.naam
 
-    # def clean(self):
-    #     for contact in self.contacts.all():
-    #         if (
-    #             contact.organisation_id is not None
-    #             and not self.organisations.filter(id=contact.organisation_id).exists()
-    #         ):
-    #             self.organisations.add(contact.organisation)
+    def clean(self):
+        for contact in self.contacten.all():
+            if (
+                contact.organisatie_id is not None
+                and not self.organisaties.filter(id=contact.organisatie_id).exists()
+            ):
+                self.organisaties.add(contact.organisatie)
 
     @property
     def actuele_prijs(self):

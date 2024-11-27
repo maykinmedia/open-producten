@@ -100,8 +100,8 @@ class GeoAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if "coordinates" in self.fields:
-            self.fields["coordinates"].disabled = True
+        if "coordinaten" in self.fields:
+            self.fields["coordinaten"].disabled = True
 
 
 class GeoAdminMixin:
@@ -110,5 +110,5 @@ class GeoAdminMixin:
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = super().get_readonly_fields(request, obj)
         if not obj:
-            return readonly_fields + ("coordinates",)
+            return readonly_fields + ("coordinaten",)
         return readonly_fields
