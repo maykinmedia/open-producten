@@ -75,7 +75,7 @@ jobs:
           optimize-postgres: 'yes'
           pg-service: 'postgres'
           setup-node: 'no'
-          apt-packages: 'gdal-bin'
+          apt-packages: 'gdal-bin gettext'
 
       - name: Run tests
         run: |

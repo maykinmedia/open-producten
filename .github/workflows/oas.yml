@@ -20,6 +20,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  DJANGO_SETTINGS_MODULE: open_producten.conf.ci
+
 jobs:
   generate:
     name: Generate the API specification from code
@@ -37,7 +40,7 @@ jobs:
           # npm-ci-flags: '--legacy-peer-deps' -> preferably use a .npmrc file
 
       - name: Generate the API specification
-        run: ./bin/generate_api_schema.sh openapi.yaml
+        run: ./bin/generate_api_schema.sh
 
       - name: Store generated API specification for later use
         uses: actions/upload-artifact@v4

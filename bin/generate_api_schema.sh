@@ -11,7 +11,6 @@
 # For multiple-major version support, take a look at the objects-api and tweak
 # accordingly.
 #
-set -eu -o pipefail
 
 OUTFILE=${1:-src/openapi.yaml}
 

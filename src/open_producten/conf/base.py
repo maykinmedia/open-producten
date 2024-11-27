@@ -132,3 +132,9 @@ GEOPY_APP = "Openproducten"
 GEOPY_TIMEOUT = 10  # in seconds
 LOCATION_SERVICE_URL = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/free"
 GEOCODER = "open_producten.utils.geocode.PdocLocatieserver"
+
+# Subpath (optional)
+# This environment variable can be configured during deployment.
+SUBPATH = config("SUBPATH", None)
+if SUBPATH:
+    SUBPATH = f"/{SUBPATH.strip('/')}"
