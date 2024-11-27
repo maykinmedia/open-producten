@@ -27,7 +27,7 @@ class PdocLocatieserver(Geocoder):
         scheme="https",
         user_agent=None,
         ssl_context=DEFAULT_SENTINEL,
-        adapter_factory=None
+        adapter_factory=None,
     ):
         super().__init__(
             scheme=scheme,

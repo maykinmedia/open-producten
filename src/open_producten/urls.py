@@ -14,8 +14,10 @@ from drf_spectacular.views import (
 )
 from maykin_2fa import monkeypatch_admin
 from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
+from mozilla_django_oidc_db.views import AdminLoginFailure
 
 from open_producten.accounts.views.password_reset import PasswordResetView
+
 # from open_producten.locations.router import location_urlpatterns
 # from open_producten.products.router import product_urlpatterns
 # from open_producten.producttypen.router import product_type_urlpatterns
@@ -25,6 +27,8 @@ from open_producten.accounts.views.password_reset import PasswordResetView
 monkeypatch_admin()
 
 handler500 = "open_producten.utils.views.server_error"
+
+admin.site.enable_nav_sidebar = False
 admin.site.site_header = "Open Producten admin"
 admin.site.site_title = "Open Producten admin"
 admin.site.index_title = "Open Producten dashboard"
@@ -42,6 +46,9 @@ urlpatterns = [
         auth_views.PasswordResetDoneView.as_view(),
         name="password_reset_done",
     ),
+    # OIDC urls
+    path("admin/login/failure/", AdminLoginFailure.as_view(), name="admin-oidc-error"),
+    path("auth/oidc/", include("mozilla_django_oidc.urls")),
     # Use custom login views for the admin + support hardware tokens
     path("admin/", include((urlpatterns, "maykin_2fa"))),
     path("admin/", include((webauthn_urlpatterns, "two_factor"))),
@@ -96,5 +103,5 @@ if settings.DEBUG and apps.is_installed("debug_toolbar"):
     import debug_toolbar
 
     urlpatterns = [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
+                      path("__debug__/", include(debug_toolbar.urls)),
+                  ] + urlpatterns
