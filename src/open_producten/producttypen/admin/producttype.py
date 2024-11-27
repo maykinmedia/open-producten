@@ -35,9 +35,9 @@ class ProductTypeAdmin(admin.ModelAdmin):
     list_editable = ("gepubliceerd",)
     date_hierarchy = "aanmaak_datum"
     autocomplete_fields = (
-        # "organisations",
-        # "contacts",
-        # "locations",
+        "organisaties",
+        "contacten",
+        "locaties",
     )
     search_fields = ("naam",)
     ordering = ("naam",)
@@ -49,10 +49,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
         return (
             super()
             .get_queryset(request)
-            .prefetch_related(
-                "onderwerpen",
-                # "contacts", "locations", "organisations"
-            )
+            .prefetch_related("onderwerpen", "contacten", "locaties", "organisaties")
         )
 
     @admin.display(description="onderwerpen")

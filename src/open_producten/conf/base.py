@@ -25,7 +25,7 @@ INSTALLED_APPS += [
     "open_producten.utils",
     "open_producten.producttypen",
     # "open_producten.products",
-    # "open_producten.locations",
+    "open_producten.locaties",
 ]
 
 DATABASES = {
