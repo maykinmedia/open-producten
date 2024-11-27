@@ -31,12 +31,14 @@ uv pip compile \
 uv pip compile \
     --output-file requirements/ci.txt \
     "$@" \
+    requirements/base.txt \
     requirements/test-tools.in
 
 # Dev depedencies - exact same set as CI + some extra tooling
 uv pip compile \
     --output-file requirements/dev.txt \
     "$@" \
+    requirements/ci.txt \
     requirements/dev.in
 
 cd "${cwd}"
