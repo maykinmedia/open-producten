@@ -5,5 +5,1646 @@ info:
   description: |2
 
     Open Producten is an API to manage product types and products.
-paths: {}
-components: {}
+paths:
+  /api/v1/onderwerpen/:
+    get:
+      operationId: onderwerpen_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+      tags:
+        - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOnderwerpList'
+          description: ''
+    post:
+      operationId: onderwerpen_create
+      tags:
+        - onderwerpen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Onderwerp'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Onderwerp'
+          description: ''
+  /api/v1/onderwerpen/{id}/:
+    get:
+      operationId: onderwerpen_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Onderwerp.
+          required: true
+      tags:
+        - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Onderwerp'
+          description: ''
+    put:
+      operationId: onderwerpen_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Onderwerp.
+          required: true
+      tags:
+        - onderwerpen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Onderwerp'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Onderwerp'
+          description: ''
+    patch:
+      operationId: onderwerpen_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Onderwerp.
+          required: true
+      tags:
+        - onderwerpen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOnderwerp'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Onderwerp'
+          description: ''
+    delete:
+      operationId: onderwerpen_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Onderwerp.
+          required: true
+      tags:
+        - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/onderwerpen/{onderwerp_id}/vragen/:
+    get:
+      operationId: onderwerpen_vragen_list
+      parameters:
+        - in: path
+          name: onderwerp_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+      tags:
+        - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVraagList'
+          description: ''
+    post:
+      operationId: onderwerpen_vragen_create
+      parameters:
+        - in: path
+          name: onderwerp_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - onderwerpen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vraag'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+  /api/v1/onderwerpen/{onderwerp_id}/vragen/{vraag_id}/:
+    get:
+      operationId: onderwerpen_vragen_retrieve
+      parameters:
+        - in: path
+          name: onderwerp_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+    put:
+      operationId: onderwerpen_vragen_update
+      parameters:
+        - in: path
+          name: onderwerp_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - onderwerpen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vraag'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+    patch:
+      operationId: onderwerpen_vragen_partial_update
+      parameters:
+        - in: path
+          name: onderwerp_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - onderwerpen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVraag'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+    delete:
+      operationId: onderwerpen_vragen_destroy
+      parameters:
+        - in: path
+          name: onderwerp_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypen/:
+    get:
+      operationId: producttypen_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductTypeList'
+          description: ''
+    post:
+      operationId: producttypen_create
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductType'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+  /api/v1/producttypen/{id}/:
+    get:
+      operationId: producttypen_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+    put:
+      operationId: producttypen_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductType'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+    patch:
+      operationId: producttypen_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductType'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductType'
+          description: ''
+    delete:
+      operationId: producttypen_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypen/{product_type_id}/links/:
+    get:
+      operationId: producttypen_links_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze link hoort.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLinkList'
+          description: ''
+    post:
+      operationId: producttypen_links_create
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze link hoort.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Link'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+  /api/v1/producttypen/{product_type_id}/links/{link_id}/:
+    get:
+      operationId: producttypen_links_retrieve
+      parameters:
+        - in: path
+          name: link_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze link hoort.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+    put:
+      operationId: producttypen_links_update
+      parameters:
+        - in: path
+          name: link_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze link hoort.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Link'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+    patch:
+      operationId: producttypen_links_partial_update
+      parameters:
+        - in: path
+          name: link_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze link hoort.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLink'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+          description: ''
+    delete:
+      operationId: producttypen_links_destroy
+      parameters:
+        - in: path
+          name: link_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Product type link.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze link hoort.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypen/{product_type_id}/prijzen/:
+    get:
+      operationId: producttypen_prijzen_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze prijs hoort.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPrijsList'
+          description: ''
+    post:
+      operationId: producttypen_prijzen_create
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze prijs hoort.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prijs'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prijs'
+          description: ''
+  /api/v1/producttypen/{product_type_id}/prijzen/{prijs_id}/:
+    get:
+      operationId: producttypen_prijzen_retrieve
+      parameters:
+        - in: path
+          name: prijs_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Prijs.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze prijs hoort.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prijs'
+          description: ''
+    put:
+      operationId: producttypen_prijzen_update
+      parameters:
+        - in: path
+          name: prijs_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Prijs.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze prijs hoort.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prijs'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prijs'
+          description: ''
+    patch:
+      operationId: producttypen_prijzen_partial_update
+      parameters:
+        - in: path
+          name: prijs_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Prijs.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze prijs hoort.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPrijs'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prijs'
+          description: ''
+    delete:
+      operationId: producttypen_prijzen_destroy
+      parameters:
+        - in: path
+          name: prijs_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Prijs.
+          required: true
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+            description: Het product type waarbij deze prijs hoort.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypen/{product_type_id}/vragen/:
+    get:
+      operationId: producttypen_vragen_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVraagList'
+          description: ''
+    post:
+      operationId: producttypen_vragen_create
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vraag'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+  /api/v1/producttypen/{product_type_id}/vragen/{vraag_id}/:
+    get:
+      operationId: producttypen_vragen_retrieve
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+    put:
+      operationId: producttypen_vragen_update
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vraag'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+    patch:
+      operationId: producttypen_vragen_partial_update
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVraag'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vraag'
+          description: ''
+    delete:
+      operationId: producttypen_vragen_destroy
+      parameters:
+        - in: path
+          name: product_type_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: vraag_id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Vraag.
+          required: true
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypen/actuele-prijzen/:
+    get:
+      operationId: producttypen_actuele_prijzen_retrieve
+      tags:
+        - producttypen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductTypeActuelePrijs'
+          description: ''
+components:
+  schemas:
+    Bestand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        bestand:
+          type: string
+          format: uri
+      required:
+        - bestand
+        - id
+    Link:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: Naam van de link.
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Url van de link.
+          maxLength: 200
+      required:
+        - id
+        - naam
+        - url
+    Onderwerp:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        hoofd_onderwerp:
+          type: string
+          format: uuid
+          nullable: true
+        product_typen:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleProductType'
+          readOnly: true
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vraag'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        naam:
+          type: string
+          description: Naam van het onderwerp.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het onderwerp.
+      required:
+        - aanmaak_datum
+        - hoofd_onderwerp
+        - id
+        - naam
+        - product_typen
+        - update_datum
+        - vragen
+    PaginatedLinkList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+    PaginatedOnderwerpList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Onderwerp'
+    PaginatedPrijsList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prijs'
+    PaginatedProductTypeList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductType'
+    PaginatedVraagList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vraag'
+    PatchedLink:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: Naam van de link.
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Url van de link.
+          maxLength: 200
+    PatchedOnderwerp:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        hoofd_onderwerp:
+          type: string
+          format: uuid
+          nullable: true
+        product_typen:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleProductType'
+          readOnly: true
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vraag'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        naam:
+          type: string
+          description: Naam van het onderwerp.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het onderwerp.
+    PatchedPrijs:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        prijsopties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsOptie'
+          default: [ ]
+        actief_vanaf:
+          type: string
+          format: date
+          title: Start datum
+          description: De datum vanaf wanneer de prijs actief is.
+    PatchedProductType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        uniforme_product_naam:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+        onderwerpen:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleOnderwerp'
+          readOnly: true
+        onderwerp_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vraag'
+          readOnly: true
+        prijzen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prijs'
+          readOnly: true
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+          readOnly: true
+        bestanden:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bestand'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        naam:
+          type: string
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          description: Product type beschrijving met WYSIWYG editor.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        organisaties:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: organisaties die dit het product aanbieden.
+        contacten:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: De contacten verantwoordelijk voor het product type.
+        locaties:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: De locaties waar het product beschikbaar is.
+    PatchedVraag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        vraag:
+          type: string
+          maxLength: 250
+        antwoord:
+          type: string
+    Prijs:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        prijsopties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsOptie'
+          default: [ ]
+        actief_vanaf:
+          type: string
+          format: date
+          title: Start datum
+          description: De datum vanaf wanneer de prijs actief is.
+      required:
+        - actief_vanaf
+        - id
+    PrijsOptie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bedrag:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          description: Het bedrag van de prijs optie.
+        beschrijving:
+          type: string
+          description: Korte beschrijving van de optie.
+          maxLength: 100
+      required:
+        - bedrag
+        - beschrijving
+    ProductType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        uniforme_product_naam:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+        onderwerpen:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleOnderwerp'
+          readOnly: true
+        onderwerp_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vraag'
+          readOnly: true
+        prijzen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prijs'
+          readOnly: true
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+          readOnly: true
+        bestanden:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bestand'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        naam:
+          type: string
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          description: Product type beschrijving met WYSIWYG editor.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        organisaties:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: organisaties die dit het product aanbieden.
+        contacten:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: De contacten verantwoordelijk voor het product type.
+        locaties:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: De locaties waar het product beschikbaar is.
+      required:
+        - aanmaak_datum
+        - beschrijving
+        - bestanden
+        - id
+        - links
+        - naam
+        - onderwerp_ids
+        - onderwerpen
+        - prijzen
+        - uniforme_product_naam
+        - update_datum
+        - vragen
+    ProductTypeActuelePrijs:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: naam van het product type.
+          maxLength: 100
+        upl_naam:
+          type: string
+          description: Uniforme product naam
+          readOnly: true
+        upl_uri:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+          readOnly: true
+        actuele_prijs:
+          allOf:
+            - $ref: '#/components/schemas/Prijs'
+          nullable: true
+      required:
+        - actuele_prijs
+        - id
+        - naam
+        - upl_naam
+        - upl_uri
+    SimpleOnderwerp:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        naam:
+          type: string
+          description: Naam van het onderwerp.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het onderwerp.
+      required:
+        - aanmaak_datum
+        - id
+        - naam
+        - update_datum
+    SimpleProductType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        uniforme_product_naam:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        naam:
+          type: string
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          description: Product type beschrijving met WYSIWYG editor.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+      required:
+        - aanmaak_datum
+        - beschrijving
+        - id
+        - naam
+        - uniforme_product_naam
+        - update_datum
+    Vraag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        vraag:
+          type: string
+          maxLength: 250
+        antwoord:
+          type: string
+      required:
+        - antwoord
+        - id
+        - vraag
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
