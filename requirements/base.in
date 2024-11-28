@@ -12,3 +12,6 @@ django-tinymce
 geopy
 django-open-forms-client
 django-localflavor
+
+# waiting for > 2.0.1
+commonground-api-common==1.13.4

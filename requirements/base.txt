@@ -4,7 +4,6 @@ amqp==5.3.1
     # via kombu
 ape-pie==0.2.0
     # via
-    #   commonground-api-common
     #   notifications-api-common
     #   zgw-consumers
 asgiref==3.8.1
@@ -57,13 +56,15 @@ click-plugins==1.1.1
     # via celery
 click-repl==0.3.0
     # via celery
-commonground-api-common==2.0.1
-    # via open-api-framework
+commonground-api-common==1.13.4
+    # via
+    #   -r requirements/base.in
+    #   open-api-framework
 coreapi==2.3.3
     # via commonground-api-common
 coreschema==0.0.4
     # via coreapi
-cryptography==43.0.3
+cryptography==44.0.0
     # via
     #   django-simple-certmanager
     #   josepy
@@ -216,6 +217,8 @@ flower==2.0.1
     # via open-api-framework
 furl==2.1.3
     # via ape-pie
+gemma-zds-client==2.0.0
+    # via commonground-api-common
 geographiclib==2.0
     # via geopy
 geopy==2.4.1
@@ -282,11 +285,12 @@ pycparser==2.22
     # via cffi
 pygments==2.18.0
     # via django-markup
-pyjwt==2.10.0
+pyjwt==2.10.1
     # via
     #   commonground-api-common
+    #   gemma-zds-client
     #   zgw-consumers
-pyopenssl==24.2.1
+pyopenssl==24.3.0
     # via
     #   josepy
     #   webauthn
@@ -312,6 +316,7 @@ pyyaml==6.0.2
     # via
     #   drf-spectacular
     #   drf-yasg
+    #   gemma-zds-client
     #   oyaml
 qrcode==7.4.2
     # via django-two-factor-auth
@@ -330,12 +335,10 @@ requests==2.32.3
     #   coreapi
     #   django-log-outgoing-requests
     #   django-open-forms-client
+    #   gemma-zds-client
     #   mozilla-django-oidc
     #   open-api-framework
-    #   requests-mock
     #   zgw-consumers
-requests-mock==1.12.1
-    # via commonground-api-common
 rpds-py==0.21.0
     # via
     #   jsonschema
@@ -391,6 +394,5 @@ wrapt==1.17.0
     # via elastic-apm
 zgw-consumers==0.35.1
     # via
-    #   commonground-api-common
     #   notifications-api-common
     #   open-api-framework

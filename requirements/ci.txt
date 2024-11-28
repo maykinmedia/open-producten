@@ -9,7 +9,6 @@ ape-pie==0.2.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   commonground-api-common
     #   notifications-api-common
     #   zgw-consumers
 asgiref==3.8.1
@@ -107,7 +106,7 @@ click-repl==0.3.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   celery
-commonground-api-common==2.0.1
+commonground-api-common==1.13.4
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -124,7 +123,7 @@ coreschema==0.0.4
     #   coreapi
 coverage==7.6.8
     # via -r requirements/test-tools.in
-cryptography==43.0.3
+cryptography==44.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -392,7 +391,7 @@ face==24.0.0
     #   glom
 factory-boy==3.3.1
     # via -r requirements/test-tools.in
-faker==33.0.0
+faker==33.1.0
     # via factory-boy
 flake8==7.1.1
     # via -r requirements/test-tools.in
@@ -408,6 +407,11 @@ furl==2.1.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   ape-pie
+gemma-zds-client==2.0.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   commonground-api-common
 geographiclib==2.0
     # via
     #   -c requirements/base.txt
@@ -589,15 +593,16 @@ pygments==2.18.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
-pyjwt==2.10.0
+pyjwt==2.10.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
+    #   gemma-zds-client
     #   zgw-consumers
 pylint==3.3.1
     # via -r requirements/test-tools.in
-pyopenssl==24.2.1
+pyopenssl==24.3.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -650,6 +655,7 @@ pyyaml==6.0.2
     #   -r requirements/base.txt
     #   drf-spectacular
     #   drf-yasg
+    #   gemma-zds-client
     #   oyaml
 qrcode==7.4.2
     # via
@@ -681,16 +687,13 @@ requests==2.32.3
     #   coreapi
     #   django-log-outgoing-requests
     #   django-open-forms-client
+    #   gemma-zds-client
     #   mozilla-django-oidc
     #   open-api-framework
     #   requests-mock
     #   zgw-consumers
 requests-mock==1.12.1
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   -r requirements/test-tools.in
-    #   commonground-api-common
+    # via -r requirements/test-tools.in
 rpds-py==0.21.0
     # via
     #   -c requirements/base.txt
@@ -805,6 +808,5 @@ zgw-consumers==0.35.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   commonground-api-common
     #   notifications-api-common
     #   open-api-framework
