@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: open_producten-oas
-          path: openapi.yaml
+          path: src/openapi.yaml
           retention-days: 1
 
   check-up-to-date:
@@ -87,8 +87,7 @@ jobs:
           name: open_producten-oas
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: npm
+          node-version: '20'
 
       - name: Install spectral
         run: npm install -g @stoplight/spectral@5
@@ -109,8 +108,7 @@ jobs:
           name: open_producten-oas
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: npm
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install -g openapi-to-postmanv2
@@ -136,8 +134,7 @@ jobs:
           name: open_producten-oas
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: npm
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install -g @openapitools/openapi-generator-cli
