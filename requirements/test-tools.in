@@ -1,0 +1,17 @@
+-c base.txt
+-r base.txt
+
+# Dependencies only relevant for (unit) testing
+coverage
+
+django-webtest
+factory-boy
+freezegun
+flake8
+pylint
+pyquery  # integrates with webtest
+requests-mock
+tblib
+
+black
+isort

@@ -1,0 +1,19 @@
+-c ci.txt
+-r ci.txt
+
+# Helpers
+bump2version
+gitpython
+
+# Code formatting
+black
+isort[colors]
+flake8
+
+# Debug tooling
+django-debug-toolbar
+django-extensions
+
+# Documentation
+sphinx
+sphinx_rtd_theme

@@ -1,0 +1,9 @@
+openapi: 3.0.3
+info:
+  title: Open Producten API
+  version: 0.0.1
+  description: |2
+
+    Open Producten is an API to manage product types and products.
+paths: {}
+components: {}
