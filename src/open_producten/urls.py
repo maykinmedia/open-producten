@@ -19,8 +19,8 @@ from mozilla_django_oidc_db.views import AdminLoginFailure
 from open_producten.accounts.views.password_reset import PasswordResetView
 
 # from open_producten.locations.router import location_urlpatterns
-# from open_producten.products.router import product_urlpatterns
-# from open_producten.producttypen.router import product_type_urlpatterns
+# from open_producten.producten.router import product_urlpatterns
+from open_producten.producttypen.router import product_type_urlpatterns
 
 # Configure admin
 
@@ -84,7 +84,7 @@ urlpatterns = [
                     SpectacularRedocView.as_view(url_name="schema"),
                     name="redoc",
                 ),
-                # path("", include(product_type_urlpatterns)),
+                path("", include(product_type_urlpatterns)),
                 # path("", include(product_urlpatterns)),
                 # path("", include(location_urlpatterns)),
             ]
