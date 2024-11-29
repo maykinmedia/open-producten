@@ -15,7 +15,7 @@ from .upn import UniformeProductNaam
 
 class OnderwerpProductType(models.Model):
     """
-    Through-model for Category-ProductType m2m-relations.
+    Through-model for Onderwerp-ProductType m2m-relations.
     """
 
     onderwerp = models.ForeignKey(Onderwerp, on_delete=models.CASCADE)
@@ -41,13 +41,6 @@ class ProductType(BasePublishableModel):
         help_text=_("Product type beschrijving met WYSIWYG editor."),
     )
 
-    gerelateerde_product_typen = models.ManyToManyField(
-        "ProductType",
-        verbose_name=_("gerelateerde product typen"),
-        blank=True,
-        help_text=_("gerelateerde product typen naar dit product type."),
-    )
-
     keywords = ArrayField(
         models.CharField(max_length=100, blank=True),
         verbose_name=_("Keywords"),
@@ -64,7 +57,7 @@ class ProductType(BasePublishableModel):
         related_name="product_typen",
     )
 
-    onderwerp = models.ManyToManyField(
+    onderwerpen = models.ManyToManyField(
         Onderwerp,
         verbose_name=_("onderwerp"),
         blank=True,
@@ -99,7 +92,7 @@ class ProductType(BasePublishableModel):
 
     class Meta:
         verbose_name = _("Product type")
-        verbose_name_plural = _("Product types")
+        verbose_name_plural = _("Product typen")
 
     def __str__(self):
         return self.naam
@@ -113,7 +106,7 @@ class ProductType(BasePublishableModel):
     #             self.organisations.add(contact.organisation)
 
     @property
-    def current_price(self):
+    def actuele_prijs(self):
         now = date.today()
         return (
             self.prijzen.filter(actief_vanaf__lte=now).order_by("actief_vanaf").last()

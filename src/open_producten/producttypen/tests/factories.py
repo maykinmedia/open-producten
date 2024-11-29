@@ -32,7 +32,7 @@ class ProductTypeFactory(factory.django.DjangoModelFactory):
 
 
 class OnderwerpFactory(factory.django.DjangoModelFactory):
-    naam = factory.Sequence(lambda n: f"subject {n}")
+    naam = factory.Sequence(lambda n: f"onderwerp {n}")
     beschrijving = factory.Faker("sentence")
     gepubliceerd = True
 
@@ -71,7 +71,7 @@ class PrijsOptieFactory(factory.django.DjangoModelFactory):
 
 class BestandFactory(factory.django.DjangoModelFactory):
     product_type = factory.SubFactory(ProductTypeFactory)
-    bestand = factory.django.FileField(filename="test_file.txt")
+    bestand = factory.django.FileField(filename="test_bestand.txt")
 
     class Meta:
         model = Bestand

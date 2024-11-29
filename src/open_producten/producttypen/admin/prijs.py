@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
+from django.utils.translation import gettext_lazy as _
 
 from ..models import Prijs, PrijsOptie
 
@@ -8,7 +9,7 @@ from ..models import Prijs, PrijsOptie
 class PrijsOptieInlineFormSet(BaseInlineFormSet):
 
     def clean(self):
-        """Check that at least one option has been added."""
+        """Check that at least one optie has been added."""
         super().clean()
         if any(self.errors):
             return
@@ -16,7 +17,7 @@ class PrijsOptieInlineFormSet(BaseInlineFormSet):
             cleaned_data and not cleaned_data.get("DELETE", False)
             for cleaned_data in self.cleaned_data
         ):
-            raise ValidationError("Er is minimaal één optie vereist.")
+            raise ValidationError(_("Er is minimaal één optie vereist."))
 
 
 class PrijsOptieInline(admin.TabularInline):
