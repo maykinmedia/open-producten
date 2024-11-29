@@ -87,7 +87,10 @@ class ProductType(BasePublishableModel):
     def __str__(self):
         return self.naam
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
+        self.add_contact_organisaties()
+
+    def add_contact_organisaties(self):
         for contact in self.contacten.all():
             if (
                 contact.organisatie_id is not None
