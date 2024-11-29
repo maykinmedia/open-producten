@@ -17,5 +17,5 @@ OUTFILE=${1:-src/openapi.yaml}
 src/manage.py spectacular \
     --validate \
     --fail-on-warn \
-    --lang=en \
+    --lang=nl \
     --file "$OUTFILE"

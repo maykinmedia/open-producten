@@ -8,9 +8,8 @@ django-treebeard
 
 # API libraries
 # django-extra-fields
-django-tinymce
+django-markdownx
 geopy
-django-open-forms-client
 django-localflavor
 
 # waiting for > 2.0.1
