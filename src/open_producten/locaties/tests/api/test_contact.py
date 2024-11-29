@@ -65,7 +65,7 @@ class TestContact(BaseApiTestCase):
         self.assertEqual(Contact.objects.count(), 1)
         self.assertEqual(Contact.objects.first().voornaam, "update")
 
-    def test_read_contacts(self):
+    def test_read_contacten(self):
         response = self.get()
 
         self.assertEqual(response.status_code, 200)

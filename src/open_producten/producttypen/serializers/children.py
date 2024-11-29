@@ -58,7 +58,11 @@ class PrijsSerializer(serializers.ModelSerializer):
 
                     if optie_id in seen_optie_ids:
                         optie_errors.append(
-                            _("Dubbele optie id {} op index {}.".format(optie_id, idx))
+                            _(
+                                "Dubbel optie object id {} op index {}.".format(
+                                    optie_id, idx
+                                )
+                            )
                         )
                     seen_optie_ids.add(optie_id)
 
