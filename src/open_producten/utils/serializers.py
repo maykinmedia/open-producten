@@ -13,7 +13,7 @@ def build_array_duplicates_error_message(objects: list, field: str, errors):
         if obj in object_set:
             errors_messages.append(
                 _(
-                    "Dubbel {} id: {} op index {}.".format(
+                    "Dubbel {} object id: {} op index {}.".format(
                         type(obj).__name__, obj.id, idx
                     )
                 )

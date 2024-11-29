@@ -94,7 +94,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel ProductType id: {product_type.id} op index 1.",
+                        string=f"Dubbel ProductType object id: {product_type.id} op index 1.",
                         code="invalid",
                     )
                 ]
@@ -174,7 +174,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel ProductType id: {product_type.id} op index 1.",
+                        string=f"Dubbel ProductType object id: {product_type.id} op index 1.",
                         code="invalid",
                     )
                 ]
@@ -279,7 +279,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel ProductType id: {product_type.id} op index 1.",
+                        string=f"Dubbel ProductType object id: {product_type.id} op index 1.",
                         code="invalid",
                     )
                 ]

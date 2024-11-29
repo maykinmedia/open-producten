@@ -1,16 +1,16 @@
-# from unittest.mock import Mock, patch
-#
-# from django.contrib.gis.geos import Point
+from unittest.mock import Mock, patch
+
+from django.contrib.gis.geos import Point
 from django.forms import model_to_dict
 
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-# from open_producten.locaties.tests.factories import (
-#     ContactFactory,
-#     LocatieFactory,
-#     OrganisatieFactory,
-# )
+from open_producten.locaties.tests.factories import (
+    ContactFactory,
+    LocatieFactory,
+    OrganisatieFactory,
+)
 from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
     LinkFactory,
@@ -119,67 +119,68 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [onderwerp.naam],
         )
 
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_create_product_type_with_location(self):
-    #     locatie = LocatieFactory.create()
-    #
-    #     data = self.data | {"locatie_ids": [locatie.id]}
-    #     response = self.post(data)
-    #
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("locaties__naam", flat=True)),
-    #         [locatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_create_product_type_with_organisation(self):
-    #     organisatie = OrganisatieFactory.create()
-    #
-    #     data = self.data | {"organisatie_ids": [organisatie.id]}
-    #     response = self.post(data)
-    #
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("organisaties__naam", flat=True)),
-    #         [organisatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_create_product_type_with_contact(self):
-    #     contact = ContactFactory.create()
-    #
-    #     data = self.data | {"contact_ids": [contact.id]}
-    #     response = self.post(data)
-    #
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
-    #         [contact.voornaam],
-    #     )
-    #
-    #     # contact org is added in ProductType clean
-    #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
+    @patch(
+        "open_producten.locaties.models.locatie.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
+    def test_create_product_type_with_locatie(self):
+        locatie = LocatieFactory.create()
+
+        data = self.data | {"locatie_ids": [locatie.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("locaties__naam", flat=True)),
+            [locatie.naam],
+        )
+
+    @patch(
+        "open_producten.locaties.models.locatie.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
+    def test_create_product_type_with_organisatie(self):
+        organisatie = OrganisatieFactory.create()
+
+        data = self.data | {"organisatie_ids": [organisatie.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("organisaties__naam", flat=True)),
+            [organisatie.naam],
+        )
+
+    @patch(
+        "open_producten.locaties.models.locatie.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
+    def test_create_product_type_with_contact(self):
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
+            [contact.voornaam],
+        )
+
+        # contact org is added in ProductType clean
+        self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):
         onderwerp = OnderwerpFactory.create()
 
-        # TODO add location_ids
+        locatie = LocatieFactory.create()
 
         data = self.data | {
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
+            "locatie_ids": [locatie.id, locatie.id],
         }
 
         response = self.post(data)
@@ -190,7 +191,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "onderwerp_ids": [
                     ErrorDetail(
-                        string=f"Dubbel Onderwerp id: {onderwerp.id} op index 1.",
+                        string=f"Dubbel Onderwerp object id: {onderwerp.id} op index 1.",
+                        code="invalid",
+                    )
+                ],
+                "locatie_ids": [
+                    ErrorDetail(
+                        string=f"Dubbel Locatie object id: {locatie.id} op index 1.",
                         code="invalid",
                     )
                 ],
@@ -219,71 +226,71 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [onderwerp.naam],
         )
 
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_update_product_type_with_location(self):
-    #     product_type = ProductTypeFactory.create()
-    #     locatie = LocatieFactory.create()
-    #
-    #     data = self.data | {"locatie_ids": [locatie.id]}
-    #     response = self.put(product_type.id, data)
-    #
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("locaties__naam", flat=True)),
-    #         [locatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_update_product_type_with_organisation(self):
-    #     product_type = ProductTypeFactory.create()
-    #     organisatie = OrganisatieFactory.create()
-    #
-    #     data = self.data | {"organisation_ids": [organisatie.id]}
-    #     response = self.put(product_type.id, data)
-    #
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("organisaties__naam", flat=True)),
-    #         [organisatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_update_product_type_with_contact(self):
-    #     product_type = ProductTypeFactory.create()
-    #     contact = ContactFactory.create()
-    #
-    #     data = self.data | {"contact_ids": [contact.id]}
-    #     response = self.put(product_type.id, data)
-    #
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
-    #         [contact.voornaam],
-    #     )
-    #
-    #     # contact org is added in ProductType clean
-    #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
+    @patch(
+        "open_producten.locaties.models.locatie.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
+    def test_update_product_type_with_location(self):
+        product_type = ProductTypeFactory.create()
+        locatie = LocatieFactory.create()
+
+        data = self.data | {"locatie_ids": [locatie.id]}
+        response = self.put(product_type.id, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("locaties__naam", flat=True)),
+            [locatie.naam],
+        )
+
+    @patch(
+        "open_producten.locaties.models.locatie.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
+    def test_update_product_type_with_organisatie(self):
+        product_type = ProductTypeFactory.create()
+        organisatie = OrganisatieFactory.create()
+
+        data = self.data | {"organisatie_ids": [organisatie.id]}
+        response = self.put(product_type.id, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("organisaties__naam", flat=True)),
+            [organisatie.naam],
+        )
+
+    @patch(
+        "open_producten.locaties.models.locatie.geocode_address",
+        new=Mock(return_value=Point((4.84303667, 52.38559043))),
+    )
+    def test_update_product_type_with_contact(self):
+        product_type = ProductTypeFactory.create()
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.put(product_type.id, data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
+            [contact.voornaam],
+        )
+
+        # contact org is added in ProductType clean
+        self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
         product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
-
-        # TODO add location_ids
+        locatie = LocatieFactory.create()
 
         data = self.data | {
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
+            "locatie_ids": [locatie.id, locatie.id],
         }
 
         response = self.put(product_type.id, data)
@@ -294,7 +301,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "onderwerp_ids": [
                     ErrorDetail(
-                        string=f"Dubbel Onderwerp id: {onderwerp.id} op index 1.",
+                        string=f"Dubbel Onderwerp object id: {onderwerp.id} op index 1.",
+                        code="invalid",
+                    )
+                ],
+                "locatie_ids": [
+                    ErrorDetail(
+                        string=f"Dubbel Locatie object id: {locatie.id} op index 1.",
                         code="invalid",
                     )
                 ],
@@ -303,8 +316,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_partial_update_product_type(self):
         product_type = ProductTypeFactory.create()
+        locatie = LocatieFactory.create()
 
-        # TODO add location_ids
+        product_type.locaties.add(locatie)
 
         product_type.save()
 
@@ -313,6 +327,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         response = self.patch(product_type.id, data)
         product_type.refresh_from_db()
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(product_type.locaties.count(), 1)
         self.assertEqual(product_type.naam, "update")
 
     def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
@@ -331,7 +346,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "onderwerp_ids": [
                     ErrorDetail(
-                        string=f"Dubbel Onderwerp id: {onderwerp.id} op index 1.",
+                        string=f"Dubbel Onderwerp object id: {onderwerp.id} op index 1.",
                         code="invalid",
                     )
                 ],

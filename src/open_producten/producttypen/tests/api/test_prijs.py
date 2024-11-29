@@ -227,7 +227,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string=f"Dubbele optie id {optie.id} op index 1.",
+                        string=f"Dubbel optie object id {optie.id} op index 1.",
                         code="invalid",
                     )
                 ]
@@ -320,7 +320,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string=f"Dubbele optie id {optie.id} op index 1.",
+                        string=f"Dubbel optie object id {optie.id} op index 1.",
                         code="invalid",
                     ),
                     ErrorDetail(

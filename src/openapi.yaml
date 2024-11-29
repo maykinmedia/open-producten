@@ -6,6 +6,138 @@ info:
 
     Open Producten is an API to manage product types and products.
 paths:
+  /api/v1/contacten/:
+    get:
+      operationId: contacten_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+      tags:
+        - contacten
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContactList'
+          description: ''
+    post:
+      operationId: contacten_create
+      tags:
+        - contacten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+  /api/v1/contacten/{id}/:
+    get:
+      operationId: contacten_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacten
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    put:
+      operationId: contacten_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    patch:
+      operationId: contacten_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContact'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    delete:
+      operationId: contacten_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Contact.
+          required: true
+      tags:
+        - contacten
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
   /api/v1/links/:
     get:
       operationId: links_list
@@ -144,6 +276,138 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/locaties/:
+    get:
+      operationId: locaties_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+      tags:
+        - locaties
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLocatieList'
+          description: ''
+    post:
+      operationId: locaties_create
+      tags:
+        - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Locatie'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+  /api/v1/locaties/{id}/:
+    get:
+      operationId: locaties_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Locatie.
+          required: true
+      tags:
+        - locaties
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    put:
+      operationId: locaties_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Locatie.
+          required: true
+      tags:
+        - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Locatie'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    patch:
+      operationId: locaties_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Locatie.
+          required: true
+      tags:
+        - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLocatie'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    delete:
+      operationId: locaties_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Locatie.
+          required: true
+      tags:
+        - locaties
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
   /api/v1/onderwerpen/:
     get:
       operationId: onderwerpen_list
@@ -271,6 +535,138 @@ paths:
           required: true
       tags:
         - onderwerpen
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organisaties/:
+    get:
+      operationId: organisaties_list
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Een pagina binnen de gepagineerde set resultaten.
+          schema:
+            type: integer
+      tags:
+        - organisaties
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganisatieList'
+          description: ''
+    post:
+      operationId: organisaties_create
+      tags:
+        - organisaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisatie'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisatie'
+          description: ''
+  /api/v1/organisaties/{id}/:
+    get:
+      operationId: organisaties_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisatie.
+          required: true
+      tags:
+        - organisaties
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisatie'
+          description: ''
+    put:
+      operationId: organisaties_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisatie.
+          required: true
+      tags:
+        - organisaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisatie'
+        required: true
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisatie'
+          description: ''
+    patch:
+      operationId: organisaties_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisatie.
+          required: true
+      tags:
+        - organisaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganisatie'
+      security:
+        - tokenAuth: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisatie'
+          description: ''
+    delete:
+      operationId: organisaties_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          description: A UUID string identifying this Organisatie.
+          required: true
+      tags:
+        - organisaties
       security:
         - tokenAuth: [ ]
       responses:
@@ -723,6 +1119,49 @@ components:
         - bestand
         - id
         - product_type_id
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organisatie:
+          allOf:
+            - $ref: '#/components/schemas/Organisatie'
+          readOnly: true
+        organisatie_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        voornaam:
+          type: string
+          description: voornaam van het contact
+          maxLength: 255
+        achternaam:
+          type: string
+          description: achternaam van het contact
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          title: Email adres
+          description: email van het contact
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          description: telefoonnummer van het contact
+          maxLength: 15
+        rol:
+          type: string
+          description: De rol/functie van het contact
+          maxLength: 100
+      required:
+        - achternaam
+        - id
+        - organisatie
+        - organisatie_id
+        - voornaam
     Link:
       type: object
       properties:
@@ -747,6 +1186,46 @@ components:
         - naam
         - product_type_id
         - url
+    Locatie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        coordinaten:
+          type: array
+          items: { }
+          readOnly: true
+        naam:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email adres
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          maxLength: 15
+        straat:
+          type: string
+          maxLength: 250
+        huisnummer:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        stad:
+          type: string
+          maxLength: 250
+      required:
+        - coordinaten
+        - id
+        - postcode
+        - stad
     Onderwerp:
       type: object
       properties:
@@ -805,6 +1284,69 @@ components:
         - product_typen
         - update_datum
         - vragen
+    Organisatie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        coordinaten:
+          type: array
+          items: { }
+          readOnly: true
+        naam:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email adres
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          maxLength: 15
+        straat:
+          type: string
+          maxLength: 250
+        huisnummer:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        stad:
+          type: string
+          maxLength: 250
+      required:
+        - coordinaten
+        - id
+        - postcode
+        - stad
+    PaginatedContactList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
     PaginatedLinkList:
       type: object
       required:
@@ -828,6 +1370,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Link'
+    PaginatedLocatieList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locatie'
     PaginatedOnderwerpList:
       type: object
       required:
@@ -851,6 +1416,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Onderwerp'
+    PaginatedOrganisatieList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organisatie'
     PaginatedPrijsList:
       type: object
       required:
@@ -920,6 +1508,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Vraag'
+    PatchedContact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organisatie:
+          allOf:
+            - $ref: '#/components/schemas/Organisatie'
+          readOnly: true
+        organisatie_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        voornaam:
+          type: string
+          description: voornaam van het contact
+          maxLength: 255
+        achternaam:
+          type: string
+          description: achternaam van het contact
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          title: Email adres
+          description: email van het contact
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          description: telefoonnummer van het contact
+          maxLength: 15
+        rol:
+          type: string
+          description: De rol/functie van het contact
+          maxLength: 100
     PatchedLink:
       type: object
       properties:
@@ -927,6 +1552,9 @@ components:
           type: string
           format: uuid
           readOnly: true
+        product_type_id:
+          type: string
+          format: uuid
         naam:
           type: string
           description: Naam van de link.
@@ -936,6 +1564,41 @@ components:
           format: uri
           description: Url van de link.
           maxLength: 200
+    PatchedLocatie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        coordinaten:
+          type: array
+          items: { }
+          readOnly: true
+        naam:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email adres
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          maxLength: 15
+        straat:
+          type: string
+          maxLength: 250
+        huisnummer:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        stad:
+          type: string
+          maxLength: 250
     PatchedOnderwerp:
       type: object
       properties:
@@ -986,6 +1649,41 @@ components:
         beschrijving:
           type: string
           description: Beschrijving van het onderwerp.
+    PatchedOrganisatie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        coordinaten:
+          type: array
+          items: { }
+          readOnly: true
+        naam:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Email adres
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          maxLength: 15
+        straat:
+          type: string
+          maxLength: 250
+        huisnummer:
+          type: string
+          maxLength: 250
+        postcode:
+          type: string
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 7
+        stad:
+          type: string
+          maxLength: 250
     PatchedPrijs:
       type: object
       properties:
@@ -1029,6 +1727,42 @@ components:
             format: uuid
             writeOnly: true
           writeOnly: true
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locatie'
+          readOnly: true
+        locatie_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        organisaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organisatie'
+          readOnly: true
+        organisatie_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        contacten:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+          readOnly: true
+        contact_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
         vragen:
           type: array
           items:
@@ -1081,24 +1815,6 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
-        organisaties:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: organisaties die dit het product aanbieden.
-        contacten:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: De contacten verantwoordelijk voor het product type.
-        locaties:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: De locaties waar het product beschikbaar is.
     PatchedVraag:
       type: object
       properties:
@@ -1182,6 +1898,42 @@ components:
             format: uuid
             writeOnly: true
           writeOnly: true
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locatie'
+          readOnly: true
+        locatie_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        organisaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organisatie'
+          readOnly: true
+        organisatie_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
+        contacten:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+          readOnly: true
+        contact_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+          default: [ ]
         vragen:
           type: array
           items:
@@ -1234,33 +1986,18 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
-        organisaties:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: organisaties die dit het product aanbieden.
-        contacten:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: De contacten verantwoordelijk voor het product type.
-        locaties:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: De locaties waar het product beschikbaar is.
       required:
         - aanmaak_datum
         - beschrijving
         - bestanden
+        - contacten
         - id
         - links
+        - locaties
         - naam
         - onderwerp_ids
         - onderwerpen
+        - organisaties
         - prijzen
         - uniforme_product_naam
         - update_datum
