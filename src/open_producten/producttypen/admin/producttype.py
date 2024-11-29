@@ -24,18 +24,17 @@ class ProductTypeAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         if len(cleaned_data["onderwerpen"]) == 0:
-            self.add_error("onderwerpen", _("Er is minimaal één onderwerp vereist"))
+            self.add_error("onderwerpen", _("Er is minimaal één onderwerp vereist."))
         return cleaned_data
 
 
 @admin.register(ProductType)
 class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ("naam", "aanmaak_datum", "display_onderwerpen", "gepubliceerd")
-    list_filter = ("gepubliceerd", "onderwerp")
+    list_filter = ("gepubliceerd", "onderwerpen")
     list_editable = ("gepubliceerd",)
     date_hierarchy = "aanmaak_datum"
     autocomplete_fields = (
-        "gerelateerde_product_typen",
         # "organisations",
         # "contacts",
         # "locations",

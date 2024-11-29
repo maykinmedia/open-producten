@@ -110,6 +110,9 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "DESCRIPTION": _DESCRIPTION,
     "TOS": None,
     "VERSION": API_VERSION,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
 }
 
 #

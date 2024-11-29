@@ -11,15 +11,15 @@ class TestProductTypeAdminForm(TestCase):
         self.data = {
             "naam": "test",
             "uniforme_product_naam": upn,
-            "beschrijving": "content",
-            "samenvatting": "summary",
+            "beschrijving": "beschrijving",
+            "samenvatting": "samenvatting",
         }
 
     def test_at_least_one_onderwerp_is_required(self):
         form = ProductTypeAdminForm(data=self.data)
 
         self.assertEquals(
-            form.errors, {"onderwerpen": ["Er is minimaal één onderwerp vereist"]}
+            form.errors, {"onderwerpen": ["Er is minimaal één onderwerp vereist."]}
         )
 
         OnderwerpFactory.create()

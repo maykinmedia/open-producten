@@ -13,19 +13,20 @@ class BaseModel(models.Model):
 
 class BasePublishableModel(BaseModel):
     gepubliceerd = models.BooleanField(
-        verbose_name=_("Published"),
+        verbose_name=_("gepubliceerd"),
         default=False,
-        help_text=_("Whether the object is accessible through the API."),
+        help_text=_("Geeft aan of het object getoond kan worden."),
+        # TODO unpublished objects are currently not filtered out of api.
     )
     aanmaak_datum = models.DateTimeField(
         verbose_name=_("Created on"),
         auto_now_add=True,
-        help_text=_("The datetime at which the object was created."),
+        help_text=_("De datum waarop het object is aangemaakt."),
     )
     update_datum = models.DateTimeField(
         verbose_name=_("Updated on"),
         auto_now=True,
-        help_text=_("The datetime at which the object was last changed."),
+        help_text=_("De datum waarop het object voor het laatst is gewijzigd."),
     )
 
     class Meta:

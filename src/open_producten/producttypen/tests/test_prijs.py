@@ -27,16 +27,16 @@ class TestPrijs(TestCase):
             prijs.full_clean()
 
 
-class TestPrijsOption(TestCase):
+class TestPrijsOptie(TestCase):
     def setUp(self):
         self.prijs = PrijsFactory.create()
 
     def test_min_amount_validation(self):
         with self.assertRaises(ValidationError):
-            option = PrijsOptieFactory.build(prijs=self.prijs, bedrag=Decimal("-1"))
-            option.full_clean()
+            optie = PrijsOptieFactory.build(prijs=self.prijs, bedrag=Decimal("-1"))
+            optie.full_clean()
 
     def test_decimal_place_validation(self):
         with self.assertRaises(ValidationError):
-            option = PrijsOptieFactory.build(prijs=self.prijs, bedrag=Decimal("0.001"))
-            option.full_clean()
+            optie = PrijsOptieFactory.build(prijs=self.prijs, bedrag=Decimal("0.001"))
+            optie.full_clean()

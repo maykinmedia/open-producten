@@ -27,9 +27,9 @@ class TestOnderwerpAdminForm(TestCase):
             "depth": 1,
         }
 
-    def test_parent_nodes_must_be_published_when_publishing_child(self):
-        parent = OnderwerpFactory.create(gepubliceerd=False)
-        data = self.data | {"gepubliceerd": True, "_ref_node_id": parent.id}
+    def test_hoofd_onderwerpen_must_be_published_when_publishing_sub_onderwerp(self):
+        hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
+        data = self.data | {"gepubliceerd": True, "_ref_node_id": hoofd_onderwerp.id}
 
         form = create_form(data)
 
@@ -40,18 +40,18 @@ class TestOnderwerpAdminForm(TestCase):
             ],
         )
 
-        parent.gepubliceerd = True
-        parent.save()
+        hoofd_onderwerp.gepubliceerd = True
+        hoofd_onderwerp.save()
 
         form = create_form(data)
         self.assertEquals(form.errors, {})
 
-    def test_parent_nodes_cannot_be_published_with_published_children(self):
-        parent = OnderwerpFactory.create(gepubliceerd=False)
-        parent.add_child(**{"naam": "child", "gepubliceerd": True})
+    def test_hoofd_onderwerpen_cannot_be_published_with_published_sub_onderwerpen(self):
+        hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
+        hoofd_onderwerp.add_child(**{"naam": "sub onderwerp", "gepubliceerd": True})
         data = {"gepubliceerd": False, "_ref_node_id": None}
 
-        form = create_form(data, parent)
+        form = create_form(data, hoofd_onderwerp)
 
         self.assertEquals(
             form.non_field_errors(),
@@ -61,7 +61,7 @@ class TestOnderwerpAdminForm(TestCase):
         )
 
 
-class TestCategoryAdminFormSet(TestCase):
+class TestOnderwerpAdminFormSet(TestCase):
 
     def setUp(self):
         self.formset = modelformset_factory(
@@ -70,16 +70,22 @@ class TestCategoryAdminFormSet(TestCase):
             fields=OnderwerpAdmin.list_editable,
         )
 
-        self.parent = Onderwerp.add_root(**{"naam": "parent", "gepubliceerd": False})
-        self.child = self.parent.add_child(**{"naam": "child", "gepubliceerd": True})
+        self.hoofd_onderwerp = Onderwerp.add_root(
+            **{"naam": "hoofd onderwerp", "gepubliceerd": False}
+        )
+        self.sub_onderwerp = self.hoofd_onderwerp.add_child(
+            **{"naam": "sub onderwerp", "gepubliceerd": True}
+        )
 
-    def test_parent_nodes_cannot_be_unpublished_with_published_children(self):
+    def test_hoofd_onderwerpen_cannot_be_unpublished_with_published_sub_onderwerpen(
+        self,
+    ):
         data = build_formset_data(
             "form",
             {
-                "id": self.parent.id,  # gepubliceerd off
+                "id": self.hoofd_onderwerp.id,  # gepubliceerd false
             },
-            {"id": self.child.id, "gepubliceerd": "on"},
+            {"id": self.sub_onderwerp.id, "gepubliceerd": "on"},
         )
 
         object_formset = self.formset(data)

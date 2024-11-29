@@ -41,15 +41,15 @@ class Onderwerp(MP_Node, BasePublishableModel):
         return self.naam
 
     @property
-    def parent_onderwerp(self):
+    def hoofd_onderwerp(self):
         return self.get_parent()
 
     def move(self, target, pos=None):
         return PublishedMoveHandler(self, target, pos).process()
 
     def clean(self):
-        if self.gepubliceerd and self.parent_onderwerp:
-            if not self.parent_onderwerp.gepubliceerd:
+        if self.gepubliceerd and self.hoofd_onderwerp:
+            if not self.hoofd_onderwerp.gepubliceerd:
                 raise ValidationError(
                     _(
                         "Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
