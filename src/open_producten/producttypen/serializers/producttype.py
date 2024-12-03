@@ -12,12 +12,10 @@ from rest_framework import serializers
 from open_producten.utils.serializers import build_array_duplicates_error_message
 
 from ..models import Onderwerp, ProductType, UniformeProductNaam
-from .children import (
-    BestandSerializer,
-    LinkSerializer,
-    PrijsSerializer,
-    VraagSerializer,
-)
+from .bestand import BestandSerializer
+from .vraag import VraagSerializer
+from .link import LinkSerializer
+from .prijs import PrijsSerializer
 
 
 class SimpleOnderwerpSerializer(serializers.ModelSerializer):

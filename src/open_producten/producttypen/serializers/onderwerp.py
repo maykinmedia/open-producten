@@ -10,7 +10,7 @@ from open_producten.producttypen.models import (
 )
 from open_producten.utils.serializers import build_array_duplicates_error_message
 
-from .children import VraagSerializer
+from .vraag import VraagSerializer
 
 
 class SimpleProductTypeSerializer(serializers.ModelSerializer):

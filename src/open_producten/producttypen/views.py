@@ -1,5 +1,4 @@
-from django.shortcuts import get_object_or_404
-
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -10,15 +9,13 @@ from open_producten.producttypen.models import (
     ProductType,
     Vraag,
 )
-from open_producten.producttypen.serializers.children import (
+from open_producten.producttypen.serializers import (
     LinkSerializer,
+    OnderwerpSerializer,
     PrijsSerializer,
-    VraagSerializer,
-)
-from open_producten.producttypen.serializers.onderwerp import OnderwerpSerializer
-from open_producten.producttypen.serializers.producttype import (
     ProductTypeActuelePrijsSerializer,
     ProductTypeSerializer,
+    VraagSerializer,
 )
 from open_producten.utils.views import OrderedModelViewSet
 
@@ -39,55 +36,31 @@ class ProductTypeViewSet(OrderedModelViewSet):
         return Response(serializer.data)
 
 
-class ProductTypeChildViewSet(OrderedModelViewSet):
-
-    def get_product_type(self):
-        return get_object_or_404(ProductType, id=self.kwargs["product_type_id"])
-
-    def get_queryset(self):
-        return super().get_queryset().filter(product_type=self.get_product_type())
-
-    def perform_create(self, serializer):
-        serializer.save(product_type=self.get_product_type())
-
-
-class ProductTypeLinkViewSet(ProductTypeChildViewSet):
+class LinkViewSet(OrderedModelViewSet):
     queryset = Link.objects.all()
     serializer_class = LinkSerializer
-    lookup_url_kwarg = "link_id"
+    lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["product_type_id"]
 
 
-class ProductTypePrijsViewSet(ProductTypeChildViewSet):
+class PrijsViewSet(OrderedModelViewSet):
     queryset = Prijs.objects.all()
     serializer_class = PrijsSerializer
-    lookup_url_kwarg = "prijs_id"
+    lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["product_type_id"]
 
 
-class ProductTypeVraagViewSet(ProductTypeChildViewSet):
+class VraagViewSet(OrderedModelViewSet):
     queryset = Vraag.objects.all()
     serializer_class = VraagSerializer
-    lookup_url_kwarg = "vraag_id"
+    lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["product_type_id", "onderwerp_id"]
 
 
 class OnderwerpViewSet(OrderedModelViewSet):
     queryset = Onderwerp.objects.all()
     serializer_class = OnderwerpSerializer
     lookup_url_kwarg = "id"
-
-
-class OnderwerpChildViewSet(OrderedModelViewSet):
-
-    def get_onderwerp(self):
-        return get_object_or_404(Onderwerp, id=self.kwargs["onderwerp_id"])
-
-    def get_queryset(self):
-        return super().get_queryset().filter(onderwerp=self.get_onderwerp())
-
-    def perform_create(self, serializer):
-        serializer.save(onderwerp=self.get_onderwerp())
-
-
-class OnderwerpVraagViewSet(OnderwerpChildViewSet):
-    queryset = Vraag.objects.all()
-    serializer_class = VraagSerializer
-    lookup_url_kwarg = "vraag_id"
