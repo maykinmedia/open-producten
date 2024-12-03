@@ -10,7 +10,7 @@ from open_producten.producttypen.models import (
 )
 from open_producten.utils.serializers import build_array_duplicates_error_message
 
-from .children import VraagSerializer
+from .vraag import VraagSerializer
 
 
 class SimpleProductTypeSerializer(serializers.ModelSerializer):
@@ -22,9 +22,9 @@ class SimpleProductTypeSerializer(serializers.ModelSerializer):
         model = ProductType
         exclude = (
             "onderwerpen",
-            "organisaties",
-            "locaties",
-            "contacten",
+            # "organisaties",
+            # "locaties",
+            # "contacten",
         )
 
 
@@ -92,10 +92,10 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             instance_hoofd_onderwerp = instance.get_parent()
             if hoofd_onderwerp is None and instance_hoofd_onderwerp is not None:
                 last_root = Onderwerp.get_last_root_node()
-                instance.move(last_root, "last-sibling")
+                instance.move(last_root, "sorted-sibling")
 
             elif hoofd_onderwerp != instance_hoofd_onderwerp:
-                instance.move(hoofd_onderwerp, "last-child")
+                instance.move(hoofd_onderwerp, "sorted-child")
 
             instance.refresh_from_db()
 

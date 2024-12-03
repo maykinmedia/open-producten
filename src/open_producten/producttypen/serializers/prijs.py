@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
-from ..models import Bestand, Link, Prijs, PrijsOptie, Vraag
+from ..models import Prijs, PrijsOptie, ProductType
 
 
 class PrijsOptieSerializer(serializers.ModelSerializer):
@@ -16,6 +16,9 @@ class PrijsOptieSerializer(serializers.ModelSerializer):
 
 class PrijsSerializer(serializers.ModelSerializer):
     prijsopties = PrijsOptieSerializer(many=True, default=[])
+    product_type_id = serializers.PrimaryKeyRelatedField(
+        source="product_type", queryset=ProductType.objects.all()
+    )
 
     class Meta:
         model = Prijs
@@ -94,21 +97,3 @@ class PrijsSerializer(serializers.ModelSerializer):
             ).delete()
 
         return prijs
-
-
-class BestandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Bestand
-        exclude = ("product_type",)
-
-
-class VraagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Vraag
-        exclude = ("onderwerp", "product_type")
-
-
-class LinkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Link
-        exclude = ("product_type",)

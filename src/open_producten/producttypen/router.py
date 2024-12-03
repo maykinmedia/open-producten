@@ -1,53 +1,26 @@
 from django.urls import include, path
 
-from rest_framework_nested.routers import DefaultRouter, NestedSimpleRouter
+from rest_framework.routers import DefaultRouter
 
 from open_producten.producttypen.views import (
+    LinkViewSet,
     OnderwerpViewSet,
-    OnderwerpVraagViewSet,
-    ProductTypeLinkViewSet,
-    ProductTypePrijsViewSet,
+    PrijsViewSet,
     ProductTypeViewSet,
-    ProductTypeVraagViewSet,
+    VraagViewSet,
 )
 
 ProductTypenRouter = DefaultRouter()
 ProductTypenRouter.register("producttypen", ProductTypeViewSet, basename="producttype")
 
-ProductTypenLinkRouter = NestedSimpleRouter(
-    ProductTypenRouter, "producttypen", lookup="product_type"
-)
-ProductTypenLinkRouter.register(
-    r"links", ProductTypeLinkViewSet, basename="producttype-link"
-)
+ProductTypenRouter.register(r"links", LinkViewSet, basename="link")
 
-ProductTypenPrijsRouter = NestedSimpleRouter(
-    ProductTypenRouter, "producttypen", lookup="product_type"
-)
-ProductTypenPrijsRouter.register(
-    r"prijzen", ProductTypePrijsViewSet, basename="producttype-prijs"
-)
+ProductTypenRouter.register(r"prijzen", PrijsViewSet, basename="prijs")
 
-ProductTypenVraagRouter = NestedSimpleRouter(
-    ProductTypenRouter, "producttypen", lookup="product_type"
-)
-ProductTypenVraagRouter.register(
-    r"vragen", ProductTypeVraagViewSet, basename="producttype-vraag"
-)
+ProductTypenRouter.register(r"vragen", VraagViewSet, basename="vraag")
 
 ProductTypenRouter.register("onderwerpen", OnderwerpViewSet, basename="onderwerp")
 
-OnderwerpenVraagRouter = NestedSimpleRouter(
-    ProductTypenRouter, "onderwerpen", lookup="onderwerp"
-)
-OnderwerpenVraagRouter.register(
-    r"vragen", OnderwerpVraagViewSet, basename="onderwerp-vraag"
-)
-
 product_type_urlpatterns = [
     path("", include(ProductTypenRouter.urls)),
-    path("", include(ProductTypenLinkRouter.urls)),
-    path("", include(ProductTypenPrijsRouter.urls)),
-    path("", include(ProductTypenVraagRouter.urls)),
-    path("", include(OnderwerpenVraagRouter.urls)),
 ]
