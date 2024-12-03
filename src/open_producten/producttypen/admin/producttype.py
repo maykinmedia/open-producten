@@ -57,4 +57,4 @@ class ProductTypeAdmin(admin.ModelAdmin):
 
     @admin.display(description="onderwerpen")
     def display_onderwerpen(self, obj):
-        return ", ".join(p.naam for p in obj.onderwerp.all())
+        return ", ".join(p.naam for p in obj.onderwerpen.all())

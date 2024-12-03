@@ -20,6 +20,7 @@ from open_producten.utils.tests.helpers import model_to_dict_with_id
 
 def prijs_to_dict(prijs):
     prijs_dict = model_to_dict_with_id(prijs, exclude=["product_type"])
+    prijs_dict["product_type_id"] = prijs.product_type.id
     prijs_dict["prijsopties"] = [
         model_to_dict(optie) for optie in prijs.prijsopties.all()
     ]
@@ -34,8 +35,11 @@ class TestProductTypePrijs(BaseApiTestCase):
     def setUp(self):
         super().setUp()
         self.product_type = ProductTypeFactory()
-        self.prijs_data = {"actief_vanaf": datetime.date(2024, 1, 2)}
-        self.path = f"/api/v1/producttypen/{self.product_type.id}/prijzen/"
+        self.prijs_data = {
+            "actief_vanaf": datetime.date(2024, 1, 2),
+            "product_type_id": self.product_type.id,
+        }
+        self.path = "/api/v1/prijzen/"
 
     def _create_prijs(self):
         return PrijsFactory.create(
@@ -66,6 +70,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": datetime.date(2024, 1, 2),
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
+            "product_type_id": self.product_type.id,
         }
 
         response = self.post(data)
@@ -85,6 +90,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
             "prijsopties": [],
         }
 
@@ -110,6 +116,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
             "prijsopties": [
                 {
                     "id": optie_to_be_updated.id,
@@ -133,6 +140,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": prijs.actief_vanaf,
             "prijsopties": [{"bedrag": "20", "beschrijving": "test"}],
+            "product_type_id": self.product_type.id,
         }
 
         response = self.put(prijs.id, data)
@@ -149,6 +157,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving}
             ],
@@ -174,6 +183,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         non_existing_id = uuid.uuid4()
 
         data = {
+            "product_type_id": self.product_type.id,
             "actief_vanaf": prijs.actief_vanaf,
             "prijsopties": [
                 {"id": non_existing_id, "bedrag": "20", "beschrijving": "test"}
@@ -202,6 +212,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving},
                 {"id": optie.id, "bedrag": "40", "beschrijving": optie.beschrijving},
@@ -406,6 +417,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     "upl_uri": self.product_type.uniforme_product_naam.uri,
                     "actuele_prijs": {
                         "id": str(prijs.id),
+                        "product_type_id": self.product_type.id,
                         "actief_vanaf": "2024-01-01",
                         "prijsopties": [
                             {

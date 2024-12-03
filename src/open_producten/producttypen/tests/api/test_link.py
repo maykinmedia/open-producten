@@ -8,7 +8,10 @@ from ..factories import LinkFactory, ProductTypeFactory
 
 
 def link_to_dict(link):
-    return model_to_dict_with_id(link, exclude=["product_type"])
+    link_dict = model_to_dict_with_id(link, exclude=["product_type"])
+    link_dict["product_type_id"] = link.product_type.id
+
+    return link_dict
 
 
 class TestProductTypeLink(BaseApiTestCase):
@@ -16,8 +19,12 @@ class TestProductTypeLink(BaseApiTestCase):
     def setUp(self):
         super().setUp()
         product_type = ProductTypeFactory.create()
-        self.data = {"naam": "test link", "url": "https://www.google.com"}
-        self.path = f"/api/v1/producttypen/{product_type.id}/links/"
+        self.data = {
+            "naam": "test link",
+            "url": "https://www.google.com",
+            "product_type_id": product_type.id,
+        }
+        self.path = "/api/v1/links/"
 
         self.link = LinkFactory.create(product_type=product_type)
 
