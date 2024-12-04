@@ -7,19 +7,13 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic.base import RedirectView
 
-from drf_spectacular.views import (
-    SpectacularAPIView,
-    SpectacularRedocView,
-    SpectacularSwaggerView,
-)
 from maykin_2fa import monkeypatch_admin
 from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
 from mozilla_django_oidc_db.views import AdminLoginFailure
 
 from open_producten.accounts.views.password_reset import PasswordResetView
-from open_producten.locaties.urls import locatie_urlpatterns
-from open_producten.producten.urls import product_urlpatterns
-from open_producten.producttypen.urls import product_type_urlpatterns
+from open_producten.producten.urls import urlpatterns as product_urlpatterns
+from open_producten.producttypen.urls import urlpatterns as product_type_urlpatterns
 
 # Configure admin
 
@@ -65,29 +59,12 @@ urlpatterns = [
     # redirect root to admin index.
     path("", RedirectView.as_view(pattern_name="admin:index")),
     path(
-        "api/v1/",
-        include(
-            [
-                path(
-                    "schema/",
-                    SpectacularAPIView.as_view(schema=None),
-                    name="schema",
-                ),
-                path(
-                    "schema/swagger-ui/",
-                    SpectacularSwaggerView.as_view(url_name="schema"),
-                    name="swagger-ui",
-                ),
-                path(
-                    "schema/redoc/",
-                    SpectacularRedocView.as_view(url_name="schema"),
-                    name="redoc",
-                ),
-                path("", include(product_type_urlpatterns)),
-                path("", include(product_urlpatterns)),
-                path("", include(locatie_urlpatterns)),
-            ]
-        ),
+        "producttypen/api/v{}/".format(settings.PRODUCTTYPEN_API_VERSION),
+        include(product_type_urlpatterns),
+    ),
+    path(
+        "producten/api/v{}/".format(settings.PRODUCTEN_API_VERSION),
+        include(product_urlpatterns),
     ),
     path("markdownx/", include("markdownx.urls")),
 ]
