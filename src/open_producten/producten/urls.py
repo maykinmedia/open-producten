@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import include, path
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
-from rest_framework_nested.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter
 
 from open_producten.producten.views import ProductViewSet
 
@@ -13,7 +13,7 @@ custom_settings = {
     "TITLE": "Producten API",
     "VERSION": settings.PRODUCTEN_API_VERSION,
     # "DESCRIPTION": description,
-    # TODO is this needed?  "SERVERS": [{"url": "/producten/api/v1"}],
+    "SERVERS": [{"url": f"/producten/api/v{settings.PRODUCTEN_API_MAJOR_VERSION}"}],
     "TAGS": [{"name": "producten"}],
 }
 

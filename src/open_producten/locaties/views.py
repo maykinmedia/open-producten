@@ -23,7 +23,7 @@ from open_producten.utils.views import OrderedModelViewSet
     ),
     update=extend_schema(
         summary="Werk een LOCATIE in zijn geheel bij.",
-        description=("Werk een LOCATIE in zijn geheel bij."),
+        description="Werk een LOCATIE in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een LOCATIE deels bij.", description="Werk een LOCATIE deels bij."
