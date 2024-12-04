@@ -145,10 +145,7 @@ jobs:
 
 
     steps:
-      - name: Download generated OAS
-        uses: actions/download-artifact@v4
-        with:
-          name: open_producten-oas
+      - uses: actions/checkout@v4 # the artifact generated in the previous job has errors which I have not been able to fix, currently removing the culprit manually when generating spec locally.
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -159,13 +156,13 @@ jobs:
       - name: Validate schema
         run: |
           openapi-generator-cli \
-            validate -i ${{matrix.base_endpoint}}-openapi.yaml
+            validate -i src/${{matrix.base_endpoint}}-open.yaml
 
       - name: Generate Java client
         run: |
           openapi-generator-cli \
             generate \
-            -i ${{matrix.base_endpoint}}-openapi.yaml \
+            -i src/openapi.yaml \
             --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
             -o ./sdks/java \
             -g java \
@@ -175,7 +172,7 @@ jobs:
         run: |
           openapi-generator-cli \
             generate \
-            -i ${{matrix.base_endpoint}}-openapi.yaml \
+            -i src/openapi.yaml \
             --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
             -o ./sdks/net \
             -g csharp \
@@ -185,7 +182,7 @@ jobs:
         run: |
           openapi-generator-cli \
             generate \
-            -i ${{matrix.base_endpoint}}-openapi.yaml \
+            -i src/openapi.yaml \
             --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
             -o ./sdks/python \
             -g python \

@@ -1,8 +1,12 @@
 from django.conf import settings
 from django.urls import include, path
 
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
-from vng_api_common.routers import DefaultRouter
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+from rest_framework.routers import DefaultRouter
 
 from open_producten.locaties.router import LocatieRouter
 from open_producten.producttypen.views import (
@@ -31,7 +35,9 @@ custom_settings = {
     "TITLE": "Product typen API",
     "VERSION": settings.PRODUCTTYPEN_API_VERSION,
     # "DESCRIPTION": description,
-    # "SERVERS": [{"url": "/producttypen/api/v0.0.1"}],
+    "SERVERS": [
+        {"url": f"/producttypen/api/v{settings.PRODUCTTYPEN_API_MAJOR_VERSION}"}
+    ],
     "TAGS": [
         {"name": "onderwerpen"},
         {"name": "producttypen"},
@@ -49,7 +55,7 @@ urlpatterns = [
     path(
         "schema/openapi.yaml",
         SpectacularAPIView.as_view(
-            urlconf="open_producten.producttypen.urls",
+            urlconf="open_producten.producttypen.router",
             custom_settings=custom_settings,
         ),
         name="schema-producttypen",
@@ -60,6 +66,10 @@ urlpatterns = [
             url_name="schema-producttypen", title=custom_settings["TITLE"]
         ),
         name="schema-redoc-producttypen",
+    ),
+    path(
+        "schema-swagger",
+        SpectacularSwaggerView.as_view(url_name="schema-producttypen", title="schema"),
     ),
     path("", include(ProductTypenRouter.urls)),
     path("", include(LocatieRouter.urls)),

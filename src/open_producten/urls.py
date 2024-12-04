@@ -59,11 +59,11 @@ urlpatterns = [
     # redirect root to admin index.
     path("", RedirectView.as_view(pattern_name="admin:index")),
     path(
-        "producttypen/api/v{}/".format(settings.PRODUCTTYPEN_API_VERSION),
+        "producttypen/api/v{}/".format(settings.PRODUCTTYPEN_API_MAJOR_VERSION),
         include(product_type_urlpatterns),
     ),
     path(
-        "producten/api/v{}/".format(settings.PRODUCTEN_API_VERSION),
+        "producten/api/v{}/".format(settings.PRODUCTEN_API_MAJOR_VERSION),
         include(product_urlpatterns),
     ),
     path("markdownx/", include("markdownx.urls")),
