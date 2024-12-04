@@ -29,11 +29,12 @@ class TestLocatie(BaseApiTestCase):
         new=Mock(return_value=Point((4.84303667, 52.38559043))),
     )
     def setUp(self):
-        super().setUp()
         self.data = {"naam": "locatie", "postcode": "1111 AA", "stad": "Amsterdam"}
-        self.path = "/api/v1/locaties/"
-
         self.locatie = LocatieFactory.create()
+
+        self.api = "producttypen"
+        self.object = "locaties"
+        super().setUp()
 
     def test_read_locatie_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

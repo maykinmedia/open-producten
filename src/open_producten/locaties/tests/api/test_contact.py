@@ -28,16 +28,17 @@ class TestContact(BaseApiTestCase):
         new=Mock(return_value=Point((4.84303667, 52.38559043))),
     )
     def setUp(self):
-        super().setUp()
         organisatie = OrganisatieFactory.create()
         self.data = {
             "voornaam": "bob",
             "achternaam": "de vries",
             "organisatie_id": organisatie.id,
         }
-        self.path = "/api/v1/contacten/"
-
         self.contact = ContactFactory.create()
+
+        self.api = "producttypen"
+        self.object = "contacten"
+        super().setUp()
 
     def test_read_contact_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

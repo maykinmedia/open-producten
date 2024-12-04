@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.template.defaultfilters import upper
+
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
@@ -5,12 +8,17 @@ from open_producten.accounts.models import User
 
 
 class BaseApiTestCase(APITestCase):
-    path: str
+    api: str
+    object: str
 
     def setUp(self):
         user = User.objects.create_user(username="testuser", password="testpassword")
         token = Token.objects.create(user=user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+
+        version = getattr(settings, f"{upper(self.api)}_API_MAJOR_VERSION")
+        self.path = f"/{self.api}/api/v{version}/{self.object}/"
+        print(self.path)
 
     def get(self, object_id=""):
         end = "/" if object_id else ""

@@ -44,7 +44,6 @@ def product_to_dict(product):
 class TestProduct(BaseApiTestCase):
 
     def setUp(self):
-        super().setUp()
         self.product_type = ProductTypeFactory.create()
         self.data = {
             "product_type_id": self.product_type.id,
@@ -53,7 +52,10 @@ class TestProduct(BaseApiTestCase):
             "eind_datum": datetime.date(2024, 12, 31),
             "data": [],
         }
-        self.path = "/api/v1/producten/"
+
+        self.api = "producten"
+        self.object = "producten"
+        super().setUp()
 
     def test_read_product_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

@@ -24,13 +24,14 @@ def vraag_to_dict(vraag):
 class TestProductTypeVraag(BaseApiTestCase):
 
     def setUp(self):
-        super().setUp()
         self.product_type = ProductTypeFactory.create()
         self.onderwerp = OnderwerpFactory.create()
         self.data = {"vraag": "18?", "antwoord": "in aanmerking"}
-        self.path = "/api/v1/vragen/"
-
         self.vraag = VraagFactory.create(product_type=self.product_type)
+
+        self.api = "producttypen"
+        self.object = "vragen"
+        super().setUp()
 
     def test_read_vraag_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

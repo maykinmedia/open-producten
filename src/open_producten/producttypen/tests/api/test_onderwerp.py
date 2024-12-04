@@ -38,12 +38,14 @@ def onderwerp_to_dict(onderwerp):
 class TestOnderwerpViewSet(BaseApiTestCase):
 
     def setUp(self):
-        super().setUp()
         self.data = {
             "naam": "test-onderwerp",
             "hoofd_onderwerp": None,
         }
-        self.path = "/api/v1/onderwerpen/"
+
+        self.api = "producttypen"
+        self.object = "onderwerpen"
+        super().setUp()
 
     def test_read_onderwerp_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

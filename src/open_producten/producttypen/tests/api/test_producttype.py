@@ -63,10 +63,8 @@ def product_type_to_dict(product_type):
 class TestProducttypeViewSet(BaseApiTestCase):
 
     def setUp(self):
-        super().setUp()
         upn = UniformeProductNaamFactory.create()
         onderwerp = OnderwerpFactory()
-
         self.data = {
             "naam": "test-product-type",
             "samenvatting": "test",
@@ -75,7 +73,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "onderwerp_ids": [onderwerp.id],
         }
 
-        self.path = "/api/v1/producttypen/"
+        self.api = "producttypen"
+        self.object = "producttypen"
+        super().setUp()
 
     def test_read_product_type_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

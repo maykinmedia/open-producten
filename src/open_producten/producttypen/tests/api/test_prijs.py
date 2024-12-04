@@ -2,6 +2,7 @@ import datetime
 import uuid
 from decimal import Decimal
 
+from django.conf import settings
 from django.forms import model_to_dict
 
 from freezegun import freeze_time
@@ -33,13 +34,15 @@ def prijs_to_dict(prijs):
 class TestProductTypePrijs(BaseApiTestCase):
 
     def setUp(self):
-        super().setUp()
         self.product_type = ProductTypeFactory()
         self.prijs_data = {
             "actief_vanaf": datetime.date(2024, 1, 2),
             "product_type_id": self.product_type.id,
         }
-        self.path = "/api/v1/prijzen/"
+
+        self.api = "producttypen"
+        self.object = "prijzen"
+        super().setUp()
 
     def _create_prijs(self):
         return PrijsFactory.create(
@@ -360,7 +363,9 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.count(), 0)
 
     def test_get_actuele_prijs_when_product_type_has_no_prijzen(self):
-        response = self.client.get("/api/v1/producttypen/actuele-prijzen/")
+        response = self.client.get(
+            f"/producttypen/api/v{settings.PRODUCTTYPEN_API_MAJOR_VERSION}/producttypen/actuele-prijzen/"
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data,
@@ -380,7 +385,9 @@ class TestProductTypePrijs(BaseApiTestCase):
             product_type=self.product_type, actief_vanaf=datetime.date(2024, 2, 2)
         )
 
-        response = self.client.get("/api/v1/producttypen/actuele-prijzen/")
+        response = self.client.get(
+            f"/producttypen/api/v{settings.PRODUCTTYPEN_API_MAJOR_VERSION}/producttypen/actuele-prijzen/"
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -404,7 +411,9 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         optie = PrijsOptieFactory.create(prijs=prijs)
 
-        response = self.client.get("/api/v1/producttypen/actuele-prijzen/")
+        response = self.client.get(
+            f"/producttypen/api/v{settings.PRODUCTTYPEN_API_MAJOR_VERSION}/producttypen/actuele-prijzen/"
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

@@ -162,7 +162,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /links:
+  /links/:
     get:
       operationId: links_list
       description: Deze lijst kan gefilterd wordt met query-string parameters.
@@ -218,7 +218,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
-  /links/{id}:
+  /links/{id}/:
     get:
       operationId: links_retrieve
       description: Een specifieke LINK opvragen.
@@ -468,7 +468,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /onderwerpen:
+  /onderwerpen/:
     get:
       operationId: onderwerpen_list
       description: Deze lijst kan gefilterd wordt met query-string parameters.
@@ -522,7 +522,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Onderwerp'
           description: ''
-  /onderwerpen/{id}:
+  /onderwerpen/{id}/:
     get:
       operationId: onderwerpen_retrieve
       description: Een specifieke ONDERWERP opvragen.
@@ -772,7 +772,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /prijzen:
+  /prijzen/:
     get:
       operationId: prijzen_list
       description: Deze lijst kan gefilterd wordt met query-string parameters.
@@ -828,7 +828,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
-  /prijzen/{id}:
+  /prijzen/{id}/:
     get:
       operationId: prijzen_retrieve
       description: Een specifieke PRIJS opvragen.
@@ -928,7 +928,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /producttypen:
+  /producttypen/:
     get:
       operationId: producttypen_list
       description: Deze lijst kan gefilterd wordt met query-string parameters.
@@ -982,7 +982,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
-  /producttypen/{id}:
+  /producttypen/{id}/:
     get:
       operationId: producttypen_retrieve
       description: Een specifiek PRODUCTTYPE opvragen.
@@ -1038,7 +1038,7 @@ paths:
     patch:
       operationId: producttypen_partial_update
       description: Werk een LINK deels bij
-      summary: Werk een LINK deels bij.
+      summary: Werk een PRODUCTTYPE deels bij.
       parameters:
         - in: path
           name: id
@@ -1066,7 +1066,7 @@ paths:
     delete:
       operationId: producttypen_destroy
       description: Verwijder een LINK.
-      summary: Verwijder een LINK.
+      summary: Verwijder een PRODUCTTYPE.
       parameters:
         - in: path
           name: id
@@ -1082,7 +1082,7 @@ paths:
       responses:
         '204':
           description: No response body
-  /producttypen/actuele-prijzen:
+  /producttypen/actuele-prijzen/:
     get:
       operationId: producttypen_actuele_prijzen_retrieve
       tags:
@@ -1096,7 +1096,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
           description: ''
-  /vragen:
+  /vragen/:
     get:
       operationId: vragen_list
       description: Deze lijst kan gefilterd wordt met query-string parameters.
@@ -1158,7 +1158,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
-  /vragen/{id}:
+  /vragen/{id}/:
     get:
       operationId: vragen_retrieve
       description: Een specifieke VRAAG opvragen.
@@ -1410,6 +1410,8 @@ components:
           items:
             type: string
             format: uuid
+            writeOnly: true
+            default: [ ]
           writeOnly: true
           default: [ ]
         gepubliceerd:
@@ -1783,6 +1785,8 @@ components:
           items:
             type: string
             format: uuid
+            writeOnly: true
+            default: [ ]
           writeOnly: true
           default: [ ]
         gepubliceerd:

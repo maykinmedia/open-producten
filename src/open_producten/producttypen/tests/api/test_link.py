@@ -17,16 +17,17 @@ def link_to_dict(link):
 class TestProductTypeLink(BaseApiTestCase):
 
     def setUp(self):
-        super().setUp()
         product_type = ProductTypeFactory.create()
         self.data = {
             "naam": "test link",
             "url": "https://www.google.com",
             "product_type_id": product_type.id,
         }
-        self.path = "/api/v1/links/"
-
         self.link = LinkFactory.create(product_type=product_type)
+
+        self.api = "producttypen"
+        self.object = "links"
+        super().setUp()
 
     def test_read_link_without_credentials_returns_error(self):
         response = APIClient().get(self.path)

@@ -29,16 +29,16 @@ class TestOrganisatie(BaseApiTestCase):
         new=Mock(return_value=Point((4.84303667, 52.38559043))),
     )
     def setUp(self):
-        super().setUp()
-
         self.data = {
             "naam": "locatie",
             "postcode": "1111 AA",
             "stad": "Amsterdam",
         }
-        self.path = "/api/v1/organisaties/"
-
         self.organisatie = OrganisatieFactory.create()
+
+        self.api = "producttypen"
+        self.object = "organisaties"
+        super().setUp()
 
     def test_read_organisatie_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
