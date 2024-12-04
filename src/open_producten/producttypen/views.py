@@ -45,11 +45,11 @@ from open_producten.utils.views import OrderedModelViewSet
         description="Werk een PRODUCTTYPE in zijn geheel bij.",
     ),
     partial_update=extend_schema(
-        summary="Werk een LINK deels bij.",
+        summary="Werk een PRODUCTTYPE deels bij.",
         description="Werk een LINK deels bij",
     ),
     destroy=extend_schema(
-        summary="Verwijder een LINK.",
+        summary="Verwijder een PRODUCTTYPE.",
         description="Verwijder een LINK.",
     ),
 )
