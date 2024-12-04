@@ -24,6 +24,8 @@ class ProductTypeViewSet(OrderedModelViewSet):
     queryset = ProductType.objects.all()
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["gepubliceerd"]
 
     @action(
         detail=False,
@@ -64,3 +66,5 @@ class OnderwerpViewSet(OrderedModelViewSet):
     queryset = Onderwerp.objects.all()
     serializer_class = OnderwerpSerializer
     lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["gepubliceerd"]

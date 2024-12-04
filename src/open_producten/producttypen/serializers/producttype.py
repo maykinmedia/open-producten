@@ -13,9 +13,9 @@ from open_producten.utils.serializers import build_array_duplicates_error_messag
 
 from ..models import Onderwerp, ProductType, UniformeProductNaam
 from .bestand import BestandSerializer
-from .vraag import VraagSerializer
 from .link import LinkSerializer
 from .prijs import PrijsSerializer
+from .vraag import VraagSerializer
 
 
 class SimpleOnderwerpSerializer(serializers.ModelSerializer):
