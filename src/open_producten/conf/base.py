@@ -94,6 +94,9 @@ REST_FRAMEWORK = {
     # "PAGE_SIZE": 100,
 }
 
+PRODUCTEN_API_VERSION = "0.0.1"
+PRODUCTTYPEN_API_VERSION = "0.0.1"
+
 #
 # SPECTACULAR - OpenAPI schema generation
 #
@@ -102,17 +105,22 @@ _DESCRIPTION = """
 Open Producten is an API to manage product types and products.
 """
 
-API_VERSION = "0.0.1"
+OPEN_PRODUCTEN_API_CONTACT_EMAIL = "support@maykinmedia.nl"
+OPEN_PRODUCTEN_API_CONTACT_URL = "https://www.maykinmedia.nl"
 
 SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "SCHEMA_PATH_PREFIX": "/api/v1",
     "TITLE": "Open Producten API",
     "DESCRIPTION": _DESCRIPTION,
-    "TOS": None,
-    "VERSION": API_VERSION,
+    "LICENSE": {"name": "EUPL 1.2", "url": "https://opensource.org/licenses/EUPL-1.2"},
+    "CONTACT": {
+        "email": OPEN_PRODUCTEN_API_CONTACT_EMAIL,
+        "url": OPEN_PRODUCTEN_API_CONTACT_URL,
+    },
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 #
