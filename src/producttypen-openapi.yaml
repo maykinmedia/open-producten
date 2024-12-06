@@ -18,22 +18,22 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle CONTACTEN opvragen.
       parameters:
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
-        - contacten
+      - contacten
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -46,7 +46,7 @@ paths:
       description: Maak een CONTACT aan.
       summary: Maak een CONTACT aan.
       tags:
-        - contacten
+      - contacten
       requestBody:
         content:
           application/json:
@@ -54,7 +54,7 @@ paths:
               $ref: '#/components/schemas/Contact'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -68,17 +68,17 @@ paths:
       description: Een specifieke CONTACT opvragen.
       summary: Een specifiek CONTACT opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Contact.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Contact.
+        required: true
       tags:
-        - contacten
+      - contacten
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -91,15 +91,15 @@ paths:
       description: Werk een CONTACT in zijn geheel bij.
       summary: Werk een CONTACT in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Contact.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Contact.
+        required: true
       tags:
-        - contacten
+      - contacten
       requestBody:
         content:
           application/json:
@@ -107,7 +107,7 @@ paths:
               $ref: '#/components/schemas/Contact'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -120,22 +120,22 @@ paths:
       description: Werk een CONTACT deels bij.
       summary: Werk een CONTACT deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Contact.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Contact.
+        required: true
       tags:
-        - contacten
+      - contacten
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedContact'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -148,17 +148,17 @@ paths:
       description: Verwijder een CONTACT.
       summary: Verwijder een CONTACT.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Contact.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Contact.
+        required: true
       tags:
-        - contacten
+      - contacten
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -168,28 +168,28 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle LINKS opvragen.
       parameters:
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
-        - in: query
-          name: product_type_id
-          schema:
-            type: string
-            format: uuid
-          description: Het product type waarbij deze link hoort.
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: product_type_id
+        schema:
+          type: string
+          format: uuid
+        description: Het product type waarbij deze link hoort.
       tags:
-        - links
+      - links
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -202,7 +202,7 @@ paths:
       description: Maak een LINK aan.
       summary: Maak een LINK aan.
       tags:
-        - links
+      - links
       requestBody:
         content:
           application/json:
@@ -210,7 +210,7 @@ paths:
               $ref: '#/components/schemas/Link'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -224,17 +224,17 @@ paths:
       description: Een specifieke LINK opvragen.
       summary: Een specifieke LINK opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type link.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type link.
+        required: true
       tags:
-        - links
+      - links
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -247,15 +247,15 @@ paths:
       description: Werk een LINK in zijn geheel bij.
       summary: Werk een LINK in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type link.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type link.
+        required: true
       tags:
-        - links
+      - links
       requestBody:
         content:
           application/json:
@@ -263,7 +263,7 @@ paths:
               $ref: '#/components/schemas/Link'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -276,22 +276,22 @@ paths:
       description: Werk een LINK deels bij
       summary: Werk een LINK deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type link.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type link.
+        required: true
       tags:
-        - links
+      - links
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedLink'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -304,17 +304,17 @@ paths:
       description: Verwijder een LINK.
       summary: Verwijder een LINK.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type link.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type link.
+        required: true
       tags:
-        - links
+      - links
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -324,22 +324,22 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle LOCATIES opvragen.
       parameters:
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
-        - locaties
+      - locaties
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -352,7 +352,7 @@ paths:
       description: Maak een LOCATIE aan.
       summary: Maak een LOCATIE aan.
       tags:
-        - locaties
+      - locaties
       requestBody:
         content:
           application/json:
@@ -360,7 +360,7 @@ paths:
               $ref: '#/components/schemas/Locatie'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -374,17 +374,17 @@ paths:
       description: Een specifieke LOCATIE opvragen.
       summary: Een specifiek LOCATIE opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Locatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Locatie.
+        required: true
       tags:
-        - locaties
+      - locaties
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -397,15 +397,15 @@ paths:
       description: Werk een LOCATIE in zijn geheel bij.
       summary: Werk een LOCATIE in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Locatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Locatie.
+        required: true
       tags:
-        - locaties
+      - locaties
       requestBody:
         content:
           application/json:
@@ -413,7 +413,7 @@ paths:
               $ref: '#/components/schemas/Locatie'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -426,22 +426,22 @@ paths:
       description: Werk een LOCATIE deels bij.
       summary: Werk een LOCATIE deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Locatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Locatie.
+        required: true
       tags:
-        - locaties
+      - locaties
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedLocatie'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -454,17 +454,17 @@ paths:
       description: Verwijder een LOCATIE.
       summary: Verwijder een LOCATIE.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Locatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Locatie.
+        required: true
       tags:
-        - locaties
+      - locaties
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -474,26 +474,26 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle ONDERWERPEN opvragen.
       parameters:
-        - in: query
-          name: gepubliceerd
-          schema:
-            type: boolean
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
+      - in: query
+        name: gepubliceerd
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
-        - onderwerpen
+      - onderwerpen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -506,7 +506,7 @@ paths:
       description: Maak een ONDERWERP aan.
       summary: Maak een ONDERWERP aan.
       tags:
-        - onderwerpen
+      - onderwerpen
       requestBody:
         content:
           application/json:
@@ -514,7 +514,7 @@ paths:
               $ref: '#/components/schemas/Onderwerp'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -528,17 +528,17 @@ paths:
       description: Een specifieke ONDERWERP opvragen.
       summary: Een specifiek ONDERWERP opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Onderwerp.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Onderwerp.
+        required: true
       tags:
-        - onderwerpen
+      - onderwerpen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -551,15 +551,15 @@ paths:
       description: Werk een ONDERWERP in zijn geheel bij.
       summary: Werk een ONDERWERP in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Onderwerp.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Onderwerp.
+        required: true
       tags:
-        - onderwerpen
+      - onderwerpen
       requestBody:
         content:
           application/json:
@@ -567,7 +567,7 @@ paths:
               $ref: '#/components/schemas/Onderwerp'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -580,22 +580,22 @@ paths:
       description: Werk een ONDERWERP deels bij.
       summary: Werk een ONDERWERP deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Onderwerp.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Onderwerp.
+        required: true
       tags:
-        - onderwerpen
+      - onderwerpen
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedOnderwerp'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -608,17 +608,17 @@ paths:
       description: Verwijder een ONDERWERP.
       summary: Verwijder een ONDERWERP.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Onderwerp.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Onderwerp.
+        required: true
       tags:
-        - onderwerpen
+      - onderwerpen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -628,22 +628,22 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle ORGANISATIES opvragen.
       parameters:
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
-        - organisaties
+      - organisaties
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -656,7 +656,7 @@ paths:
       description: Maak een ORGANISATIE aan.
       summary: Maak een ORGANISATIE aan.
       tags:
-        - organisaties
+      - organisaties
       requestBody:
         content:
           application/json:
@@ -664,7 +664,7 @@ paths:
               $ref: '#/components/schemas/Organisatie'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -678,17 +678,17 @@ paths:
       description: Een specifieke ORGANISATIE opvragen.
       summary: Een specifiek ORGANISATIE opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Organisatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Organisatie.
+        required: true
       tags:
-        - organisaties
+      - organisaties
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -701,15 +701,15 @@ paths:
       description: Werk een ORGANISATIE in zijn geheel bij.
       summary: Werk een ORGANISATIE in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Organisatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Organisatie.
+        required: true
       tags:
-        - organisaties
+      - organisaties
       requestBody:
         content:
           application/json:
@@ -717,7 +717,7 @@ paths:
               $ref: '#/components/schemas/Organisatie'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -730,22 +730,22 @@ paths:
       description: Werk een ORGANISATIE deels bij.
       summary: Werk een ORGANISATIE deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Organisatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Organisatie.
+        required: true
       tags:
-        - organisaties
+      - organisaties
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedOrganisatie'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -758,17 +758,17 @@ paths:
       description: Verwijder een ORGANISATIE.
       summary: Verwijder een ORGANISATIE.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Organisatie.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Organisatie.
+        required: true
       tags:
-        - organisaties
+      - organisaties
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -778,28 +778,28 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle PRIJZEN opvragen.
       parameters:
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
-        - in: query
-          name: product_type_id
-          schema:
-            type: string
-            format: uuid
-          description: Het product type waarbij deze prijs hoort.
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: product_type_id
+        schema:
+          type: string
+          format: uuid
+        description: Het product type waarbij deze prijs hoort.
       tags:
-        - prijzen
+      - prijzen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -812,7 +812,7 @@ paths:
       description: Maak een PRIJS aan.
       summary: Maak een PRIJS aan.
       tags:
-        - prijzen
+      - prijzen
       requestBody:
         content:
           application/json:
@@ -820,7 +820,7 @@ paths:
               $ref: '#/components/schemas/Prijs'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -834,17 +834,17 @@ paths:
       description: Een specifieke PRIJS opvragen.
       summary: Een specifieke PRIJS opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Prijs.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Prijs.
+        required: true
       tags:
-        - prijzen
+      - prijzen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -857,15 +857,15 @@ paths:
       description: Werk een PRIJS in zijn geheel bij.
       summary: Werk een PRIJS in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Prijs.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Prijs.
+        required: true
       tags:
-        - prijzen
+      - prijzen
       requestBody:
         content:
           application/json:
@@ -873,7 +873,7 @@ paths:
               $ref: '#/components/schemas/Prijs'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -886,22 +886,22 @@ paths:
       description: Werk een PRIJS deels bij.
       summary: Werk een PRIJS deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Prijs.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Prijs.
+        required: true
       tags:
-        - prijzen
+      - prijzen
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedPrijs'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -914,17 +914,17 @@ paths:
       description: Verwijder een PRIJS.
       summary: Verwijder een PRIJS.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Prijs.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Prijs.
+        required: true
       tags:
-        - prijzen
+      - prijzen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -934,26 +934,26 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
-        - in: query
-          name: gepubliceerd
-          schema:
-            type: boolean
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
+      - in: query
+        name: gepubliceerd
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
-        - producttypen
+      - producttypen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -966,7 +966,7 @@ paths:
       description: Maak een PRODUCTTYPE aan.
       summary: Maak een PRODUCTTYPE aan.
       tags:
-        - producttypen
+      - producttypen
       requestBody:
         content:
           application/json:
@@ -974,7 +974,7 @@ paths:
               $ref: '#/components/schemas/ProductType'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -988,17 +988,17 @@ paths:
       description: Een specifiek PRODUCTTYPE opvragen.
       summary: Een specifiek PRODUCTTYPE opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type.
+        required: true
       tags:
-        - producttypen
+      - producttypen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1011,15 +1011,15 @@ paths:
       description: Werk een PRODUCTTYPE in zijn geheel bij.
       summary: Werk een PRODUCTTYPE in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type.
+        required: true
       tags:
-        - producttypen
+      - producttypen
       requestBody:
         content:
           application/json:
@@ -1027,7 +1027,7 @@ paths:
               $ref: '#/components/schemas/ProductType'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1040,22 +1040,22 @@ paths:
       description: Werk een LINK deels bij
       summary: Werk een PRODUCTTYPE deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type.
+        required: true
       tags:
-        - producttypen
+      - producttypen
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedProductType'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1068,17 +1068,17 @@ paths:
       description: Verwijder een LINK.
       summary: Verwijder een PRODUCTTYPE.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Product type.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type.
+        required: true
       tags:
-        - producttypen
+      - producttypen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -1086,9 +1086,9 @@ paths:
     get:
       operationId: producttypen_actuele_prijzen_retrieve
       tags:
-        - producttypen
+      - producttypen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1102,34 +1102,34 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle VRAGEN opvragen.
       parameters:
-        - in: query
-          name: onderwerp_id
-          schema:
-            type: string
-            format: uuid
-            nullable: true
-        - name: page
-          required: false
-          in: query
-          description: Een pagina binnen de gepagineerde set resultaten.
-          schema:
-            type: integer
-        - name: page_size
-          required: false
-          in: query
-          description: Het aantal resultaten terug te geven per pagina.
-          schema:
-            type: integer
-        - in: query
-          name: product_type_id
-          schema:
-            type: string
-            format: uuid
-            nullable: true
+      - in: query
+        name: onderwerp_id
+        schema:
+          type: string
+          format: uuid
+          nullable: true
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: product_type_id
+        schema:
+          type: string
+          format: uuid
+          nullable: true
       tags:
-        - vragen
+      - vragen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1142,7 +1142,7 @@ paths:
       description: Maak een VRAAG aan.
       summary: Maak een VRAAG aan.
       tags:
-        - vragen
+      - vragen
       requestBody:
         content:
           application/json:
@@ -1150,7 +1150,7 @@ paths:
               $ref: '#/components/schemas/Vraag'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -1164,17 +1164,17 @@ paths:
       description: Een specifieke VRAAG opvragen.
       summary: Een specifieke VRAAG opvragen.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Vraag.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Vraag.
+        required: true
       tags:
-        - vragen
+      - vragen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1187,15 +1187,15 @@ paths:
       description: Werk een VRAAG in zijn geheel bij.
       summary: Werk een VRAAG in zijn geheel bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Vraag.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Vraag.
+        required: true
       tags:
-        - vragen
+      - vragen
       requestBody:
         content:
           application/json:
@@ -1203,7 +1203,7 @@ paths:
               $ref: '#/components/schemas/Vraag'
         required: true
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1216,22 +1216,22 @@ paths:
       description: Werk een VRAAG deels bij.
       summary: Werk een VRAAG deels bij.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Vraag.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Vraag.
+        required: true
       tags:
-        - vragen
+      - vragen
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedVraag'
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -1244,17 +1244,17 @@ paths:
       description: Verwijder een VRAAG.
       summary: Verwijder een VRAAG.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-            format: uuid
-          description: A UUID string identifying this Vraag.
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Vraag.
+        required: true
       tags:
-        - vragen
+      - vragen
       security:
-        - tokenAuth: [ ]
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -1274,9 +1274,9 @@ components:
           type: string
           format: uri
       required:
-        - bestand
-        - id
-        - product_type_id
+      - bestand
+      - id
+      - product_type_id
     Contact:
       type: object
       properties:
@@ -1286,7 +1286,7 @@ components:
           readOnly: true
         organisatie:
           allOf:
-            - $ref: '#/components/schemas/Organisatie'
+          - $ref: '#/components/schemas/Organisatie'
           readOnly: true
         organisatie_id:
           type: string
@@ -1315,11 +1315,11 @@ components:
           description: De rol/functie van het contact
           maxLength: 100
       required:
-        - achternaam
-        - id
-        - organisatie
-        - organisatie_id
-        - voornaam
+      - achternaam
+      - id
+      - organisatie
+      - organisatie_id
+      - voornaam
     Link:
       type: object
       properties:
@@ -1340,10 +1340,10 @@ components:
           description: Url van de link.
           maxLength: 200
       required:
-        - id
-        - naam
-        - product_type_id
-        - url
+      - id
+      - naam
+      - product_type_id
+      - url
     Locatie:
       type: object
       properties:
@@ -1353,7 +1353,7 @@ components:
           readOnly: true
         coordinaten:
           type: array
-          items: { }
+          items: {}
           readOnly: true
         naam:
           type: string
@@ -1380,10 +1380,10 @@ components:
           type: string
           maxLength: 250
       required:
-        - coordinaten
-        - id
-        - postcode
-        - stad
+      - coordinaten
+      - id
+      - postcode
+      - stad
     Onderwerp:
       type: object
       properties:
@@ -1410,10 +1410,8 @@ components:
           items:
             type: string
             format: uuid
-            writeOnly: true
-            default: [ ]
           writeOnly: true
-          default: [ ]
+          default: []
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -1437,13 +1435,13 @@ components:
           type: string
           description: Beschrijving van het onderwerp.
       required:
-        - aanmaak_datum
-        - hoofd_onderwerp
-        - id
-        - naam
-        - product_typen
-        - update_datum
-        - vragen
+      - aanmaak_datum
+      - hoofd_onderwerp
+      - id
+      - naam
+      - product_typen
+      - update_datum
+      - vragen
     Organisatie:
       type: object
       properties:
@@ -1453,7 +1451,7 @@ components:
           readOnly: true
         coordinaten:
           type: array
-          items: { }
+          items: {}
           readOnly: true
         naam:
           type: string
@@ -1480,15 +1478,15 @@ components:
           type: string
           maxLength: 250
       required:
-        - coordinaten
-        - id
-        - postcode
-        - stad
+      - coordinaten
+      - id
+      - postcode
+      - stad
     PaginatedContactList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1510,8 +1508,8 @@ components:
     PaginatedLinkList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1533,8 +1531,8 @@ components:
     PaginatedLocatieList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1556,8 +1554,8 @@ components:
     PaginatedOnderwerpList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1579,8 +1577,8 @@ components:
     PaginatedOrganisatieList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1602,8 +1600,8 @@ components:
     PaginatedPrijsList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1625,8 +1623,8 @@ components:
     PaginatedProductTypeList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1648,8 +1646,8 @@ components:
     PaginatedVraagList:
       type: object
       required:
-        - count
-        - results
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1677,7 +1675,7 @@ components:
           readOnly: true
         organisatie:
           allOf:
-            - $ref: '#/components/schemas/Organisatie'
+          - $ref: '#/components/schemas/Organisatie'
           readOnly: true
         organisatie_id:
           type: string
@@ -1733,7 +1731,7 @@ components:
           readOnly: true
         coordinaten:
           type: array
-          items: { }
+          items: {}
           readOnly: true
         naam:
           type: string
@@ -1785,10 +1783,8 @@ components:
           items:
             type: string
             format: uuid
-            writeOnly: true
-            default: [ ]
           writeOnly: true
-          default: [ ]
+          default: []
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -1820,7 +1816,7 @@ components:
           readOnly: true
         coordinaten:
           type: array
-          items: { }
+          items: {}
           readOnly: true
         naam:
           type: string
@@ -1857,7 +1853,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
-          default: [ ]
+          default: []
         product_type_id:
           type: string
           format: uuid
@@ -1887,7 +1883,6 @@ components:
           items:
             type: string
             format: uuid
-            writeOnly: true
           writeOnly: true
         locaties:
           type: array
@@ -1900,7 +1895,7 @@ components:
             type: string
             format: uuid
           writeOnly: true
-          default: [ ]
+          default: []
         organisaties:
           type: array
           items:
@@ -1912,7 +1907,7 @@ components:
             type: string
             format: uuid
           writeOnly: true
-          default: [ ]
+          default: []
         contacten:
           type: array
           items:
@@ -1924,7 +1919,7 @@ components:
             type: string
             format: uuid
           writeOnly: true
-          default: [ ]
+          default: []
         vragen:
           type: array
           items:
@@ -1993,6 +1988,10 @@ components:
         vraag:
           type: string
           maxLength: 250
+        martor:
+          type: string
+        pagedown:
+          type: string
         antwoord:
           type: string
     Prijs:
@@ -2006,7 +2005,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
-          default: [ ]
+          default: []
         product_type_id:
           type: string
           format: uuid
@@ -2016,9 +2015,9 @@ components:
           title: Start datum
           description: De datum vanaf wanneer de prijs actief is.
       required:
-        - actief_vanaf
-        - id
-        - product_type_id
+      - actief_vanaf
+      - id
+      - product_type_id
     PrijsOptie:
       type: object
       properties:
@@ -2035,8 +2034,8 @@ components:
           description: Korte beschrijving van de optie.
           maxLength: 100
       required:
-        - bedrag
-        - beschrijving
+      - bedrag
+      - beschrijving
     ProductType:
       type: object
       properties:
@@ -2058,7 +2057,6 @@ components:
           items:
             type: string
             format: uuid
-            writeOnly: true
           writeOnly: true
         locaties:
           type: array
@@ -2071,7 +2069,7 @@ components:
             type: string
             format: uuid
           writeOnly: true
-          default: [ ]
+          default: []
         organisaties:
           type: array
           items:
@@ -2083,7 +2081,7 @@ components:
             type: string
             format: uuid
           writeOnly: true
-          default: [ ]
+          default: []
         contacten:
           type: array
           items:
@@ -2095,7 +2093,7 @@ components:
             type: string
             format: uuid
           writeOnly: true
-          default: [ ]
+          default: []
         vragen:
           type: array
           items:
@@ -2149,21 +2147,21 @@ components:
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
       required:
-        - aanmaak_datum
-        - beschrijving
-        - bestanden
-        - contacten
-        - id
-        - links
-        - locaties
-        - naam
-        - onderwerp_ids
-        - onderwerpen
-        - organisaties
-        - prijzen
-        - uniforme_product_naam
-        - update_datum
-        - vragen
+      - aanmaak_datum
+      - beschrijving
+      - bestanden
+      - contacten
+      - id
+      - links
+      - locaties
+      - naam
+      - onderwerp_ids
+      - onderwerpen
+      - organisaties
+      - prijzen
+      - uniforme_product_naam
+      - update_datum
+      - vragen
     ProductTypeActuelePrijs:
       type: object
       properties:
@@ -2186,14 +2184,14 @@ components:
           readOnly: true
         actuele_prijs:
           allOf:
-            - $ref: '#/components/schemas/Prijs'
+          - $ref: '#/components/schemas/Prijs'
           nullable: true
       required:
-        - actuele_prijs
-        - id
-        - naam
-        - upl_naam
-        - upl_uri
+      - actuele_prijs
+      - id
+      - naam
+      - upl_naam
+      - upl_uri
     SimpleOnderwerp:
       type: object
       properties:
@@ -2224,10 +2222,10 @@ components:
           type: string
           description: Beschrijving van het onderwerp.
       required:
-        - aanmaak_datum
-        - id
-        - naam
-        - update_datum
+      - aanmaak_datum
+      - id
+      - naam
+      - update_datum
     SimpleProductType:
       type: object
       properties:
@@ -2272,12 +2270,12 @@ components:
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
       required:
-        - aanmaak_datum
-        - beschrijving
-        - id
-        - naam
-        - uniforme_product_naam
-        - update_datum
+      - aanmaak_datum
+      - beschrijving
+      - id
+      - naam
+      - uniforme_product_naam
+      - update_datum
     Vraag:
       type: object
       properties:
@@ -2294,12 +2292,16 @@ components:
         vraag:
           type: string
           maxLength: 250
+        martor:
+          type: string
+        pagedown:
+          type: string
         antwoord:
           type: string
       required:
-        - antwoord
-        - id
-        - vraag
+      - antwoord
+      - id
+      - vraag
   securitySchemes:
     tokenAuth:
       type: apiKey

@@ -124,6 +124,10 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
     "SERVE_INCLUDE_SCHEMA": False,
+    "POSTPROCESSING_HOOKS": (
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "open_producten.utils.spectacular_hooks.custom_postprocessing_hook",
+    ),
 }
 
 #
