@@ -1988,10 +1988,6 @@ components:
         vraag:
           type: string
           maxLength: 250
-        martor:
-          type: string
-        pagedown:
-          type: string
         antwoord:
           type: string
     Prijs:
@@ -2292,10 +2288,6 @@ components:
         vraag:
           type: string
           maxLength: 250
-        martor:
-          type: string
-        pagedown:
-          type: string
         antwoord:
           type: string
       required:
