@@ -36,7 +36,7 @@ class OnderwerpAdminFormSet(BaseModelFormSet):
                 if not gepubliceerd and any([data[child] for child in children]):
                     raise forms.ValidationError(
                         _(
-                            "Hoofd onderwerpen moeten gepubliceerd zijn met gepubliceerde sub onderwerpen."
+                            "Onderwerpen moeten gepubliceerd zijn met gepubliceerde sub onderwerpen."
                         )
                     )
 
@@ -70,9 +70,7 @@ class OnderwerpAdmin(TreeAdmin):
         ),
     )
 
-    list_filter = [
-        "gepubliceerd",
-    ]
+    list_filter = ["gepubliceerd", "product_typen"]
 
     def get_changelist_formset(self, request, **kwargs):
         kwargs["formset"] = OnderwerpAdminFormSet

@@ -21,7 +21,6 @@ class Prijs(BaseModel):
     actief_vanaf = models.DateField(
         verbose_name=_("start datum"),
         validators=[MinValueValidator(datetime.date.today)],
-        unique=True,
         help_text=_("De datum vanaf wanneer de prijs actief is."),
     )
 

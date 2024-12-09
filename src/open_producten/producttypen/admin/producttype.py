@@ -30,7 +30,14 @@ class ProductTypeAdminForm(forms.ModelForm):
 
 @admin.register(ProductType)
 class ProductTypeAdmin(admin.ModelAdmin):
-    list_display = ("naam", "aanmaak_datum", "display_onderwerpen", "gepubliceerd")
+    list_display = (
+        "naam",
+        "uniforme_product_naam",
+        "aanmaak_datum",
+        "display_onderwerpen",
+        "gepubliceerd",
+        "keywords",
+    )
     list_filter = ("gepubliceerd", "onderwerpen")
     list_editable = ("gepubliceerd",)
     date_hierarchy = "aanmaak_datum"
@@ -39,7 +46,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
         # "contacts",
         # "locations",
     )
-    search_fields = ("naam",)
+    search_fields = ("naam", "uniforme_product_naam__naam", "keywords")
     ordering = ("naam",)
     save_on_top = True
     form = ProductTypeAdminForm
@@ -57,4 +64,4 @@ class ProductTypeAdmin(admin.ModelAdmin):
 
     @admin.display(description="onderwerpen")
     def display_onderwerpen(self, obj):
-        return ", ".join(p.naam for p in obj.onderwerp.all())
+        return ", ".join(p.naam for p in obj.onderwerpen.all())
