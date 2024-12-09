@@ -1,9 +1,16 @@
 from datetime import date, timedelta
 from decimal import Decimal
 
+from django.contrib.admin.sites import AdminSite
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from freezegun import freeze_time
+
+from open_producten.producttypen.admin import PrijsAdmin
+from open_producten.producttypen.models import Prijs
+
+from ...accounts.tests.factories import UserFactory
 from .factories import PrijsFactory, PrijsOptieFactory, ProductTypeFactory
 
 
@@ -25,6 +32,33 @@ class TestPrijs(TestCase):
         with self.assertRaises(ValidationError):
             prijs = PrijsFactory.build(actief_vanaf=date(2020, 1, 1))
             prijs.full_clean()
+
+    @freeze_time("2024-01-02")
+    def test_change_permission_on_old_price(self):
+        instance = PrijsFactory.create(actief_vanaf=date(2024, 1, 1))
+        admin = PrijsAdmin(Prijs, AdminSite())
+        request = self.client.request()
+        request.user = UserFactory(superuser=True)
+
+        self.assertFalse(admin.has_change_permission(request, instance))
+
+    @freeze_time("2024-01-02")
+    def test_change_permission_on_future_price(self):
+        instance = PrijsFactory.create(actief_vanaf=date(2024, 3, 1))
+        admin = PrijsAdmin(Prijs, AdminSite())
+        request = self.client.request()
+        request.user = UserFactory(superuser=True)
+
+        self.assertTrue(admin.has_change_permission(request, instance))
+
+    @freeze_time("2024-01-02")
+    def test_change_permission_on_current_price(self):
+        instance = PrijsFactory.create(actief_vanaf=date(2024, 1, 2))
+        admin = PrijsAdmin(Prijs, AdminSite())
+        request = self.client.request()
+        request.user = UserFactory(superuser=True)
+
+        self.assertTrue(admin.has_change_permission(request, instance))
 
 
 class TestPrijsOptie(TestCase):
