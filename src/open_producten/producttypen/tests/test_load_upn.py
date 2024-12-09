@@ -1,15 +1,24 @@
 import os
 from io import StringIO
-from unittest.mock import patch
 
 from django.core.management import CommandError, call_command
-from django.test import SimpleTestCase, TestCase
+from django.test import TestCase
 
-from open_producten.producttypen.management.parsers import CsvParser
+import requests_mock
+
 from open_producten.producttypen.models import UniformeProductNaam
+from open_producten.producttypen.tests.factories import UniformeProductNaamFactory
+
+TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-class TestLoadUPNCommand(TestCase):
+class TestLoadUPLCommand(TestCase):
+
+    def setUp(self):
+        self.path = os.path.join(TESTS_DIR, "data/upl.csv")
+        self.requests_mock = requests_mock.Mocker()
+        self.requests_mock.start()
+        self.addCleanup(self.requests_mock.stop)
 
     def call_command(self, *args, **kwargs):
         out = StringIO()
@@ -22,80 +31,124 @@ class TestLoadUPNCommand(TestCase):
         )
         return out.getvalue()
 
-    def test_load_csv_with_correct_columns(self):
-        file_name = "data/upl.csv"
-        path = os.path.join(os.path.dirname(__file__), file_name)
-        result = self.call_command(path)
-        self.assertEqual(result, f"Importing upn from {path}...\nDone (1 objects).\n")
+    def test_call_command_without_file_and_url(self):
+        with self.assertRaisesMessage(
+            Exception, "Either --file or --url must be specified."
+        ):
+            self.call_command()
+
+    def test_call_command_wit_file_and_url(self):
+        with self.assertRaisesMessage(
+            Exception, "Only one of --file or --url can be specified."
+        ):
+            self.call_command("--file", self.path, "--url", "https://example.com")
+
+    def test_with_other_file_extension(self):
+        path = os.path.join(TESTS_DIR, "data/upl.txt")
+        with self.assertRaisesMessage(Exception, "File format is not csv."):
+            self.call_command("--file", path)
+
+    def test_with_csv_file(self):
+        result = self.call_command("--file", self.path)
+        self.assertEqual(
+            result,
+            f"Importing upn from {self.path}...\nDone\nCreated 1 product names.\nUpdated 0 product names.\n0 product names did not exist in the csv.\n",
+        )
+
         self.assertEqual(UniformeProductNaam.objects.count(), 1)
         self.assertEqual(
-            UniformeProductNaam.objects.first().naam, "aangifte vertrek buitenland"
+            UniformeProductNaam.objects.get().naam, "aangifte vertrek buitenland"
         )
         self.assertEqual(
-            UniformeProductNaam.objects.first().uri,
+            UniformeProductNaam.objects.get().uri,
             "http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland",
         )
 
-    def test_load_csv_with_incorrect_columns(self):
-        file_name = "data/wrong-upl.csv"
-        path = os.path.join(os.path.dirname(__file__), file_name)
+    def test_with_csv_url_404(self):
+        self.requests_mock.get(
+            status_code=404,
+            url="https://test/upl.csv",
+        )
 
-        with self.assertRaisesMessage(CommandError, "'URI' does not exist in csv"):
-            self.call_command(path)
+        with self.assertRaisesMessage(Exception, "Url returned status code: 404"):
+            self.call_command("--url", "https://test/upl.csv")
 
+    def test_parse_csv_url(self):
+        with open(self.path) as f:
 
-class TestCSVParser(SimpleTestCase):
+            self.requests_mock.get(
+                status_code=200,
+                text=f.read(),
+                url="https://test/upl.csv",
+            )
 
-    def setUp(self):
-        self.parser = CsvParser()
+            result = self.call_command("--url", "https://test/upl.csv")
 
-    def test_parser_returns_error_when_format_is_not_csv(self):
-        with self.assertRaisesMessage(Exception, "File format is not csv"):
-            self.parser.parse("abc.txt")
-
-    @patch("open_producten.producttypen.management.parsers.NamedTemporaryFile")
-    @patch("open_producten.producttypen.management.parsers.CsvParser.process_csv")
-    def test_parser_with_url(self, mock_process_csv, mock_NamedTemporaryFile):
-        self.parser.parse("https://www.abc.com/abc.csv")
-
-        self.assertEqual(mock_NamedTemporaryFile.call_count, 1)
-        self.assertEqual(mock_process_csv.call_count, 1)
-
-    @patch("tempfile.NamedTemporaryFile")
-    @patch("open_producten.producttypen.management.parsers.CsvParser.process_csv")
-    def test_parser_with_file(self, mock_process_csv, mock_NamedTemporaryFile):
-        self.parser.parse("abc.csv")
-
-        self.assertEqual(mock_NamedTemporaryFile.call_count, 0)
-        self.assertEqual(mock_process_csv.call_count, 1)
-
-    def test_process_csv(self):
-        file_name = "data/upl.csv"
-        path = os.path.join(os.path.dirname(__file__), file_name)
-        result = self.parser.process_csv(path)
         self.assertEqual(
             result,
-            [
-                {
-                    "Aanvraag": "",
-                    "Autonomie": "",
-                    "Bedrijf": "",
-                    "Burger": "X",
-                    "Dienstenwet": "",
-                    "Gemeente": "X",
-                    "Grondslag": "http://standaarden.overheid.nl/owms/terms/Wet_BRP_art_2_43",
-                    "Grondslaglabel": "Artikel 2.43 Wet basisregistratie personen",
-                    "Grondslaglink": "https://wetten.overheid.nl/jci1.3:c:BWBR0033715&hoofdstuk=2&afdeling=1&paragraaf=5&artikel=2.43",
-                    "Medebewind": "X",
-                    "Melding": "",
-                    "Provincie": "",
-                    "Rijk": "X",
-                    "SDG": "D1",
-                    "Subsidie": "",
-                    "URI": "http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland",
-                    "UniformeProductnaam": "aangifte vertrek buitenland",
-                    "Verplichting": "X",
-                    "Waterschap": "",
-                }
-            ],
+            "Importing upn from https://test/upl.csv...\nDone\nCreated 1 product names.\nUpdated 0 product names.\n0 product names did not exist in the csv.\n",
+        )
+
+        self.assertEqual(UniformeProductNaam.objects.count(), 1)
+        self.assertEqual(
+            UniformeProductNaam.objects.get().naam, "aangifte vertrek buitenland"
+        )
+        self.assertEqual(
+            UniformeProductNaam.objects.get().uri,
+            "http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland",
+        )
+
+    def test_load_upl_with_empty_data_at_column(self):
+        path = os.path.join(TESTS_DIR, "data/upl-empty-data.csv")
+
+        result = self.call_command("--file", path)
+        self.assertEqual(
+            result,
+            f"Importing upn from {path}...\nSkipping index 0 because of missing column(s) URI or UniformeProductnaam.\nDone\nCreated 0 product names.\nUpdated 0 product names.\n0 product names did not exist in the csv.\n",
+        )
+
+        self.assertEqual(UniformeProductNaam.objects.count(), 0)
+
+    def test_load_csv_with_missing_columns(self):
+        path = os.path.join(TESTS_DIR, "data/upl-missing-columns.csv")
+
+        with self.assertRaisesMessage(
+            CommandError, "Column(s) 'URI' do not exist in the CSV."
+        ):
+            self.call_command("--file", path)
+
+    def test_upn_is_updated(self):
+        UniformeProductNaamFactory.create(
+            uri="http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland"
+        )
+
+        result = self.call_command("--file", self.path)
+        self.assertEqual(
+            result,
+            f"Importing upn from {self.path}...\nDone\nCreated 0 product names.\nUpdated 1 product names.\n0 product names did not exist in the csv.\n",
+        )
+
+        self.assertEqual(UniformeProductNaam.objects.count(), 1)
+        self.assertEqual(
+            UniformeProductNaam.objects.get().naam, "aangifte vertrek buitenland"
+        )
+        self.assertEqual(
+            UniformeProductNaam.objects.get().uri,
+            "http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland",
+        )
+
+    def test_upn_not_in_csv_is_set_to_deleted(self):
+        upn = UniformeProductNaamFactory.create(
+            uri="http://standaarden.overheid.nl/owms/terms/BlaBla"
+        )
+
+        result = self.call_command("--file", self.path)
+        self.assertEqual(
+            result,
+            f"Importing upn from {self.path}...\nDone\nCreated 1 product names.\nUpdated 0 product names.\n1 product names did not exist in the csv.\n",
+        )
+
+        self.assertEqual(UniformeProductNaam.objects.count(), 2)
+        self.assertEqual(
+            UniformeProductNaam.objects.filter(is_verwijderd=True).get().naam, upn.naam
         )

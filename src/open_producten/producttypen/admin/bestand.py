@@ -12,6 +12,7 @@ class BestandInline(admin.TabularInline):
 class BestandAdmin(admin.ModelAdmin):
     list_display = ("product_type", "bestand")
     list_filter = ("product_type",)
+    search_fields = ("bestand",)
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product_type")

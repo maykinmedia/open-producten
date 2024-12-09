@@ -12,6 +12,8 @@ class LinkInline(admin.TabularInline):
 @admin.register(Link)
 class LinkAdmin(admin.ModelAdmin):
     list_display = ("product_type", "naam", "url")
+    list_filter = ("product_type__naam",)
+    search_fields = ("naam", "product_type__naam")
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product_type")

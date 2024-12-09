@@ -29,7 +29,7 @@ class Onderwerp(MP_Node, BasePublishableModel):
         verbose_name=_("beschrijving"),
         blank=True,
         default="",
-        help_text=_("Beschrijving van het onderwerp."),
+        help_text=_("Beschrijving van het onderwerp, ondersteund markdown format."),
     )
 
     class Meta:
@@ -48,13 +48,16 @@ class Onderwerp(MP_Node, BasePublishableModel):
         return PublishedMoveHandler(self, target, pos).process()
 
     def clean(self):
-        if self.gepubliceerd and self.hoofd_onderwerp:
-            if not self.hoofd_onderwerp.gepubliceerd:
-                raise ValidationError(
-                    _(
-                        "Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
-                    )
+        if (
+            self.gepubliceerd
+            and self.hoofd_onderwerp
+            and not self.hoofd_onderwerp.gepubliceerd
+        ):
+            raise ValidationError(
+                _(
+                    "Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
                 )
+            )
 
         if (
             not self.gepubliceerd
@@ -62,6 +65,6 @@ class Onderwerp(MP_Node, BasePublishableModel):
         ):
             raise ValidationError(
                 _(
-                    "Hoofd-onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben."
+                    "Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben."
                 )
             )

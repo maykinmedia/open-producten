@@ -24,7 +24,7 @@ class OnderwerpProductType(models.Model):
 
 class ProductType(BasePublishableModel):
     naam = models.CharField(
-        verbose_name=_("naam"),
+        verbose_name=_("product type naam"),
         max_length=100,
         help_text=_("naam van het product type."),
     )
@@ -38,7 +38,7 @@ class ProductType(BasePublishableModel):
 
     beschrijving = MarkdownxField(
         verbose_name=_("beschrijving"),
-        help_text=_("Product type beschrijving met WYSIWYG editor."),
+        help_text=_("Product type beschrijving, ondersteund markdown format."),
     )
 
     keywords = ArrayField(

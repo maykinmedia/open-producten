@@ -18,6 +18,7 @@ class Vraag(BaseModel):
         blank=True,
         null=True,
         related_name="vragen",
+        help_text=_("Het onderwerp waarbij deze vraag hoort."),
     )
     product_type = models.ForeignKey(
         ProductType,
@@ -26,9 +27,17 @@ class Vraag(BaseModel):
         blank=True,
         null=True,
         related_name="vragen",
+        help_text=_("Het product type waarbij deze vraag hoort."),
     )
-    vraag = models.CharField(verbose_name=_("vraag"), max_length=250)
-    antwoord = MarkdownxField(verbose_name=_("antwoord"))
+    vraag = models.CharField(
+        verbose_name=_("vraag"),
+        max_length=250,
+        help_text=_("De vraag die wordt beantwoord."),
+    )
+    antwoord = MarkdownxField(
+        verbose_name=_("antwoord"),
+        help_text=_("Het antwoord op de vraag, ondersteund markdown format."),
+    )
 
     class Meta:
         verbose_name = _("Vraag")
