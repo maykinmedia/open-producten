@@ -7,10 +7,19 @@ from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.serializers.onderwerp import (
     SimpleProductTypeSerializer,
 )
-from open_producten.utils.serializers import model_to_dict_with_related_ids
+from open_producten.utils.serializers import (
+    CustomDateField,
+    CustomDateTimeField,
+    model_to_dict_with_related_ids,
+)
 
 
 class BaseProductSerializer(serializers.ModelSerializer):
+    start_datum = CustomDateField()
+    eind_datum = CustomDateField()
+    aanmaak_datum = CustomDateTimeField(read_only=True)
+    update_datum = CustomDateTimeField(read_only=True)
+
     def validate(self, attrs):
 
         if self.partial:

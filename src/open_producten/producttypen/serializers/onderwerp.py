@@ -8,12 +8,18 @@ from open_producten.producttypen.models import (
     ProductType,
     UniformeProductNaam,
 )
-from open_producten.utils.serializers import build_array_duplicates_error_message
+from open_producten.utils.serializers import (
+    CustomDateTimeField,
+    build_array_duplicates_error_message,
+)
 
 from .vraag import VraagSerializer
 
 
 class SimpleProductTypeSerializer(serializers.ModelSerializer):
+    aanmaak_datum = CustomDateTimeField(read_only=True)
+    update_datum = CustomDateTimeField(read_only=True)
+
     uniforme_product_naam = serializers.SlugRelatedField(
         slug_field="uri", queryset=UniformeProductNaam.objects.all()
     )
@@ -29,6 +35,9 @@ class SimpleProductTypeSerializer(serializers.ModelSerializer):
 
 
 class OnderwerpSerializer(serializers.ModelSerializer):
+    aanmaak_datum = CustomDateTimeField(read_only=True)
+    update_datum = CustomDateTimeField(read_only=True)
+
     hoofd_onderwerp = serializers.PrimaryKeyRelatedField(
         queryset=Onderwerp.objects.all(),
         allow_null=True,

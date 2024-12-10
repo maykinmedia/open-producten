@@ -1,4 +1,5 @@
 import datetime
+from zoneinfo import ZoneInfo
 
 from freezegun import freeze_time
 from rest_framework.exceptions import ErrorDetail
@@ -13,10 +14,14 @@ from open_producten.utils.tests.helpers import model_to_dict_with_id
 
 def product_to_dict(product):
     product_dict = model_to_dict_with_id(product)
-    product_dict["start_datum"] = str(product_dict["start_datum"])
-    product_dict["eind_datum"] = str(product_dict["eind_datum"])
-    product_dict["aanmaak_datum"] = str(product.aanmaak_datum.astimezone().isoformat())
-    product_dict["update_datum"] = str(product.update_datum.astimezone().isoformat())
+    product_dict["start_datum"] = product_dict["start_datum"].strftime("%d-%m-%Y")
+    product_dict["eind_datum"] = product_dict["eind_datum"].strftime("%d-%m-%Y")
+    product_dict["aanmaak_datum"] = product.aanmaak_datum.astimezone(
+        ZoneInfo("Europe/Amsterdam")
+    ).strftime("%d-%m-%YT%H:%M:%S%z")
+    product_dict["update_datum"] = product.update_datum.astimezone(
+        ZoneInfo("Europe/Amsterdam")
+    ).strftime("%d-%m-%YT%H:%M:%S%z")
 
     product_dict["product_type"] = model_to_dict_with_id(
         product.product_type,
@@ -31,11 +36,15 @@ def product_to_dict(product):
         "uniforme_product_naam"
     ] = product.product_type.uniforme_product_naam.uri
 
-    product_dict["product_type"]["aanmaak_datum"] = str(
-        product.product_type.aanmaak_datum.astimezone().isoformat()
+    product_dict["product_type"]["aanmaak_datum"] = (
+        product.product_type.aanmaak_datum.astimezone(
+            ZoneInfo("Europe/Amsterdam")
+        ).strftime("%d-%m-%YT%H:%M:%S%z")
     )
-    product_dict["product_type"]["update_datum"] = str(
-        product.product_type.update_datum.astimezone().isoformat()
+    product_dict["product_type"]["update_datum"] = (
+        product.product_type.update_datum.astimezone(
+            ZoneInfo("Europe/Amsterdam")
+        ).strftime("%d-%m-%YT%H:%M:%S%z")
     )
     return product_dict
 
@@ -48,8 +57,8 @@ class TestProduct(BaseApiTestCase):
         self.data = {
             "product_type_id": self.product_type.id,
             "bsn": "111222333",
-            "start_datum": datetime.date(2024, 1, 2),
-            "eind_datum": datetime.date(2024, 12, 31),
+            "start_datum": datetime.date(2024, 1, 2).strftime("%d-%m-%Y"),
+            "eind_datum": datetime.date(2024, 12, 31).strftime("%d-%m-%Y"),
             "data": [],
         }
 
@@ -62,7 +71,11 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(response.status_code, 401)
 
     def _create_product(self):
-        return ProductFactory.create(bsn="111222333")
+        return ProductFactory.create(
+            bsn="111222333",
+            start_datum=datetime.date(2024, 1, 2),
+            eind_datum=datetime.date(2024, 12, 31),
+        )
 
     def test_create_product(self):
         response = self.post(self.data)
@@ -93,12 +106,16 @@ class TestProduct(BaseApiTestCase):
     def test_update_product(self):
         product = self._create_product()
 
-        data = self.data | {"eind_datum": datetime.date(2025, 12, 31)}
+        data = self.data | {
+            "eind_datum": datetime.date(2025, 12, 31).strftime("%d-%m-%Y")
+        }
         response = self.put(product.id, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Product.objects.count(), 1)
-        self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
+        self.assertEqual(
+            Product.objects.first().eind_datum.strftime("%d-%m-%Y"), data["eind_datum"]
+        )
 
     def test_update_product_without_bsn_or_kvk(self):
         product = self._create_product()
@@ -123,7 +140,7 @@ class TestProduct(BaseApiTestCase):
     def test_partial_update_product(self):
         product = self._create_product()
 
-        data = {"eind_datum": datetime.date(2025, 12, 31)}
+        data = {"eind_datum": datetime.date(2025, 12, 31).strftime("%d-%m-%Y")}
         response = self.patch(product.id, data)
 
         self.assertEqual(response.status_code, 200)

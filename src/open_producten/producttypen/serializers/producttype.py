@@ -9,7 +9,10 @@ from open_producten.locaties.serializers.locatie import (
     LocatieSerializer,
     OrganisatieSerializer,
 )
-from open_producten.utils.serializers import build_array_duplicates_error_message
+from open_producten.utils.serializers import (
+    CustomDateTimeField,
+    build_array_duplicates_error_message,
+)
 
 from ..models import Onderwerp, ProductType, UniformeProductNaam
 from .bestand import BestandSerializer
@@ -19,12 +22,18 @@ from .vraag import VraagSerializer
 
 
 class SimpleOnderwerpSerializer(serializers.ModelSerializer):
+    aanmaak_datum = CustomDateTimeField(read_only=True)
+    update_datum = CustomDateTimeField(read_only=True)
+
     class Meta:
         model = Onderwerp
         exclude = ("path", "depth", "numchild")
 
 
 class ProductTypeSerializer(serializers.ModelSerializer):
+    aanmaak_datum = CustomDateTimeField(read_only=True)
+    update_datum = CustomDateTimeField(read_only=True)
+
     uniforme_product_naam = serializers.SlugRelatedField(
         slug_field="uri", queryset=UniformeProductNaam.objects.all()
     )

@@ -92,6 +92,10 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PAGINATION_CLASS": "open_producten.utils.pagination.Pagination",
     # "PAGE_SIZE": 100,
+    "DATE_FORMAT": "%d-%m-%Y",
+    "DATE_INPUT_FORMATS": ["%d-%m-%Y"],
+    "DATETIME_FORMAT": "%d-%m-%YT%H:%M:%S%z",
+    "DATETIME_INPUT_FORMATS": ["%d-%m-%YT%H:%M:%S%z"],
 }
 
 PRODUCTEN_API_VERSION = "0.0.1"

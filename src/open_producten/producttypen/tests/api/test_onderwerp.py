@@ -1,3 +1,5 @@
+from zoneinfo import ZoneInfo
+
 from django.forms import model_to_dict
 
 from rest_framework.exceptions import ErrorDetail
@@ -22,12 +24,13 @@ def onderwerp_to_dict(onderwerp):
     onderwerp_dict["product_typen"] = [
         model_to_dict(product_type) for product_type in onderwerp.product_typen.all()
     ]
-    onderwerp_dict["aanmaak_datum"] = str(
-        onderwerp.aanmaak_datum.astimezone().isoformat()
-    )
-    onderwerp_dict["update_datum"] = str(
-        onderwerp.update_datum.astimezone().isoformat()
-    )
+    onderwerp_dict["aanmaak_datum"] = onderwerp.aanmaak_datum.astimezone(
+        ZoneInfo("Europe/Amsterdam")
+    ).strftime("%d-%m-%YT%H:%M:%S%z")
+    onderwerp_dict["update_datum"] = onderwerp.update_datum.astimezone(
+        ZoneInfo("Europe/Amsterdam")
+    ).strftime("%d-%m-%YT%H:%M:%S%z")
+
     onderwerp_dict["hoofd_onderwerp"] = (
         onderwerp.hoofd_onderwerp.id if onderwerp.hoofd_onderwerp else None
     )
