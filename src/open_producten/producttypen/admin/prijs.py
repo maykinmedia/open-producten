@@ -33,7 +33,7 @@ class PrijsAdmin(admin.ModelAdmin):
     model = Prijs
     inlines = [PrijsOptieInline]
     list_display = ("__str__", "actief_vanaf")
-    list_filter = ("product_type__naam",)
+    list_filter = ("product_type__naam", "actief_vanaf")
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product_type")
