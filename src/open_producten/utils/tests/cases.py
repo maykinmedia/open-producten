@@ -18,7 +18,6 @@ class BaseApiTestCase(APITestCase):
 
         version = getattr(settings, f"{upper(self.api)}_API_MAJOR_VERSION")
         self.path = f"/{self.api}/api/v{version}/{self.object}/"
-        print(self.path)
 
     def get(self, object_id=""):
         end = "/" if object_id else ""

@@ -41,6 +41,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedContactList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: contacten_create
       description: Maak een CONTACT aan.
@@ -61,6 +86,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /contacten/{id}/:
     get:
@@ -85,6 +135,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: contacten_update
@@ -115,6 +190,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: contacten_partial_update
       description: Werk een CONTACT deels bij.
@@ -143,6 +243,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: contacten_destroy
       description: Verwijder een CONTACT.
@@ -162,6 +287,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /links/:
     get:
       operationId: links_list
@@ -197,6 +347,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedLinkList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: links_create
       description: Maak een LINK aan.
@@ -217,6 +392,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /links/{id}/:
     get:
@@ -241,6 +441,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: links_update
@@ -271,6 +496,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: links_partial_update
       description: Werk een LINK deels bij
@@ -299,6 +549,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: links_destroy
       description: Verwijder een LINK.
@@ -318,6 +593,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /locaties/:
     get:
       operationId: locaties_list
@@ -347,6 +647,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedLocatieList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: locaties_create
       description: Maak een LOCATIE aan.
@@ -367,6 +692,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /locaties/{id}/:
     get:
@@ -391,6 +741,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: locaties_update
@@ -421,6 +796,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: locaties_partial_update
       description: Werk een LOCATIE deels bij.
@@ -449,6 +849,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: locaties_destroy
       description: Verwijder een LOCATIE.
@@ -468,6 +893,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /onderwerpen/:
     get:
       operationId: onderwerpen_list
@@ -501,6 +951,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedOnderwerpList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: onderwerpen_create
       description: Maak een ONDERWERP aan.
@@ -521,6 +996,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Onderwerp'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /onderwerpen/{id}/:
     get:
@@ -545,6 +1045,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Onderwerp'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: onderwerpen_update
@@ -575,6 +1100,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Onderwerp'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: onderwerpen_partial_update
       description: Werk een ONDERWERP deels bij.
@@ -603,6 +1153,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Onderwerp'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: onderwerpen_destroy
       description: Verwijder een ONDERWERP.
@@ -622,6 +1197,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /organisaties/:
     get:
       operationId: organisaties_list
@@ -651,6 +1251,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedOrganisatieList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: organisaties_create
       description: Maak een ORGANISATIE aan.
@@ -671,6 +1296,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /organisaties/{id}/:
     get:
@@ -695,6 +1345,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: organisaties_update
@@ -725,6 +1400,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: organisaties_partial_update
       description: Werk een ORGANISATIE deels bij.
@@ -753,6 +1453,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: organisaties_destroy
       description: Verwijder een ORGANISATIE.
@@ -772,6 +1497,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /prijzen/:
     get:
       operationId: prijzen_list
@@ -807,6 +1557,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedPrijsList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: prijzen_create
       description: Maak een PRIJS aan.
@@ -827,6 +1602,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /prijzen/{id}/:
     get:
@@ -851,6 +1651,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: prijzen_update
@@ -881,6 +1706,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: prijzen_partial_update
       description: Werk een PRIJS deels bij.
@@ -909,6 +1759,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: prijzen_destroy
       description: Verwijder een PRIJS.
@@ -928,6 +1803,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /producttypen/:
     get:
       operationId: producttypen_list
@@ -961,6 +1861,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductTypeList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: producttypen_create
       description: Maak een PRODUCTTYPE aan.
@@ -981,6 +1906,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /producttypen/{id}/:
     get:
@@ -1005,6 +1955,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: producttypen_update
@@ -1035,6 +2010,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: producttypen_partial_update
       description: Werk een LINK deels bij
@@ -1063,6 +2063,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: producttypen_destroy
       description: Verwijder een LINK.
@@ -1082,6 +2107,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /producttypen/actuele-prijzen/:
     get:
       operationId: producttypen_actuele_prijzen_retrieve
@@ -1095,6 +2145,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /vragen/:
     get:
@@ -1137,6 +2212,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedVraagList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: vragen_create
       description: Maak een VRAAG aan.
@@ -1157,6 +2257,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Vraag'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /vragen/{id}/:
     get:
@@ -1181,6 +2306,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Vraag'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: vragen_update
@@ -1211,6 +2361,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: vragen_partial_update
       description: Werk een VRAAG deels bij.
@@ -1239,6 +2414,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: vragen_destroy
       description: Verwijder een VRAAG.
@@ -1258,6 +2458,31 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
 components:
   schemas:
     Bestand:
@@ -1320,6 +2545,20 @@ components:
       - organisatie
       - organisatie_id
       - voornaam
+    DetailError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        veld:
+          type: string
+      required:
+      - veld
     Link:
       type: object
       properties:
@@ -1391,6 +2630,16 @@ components:
           type: string
           format: uuid
           readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         hoofd_onderwerp:
           type: string
           format: uuid
@@ -1415,18 +2664,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -1764,6 +3001,16 @@ components:
           type: string
           format: uuid
           readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         hoofd_onderwerp:
           type: string
           format: uuid
@@ -1788,18 +3035,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -1858,16 +3093,25 @@ components:
           type: string
           format: uuid
         actief_vanaf:
+          example: 01-12-2024
           type: string
           format: date
-          title: Start datum
-          description: De datum vanaf wanneer de prijs actief is.
     PatchedProductType:
       type: object
       properties:
         id:
           type: string
           format: uuid
+          readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
           readOnly: true
         uniforme_product_naam:
           type: string
@@ -1943,18 +3187,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.
@@ -2006,10 +3238,9 @@ components:
           type: string
           format: uuid
         actief_vanaf:
+          example: 01-12-2024
           type: string
           format: date
-          title: Start datum
-          description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
       - id
@@ -2038,6 +3269,16 @@ components:
         id:
           type: string
           format: uuid
+          readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
           readOnly: true
         uniforme_product_naam:
           type: string
@@ -2113,18 +3354,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.
@@ -2195,21 +3424,19 @@ components:
           type: string
           format: uuid
           readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -2229,6 +3456,16 @@ components:
           type: string
           format: uuid
           readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         uniforme_product_naam:
           type: string
           format: uri
@@ -2236,18 +3473,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.

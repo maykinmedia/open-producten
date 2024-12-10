@@ -5,7 +5,11 @@ from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.plumbing import build_basic_type
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema_field,
+    extend_schema_serializer,
+)
 from rest_framework import serializers
 
 from .models import BaseModel
@@ -39,6 +43,30 @@ def model_to_dict_with_related_ids(model: BaseModel) -> dict:
             model_dict[f"{k}_id"] = model_dict.pop(k)
 
     return model_dict
+
+
+class DetailErrorSerializer(serializers.Serializer):
+    detail = serializers.CharField()
+
+
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Bad request example",
+            description="Errors worden per veld teruggegeven.",
+            value={
+                "prijsopties": ["Er is minimaal één optie vereist."],
+                "product_type_id": ["‘<uuid>’ is geen geldige UUID."],
+                "actief_vanaf": [
+                    "Date heeft het verkeerde formaat, gebruik 1 van deze formaten: DD-MM-YYYY."
+                ],
+            },
+        ),
+    ]
+)
+class ErrorSerializer(serializers.Serializer):
+    veld = serializers.CharField()
+
 
 # sets date example value to dd-mm-yyyy
 @extend_schema_field(dict(example="01-12-2024", **build_basic_type(OpenApiTypes.DATE)))
