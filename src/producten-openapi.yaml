@@ -45,6 +45,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: producten_create
       description: Maak een PRODUCT aan.
@@ -65,6 +90,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
   /producten/{id}/:
     get:
@@ -89,6 +139,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
           description: ''
     put:
       operationId: producten_update
@@ -119,6 +194,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductUpdate'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: producten_partial_update
       description: Werk een PRODUCT deels bij.
@@ -147,6 +247,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductUpdate'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: producten_destroy
       description: Verwijder een PRODUCT.
@@ -166,8 +291,47 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
 components:
   schemas:
+    DetailError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        veld:
+          type: string
+      required:
+      - veld
     PaginatedProductList:
       type: object
       required:
@@ -198,29 +362,27 @@ components:
           type: string
           format: uuid
           readOnly: true
+        start_datum:
+          example: 01-12-2024
+          type: string
+          format: date
+        eind_datum:
+          example: 01-12-2024
+          type: string
+          format: date
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        start_datum:
-          type: string
-          format: date
-          description: De start datum van dit product.
-        eind_datum:
-          type: string
-          format: date
-          description: De einddatum van dit product.
         bsn:
           type: string
           nullable: true
@@ -241,6 +403,24 @@ components:
           type: string
           format: uuid
           readOnly: true
+        start_datum:
+          example: 01-12-2024
+          type: string
+          format: date
+        eind_datum:
+          example: 01-12-2024
+          type: string
+          format: date
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         product_type:
           allOf:
           - $ref: '#/components/schemas/SimpleProductType'
@@ -252,26 +432,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        start_datum:
-          type: string
-          format: date
-          description: De start datum van dit product.
-        eind_datum:
-          type: string
-          format: date
-          description: De einddatum van dit product.
         bsn:
           type: string
           nullable: true
@@ -300,29 +460,27 @@ components:
           type: string
           format: uuid
           readOnly: true
+        start_datum:
+          example: 01-12-2024
+          type: string
+          format: date
+        eind_datum:
+          example: 01-12-2024
+          type: string
+          format: date
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        start_datum:
-          type: string
-          format: date
-          description: De start datum van dit product.
-        eind_datum:
-          type: string
-          format: date
-          description: De einddatum van dit product.
         bsn:
           type: string
           nullable: true
@@ -349,6 +507,16 @@ components:
           type: string
           format: uuid
           readOnly: true
+        aanmaak_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
+        update_datum:
+          example: 01-12-2024T20:30:30+0200
+          type: string
+          format: date
+          readOnly: true
         uniforme_product_naam:
           type: string
           format: uri
@@ -356,18 +524,6 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.
