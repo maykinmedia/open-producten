@@ -31,10 +31,28 @@ ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 
 ProductTypenRouter.register("bestanden", BestandViewSet, basename="bestand")
 
+description = """
+Een Api voor Product typen.
+
+Een Product type is de definitie van een Product. hierin word alle relevante data opgeslagen zoals informatie teksten bedoeld voor klanten.
+
+Een Product (zie product api) is de instantie hierin worden de specifieke gegevens van de instantie opgeslagen zoals bijvoorbeeld de gegevens van de eigenaar.
+
+Een product type valt onder een onderwerp. Onderwerpen volgen een boomstructuur om product typen verder te categoriseren.
+
+Een product type kan worden gelinkt één of meerdere locaties, organisaties en/of contacten.
+
+Daarnaast kunnen de volgende modellen per product worden aangemaakt:
+- prijzen
+- links
+- vragen
+
+"""
+
 custom_settings = {
     "TITLE": "Product typen API",
     "VERSION": settings.PRODUCTTYPEN_API_VERSION,
-    # "DESCRIPTION": description,
+    "DESCRIPTION": description,
     "SERVERS": [
         {"url": f"/producttypen/api/v{settings.PRODUCTTYPEN_API_MAJOR_VERSION}"}
     ],
