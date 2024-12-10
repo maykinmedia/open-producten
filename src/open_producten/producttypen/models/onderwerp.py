@@ -21,6 +21,8 @@ class PublishedMoveHandler(MP_MoveHandler):
 
 
 class Onderwerp(MP_Node, BasePublishableModel):
+    node_order_by = ["naam"]
+
     naam = models.CharField(
         verbose_name=_("naam"), max_length=100, help_text=_("Naam van het onderwerp.")
     )
