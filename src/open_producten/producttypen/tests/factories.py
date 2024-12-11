@@ -24,6 +24,7 @@ class ProductTypeFactory(factory.django.DjangoModelFactory):
     naam = factory.Sequence(lambda n: f"product type {n}")
     samenvatting = factory.Faker("sentence")
     beschrijving = factory.Faker("paragraph")
+    code = factory.Sequence(lambda n: f"product type code {n}")
     gepubliceerd = True
     uniforme_product_naam = factory.SubFactory(UniformeProductNaamFactory)
 

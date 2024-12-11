@@ -1,5 +1,4 @@
 import datetime
-
 from django.urls import reverse
 
 from freezegun import freeze_time
@@ -35,6 +34,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.data = {
             "naam": "test-product-type",
+            "code": "PT=12345",
             "samenvatting": "test",
             "beschrijving": "test test",
             "uniforme_product_naam": upn.uri,
@@ -112,6 +112,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_create_product_type_without_thema_returns_error(self):
         data = self.data.copy()
         data["thema_ids"] = []
+        data.pop("code")
         response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -122,7 +123,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     ErrorDetail(
                         string="Er is minimaal één thema vereist.", code="invalid"
                     )
-                ]
+                ],
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
             },
         )
 
