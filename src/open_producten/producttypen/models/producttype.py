@@ -20,6 +20,13 @@ class ProductType(BasePublishableModel):
         help_text=_("naam van het product type."),
     )
 
+    code = models.CharField(
+        verbose_name=_("code"),
+        max_length=100,
+        help_text=_("code van het product type."),
+        unique=True,
+    )
+
     samenvatting = models.TextField(
         verbose_name=_("samenvatting"),
         default="",
