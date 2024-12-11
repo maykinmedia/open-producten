@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
 from open_producten.locaties.serializers.locatie import (
@@ -19,7 +19,22 @@ from open_producten.utils.views import OrderedModelViewSet
         description="Een specifieke LOCATIE opvragen.",
     ),
     create=extend_schema(
-        summary="Maak een LOCATIE aan.", description="Maak een LOCATIE aan."
+        summary="Maak een LOCATIE aan.",
+        description="Maak een LOCATIE aan.",
+        examples=[
+            OpenApiExample(
+                "Create locatie",
+                value={
+                    "naam": "Maykin Media",
+                    "email": "info@maykinmedia.nl",
+                    "telefoonnummer": "+31 0 20 753 05 23",
+                    "straat": "Kingsfortweg",
+                    "huisnummer": "151",
+                    "postcode": "1043GR",
+                    "stad": "Amsterdam",
+                },
+            )
+        ],
     ),
     update=extend_schema(
         summary="Werk een LOCATIE in zijn geheel bij.",
@@ -49,7 +64,21 @@ class LocatieViewSet(OrderedModelViewSet):
         description="Een specifieke CONTACT opvragen.",
     ),
     create=extend_schema(
-        summary="Maak een CONTACT aan.", description="Maak een CONTACT aan."
+        summary="Maak een CONTACT aan.",
+        description="Maak een CONTACT aan.",
+        examples=[
+            OpenApiExample(
+                "Create contact",
+                value={
+                    "organisatie_id": "73a745d4-7df0-4510-991e-abfb19f0d861",
+                    "voornaam": "Bob",
+                    "achternaam": "de Vries",
+                    "email": "bob@example.com",
+                    "telefoonnummer": "0611223344",
+                    "rol": "medewerker",
+                },
+            )
+        ],
     ),
     update=extend_schema(
         summary="Werk een CONTACT in zijn geheel bij.",
@@ -79,7 +108,22 @@ class ContactViewSet(OrderedModelViewSet):
         description="Een specifieke ORGANISATIE opvragen.",
     ),
     create=extend_schema(
-        summary="Maak een ORGANISATIE aan.", description="Maak een ORGANISATIE aan."
+        summary="Maak een ORGANISATIE aan.",
+        description="Maak een ORGANISATIE aan.",
+        examples=[
+            OpenApiExample(
+                "Create organisatie",
+                value={
+                    "naam": "Maykin Media",
+                    "email": "info@maykinmedia.nl",
+                    "telefoonnummer": "+31 0 20 753 05 23",
+                    "straat": "Kingsfortweg",
+                    "huisnummer": "151",
+                    "postcode": "1043GR",
+                    "stad": "Amsterdam",
+                },
+            )
+        ],
     ),
     update=extend_schema(
         summary="Werk een ORGANISATIE in zijn geheel bij.",

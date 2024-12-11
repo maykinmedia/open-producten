@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
@@ -7,11 +8,14 @@ from django.utils.translation import gettext_lazy as _
 
 from ..models import Prijs, PrijsOptie
 
+
 class PrijsOptieAdminForm(forms.ModelForm):
     bedrag = forms.DecimalField(max_digits=5, decimal_places=2, localize=True)
+
     class Meta:
         model = PrijsOptie
-        fields = '__all__'
+        fields = "__all__"
+
 
 class PrijsOptieInlineFormSet(BaseInlineFormSet):
 

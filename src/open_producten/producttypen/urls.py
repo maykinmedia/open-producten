@@ -36,7 +36,7 @@ Een Api voor Product typen.
 
 Een Product type is de definitie van een Product. hierin word alle relevante data opgeslagen zoals informatie teksten bedoeld voor klanten.
 
-Een Product (zie product api) is de instantie hierin worden de specifieke gegevens van de instantie opgeslagen zoals bijvoorbeeld de gegevens van de eigenaar.
+Een Product (zie product api) is de instantie, hierin worden de specifieke gegevens van de instantie opgeslagen zoals bijvoorbeeld de gegevens van de eigenaar.
 
 Een product type valt onder een onderwerp. Onderwerpen volgen een boomstructuur om product typen verder te categoriseren.
 

@@ -82,7 +82,7 @@ class ValidatorsTestCase(TestCase):
         for invalid_phone_number in invalid_phone_numbers:
             self.assertRaisesMessage(
                 ValidationError,
-                _("Invalid mobile phonenumber."),
+                _("Ongeldig telefoonnummer."),
                 validate_phone_number,
                 invalid_phone_number,
             )
