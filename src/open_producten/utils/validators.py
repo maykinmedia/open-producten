@@ -29,7 +29,7 @@ def validate_phone_number(value):
     try:
         int(value.strip().lstrip("0+").replace("-", "").replace(" ", ""))
     except (ValueError, TypeError):
-        raise ValidationError(_("Invalid mobile phonenumber."))
+        raise ValidationError(_("Ongeldig telefoonnummer."))
 
     return value
 
