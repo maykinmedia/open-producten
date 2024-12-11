@@ -53,8 +53,8 @@ class TestProductTypePrijs(BaseApiTestCase):
         response = APIClient().get(self.path)
         self.assertEqual(response.status_code, 401)
 
-    def test_create_prijs_without_opties(self):
-        response = self.post(self.prijs_data)
+    def test_create_prijs_with_empty_opties(self):
+        response = self.post(self.prijs_data | {"prijsopties": []})
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -64,6 +64,22 @@ class TestProductTypePrijs(BaseApiTestCase):
                     ErrorDetail(
                         string="Er is minimaal één optie vereist.",
                         code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_create_prijs_without_opties(self):
+        response = self.post(self.prijs_data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "prijsopties": [
+                    ErrorDetail(
+                        string="Dit veld is vereist.",
+                        code="required",
                     )
                 ]
             },
@@ -430,7 +446,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                         "actief_vanaf": "01-01-2024",
                         "prijsopties": [
                             {
-                                "bedrag": str(optie.bedrag),
+                                "bedrag": str(optie.bedrag).replace(".", ","),
                                 "beschrijving": optie.beschrijving,
                                 "id": str(optie.id),
                             }

@@ -11,7 +11,13 @@ from ..models import Prijs, PrijsOptie, ProductType
 
 class PrijsOptieSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
-    bedrag = serializers.DecimalField(max_digits=8, decimal_places=2, localize=True, help_text = _('Het bedrag van de prijs optie.'), min_value = Decimal("0.01"))
+    bedrag = serializers.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        localize=True,
+        help_text=_("Het bedrag van de prijs optie."),
+        min_value=Decimal("0.01"),
+    )
 
     class Meta:
         model = PrijsOptie
