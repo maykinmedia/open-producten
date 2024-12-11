@@ -85,10 +85,6 @@ class ProductTypeViewSet(OrderedModelViewSet):
         description=(
             "Geeft de huidige prijzen van alle PRODUCTTYPEN terug."
         ),
-        # responses={
-        #     status.HTTP_200_OK: ApplicatieSerializer(many=True),
-        #     **COMMON_ERROR_RESPONSES,
-        # },
     )
     @action(
         detail=False,
