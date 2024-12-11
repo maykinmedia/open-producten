@@ -775,8 +775,6 @@ components:
           items:
             type: string
             format: uuid
-            writeOnly: true
-            default: []
           writeOnly: true
           default: []
         gepubliceerd:
@@ -969,8 +967,6 @@ components:
           items:
             type: string
             format: uuid
-            writeOnly: true
-            default: []
           writeOnly: true
           default: []
         gepubliceerd:
