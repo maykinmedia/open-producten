@@ -81,6 +81,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
+            examples:
+              CreateProduct:
+                value:
+                  start_datum: 01-12-2024
+                  eind_datum: 01-12-2026
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  gepubliceerd: false
+                  bsn: '111222333'
+                summary: Create product
         required: true
       security:
       - tokenAuth: []
@@ -90,6 +99,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                CreateProduct:
+                  value:
+                    start_datum: 01-12-2024
+                    eind_datum: 01-12-2026
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    gepubliceerd: false
+                    bsn: '111222333'
+                  summary: Create product
           description: ''
         '400':
           content:
