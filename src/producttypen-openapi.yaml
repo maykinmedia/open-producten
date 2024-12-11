@@ -77,6 +77,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Contact'
+            examples:
+              CreateContact:
+                value:
+                  organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                  voornaam: Bob
+                  achternaam: de Vries
+                  email: bob@example.com
+                  telefoonnummer: '0611223344'
+                  rol: medewerker
+                summary: Create contact
         required: true
       security:
       - tokenAuth: []
@@ -86,6 +96,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+              examples:
+                CreateContact:
+                  value:
+                    organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                    voornaam: Bob
+                    achternaam: de Vries
+                    email: bob@example.com
+                    telefoonnummer: '0611223344'
+                    rol: medewerker
+                  summary: Create contact
           description: ''
         '400':
           content:
@@ -383,6 +403,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Link'
+            examples:
+              CreateLink:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Open Producten
+                  url: https://github.com/maykinmedia/open-producten
+                summary: Create link
         required: true
       security:
       - tokenAuth: []
@@ -392,6 +419,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+              examples:
+                CreateLink:
+                  value:
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Open Producten
+                    url: https://github.com/maykinmedia/open-producten
+                  summary: Create link
           description: ''
         '400':
           content:
@@ -683,6 +717,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Locatie'
+            examples:
+              CreateLocatie:
+                value:
+                  naam: Maykin Media
+                  email: info@maykinmedia.nl
+                  telefoonnummer: +31 0 20 753 05 23
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043GR
+                  stad: Amsterdam
+                summary: Create locatie
         required: true
       security:
       - tokenAuth: []
@@ -692,6 +737,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                CreateLocatie:
+                  value:
+                    naam: Maykin Media
+                    email: info@maykinmedia.nl
+                    telefoonnummer: +31 0 20 753 05 23
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043GR
+                    stad: Amsterdam
+                  summary: Create locatie
           description: ''
         '400':
           content:
@@ -987,6 +1043,18 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Onderwerp'
+            examples:
+              CreateOnderwerp:
+                value:
+                  hoofd_onderwerp: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  product_type_ids:
+                  - 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  gepubliceerd: true
+                  naam: Parkeren
+                  beschrijving: Parkeren in gemeente ABC
+                summary: Create onderwerp
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
         required: true
       security:
       - tokenAuth: []
@@ -996,6 +1064,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Onderwerp'
+              examples:
+                CreateOnderwerp:
+                  value:
+                    hoofd_onderwerp: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                    product_type_ids:
+                    - 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    gepubliceerd: true
+                    naam: Parkeren
+                    beschrijving: Parkeren in gemeente ABC
+                  summary: Create onderwerp
+                  description: prijsOptie bedragen kunnen worden ingevuld als een
+                    getal of als string met een . of , voor de decimalen
           description: ''
         '400':
           content:
@@ -1127,7 +1207,9 @@ paths:
           description: ''
     patch:
       operationId: onderwerpen_partial_update
-      description: Werk een ONDERWERP deels bij.
+      description: |-
+        Werk een ONDERWERP deels bij.
+        Als product_type_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.
       summary: Werk een ONDERWERP deels bij.
       parameters:
       - in: path
@@ -1287,6 +1369,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Organisatie'
+            examples:
+              CreateOrganisatie:
+                value:
+                  naam: Maykin Media
+                  email: info@maykinmedia.nl
+                  telefoonnummer: +31 0 20 753 05 23
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043GR
+                  stad: Amsterdam
+                summary: Create organisatie
         required: true
       security:
       - tokenAuth: []
@@ -1296,6 +1389,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+              examples:
+                CreateOrganisatie:
+                  value:
+                    naam: Maykin Media
+                    email: info@maykinmedia.nl
+                    telefoonnummer: +31 0 20 753 05 23
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043GR
+                    stad: Amsterdam
+                  summary: Create organisatie
           description: ''
         '400':
           content:
@@ -1593,6 +1697,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Prijs'
+            examples:
+              CreatePrijs:
+                value:
+                  prijsopties:
+                  - bedrag: 50,99
+                    beschrijving: normaal
+                  - bedrag: 70,99
+                    beschrijving: spoed
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: 01-12-2024
+                summary: Create prijs
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
         required: true
       security:
       - tokenAuth: []
@@ -1602,6 +1719,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+              examples:
+                CreatePrijs:
+                  value:
+                    prijsopties:
+                    - bedrag: 50,99
+                      beschrijving: normaal
+                    - bedrag: 70,99
+                      beschrijving: spoed
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    actief_vanaf: 01-12-2024
+                  summary: Create prijs
+                  description: prijsOptie bedragen kunnen worden ingevuld als een
+                    getal of als string met een . of , voor de decimalen
           description: ''
         '400':
           content:
@@ -1733,7 +1863,9 @@ paths:
           description: ''
     patch:
       operationId: prijzen_partial_update
-      description: Werk een PRIJS deels bij.
+      description: |-
+        Werk een PRIJS deels bij.
+        Als prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.
       summary: Werk een PRIJS deels bij.
       parameters:
       - in: path
@@ -1897,6 +2029,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductType'
+            examples:
+              CreateProductType:
+                value:
+                  uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
+                  onderwerp_ids:
+                  - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  locatie_ids:
+                  - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
+                  organisatie_ids:
+                  - 2c2694f1-f948-4960-8312-d51c3a0e540f
+                  contact_ids:
+                  - 6863d699-460d-4c1e-9297-16812d75d8ca
+                  gepubliceerd: false
+                  naam: Aanleunwoning
+                  samenvatting: korte samenvatting...
+                  beschrijving: uitgebreide beschrijving...
+                  keywords:
+                  - wonen
+                summary: Create product type
         required: true
       security:
       - tokenAuth: []
@@ -1906,6 +2057,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+              examples:
+                CreateProductType:
+                  value:
+                    uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
+                    onderwerp_ids:
+                    - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    locatie_ids:
+                    - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
+                    organisatie_ids:
+                    - 2c2694f1-f948-4960-8312-d51c3a0e540f
+                    contact_ids:
+                    - 6863d699-460d-4c1e-9297-16812d75d8ca
+                    gepubliceerd: false
+                    naam: Aanleunwoning
+                    samenvatting: korte samenvatting...
+                    beschrijving: uitgebreide beschrijving...
+                    keywords:
+                    - wonen
+                  summary: Create product type
           description: ''
         '400':
           content:
@@ -2037,7 +2207,9 @@ paths:
           description: ''
     patch:
       operationId: producttypen_partial_update
-      description: Werk een LINK deels bij
+      description: |-
+        Werk een PRODUCTTYPE deels bij
+        Als onderwerp_ids, locatie_ids, organisatie_ids of contact_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.
       summary: Werk een PRODUCTTYPE deels bij.
       parameters:
       - in: path
@@ -2090,7 +2262,7 @@ paths:
           description: ''
     delete:
       operationId: producttypen_destroy
-      description: Verwijder een LINK.
+      description: Verwijder een PRODUCTTYPE.
       summary: Verwijder een PRODUCTTYPE.
       parameters:
       - in: path
@@ -2134,7 +2306,9 @@ paths:
           description: ''
   /producttypen/actuele-prijzen/:
     get:
-      operationId: producttypen_actuele_prijzen_retrieve
+      operationId: actuele_prijzen
+      description: Geeft de huidige prijzen van alle PRODUCTTYPEN terug.
+      summary: Alle ACTUELE PRIJZEN opvragen.
       tags:
       - producttypen
       security:
@@ -2248,6 +2422,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Vraag'
+            examples:
+              CreateVraag:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  vraag: Kom ik in aanmerking voor dit product?
+                  antwoord: Ja
+                summary: Create vraag
         required: true
       security:
       - tokenAuth: []
@@ -2257,6 +2438,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Vraag'
+              examples:
+                CreateVraag:
+                  value:
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    vraag: Kom ik in aanmerking voor dit product?
+                    antwoord: Ja
+                  summary: Create vraag
           description: ''
         '400':
           content:
@@ -3088,7 +3276,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
-          default: []
         product_type_id:
           type: string
           format: uuid
@@ -3233,7 +3420,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
-          default: []
         product_type_id:
           type: string
           format: uuid
@@ -3244,6 +3430,7 @@ components:
       required:
       - actief_vanaf
       - id
+      - prijsopties
       - product_type_id
     PrijsOptie:
       type: object
