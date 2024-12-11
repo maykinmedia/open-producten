@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from django.forms.models import model_to_dict
+from django.utils.translation import gettext_lazy as _
 
 from .models import BaseModel
 
@@ -11,7 +12,11 @@ def build_array_duplicates_error_message(objects: list, field: str, errors):
     for idx, obj in enumerate(objects):
         if obj in object_set:
             errors_messages.append(
-                f"Duplicate {type(obj).__name__} id: {obj.id} at index {idx}"
+                _(
+                    "Dubbel {} id: {} op index {}.".format(
+                        type(obj).__name__, obj.id, idx
+                    )
+                )
             )
 
         object_set.add(obj)

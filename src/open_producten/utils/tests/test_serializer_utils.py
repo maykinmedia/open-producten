@@ -23,7 +23,7 @@ class TestBuildArrayError(TestCase):
 
         build_array_duplicates_error_message(object_list, "test", errors)
 
-        self.assertEqual(errors, {"test": ["Duplicate Dummy id: b at index 2"]})
+        self.assertEqual(errors, {"test": ["Dubbel Dummy id: b op index 2."]})
 
     def test_build_array_error_should_return_multiple_errors_when_list_has_multiple_duplicate_object(
         self,
@@ -37,8 +37,8 @@ class TestBuildArrayError(TestCase):
             errors,
             {
                 "test": [
-                    "Duplicate Dummy id: b at index 2",
-                    "Duplicate Dummy id: b at index 3",
+                    "Dubbel Dummy id: b op index 2.",
+                    "Dubbel Dummy id: b op index 3.",
                 ]
             },
         )
