@@ -7,7 +7,7 @@ from rest_framework import serializers, status
 from open_producten.utils.serializers import DetailErrorSerializer, ErrorSerializer
 
 ERRORS = {
-    status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+    status.HTTP_400_BAD_REQUEST: OpenApiResponse( #TODO: should this be on GET requests?
         response=ErrorSerializer,
         description="Validation error",
         examples=[

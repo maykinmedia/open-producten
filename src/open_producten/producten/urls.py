@@ -9,10 +9,17 @@ from open_producten.producten.views import ProductViewSet
 ProductRouter = DefaultRouter()
 ProductRouter.register("producten", ProductViewSet, basename="product")
 
+description = """
+Een Api voor Producten.
+
+Een product is de instantie van een Product type (zie producttypen api), hierin worden de specifieke gegevens van de instantie opgeslagen zoals bijvoorbeeld de gegevens van de eigenaar.
+
+"""
+
 custom_settings = {
     "TITLE": "Producten API",
     "VERSION": settings.PRODUCTEN_API_VERSION,
-    # "DESCRIPTION": description,
+    "DESCRIPTION": description,
     "SERVERS": [{"url": f"/producten/api/v{settings.PRODUCTEN_API_MAJOR_VERSION}"}],
     "TAGS": [{"name": "producten"}],
 }
