@@ -83,9 +83,13 @@ class Command(BaseCommand):
     def _parse_csv_url(self, url: str):
         _check_if_csv_extension(url)
 
-        response = requests.get(url)
-        if response.status_code != 200:
-            raise CommandError(f"Url returned status code: {response.status_code}.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.ConnectionError:
+            raise CommandError(f"Could not connect to {url}")
+        except requests.exceptions.RequestException as e:
+            raise CommandError(e)
 
         content = StringIO(response.text)
         data = csv.DictReader(content)

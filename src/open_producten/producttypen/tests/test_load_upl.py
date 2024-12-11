@@ -5,6 +5,7 @@ from django.core.management import CommandError, call_command
 from django.test import TestCase
 
 import requests_mock
+from requests.exceptions import ConnectionError
 
 from open_producten.producttypen.models import UniformeProductNaam
 from open_producten.producttypen.tests.factories import UniformeProductNaamFactory
@@ -33,19 +34,19 @@ class TestLoadUPLCommand(TestCase):
 
     def test_call_command_without_file_and_url(self):
         with self.assertRaisesMessage(
-            Exception, "Either --file or --url must be specified."
+            CommandError, "Either --file or --url must be specified."
         ):
             self.call_command()
 
     def test_call_command_wit_file_and_url(self):
         with self.assertRaisesMessage(
-            Exception, "Only one of --file or --url can be specified."
+            CommandError, "Only one of --file or --url can be specified."
         ):
             self.call_command("--file", self.path, "--url", "https://example.com")
 
     def test_with_other_file_extension(self):
         path = os.path.join(TESTS_DIR, "data/upl.txt")
-        with self.assertRaisesMessage(Exception, "File format is not csv."):
+        with self.assertRaisesMessage(CommandError, "File format is not csv."):
             self.call_command("--file", path)
 
     def test_with_csv_file(self):
@@ -70,7 +71,17 @@ class TestLoadUPLCommand(TestCase):
             url="https://test/upl.csv",
         )
 
-        with self.assertRaisesMessage(Exception, "Url returned status code: 404"):
+        with self.assertRaisesMessage(
+            CommandError, "404 Client Error: None for url: https://test/upl.csv"
+        ):
+            self.call_command("--url", "https://test/upl.csv")
+
+    def test_wih_csv_url_connection_error(self):
+        self.requests_mock.get(exc=ConnectionError, url="https://test/upl.csv")
+
+        with self.assertRaisesMessage(
+            CommandError, "Could not connect to https://test/upl.csv"
+        ):
             self.call_command("--url", "https://test/upl.csv")
 
     def test_parse_csv_url(self):
