@@ -91,6 +91,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "open_producten.utils.pagination.Pagination",
     "PAGE_SIZE": 100,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "NON_FIELD_ERRORS_KEY": "model_errors",
 }
 
 PRODUCTEN_API_VERSION = "0.0.1"

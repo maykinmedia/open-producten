@@ -13,11 +13,17 @@ class TestVraag(TestCase):
     def test_error_when_linked_to_product_type_and_thema(self):
         vraag = VraagFactory.build(product_type=self.productType, thema=self.thema)
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
+        ):
             vraag.clean()
 
     def test_error_when_not_linked_to_product_type_or_thema(self):
         vraag = VraagFactory.build()
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Een vraag moet gelinkt zijn aan een onderwerp of een product type.",
+        ):
             vraag.clean()

@@ -53,7 +53,9 @@ class TestProduct(TestCase):
     def test_bsn_or_kvk_required(self):
         product = ProductFactory.build(product_type=self.product_type)
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesMessage(
+            ValidationError, "Een product moet een bsn, kvk nummer of beiden hebben."
+        ):
             product.clean()
 
         ProductFactory.build(

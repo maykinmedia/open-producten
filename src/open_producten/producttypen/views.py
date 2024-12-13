@@ -82,9 +82,7 @@ class ProductTypeViewSet(OrderedModelViewSet):
     @extend_schema(
         "actuele_prijzen",
         summary="Alle ACTUELE PRIJZEN opvragen.",
-        description=(
-            "Geeft de huidige prijzen van alle PRODUCTTYPEN terug."
-        ),
+        description=("Geeft de huidige prijzen van alle PRODUCTTYPEN terug."),
     )
     @action(
         detail=False,
