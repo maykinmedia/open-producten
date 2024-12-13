@@ -50,7 +50,7 @@ class Product(BasePublishableModel):
     def clean(self):
         if not self.bsn and not self.kvk:
             raise ValidationError(
-                "Een product moet een bsn, kvk nummer of beiden hebben."
+                _("Een product moet een bsn, kvk nummer of beiden hebben.")
             )
 
     def __str__(self):

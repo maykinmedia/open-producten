@@ -72,7 +72,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
         try:
             onderwerp.clean()
         except ValidationError as err:
-            raise serializers.ValidationError({"hoofd_onderwerp": err.message})
+            raise serializers.ValidationError({"hoofd_onderwerp": [err.message]})
 
     @transaction.atomic()
     def create(self, validated_data):

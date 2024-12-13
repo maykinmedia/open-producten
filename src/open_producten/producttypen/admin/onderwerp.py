@@ -36,7 +36,7 @@ class OnderwerpAdminFormSet(BaseModelFormSet):
                 if not gepubliceerd and any([data[child] for child in children]):
                     raise forms.ValidationError(
                         _(
-                            "Hoofd onderwerpen moeten gepubliceerd zijn met gepubliceerde sub onderwerpen."
+                            "Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is."
                         )
                     )
 

@@ -75,6 +75,7 @@ class TestProduct(BaseApiTestCase):
             bsn="111222333",
             start_datum=datetime.date(2024, 1, 2),
             eind_datum=datetime.date(2024, 12, 31),
+            product_type=self.product_type,
         )
 
     def test_create_product(self):
@@ -93,7 +94,7 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "bsn_or_kvk": [
+                "model_errors": [
                     ErrorDetail(
                         string="Een product moet een bsn, kvk nummer of beiden hebben.",
                         code="invalid",
@@ -128,7 +129,7 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "bsn_or_kvk": [
+                "model_errors": [
                     ErrorDetail(
                         string="Een product moet een bsn, kvk nummer of beiden hebben.",
                         code="invalid",

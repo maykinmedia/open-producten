@@ -96,6 +96,7 @@ REST_FRAMEWORK = {
     "DATE_INPUT_FORMATS": ["%d-%m-%Y"],
     "DATETIME_FORMAT": "%d-%m-%YT%H:%M:%S%z",
     "DATETIME_INPUT_FORMATS": ["%d-%m-%YT%H:%M:%S%z"],
+    "NON_FIELD_ERRORS_KEY": "model_errors",
 }
 
 PRODUCTEN_API_VERSION = "0.0.1"

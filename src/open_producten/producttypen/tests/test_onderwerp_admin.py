@@ -90,5 +90,8 @@ class TestOnderwerpAdminFormSet(TestCase):
 
         object_formset = self.formset(data)
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is.",
+        ):
             object_formset.clean()

@@ -60,7 +60,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
                         code="invalid",
@@ -76,7 +76,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
                         string="Een vraag moet gelinkt zijn aan een onderwerp of een product type.",
                         code="invalid",
@@ -105,7 +105,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
                         code="invalid",
@@ -130,7 +130,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
                         code="invalid",

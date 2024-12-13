@@ -63,20 +63,26 @@ class BaseLocatie(BaseModel):
             coordinaten = geocode_address(self.address)
         except GeopyError as exc:
             raise ValidationError(
-                _(
-                    "Het vinden van de coördinaten van de adresgegevens is mislukt: %(exc)s"
-                )
-                % {"exc": exc}
+                {
+                    "coordinaten": _(
+                        "Het vinden van de coördinaten van de adresgegevens is mislukt: %(exc)s"
+                    )
+                    % {"exc": exc}
+                }
             )
         except IndexError:
-            raise ValidationError(_("Er zijn geen adresgegevens gegeven."))
+            raise ValidationError(
+                {"coordinaten": _("Er zijn geen adresgegevens gegeven.")}
+            )
 
         if not coordinaten:
             raise ValidationError(
-                _(
-                    "Coördinaten van het adres kunnen niet worden gevonden. "
-                    "Zorg ervoor dat de adresgegevens correct zijn"
-                )
+                {
+                    "coordinaten": _(
+                        "Coördinaten van het adres kunnen niet worden gevonden. "
+                        "Zorg ervoor dat de adresgegevens correct zijn"
+                    )
+                }
             )
         self.coordinaten = coordinaten
 

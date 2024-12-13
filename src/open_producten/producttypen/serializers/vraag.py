@@ -1,5 +1,3 @@
-from django.core.exceptions import ValidationError
-
 from rest_framework import serializers
 
 from open_producten.producttypen.models import Onderwerp, ProductType, Vraag
@@ -26,10 +24,6 @@ class VraagSerializer(serializers.ModelSerializer):
             all_attrs = attrs
 
         instance = Vraag(**all_attrs)
-
-        try:
-            instance.clean()
-        except ValidationError as e:
-            raise serializers.ValidationError({"product_type_onderwerp": e.message})
+        instance.clean()
 
         return attrs

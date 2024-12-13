@@ -1,5 +1,3 @@
-from django.core.validators import ValidationError
-
 from rest_framework import serializers
 
 from open_producten.producten.models import Product
@@ -24,15 +22,14 @@ class BaseProductSerializer(serializers.ModelSerializer):
 
         if self.partial:
             all_attrs = model_to_dict_with_related_ids(self.instance) | attrs
+        elif self.instance:
+            # product_type is excluded in ProductUpdateSerializer.
+            all_attrs = attrs | {"product_type": self.instance.product_type}
         else:
             all_attrs = attrs
 
         instance = Product(**all_attrs)
-
-        try:
-            instance.clean()
-        except ValidationError as e:
-            raise serializers.ValidationError({"bsn_or_kvk": e.message})
+        instance.clean()
 
         return attrs
 
