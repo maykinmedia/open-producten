@@ -19,7 +19,7 @@ class TestProduct(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
-        self.product_type = ProductTypeFactory.create()
+        self.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
         self.data = {
             "product_type_id": self.product_type.id,
             "bsn": "111222333",
@@ -99,6 +99,29 @@ class TestProduct(BaseApiTestCase):
         )
         self.assertEqual(Product.objects.count(), 0)
 
+    def test_create_product_with_not_allowed_state(self):
+        response = self.post(self.data | {"status": "actief"})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "status": [
+                    ErrorDetail(
+                        string=f"Status 'Actief' is niet toegestaan voor het product type {self.product_type.naam}.",
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_create_product_with_allowed_state(self):
+        response = self.post(self.data | {"status": "gereed"})
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Product.objects.count(), 1)
+        product = Product.objects.first()
+        self.assertEqual(response.data, product_to_dict(product))
+
     def test_update_product(self):
         product = ProductFactory.create(bsn="111222333")
 
@@ -124,6 +147,24 @@ class TestProduct(BaseApiTestCase):
                         string=_(
                             "Een product moet een bsn, kvk nummer of beiden hebben."
                         ),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_update_product_with_not_allowed_state(self):
+        product = self._create_product()
+        data = self.data.copy() | {"status": "actief"}
+        response = self.put(product.id, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "status": [
+                    ErrorDetail(
+                        string=f"Status 'Actief' is niet toegestaan voor het product type {self.product_type.naam}.",
                         code="invalid",
                     )
                 ]

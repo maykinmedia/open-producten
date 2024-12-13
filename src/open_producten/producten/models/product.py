@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from open_producten.producttypen.models import ProductType
 from open_producten.utils.models import BasePublishableModel
 
+from ...producttypen.models.producttype import ProductStateChoices
 from .validators import validate_bsn
 
 
@@ -40,6 +41,10 @@ class Product(BasePublishableModel):
         blank=True,
     )
 
+    status = models.CharField(
+        _("status"), help_text=_("Status van dit product."), null=True, blank=True
+    )
+
     kvk = models.CharField(
         _("KVK nummer"),
         help_text=_("Het kvk nummer van de product eigenaar"),
@@ -53,9 +58,37 @@ class Product(BasePublishableModel):
         verbose_name = _("Product")
         verbose_name_plural = _("Producten")
 
+    @property
+    def status_choices(self):
+        """
+        Returns all ProductStateChoices that are enabled on the product type.
+        """
+        if not hasattr(self, "product_type"):
+            return []
+        return [
+            choice
+            for choice in ProductStateChoices.choices
+            if choice[0] in self.product_type.toegestane_statussen
+        ]
+
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
         validate_dates(self.start_datum, self.eind_datum)
+
+        if (
+            self.status is not None
+            and self.status not in self.product_type.toegestane_statussen
+        ):
+            raise ValidationError(
+                {
+                    "status": _(
+                        "Status '{}' is niet toegestaan voor het product type {}.".format(
+                            ProductStateChoices(self.status).label,
+                            self.product_type.naam,
+                        )
+                    )
+                }
+            )
 
     def __str__(self):
         return f"{self.bsn if self.bsn else self.kvk} {self.product_type.naam}"
