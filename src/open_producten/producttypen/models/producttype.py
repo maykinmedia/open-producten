@@ -1,12 +1,14 @@
 from datetime import date
 
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from markdownx.models import MarkdownxField
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
+from open_producten.utils.fields import ChoiceArrayField
 from open_producten.utils.models import BasePublishableModel
 
 from .onderwerp import Onderwerp
@@ -22,6 +24,14 @@ class OnderwerpProductType(models.Model):
     product_type = models.ForeignKey("ProductType", on_delete=models.CASCADE)
 
 
+class ProductStateChoices(models.TextChoices):
+    GEREERD = "gereed", _("Gereed")
+    ACTIEF = "actief", _("Actief")
+    INGETROKKEN = "ingetrokken", _("Ingetrokken")
+    GEWEIGERD = "geweigerd", _("Geweigerd")
+    VERLOPEN = "verlopen", _("Verlopen")
+
+
 class ProductType(BasePublishableModel):
     naam = models.CharField(
         verbose_name=_("naam"),
@@ -34,6 +44,10 @@ class ProductType(BasePublishableModel):
         max_length=100,
         help_text=_("code van het product type."),
         unique=True,
+    )
+
+    toegestane_statussen = ChoiceArrayField(
+        models.CharField(choices=ProductStateChoices.choices), default=list, blank=True
     )
 
     samenvatting = models.TextField(
@@ -111,6 +125,21 @@ class ProductType(BasePublishableModel):
                 and not self.organisaties.filter(id=contact.organisatie_id).exists()
             ):
                 self.organisaties.add(contact.organisatie)
+
+        for product in self.producten.all():
+            if (
+                product.status is not None
+                and product.status not in self.toegestane_statussen
+            ):
+                raise ValidationError(
+                    {
+                        "toegestane_statussen": _(
+                            "Een product van {} heeft de status '{}'.".format(
+                                self.naam, ProductStateChoices(product.status).label
+                            )
+                        )
+                    }
+                )
 
     @property
     def actuele_prijs(self):

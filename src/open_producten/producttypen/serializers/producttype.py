@@ -1,5 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -144,7 +145,10 @@ class ProductTypeSerializer(serializers.ModelSerializer):
             organisaties=organisaties,
             contacten=contacten,
         )
-        instance.clean()
+        try:
+            instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
         instance.save()
 
         return instance
