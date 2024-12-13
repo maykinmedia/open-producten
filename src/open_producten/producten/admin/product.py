@@ -1,6 +1,24 @@
+from django import forms
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 from open_producten.producten.models import Product
+
+
+class ProductAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["status"] = forms.TypedChoiceField(
+            label=_("status"),
+            choices=self.instance.status_choices if self.instance else [],
+            widget=forms.Select,
+        )
 
 
 @admin.register(Product)
@@ -10,12 +28,18 @@ class ProductAdmin(admin.ModelAdmin):
         "aanmaak_datum",
         "start_datum",
         "eind_datum",
-        "bsn",
-        "kvk",
+        "status",
     )
-    list_filter = ("product_type__naam", "aanmaak_datum", "start_datum", "eind_datum")
+    list_filter = (
+        "product_type__naam",
+        "aanmaak_datum",
+        "start_datum",
+        "eind_datum",
+        "status",
+    )
     autocomplete_fields = ("product_type",)
     search_fields = ("product_type__naam",)
+    form = ProductAdminForm
 
     @admin.display(description="Product Type")
     def product_type_name(self, obj):
