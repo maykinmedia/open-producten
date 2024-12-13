@@ -19,7 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     @admin.display(description="Product Type")
     def product_type_name(self, obj):
-        return obj.product_type.name
+        return obj.product_type.naam
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product_type")
