@@ -1,10 +1,12 @@
 from datetime import date
 
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from freezegun import freeze_time
 
 from ...locaties.tests.factories import ContactFactory
+from ...producten.tests.factories import ProductFactory
 from .factories import PrijsFactory, ProductTypeFactory
 
 
@@ -45,3 +47,14 @@ class TestProductType(TestCase):
 
         self.assertEqual(product_type.organisaties.count(), 1)
         self.assertEqual(product_type.organisaties.first().id, contact.organisatie.id)
+
+    def test_clean_product_has_not_allowed_status(self):
+        self.product_type.toegestane_statussen = ["gereed"]
+
+        ProductFactory.create(
+            product_type=self.product_type, bsn="111222333", status="gereed"
+        )
+
+        with self.assertRaises(ValidationError):
+            self.product_type.toegestane_statussen = []
+            self.product_type.clean()

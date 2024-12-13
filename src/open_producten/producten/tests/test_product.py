@@ -9,7 +9,7 @@ from .factories import ProductFactory
 class TestProduct(TestCase):
 
     def setUp(self):
-        self.product_type = ProductTypeFactory.create()
+        self.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
 
     def test_bsn_validation_raises_on_invalid_value(self):
         invalid_values = [
@@ -62,3 +62,14 @@ class TestProduct(TestCase):
         ProductFactory.build(
             kvk="11122233", product_type=self.product_type
         ).full_clean()
+
+    def test_status_part_of_product_type(self):
+        product = ProductFactory.build(
+            product_type=self.product_type, status="actief", bsn="111222333"
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            f"Status 'Actief' is niet toegestaan voor het product type {self.product_type.naam}.",
+        ):
+            product.clean()
