@@ -446,7 +446,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                         "actief_vanaf": "2024-01-01",
                         "prijsopties": [
                             {
-                                "bedrag": str(optie.bedrag).replace(".", ","),
+                                "bedrag": str(optie.bedrag),
                                 "beschrijving": optie.beschrijving,
                                 "id": str(optie.id),
                             }
