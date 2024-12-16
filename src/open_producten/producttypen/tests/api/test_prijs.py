@@ -25,7 +25,7 @@ def prijs_to_dict(prijs):
     prijs_dict["prijsopties"] = [
         model_to_dict(optie) for optie in prijs.prijsopties.all()
     ]
-    prijs_dict["actief_vanaf"] = prijs_dict["actief_vanaf"].strftime("%d-%m-%Y")
+    prijs_dict["actief_vanaf"] = str(prijs_dict["actief_vanaf"])
 
     return prijs_dict
 
@@ -36,7 +36,7 @@ class TestProductTypePrijs(BaseApiTestCase):
     def setUp(self):
         self.product_type = ProductTypeFactory()
         self.prijs_data = {
-            "actief_vanaf": datetime.date(2024, 1, 2).strftime("%d-%m-%Y"),
+            "actief_vanaf": datetime.date(2024, 1, 2),
             "product_type_id": self.product_type.id,
         }
 
@@ -87,7 +87,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
     def test_create_prijs_with_prijs_opties(self):
         data = {
-            "actief_vanaf": datetime.date(2024, 1, 2).strftime("%d-%m-%Y"),
+            "actief_vanaf": datetime.date(2024, 1, 2),
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "product_type_id": self.product_type.id,
         }
@@ -108,7 +108,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [],
         }
@@ -134,7 +134,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [
                 {
@@ -157,7 +157,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "prijsopties": [{"bedrag": "20", "beschrijving": "test"}],
             "product_type_id": self.product_type.id,
         }
@@ -175,7 +175,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         optie = PrijsOptieFactory.create(prijs=PrijsFactory.create())
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving}
@@ -203,7 +203,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "product_type_id": self.product_type.id,
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "prijsopties": [
                 {"id": non_existing_id, "bedrag": "20", "beschrijving": "test"}
             ],
@@ -230,7 +230,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         optie = PrijsOptieFactory.create(prijs=prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving},
@@ -257,7 +257,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         prijs = self._create_prijs()
         PrijsOptieFactory.create(prijs=prijs)
 
-        data = {"actief_vanaf": datetime.date(2024, 1, 4).strftime("%d-%m-%Y")}
+        data = {"actief_vanaf": datetime.date(2024, 1, 4)}
 
         response = self.patch(prijs.id, data)
 
@@ -275,7 +275,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf.strftime("%d-%m-%Y"),
+            "actief_vanaf": prijs.actief_vanaf,
             "prijsopties": [
                 {
                     "id": optie_to_be_updated.id,
@@ -297,7 +297,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs)
 
         data = {
-            "actief_vanaf": datetime.date(2024, 1, 4).strftime("%d-%m-%Y"),
+            "actief_vanaf": datetime.date(2024, 1, 4),
             "prijsopties": [{"bedrag": "20", "beschrijving": "test"}],
         }
 
@@ -443,7 +443,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     "actuele_prijs": {
                         "id": str(prijs.id),
                         "product_type_id": self.product_type.id,
-                        "actief_vanaf": "01-01-2024",
+                        "actief_vanaf": "2024-01-01",
                         "prijsopties": [
                             {
                                 "bedrag": str(optie.bedrag).replace(".", ","),

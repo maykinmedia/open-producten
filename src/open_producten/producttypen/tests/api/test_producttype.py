@@ -1,5 +1,4 @@
 from unittest.mock import Mock, patch
-from zoneinfo import ZoneInfo
 
 from django.contrib.gis.geos import Point
 from django.forms import model_to_dict
@@ -43,20 +42,20 @@ def product_type_to_dict(product_type):
         onderwerp_dict = model_to_dict_with_id(
             onderwerp, exclude=("path", "depth", "numchild")
         )
-        onderwerp_dict["aanmaak_datum"] = onderwerp.aanmaak_datum.astimezone(
-            ZoneInfo("Europe/Amsterdam")
-        ).strftime("%d-%m-%YT%H:%M:%S%z")
-        onderwerp_dict["update_datum"] = onderwerp.update_datum.astimezone(
-            ZoneInfo("Europe/Amsterdam")
-        ).strftime("%d-%m-%YT%H:%M:%S%z")
+        onderwerp_dict["aanmaak_datum"] = str(
+            onderwerp.aanmaak_datum.astimezone().isoformat()
+        )
+        onderwerp_dict["update_datum"] = str(
+            onderwerp.update_datum.astimezone().isoformat()
+        )
         product_type_dict["onderwerpen"].append(onderwerp_dict)
 
-    product_type_dict["aanmaak_datum"] = product_type.aanmaak_datum.astimezone(
-        ZoneInfo("Europe/Amsterdam")
-    ).strftime("%d-%m-%YT%H:%M:%S%z")
-    product_type_dict["update_datum"] = product_type.update_datum.astimezone(
-        ZoneInfo("Europe/Amsterdam")
-    ).strftime("%d-%m-%YT%H:%M:%S%z")
+    product_type_dict["aanmaak_datum"] = str(
+        product_type.aanmaak_datum.astimezone().isoformat()
+    )
+    product_type_dict["update_datum"] = str(
+        product_type.update_datum.astimezone().isoformat()
+    )
     product_type_dict["uniforme_product_naam"] = product_type.uniforme_product_naam.uri
     return product_type_dict
 

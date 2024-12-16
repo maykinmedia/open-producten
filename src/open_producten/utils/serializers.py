@@ -3,13 +3,7 @@ from uuid import UUID
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 
-from drf_spectacular.plumbing import build_basic_type
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (
-    OpenApiExample,
-    extend_schema_field,
-    extend_schema_serializer,
-)
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from .models import BaseModel
@@ -66,16 +60,3 @@ class DetailErrorSerializer(serializers.Serializer):
 )
 class ErrorSerializer(serializers.Serializer):
     veld = serializers.CharField()
-
-
-# sets date example value to dd-mm-yyyy
-@extend_schema_field(dict(example="01-12-2024", **build_basic_type(OpenApiTypes.DATE)))
-class CustomDateField(serializers.DateField):
-    pass
-
-
-@extend_schema_field(
-    dict(example="01-12-2024T20:30:30+0200", **build_basic_type(OpenApiTypes.DATE))
-)
-class CustomDateTimeField(serializers.DateTimeField):
-    pass
