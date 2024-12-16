@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
@@ -11,13 +9,6 @@ from .validators import PrijsOptieValidator
 
 class PrijsOptieSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
-    bedrag = serializers.DecimalField(
-        max_digits=8,
-        decimal_places=2,
-        localize=True,
-        help_text=_("Het bedrag van de prijs optie."),
-        min_value=Decimal("0.01"),
-    )
 
     class Meta:
         model = PrijsOptie
