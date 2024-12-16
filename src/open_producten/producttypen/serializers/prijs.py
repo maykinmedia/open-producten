@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
-from ...utils.serializers import CustomDateField
 from ..models import Prijs, PrijsOptie, ProductType
 from .validators import PrijsOptieValidator
 
@@ -30,7 +29,6 @@ class PrijsSerializer(serializers.ModelSerializer):
     product_type_id = serializers.PrimaryKeyRelatedField(
         source="product_type", queryset=ProductType.objects.all()
     )
-    actief_vanaf = CustomDateField()
 
     class Meta:
         model = Prijs

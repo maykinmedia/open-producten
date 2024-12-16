@@ -11,6 +11,7 @@ from drf_spectacular.utils import (
     extend_schema_field,
     extend_schema_serializer,
 )
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from .models import BaseModel
@@ -48,3 +49,23 @@ def model_to_dict_with_related_ids(model: BaseModel) -> dict:
             model_dict[f"{k}_id"] = model_dict.pop(k)
 
     return model_dict
+
+
+class DetailErrorSerializer(serializers.Serializer):
+    detail = serializers.CharField()
+
+
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Bad request example",
+            description="Errors worden per veld teruggegeven.",
+            value={
+                "prijsopties": ["Er is minimaal één optie vereist."],
+                "product_type_id": ["‘<uuid>’ is geen geldige UUID."],
+            },
+        ),
+    ]
+)
+class ErrorSerializer(serializers.Serializer):
+    veld = serializers.CharField()

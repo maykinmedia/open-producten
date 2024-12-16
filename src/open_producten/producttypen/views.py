@@ -171,7 +171,7 @@ class LinkViewSet(OrderedModelViewSet):
                         {"bedrag": "70,99", "beschrijving": "spoed"},
                     ],
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
-                    "actief_vanaf": "01-12-2024",
+                    "actief_vanaf": "2024-12-01",
                 },
             )
         ],
