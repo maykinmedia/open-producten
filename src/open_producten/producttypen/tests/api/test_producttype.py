@@ -109,7 +109,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         }
         self.assertEqual(response.data, expected_data)
 
-    def test_create_product_type_without_fields_returns_error(self):
+    def test_create_product_type_without_onderwerp_returns_error(self):
         data = self.data.copy()
         data["thema_ids"] = []
         response = self.client.post(self.path, data)
