@@ -22,8 +22,8 @@ from open_producten.utils.views import OrderedModelViewSet
             OpenApiExample(
                 "Create product",
                 value={
-                    "start_datum": "01-12-2024",
-                    "eind_datum": "01-12-2026",
+                    "start_datum": "2024-12-01",
+                    "eind_datum": "2026-12-01",
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                     "gepubliceerd": False,
                     "bsn": "111222333",
