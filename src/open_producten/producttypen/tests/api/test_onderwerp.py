@@ -118,16 +118,40 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
-                        string="Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
+                        string="Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is.",
                         code="invalid",
                     )
                 ]
             },
         )
 
-    def test_update_change_from_root_to_hoofd_onderwerp(self):
+    def test_update_move_published_onderwerp_to_unpublished_hoofd_onderwerp_returns_error(
+        self,
+    ):
+        hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
+
+        onderwerp = OnderwerpFactory.create(gepubliceerd=True)
+
+        data = self.data | {"hoofd_onderwerp": hoofd_onderwerp.id}
+
+        response = self.put(onderwerp.id, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "model_errors": [
+                    ErrorDetail(
+                        string="Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is.",
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_update_move_from_root_to_child(self):
         new_hoofd_onderwerp = OnderwerpFactory.create()
         onderwerp = OnderwerpFactory.create()
 
@@ -139,7 +163,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(onderwerp.get_parent(), new_hoofd_onderwerp)
 
-    def test_update_change_from_hoofd_onderwerp_to_root(self):
+    def test_update_move_from_child_to_root(self):
         hoofd_onderwerp = OnderwerpFactory.create()
         onderwerp = hoofd_onderwerp.add_child(naam="test-onderwerp")
 
@@ -151,7 +175,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(onderwerp.get_parent(), None)
 
-    def test_update_change_from_hoofd_onderwerp_to_hoofd_onderwerp(self):
+    def test_update_move_to_different_parent(self):
         hoofd_onderwerp = OnderwerpFactory.create()
         onderwerp = hoofd_onderwerp.add_child(naam="test-onderwerp")
 
@@ -201,9 +225,9 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
-                        string="Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
+                        string="Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is.",
                         code="invalid",
                     )
                 ]
@@ -224,7 +248,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
                         string="Hoofd-onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben.",
                         code="invalid",
@@ -310,9 +334,9 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
-                        string="Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
+                        string="Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is.",
                         code="invalid",
                     )
                 ]
@@ -333,7 +357,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": [
+                "model_errors": [
                     ErrorDetail(
                         string="Hoofd-onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben.",
                         code="invalid",

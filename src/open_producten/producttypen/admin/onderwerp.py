@@ -17,9 +17,27 @@ class ProductTypeInline(admin.TabularInline):
 
 
 class OnderwerpAdminForm(movenodeform_factory(Onderwerp)):
-    class Meta:
-        model = Onderwerp
-        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean(*args, **kwargs)
+
+        gepubliceerd = cleaned_data["gepubliceerd"]
+        ref_node = cleaned_data["_ref_node_id"]
+        position = cleaned_data["_position"]
+
+        if not ref_node:
+            hoofd_onderwerp = None
+        elif position == "sorted-child":
+            hoofd_onderwerp = Onderwerp.objects.get(id=ref_node)
+        else:  # sorted-sibling
+            hoofd_onderwerp = Onderwerp.objects.get(id=ref_node).hoofd_onderwerp
+
+        self.instance.clean_gepubliceerd_and_hoofd_onderwerp(
+            gepubliceerd, hoofd_onderwerp
+        )
 
 
 class OnderwerpAdminFormSet(BaseModelFormSet):
@@ -54,21 +72,6 @@ class OnderwerpAdmin(TreeAdmin):
         "gepubliceerd",
     )
     list_editable = ("gepubliceerd",)
-    exclude = ("path", "depth", "numchild")
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "naam",
-                    "beschrijving",
-                    "gepubliceerd",
-                    "_position",
-                    "_ref_node_id",
-                ),
-            },
-        ),
-    )
 
     list_filter = [
         "gepubliceerd",

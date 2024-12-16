@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -11,7 +13,16 @@ from open_producten.utils.models import BasePublishableModel
 
 class PublishedMoveHandler(MP_MoveHandler):
     def process(self):
-        if self.node.gepubliceerd and not self.target.gepubliceerd:
+        if self.pos == "sorted-child":
+            hoofd_onderwerp = self.target
+        else:  # sorted-sibling
+            hoofd_onderwerp = self.target.hoofd_onderwerp
+
+        if (
+            self.node.gepubliceerd
+            and hoofd_onderwerp
+            and not hoofd_onderwerp.gepubliceerd
+        ):
             raise InvalidMoveToDescendant(
                 _(
                     "Gepubliceerde onderwerpen kunnen kunnen geen ongepubliceerd hoofd-onderwerp hebben."
@@ -21,6 +32,8 @@ class PublishedMoveHandler(MP_MoveHandler):
 
 
 class Onderwerp(MP_Node, BasePublishableModel):
+    node_order_by = ["naam"]
+
     naam = models.CharField(
         verbose_name=_("naam"), max_length=100, help_text=_("Naam van het onderwerp.")
     )
@@ -47,19 +60,17 @@ class Onderwerp(MP_Node, BasePublishableModel):
     def move(self, target, pos=None):
         return PublishedMoveHandler(self, target, pos).process()
 
-    def clean(self):
-        if self.gepubliceerd and self.hoofd_onderwerp:
-            if not self.hoofd_onderwerp.gepubliceerd:
-                raise ValidationError(
-                    _(
-                        "Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
-                    )
+    def clean_gepubliceerd_and_hoofd_onderwerp(
+        self, gepubliceerd: bool, hoofd_onderwerp: Optional["Onderwerp"]
+    ):
+        """This cannot be called inside the normal clean method as the parent/hoofd_onderwerp will not be set yet."""
+        if gepubliceerd and hoofd_onderwerp and not hoofd_onderwerp.gepubliceerd:
+            raise ValidationError(
+                _(
+                    "Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is."
                 )
-
-        if (
-            not self.gepubliceerd
-            and self.get_children().filter(gepubliceerd=True).exists()
-        ):
+            )
+        if not gepubliceerd and self.get_children().filter(gepubliceerd=True).exists():
             raise ValidationError(
                 _(
                     "Hoofd-onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben."

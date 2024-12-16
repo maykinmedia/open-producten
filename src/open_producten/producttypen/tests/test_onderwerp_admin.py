@@ -21,22 +21,22 @@ class TestOnderwerpAdminForm(TestCase):
     def setUp(self):
         self.data = {
             "naam": "test",
-            "_position": "first-child",
-            "path": "00010001",
-            "numchild": 1,
-            "depth": 1,
         }
 
     def test_hoofd_onderwerpen_must_be_published_when_publishing_sub_onderwerp(self):
         hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
-        data = self.data | {"gepubliceerd": True, "_ref_node_id": hoofd_onderwerp.id}
+        data = self.data | {
+            "gepubliceerd": True,
+            "_ref_node_id": hoofd_onderwerp.id,
+            "_position": "sorted-child",
+        }
 
         form = create_form(data)
 
         self.assertEquals(
             form.non_field_errors(),
             [
-                "Hoofd-onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
+                "Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is."
             ],
         )
 
@@ -46,10 +46,38 @@ class TestOnderwerpAdminForm(TestCase):
         form = create_form(data)
         self.assertEquals(form.errors, {})
 
-    def test_hoofd_onderwerpen_cannot_be_published_with_published_sub_onderwerpen(self):
+    def test_hoofd_onderwerpen_must_be_published_when_publishing_sub_onderwerp_sorted_sibling(
+        self,
+    ):
+        root_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
+        hoofd_onderwerp = root_onderwerp.add_child(
+            **{"naam": "hoofd onderwerp", "gepubliceerd": False}
+        )
+        data = self.data | {
+            "gepubliceerd": True,
+            "_ref_node_id": hoofd_onderwerp.id,
+            "_position": "sorted-sibling",
+        }
+
+        form = create_form(data)
+
+        self.assertEquals(
+            form.non_field_errors(),
+            [
+                "Sub-onderwerpen kunnen niet zijn gepubliceerd als het hoofd-onderwerp dat niet is."
+            ],
+        )
+
+    def test_hoofd_onderwerpen_cannot_be_unpublished_with_published_sub_onderwerpen(
+        self,
+    ):
         hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
         hoofd_onderwerp.add_child(**{"naam": "sub onderwerp", "gepubliceerd": True})
-        data = {"gepubliceerd": False, "_ref_node_id": None}
+        data = {
+            "gepubliceerd": False,
+            "_ref_node_id": None,
+            "_position": "sorted-child",
+        }
 
         form = create_form(data, hoofd_onderwerp)
 

@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from rest_framework import serializers
@@ -68,12 +67,6 @@ class OnderwerpSerializer(serializers.ModelSerializer):
         if errors:
             raise serializers.ValidationError(errors)
 
-    def _validate_onderwerp(self, onderwerp):
-        try:
-            onderwerp.clean()
-        except ValidationError as err:
-            raise serializers.ValidationError({"hoofd_onderwerp": [err.message]})
-
     @transaction.atomic()
     def create(self, validated_data):
         product_typen = validated_data.pop("product_typen")
@@ -84,7 +77,6 @@ class OnderwerpSerializer(serializers.ModelSerializer):
         else:
             onderwerp = Onderwerp.add_root(**validated_data)
 
-        self._validate_onderwerp(onderwerp)
         self._handle_relations(onderwerp, product_typen)
         onderwerp.save()
 
@@ -101,15 +93,31 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             instance_hoofd_onderwerp = instance.get_parent()
             if hoofd_onderwerp is None and instance_hoofd_onderwerp is not None:
                 last_root = Onderwerp.get_last_root_node()
-                instance.move(last_root, "last-sibling")
+                instance.move(last_root, "sorted-sibling")
 
             elif hoofd_onderwerp != instance_hoofd_onderwerp:
-                instance.move(hoofd_onderwerp, "last-child")
+                instance.move(hoofd_onderwerp, "sorted-child")
 
             instance.refresh_from_db()
 
         instance = super().update(instance, validated_data)
-        self._validate_onderwerp(instance)
         self._handle_relations(instance, product_typen)
         instance.save()
         return instance
+
+    def validate(self, attrs):
+        if self.instance:
+            gepubliceerd = attrs.get("gepubliceerd", self.instance.gepubliceerd)
+            hoofd_onderwerp = attrs.get(
+                "hoofd_onderwerp", self.instance.hoofd_onderwerp
+            )
+            self.instance.clean_gepubliceerd_and_hoofd_onderwerp(
+                gepubliceerd, hoofd_onderwerp
+            )
+        else:
+            instance = Onderwerp()
+            instance.clean_gepubliceerd_and_hoofd_onderwerp(
+                attrs.get("gepubliceerd", False), attrs.get("hoofd_onderwerp")
+            )
+
+        return attrs
