@@ -89,7 +89,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         product_type = ProductType.objects.first()
         self.assertEqual(response.data, product_type_to_dict(product_type))
 
-    def test_create_product_type_without_fields_returns_error(self):
+    def test_create_product_type_without_onderwerp_returns_error(self):
         data = self.data.copy()
         data["onderwerp_ids"] = []
         response = self.post(data)
