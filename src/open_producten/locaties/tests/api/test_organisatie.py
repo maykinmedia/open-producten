@@ -2,6 +2,7 @@ from unittest.mock import Mock, patch
 
 from django.contrib.gis.geos import Point
 
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
 from open_producten.locaties.models import Organisatie
@@ -31,6 +32,7 @@ class TestOrganisatie(BaseApiTestCase):
     def setUp(self):
         self.data = {
             "naam": "locatie",
+            "code": "ORG-123",
             "postcode": "1111 AA",
             "stad": "Amsterdam",
         }
@@ -49,6 +51,19 @@ class TestOrganisatie(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Organisatie.objects.count(), 2)
+
+    def test_create_organisatie_without_code_returns_error(self):
+        data = self.data.copy()
+        data.pop("code")
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+            },
+        )
 
     def test_update_organisatie(self):
         data = self.data | {"naam": "update"}

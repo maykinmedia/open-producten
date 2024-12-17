@@ -94,7 +94,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_create_product_type_without_onderwerp_returns_error(self):
         data = self.data.copy()
         data["onderwerp_ids"] = []
-        data.pop("code")
         response = self.post(data)
 
         self.assertEqual(response.status_code, 400)
@@ -105,7 +104,19 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     ErrorDetail(
                         string="Er is minimaal één onderwerp vereist.", code="invalid"
                     )
-                ],
+                ]
+            },
+        )
+
+    def test_create_product_type_without_code_returns_error(self):
+        data = self.data.copy()
+        data.pop("code")
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
                 "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
             },
         )
