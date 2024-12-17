@@ -1,7 +1,6 @@
 from datetime import date
 
 from django.contrib.postgres.fields import ArrayField
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -16,6 +15,8 @@ from .upn import UniformeProductNaam
 
 
 class ProductStateChoices(models.TextChoices):
+
+    INITIEEL = "initieel", _("Initieel")
     GEREERD = "gereed", _("Gereed")
     ACTIEF = "actief", _("Actief")
     INGETROKKEN = "ingetrokken", _("Ingetrokken")
@@ -38,7 +39,13 @@ class ProductType(BasePublishableModel):
     )
 
     toegestane_statussen = ChoiceArrayField(
-        models.CharField(choices=ProductStateChoices.choices),
+        models.CharField(
+            choices=[
+                choice
+                for choice in ProductStateChoices.choices
+                if choice[0] != ProductStateChoices.INITIEEL.value
+            ]
+        ),
         verbose_name=_("toegestane statussen"),
         default=list,
         blank=True,
