@@ -38,7 +38,11 @@ class ProductType(BasePublishableModel):
     )
 
     toegestane_statussen = ChoiceArrayField(
-        models.CharField(choices=ProductStateChoices.choices), default=list, blank=True
+        models.CharField(choices=ProductStateChoices.choices),
+        verbose_name=_("toegestane statussen"),
+        default=list,
+        blank=True,
+        help_text=_("toegestane statussen voor producten van dit type."),
     )
 
     samenvatting = models.TextField(
