@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
+from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
 from maykin_2fa import monkeypatch_admin
@@ -56,8 +57,9 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
-    # redirect root to admin index.
-    path("", RedirectView.as_view(pattern_name="admin:index")),
+    # # redirect root to admin index.
+    # path("", RedirectView.as_view(pattern_name="admin:index")),
+    path("", TemplateView.as_view(template_name="main.html"), name="home"),
     path(
         "producttypen/api/v{}/".format(settings.PRODUCTTYPEN_API_MAJOR_VERSION),
         include(product_type_urlpatterns),
@@ -66,6 +68,17 @@ urlpatterns = [
         "producten/api/v{}/".format(settings.PRODUCTEN_API_MAJOR_VERSION),
         include(product_urlpatterns),
     ),
+    path(
+        "producten/",
+        IndexView.as_view(component="producten"),
+        name="index-producten",
+    ),
+    path(
+        "producttypen/",
+        IndexView.as_view(component="producttypen"),
+        name="index-producttypen",
+    ),
+    # path("view-config/", ViewConfigView.as_view(), name="view-config"),
     path("markdownx/", include("markdownx.urls")),
 ]
 
