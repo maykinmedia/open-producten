@@ -984,6 +984,7 @@ paths:
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -1706,7 +1707,7 @@ paths:
                   - bedrag: 70,99
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                  actief_vanaf: 01-12-2024
+                  actief_vanaf: '2024-12-01'
                 summary: Create prijs
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
@@ -1728,7 +1729,7 @@ paths:
                     - bedrag: 70,99
                       beschrijving: spoed
                     product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    actief_vanaf: 01-12-2024
+                    actief_vanaf: '2024-12-01'
                   summary: Create prijs
                   description: prijsOptie bedragen kunnen worden ingevuld als een
                     getal of als string met een . of , voor de decimalen
@@ -1970,6 +1971,7 @@ paths:
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -2818,16 +2820,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-        aanmaak_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
-        update_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
         hoofd_onderwerp:
           type: string
           format: uuid
@@ -2852,6 +2844,18 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -3189,16 +3193,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-        aanmaak_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
-        update_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
         hoofd_onderwerp:
           type: string
           format: uuid
@@ -3223,6 +3217,18 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -3280,25 +3286,16 @@ components:
           type: string
           format: uuid
         actief_vanaf:
-          example: 01-12-2024
           type: string
           format: date
+          title: Start datum
+          description: De datum vanaf wanneer de prijs actief is.
     PatchedProductType:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          readOnly: true
-        aanmaak_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
-        update_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
           readOnly: true
         uniforme_product_naam:
           type: string
@@ -3374,6 +3371,18 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.
@@ -3424,9 +3433,10 @@ components:
           type: string
           format: uuid
         actief_vanaf:
-          example: 01-12-2024
           type: string
           format: date
+          title: Start datum
+          description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
       - id
@@ -3456,16 +3466,6 @@ components:
         id:
           type: string
           format: uuid
-          readOnly: true
-        aanmaak_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
-        update_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
           readOnly: true
         uniforme_product_naam:
           type: string
@@ -3541,6 +3541,18 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.
@@ -3611,19 +3623,21 @@ components:
           type: string
           format: uuid
           readOnly: true
-        aanmaak_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
-        update_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -3643,16 +3657,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-        aanmaak_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
-        update_datum:
-          example: 01-12-2024T20:30:30+0200
-          type: string
-          format: date
-          readOnly: true
         uniforme_product_naam:
           type: string
           format: uri
@@ -3660,6 +3664,18 @@ components:
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           description: naam van het product type.

@@ -1,4 +1,3 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 
 from open_producten.producten.models import Product
@@ -49,7 +48,6 @@ from open_producten.utils.views import OrderedModelViewSet
 class ProductViewSet(OrderedModelViewSet):
     queryset = Product.objects.all()
     lookup_url_field = "id"
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd"]
 
     def get_serializer_class(self):

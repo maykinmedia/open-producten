@@ -93,6 +93,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "open_producten.utils.pagination.Pagination",
     # "PAGE_SIZE": 100,
     "NON_FIELD_ERRORS_KEY": "model_errors",
+    "DEFAULT_FILTER_BACKENDS": ["open_producten.utils.filters.FilterBackend"],
 }
 
 PRODUCTEN_API_VERSION = "0.0.1"

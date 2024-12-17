@@ -1,4 +1,3 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -68,13 +67,12 @@ class ProductTypeViewSet(OrderedModelViewSet):
     queryset = ProductType.objects.all()
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd"]
 
     @extend_schema(
         "actuele_prijzen",
         summary="Alle ACTUELE PRIJZEN opvragen.",
-        description=("Geeft de huidige prijzen van alle PRODUCTTYPEN terug."),
+        description="Geeft de huidige prijzen van alle PRODUCTTYPEN terug.",
     )
     @action(
         detail=False,
@@ -127,7 +125,6 @@ class LinkViewSet(OrderedModelViewSet):
     queryset = Link.objects.all()
     serializer_class = LinkSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["product_type_id"]
 
 
@@ -175,7 +172,6 @@ class PrijsViewSet(OrderedModelViewSet):
     queryset = Prijs.objects.all()
     serializer_class = PrijsSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["product_type_id"]
 
 
@@ -218,7 +214,6 @@ class VraagViewSet(OrderedModelViewSet):
     queryset = Vraag.objects.all()
     serializer_class = VraagSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["product_type_id", "onderwerp_id"]
 
 
@@ -265,5 +260,4 @@ class OnderwerpViewSet(OrderedModelViewSet):
     queryset = Onderwerp.objects.all()
     serializer_class = OnderwerpSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd"]
