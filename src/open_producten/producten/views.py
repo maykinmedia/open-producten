@@ -33,7 +33,28 @@ from open_producten.utils.views import OrderedModelViewSet
     update=extend_schema(
         summary="Werk een PRODUCT in zijn geheel bij.",
     ),
-    partial_update=extend_schema(summary="Werk een PRODUCT deels bij."),
+    partial_update=extend_schema(
+        summary="Werk een PRODUCT deels bij.",
+        examples=[
+            OpenApiExample(
+                "Patch product",
+                value={
+                    "gepubliceerd": True,
+                    "start_datum": "2019-08-24",
+                    "eind_datum": "2019-08-24",
+                    "bsn": "string",
+                    "status": "string",
+                    "kvk": "^$",
+                },
+            ),
+            OpenApiExample(
+                "Update product status",
+                value={
+                    "status": "actief",
+                },
+            ),
+        ],
+    ),
     destroy=extend_schema(
         summary="Verwijder een PRODUCT.",
     ),
@@ -43,4 +64,4 @@ class ProductViewSet(OrderedModelViewSet):
     lookup_url_field = "id"
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd"]
+    filterset_fields = ["gepubliceerd", "status"]

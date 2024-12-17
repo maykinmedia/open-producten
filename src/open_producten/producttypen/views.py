@@ -50,6 +50,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "gepubliceerd": False,
                     "naam": "Aanleunwoning",
                     "code": "PT-12345",
+                    "toegestane_statussen": ["gereed", "actief"],
                     "samenvatting": "korte samenvatting...",
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],

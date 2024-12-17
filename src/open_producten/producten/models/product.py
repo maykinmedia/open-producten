@@ -42,7 +42,12 @@ class Product(BasePublishableModel):
     )
 
     status = models.CharField(
-        _("status"), help_text=_("Status van dit product."), null=True, blank=True
+        _("status"),
+        help_text=_(
+            "De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type."
+        ),
+        null=True,
+        blank=True,
     )
 
     kvk = models.CharField(
