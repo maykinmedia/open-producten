@@ -1,10 +1,10 @@
 from django.db.models.deletion import ProtectedError
+from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
@@ -82,7 +82,7 @@ class ProductTypeViewSet(OrderedModelViewSet):
     @extend_schema(
         "actuele_prijzen",
         summary="Alle ACTUELE PRIJZEN opvragen.",
-        description=("Geeft de huidige prijzen van alle PRODUCTTYPEN terug."),
+        description="Geeft de huidige prijzen van alle PRODUCTTYPEN terug.",
     )
     @action(
         detail=False,
