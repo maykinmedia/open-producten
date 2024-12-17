@@ -92,6 +92,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
     "NON_FIELD_ERRORS_KEY": "model_errors",
+    "DEFAULT_FILTER_BACKENDS": ["open_producten.utils.filters.FilterBackend"],
 }
 
 PRODUCTEN_API_VERSION = "0.0.1"
