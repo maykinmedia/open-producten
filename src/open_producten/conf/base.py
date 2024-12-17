@@ -40,7 +40,8 @@ DATABASES = {
 #
 # Custom settings
 #
-PROJECT_NAME = "open_producten"
+SITE_TITLE = "API dashboard"
+PROJECT_NAME = "Open Producten"
 SHOW_ALERT = True
 ENABLE_ADMIN_NAV_SIDEBAR = config("ENABLE_ADMIN_NAV_SIDEBAR", default=False)
 
