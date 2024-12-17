@@ -37,11 +37,11 @@ class Product(BasePublishableModel):
 
     status = models.CharField(
         _("status"),
+        choices=ProductStateChoices.choices,
         help_text=_(
             "De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type."
         ),
-        null=True,
-        blank=True,
+        default=ProductStateChoices.INITIEEL.value,
     )
 
     kvk = models.CharField(
@@ -62,9 +62,12 @@ class Product(BasePublishableModel):
         """
         Returns all ProductStateChoices that are enabled on the product type.
         """
+        choices = [
+            (ProductStateChoices.INITIEEL.value, ProductStateChoices.INITIEEL.label)
+        ]
         if not hasattr(self, "product_type"):
-            return []
-        return [
+            return choices
+        return choices + [
             choice
             for choice in ProductStateChoices.choices
             if choice[0] in self.product_type.toegestane_statussen
@@ -74,7 +77,7 @@ class Product(BasePublishableModel):
         validate_bsn_or_kvk(self.bsn, self.kvk)
 
         if (
-            self.status is not None
+            self.status != ProductStateChoices.INITIEEL.value
             and self.status not in self.product_type.toegestane_statussen
         ):
             raise ValidationError(

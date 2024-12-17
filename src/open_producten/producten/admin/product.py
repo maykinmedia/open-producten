@@ -16,7 +16,7 @@ class ProductAdminForm(forms.ModelForm):
 
         self.fields["status"] = forms.TypedChoiceField(
             label=_("status"),
-            choices=self.instance.status_choices if self.instance else [],
+            choices=self.instance.status_choices,
             widget=forms.Select,
         )
 
