@@ -132,6 +132,19 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
+    def test_create_product_type_without_code_returns_error(self):
+        data = self.data.copy()
+        data.pop("code")
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+            },
+        )
+
     def test_create_product_type_with_location(self):
         locatie = LocatieFactory.create()
 

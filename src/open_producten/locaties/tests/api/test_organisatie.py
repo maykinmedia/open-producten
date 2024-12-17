@@ -18,6 +18,7 @@ class TestOrganisatie(BaseApiTestCase):
 
         self.data = {
             "naam": "locatie",
+            "code": "ORG-123",
             "postcode": "1111 AA",
             "stad": "Amsterdam",
         }
@@ -60,6 +61,19 @@ class TestOrganisatie(BaseApiTestCase):
             "stad": organisatie.stad,
         }
         self.assertEqual(response.data, expected_data)
+
+    def test_create_organisatie_without_code_returns_error(self):
+        data = self.data.copy()
+        data.pop("code")
+        response = self.post(data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+            },
+        )
 
     def test_update_organisatie(self):
         data = self.data | {"naam": "update"}
