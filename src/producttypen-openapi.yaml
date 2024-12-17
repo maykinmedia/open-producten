@@ -2045,6 +2045,10 @@ paths:
                   - 6863d699-460d-4c1e-9297-16812d75d8ca
                   gepubliceerd: false
                   naam: Aanleunwoning
+                  code: PT-12345
+                  toegestane_statussen:
+                  - gereed
+                  - actief
                   samenvatting: korte samenvatting...
                   beschrijving: uitgebreide beschrijving...
                   keywords:
@@ -2073,6 +2077,10 @@ paths:
                     - 6863d699-460d-4c1e-9297-16812d75d8ca
                     gepubliceerd: false
                     naam: Aanleunwoning
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    - actief
                     samenvatting: korte samenvatting...
                     beschrijving: uitgebreide beschrijving...
                     keywords:
@@ -3387,6 +3395,15 @@ components:
           type: string
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3557,6 +3574,15 @@ components:
           type: string
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3574,6 +3600,7 @@ components:
       - aanmaak_datum
       - beschrijving
       - bestanden
+      - code
       - contacten
       - id
       - links
@@ -3680,6 +3707,15 @@ components:
           type: string
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3696,10 +3732,25 @@ components:
       required:
       - aanmaak_datum
       - beschrijving
+      - code
       - id
       - naam
       - uniforme_product_naam
       - update_datum
+    ToegestaneStatussenEnum:
+      enum:
+      - gereed
+      - actief
+      - ingetrokken
+      - geweigerd
+      - verlopen
+      type: string
+      description: |-
+        * `gereed` - Gereed
+        * `actief` - Actief
+        * `ingetrokken` - Ingetrokken
+        * `geweigerd` - Geweigerd
+        * `verlopen` - Verlopen
     Vraag:
       type: object
       properties:
