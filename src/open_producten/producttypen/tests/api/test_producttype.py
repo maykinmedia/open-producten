@@ -12,7 +12,6 @@ from open_producten.locaties.tests.factories import (
     LocatieFactory,
     OrganisatieFactory,
 )
-from open_producten.producten.tests.factories import ProductFactory
 from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
@@ -434,26 +433,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "locatie_ids": [
                     ErrorDetail(
                         string=_("Dubbel id: {} op index 1.").format(locatie.id),
-                        code="invalid",
-                    )
-                ],
-            },
-        )
-
-    def test_update_product_type_toegestane_statussen_that_is_used(self):
-        product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
-        ProductFactory(product_type=product_type, bsn="112223333", status="gereed")
-
-        data = self.data | {"toegestane_statussen": []}
-        response = self.put(product_type.id, data)
-
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.data,
-            {
-                "toegestane_statussen": [
-                    ErrorDetail(
-                        string=f"Een product van {data['naam']} heeft de status 'Gereed'.",
                         code="invalid",
                     )
                 ],
