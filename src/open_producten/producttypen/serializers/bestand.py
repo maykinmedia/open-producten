@@ -11,4 +11,4 @@ class BestandSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bestand
-        exclude = ("product_type",)
+        fields = ("id", "bestand", "product_type_id")

@@ -48,6 +48,7 @@ def product_type_to_dict(product_type):
         onderwerp_dict["update_datum"] = str(
             onderwerp.update_datum.astimezone().isoformat()
         )
+        onderwerp_dict["hoofd_onderwerp"] = onderwerp.hoofd_onderwerp
         product_type_dict["onderwerpen"].append(onderwerp_dict)
 
     product_type_dict["aanmaak_datum"] = str(

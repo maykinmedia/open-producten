@@ -31,7 +31,7 @@ class ProductTypeViewSet(OrderedModelViewSet):
         url_path="actuele-prijzen",
     )
     def actuele_prijzen(self, request):
-        product_typen = ProductType.objects.all()
+        product_typen = self.get_queryset().all()
         serializer = ProductTypeActuelePrijsSerializer(product_typen, many=True)
         return Response(serializer.data)
 

@@ -11,7 +11,7 @@ class PrijsOptieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PrijsOptie
-        exclude = ("prijs",)
+        fields = ("id", "bedrag", "beschrijving")
 
 
 class PrijsSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class PrijsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Prijs
-        exclude = ("product_type",)
+        fields = ("id", "product_type_id", "prijsopties", "actief_vanaf")
 
     def validate_prijsopties(self, opties: list[PrijsOptie]) -> list[PrijsOptie]:
         if len(opties) == 0:
@@ -61,7 +61,7 @@ class PrijsSerializer(serializers.ModelSerializer):
 
                     if optie_id in seen_optie_ids:
                         optie_errors.append(
-                            _("Dubbele optie id {} op index {}.".format(optie_id, idx))
+                            _("Dubbele optie id {} op index {}.").format(optie_id, idx)
                         )
                     seen_optie_ids.add(optie_id)
 
@@ -75,17 +75,13 @@ class PrijsSerializer(serializers.ModelSerializer):
                         PrijsOptie.objects.get(id=optie_id)
                         optie_errors.append(
                             _(
-                                "Prijs optie id {} op index {} is niet onderdeel van het prijs object.".format(
-                                    optie_id, idx
-                                )
-                            )
+                                "Prijs optie id {} op index {} is niet onderdeel van het prijs object."
+                            ).format(optie_id, idx)
                         )
                     except PrijsOptie.DoesNotExist:
                         optie_errors.append(
-                            _(
-                                "Prijs optie id {} op index {} bestaat niet.".format(
-                                    optie_id, idx
-                                )
+                            _("Prijs optie id {} op index {} bestaat niet.").format(
+                                optie_id, idx
                             )
                         )
 

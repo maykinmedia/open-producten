@@ -12,10 +12,8 @@ def build_array_duplicates_error_message(objects: list, field: str, errors):
     for idx, obj in enumerate(objects):
         if obj in object_set:
             errors_messages.append(
-                _(
-                    "Dubbel {} id: {} op index {}.".format(
-                        type(obj).__name__, obj.id, idx
-                    )
+                _("Dubbel {} id: {} op index {}.").format(
+                    type(obj).__name__, obj.id, idx
                 )
             )
 

@@ -10,4 +10,4 @@ class LinkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Link
-        exclude = ("product_type",)
+        fields = ("id", "naam", "url", "product_type_id")

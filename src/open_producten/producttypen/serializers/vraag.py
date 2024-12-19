@@ -16,7 +16,7 @@ class VraagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vraag
-        exclude = ("product_type", "onderwerp")
+        fields = ("id", "product_type_id", "onderwerp_id", "vraag", "antwoord")
 
     def validate(self, attrs):
 

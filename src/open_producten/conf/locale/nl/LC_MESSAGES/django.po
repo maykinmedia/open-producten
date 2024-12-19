@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-09 16:39+0100\n"
+"POT-Creation-Date: 2024-12-19 10:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Onderwerpen moeten gepubliceerd zijn met gepubliceerde sub onderwerpen."
 msgstr ""
 
-#: producttypen/admin/prijs.py:20
+#: producttypen/admin/prijs.py:21 producttypen/serializers/prijs.py:29
 msgid "Er is minimaal één optie vereist."
 msgstr ""
 
@@ -91,11 +91,12 @@ msgstr ""
 msgid "onderwerpen"
 msgstr ""
 
-#: producttypen/admin/producttype.py:21 producttypen/models/onderwerp.py:36
+#: producttypen/admin/producttype.py:21 producttypen/models/onderwerp.py:38
 msgid "Onderwerp"
 msgstr ""
 
 #: producttypen/admin/producttype.py:27
+#: producttypen/serializers/producttype.py:79
 msgid "Er is minimaal één onderwerp vereist."
 msgstr ""
 
@@ -128,7 +129,7 @@ msgstr ""
 msgid "Het product type waarbij deze link hoort."
 msgstr ""
 
-#: producttypen/models/link.py:18 producttypen/models/onderwerp.py:25
+#: producttypen/models/link.py:18 producttypen/models/onderwerp.py:27
 #: producttypen/models/upn.py:9
 msgid "naam"
 msgstr ""
@@ -159,30 +160,30 @@ msgid ""
 "hebben."
 msgstr ""
 
-#: producttypen/models/onderwerp.py:25
+#: producttypen/models/onderwerp.py:27
 msgid "Naam van het onderwerp."
 msgstr ""
 
-#: producttypen/models/onderwerp.py:29 producttypen/models/prijs.py:52
+#: producttypen/models/onderwerp.py:31 producttypen/models/prijs.py:52
 #: producttypen/models/producttype.py:40
 msgid "beschrijving"
 msgstr ""
 
-#: producttypen/models/onderwerp.py:32
+#: producttypen/models/onderwerp.py:34
 msgid "Beschrijving van het onderwerp, ondersteund markdown format."
 msgstr ""
 
-#: producttypen/models/onderwerp.py:37
+#: producttypen/models/onderwerp.py:39
 msgid "Onderwerpen"
 msgstr ""
 
-#: producttypen/models/onderwerp.py:58
+#: producttypen/models/onderwerp.py:60
 msgid ""
 "Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden "
 "gepubliceerd."
 msgstr ""
 
-#: producttypen/models/onderwerp.py:68
+#: producttypen/models/onderwerp.py:70
 msgid ""
 "Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-"
 "onderwerpen hebben."
@@ -348,6 +349,18 @@ msgstr ""
 msgid "Een vraag moet gelinkt zijn aan een onderwerp of een product type."
 msgstr ""
 
+#: producttypen/serializers/prijs.py:64
+msgid "Dubbele optie id {} op index {}."
+msgstr ""
+
+#: producttypen/serializers/prijs.py:78
+msgid "Prijs optie id {} op index {} is niet onderdeel van het prijs object."
+msgstr ""
+
+#: producttypen/serializers/prijs.py:83
+msgid "Prijs optie id {} op index {} bestaat niet."
+msgstr ""
+
 #: templates/maykin_2fa/login.html:13
 msgid "or"
 msgstr ""
@@ -386,6 +399,10 @@ msgstr ""
 
 #: utils/models.py:29
 msgid "De datum waarop het object voor het laatst is gewijzigd."
+msgstr ""
+
+#: utils/serializers.py:15
+msgid "Dubbel {} id: {} op index {}."
 msgstr ""
 
 #: utils/tests/test_validators.py:24 utils/validators.py:23

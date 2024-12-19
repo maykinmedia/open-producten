@@ -21,7 +21,15 @@ from .vraag import VraagSerializer
 class SimpleOnderwerpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Onderwerp
-        exclude = ("path", "depth", "numchild")
+        fields = (
+            "id",
+            "naam",
+            "beschrijving",
+            "gepubliceerd",
+            "aanmaak_datum",
+            "update_datum",
+            "hoofd_onderwerp",
+        )
 
 
 class ProductTypeSerializer(serializers.ModelSerializer):

@@ -20,7 +20,7 @@ from open_producten.accounts.views.password_reset import PasswordResetView
 
 # from open_producten.locations.router import location_urlpatterns
 # from open_producten.producten.router import product_urlpatterns
-from open_producten.producttypen.router import product_type_urlpatterns
+from open_producten.producttypen.urls import product_type_urlpatterns
 
 # Configure admin
 

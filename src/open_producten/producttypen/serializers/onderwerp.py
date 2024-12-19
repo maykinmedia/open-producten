@@ -20,11 +20,16 @@ class SimpleProductTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductType
-        exclude = (
-            "onderwerpen",
-            # "organisaties",
-            # "locaties",
-            # "contacten",
+        fields = (
+            "id",
+            "naam",
+            "samenvatting",
+            "beschrijving",
+            "keywords",
+            "uniforme_product_naam",
+            "gepubliceerd",
+            "aanmaak_datum",
+            "update_datum",
         )
 
 
@@ -46,7 +51,18 @@ class OnderwerpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Onderwerp
-        exclude = ("path", "depth", "numchild")
+        fields = (
+            "id",
+            "naam",
+            "beschrijving",
+            "vragen",
+            "gepubliceerd",
+            "aanmaak_datum",
+            "update_datum",
+            "hoofd_onderwerp",
+            "product_typen",
+            "product_type_ids",
+        )
 
     def _handle_relations(self, instance, product_typen: list[ProductType]):
         errors = dict()
