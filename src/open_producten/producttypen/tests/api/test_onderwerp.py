@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-from open_producten.producttypen.models import Link, Onderwerp
+from open_producten.producttypen.models import Onderwerp, Vraag
 from open_producten.producttypen.tests.factories import (
     OnderwerpFactory,
     ProductTypeFactory,
@@ -355,4 +355,4 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Onderwerp.objects.count(), 0)
-        self.assertEqual(Link.objects.count(), 0)
+        self.assertEqual(Vraag.objects.count(), 0)
