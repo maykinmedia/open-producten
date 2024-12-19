@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from rest_framework.test import APIClient
 
 from open_producten.producttypen.models import Link, ProductType
@@ -24,7 +26,7 @@ class TestProductTypeLink(BaseApiTestCase):
             "url": "https://www.google.com",
             "product_type_id": product_type.id,
         }
-        self.path = "/api/v1/links/"
+        self.path = reverse("link-list")
 
         self.link = LinkFactory.create(product_type=product_type)
 

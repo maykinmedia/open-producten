@@ -35,6 +35,16 @@ class ProductTypeViewSet(OrderedModelViewSet):
         serializer = ProductTypeActuelePrijsSerializer(product_typen, many=True)
         return Response(serializer.data)
 
+    @action(
+        detail=True,
+        serializer_class=ProductTypeActuelePrijsSerializer,
+        url_path="actuele-prijs",
+    )
+    def actuele_prijs(self, request, id=None):
+        product_type = self.get_object()
+        serializer = ProductTypeActuelePrijsSerializer(product_type)
+        return Response(serializer.data)
+
 
 class LinkViewSet(OrderedModelViewSet):
     queryset = Link.objects.all()

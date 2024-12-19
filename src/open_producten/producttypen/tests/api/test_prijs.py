@@ -3,6 +3,7 @@ import uuid
 from decimal import Decimal
 
 from django.forms import model_to_dict
+from django.urls import reverse
 
 from freezegun import freeze_time
 from rest_framework.exceptions import ErrorDetail
@@ -39,7 +40,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             "actief_vanaf": datetime.date(2024, 1, 2),
             "product_type_id": self.product_type.id,
         }
-        self.path = "/api/v1/prijzen/"
+        self.path = reverse("prijs-list")
 
     def _create_prijs(self):
         return PrijsFactory.create(
@@ -358,75 +359,3 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Prijs.objects.count(), 0)
         self.assertEqual(PrijsOptie.objects.count(), 0)
-
-    def test_get_actuele_prijs_when_product_type_has_no_prijzen(self):
-        response = self.client.get("/api/v1/producttypen/actuele-prijzen/")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            [
-                {
-                    "id": str(self.product_type.id),
-                    "naam": self.product_type.naam,
-                    "upl_naam": self.product_type.uniforme_product_naam.naam,
-                    "upl_uri": self.product_type.uniforme_product_naam.uri,
-                    "actuele_prijs": None,
-                },
-            ],
-        )
-
-    def test_get_actuele_prijzen_when_product_type_only_has_prijs_in_future(self):
-        PrijsFactory.create(
-            product_type=self.product_type, actief_vanaf=datetime.date(2024, 2, 2)
-        )
-
-        response = self.client.get("/api/v1/producttypen/actuele-prijzen/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            [
-                {
-                    "id": str(self.product_type.id),
-                    "naam": self.product_type.naam,
-                    "upl_naam": self.product_type.uniforme_product_naam.naam,
-                    "upl_uri": self.product_type.uniforme_product_naam.uri,
-                    "actuele_prijs": None,
-                },
-            ],
-        )
-
-    def test_get_actuele_prijzen_when_product_type_has_actuele_prijs(self):
-        prijs = PrijsFactory.create(
-            product_type=self.product_type,
-            actief_vanaf=datetime.date(2024, 1, 1),
-        )
-
-        optie = PrijsOptieFactory.create(prijs=prijs)
-
-        response = self.client.get("/api/v1/producttypen/actuele-prijzen/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            [
-                {
-                    "id": str(self.product_type.id),
-                    "naam": self.product_type.naam,
-                    "upl_naam": self.product_type.uniforme_product_naam.naam,
-                    "upl_uri": self.product_type.uniforme_product_naam.uri,
-                    "actuele_prijs": {
-                        "id": str(prijs.id),
-                        "product_type_id": self.product_type.id,
-                        "actief_vanaf": "2024-01-01",
-                        "prijsopties": [
-                            {
-                                "bedrag": str(optie.bedrag),
-                                "beschrijving": optie.beschrijving,
-                                "id": str(optie.id),
-                            }
-                        ],
-                    },
-                },
-            ],
-        )

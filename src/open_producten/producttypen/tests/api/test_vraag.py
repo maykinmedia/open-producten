@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
@@ -28,7 +30,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.product_type = ProductTypeFactory.create()
         self.onderwerp = OnderwerpFactory.create()
         self.data = {"vraag": "18?", "antwoord": "in aanmerking"}
-        self.path = "/api/v1/vragen/"
+        self.path = reverse("vraag-list")
 
         self.vraag = VraagFactory.create(product_type=self.product_type)
 

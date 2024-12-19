@@ -1,4 +1,5 @@
 from django.forms import model_to_dict
+from django.urls import reverse
 
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
@@ -43,7 +44,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             "naam": "test-onderwerp",
             "hoofd_onderwerp": None,
         }
-        self.path = "/api/v1/onderwerpen/"
+        self.path = reverse("onderwerp-list")
 
     def test_read_onderwerp_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
