@@ -8,8 +8,8 @@ from open_producten.producttypen.models import (
     ProductType,
     UniformeProductNaam,
 )
-from open_producten.utils.serializers import build_array_duplicates_error_message
 
+from ...utils.drf_validators import DuplicateIdValidator
 from .vraag import VraagSerializer
 
 
@@ -44,7 +44,6 @@ class OnderwerpSerializer(serializers.ModelSerializer):
     product_type_ids = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=ProductType.objects.all(),
-        default=[],
         write_only=True,
         source="product_typen",
     )
@@ -63,17 +62,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             "product_typen",
             "product_type_ids",
         )
-
-    def _handle_relations(self, instance, product_typen: list[ProductType]):
-        errors = dict()
-        if product_typen is not None:
-            build_array_duplicates_error_message(
-                product_typen, "product_type_ids", errors
-            )
-            instance.product_typen.set(product_typen)
-
-        if errors:
-            raise serializers.ValidationError(errors)
+        validators = [DuplicateIdValidator(["product_type_ids"])]
 
     def _validate_onderwerp(self, onderwerp):
         try:
@@ -92,7 +81,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             onderwerp = Onderwerp.add_root(**validated_data)
 
         self._validate_onderwerp(onderwerp)
-        self._handle_relations(onderwerp, product_typen)
+        onderwerp.product_typen.set(product_typen)
         onderwerp.save()
 
         return onderwerp
@@ -117,6 +106,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
 
         instance = super().update(instance, validated_data)
         self._validate_onderwerp(instance)
-        self._handle_relations(instance, product_typen)
+        if product_typen:
+            instance.product_typen.set(product_typen)
         instance.save()
         return instance

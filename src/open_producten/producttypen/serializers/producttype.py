@@ -1,7 +1,14 @@
 from django.db import transaction
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+
+from ...utils.drf_validators import DuplicateIdValidator
+from ..models import Onderwerp, ProductType, UniformeProductNaam
+from .bestand import BestandSerializer
+from .link import LinkSerializer
+from .prijs import PrijsSerializer
+from .vraag import VraagSerializer
 
 # from open_producten.locaties.models import Contact, Locatie, Organisatie
 # from open_producten.locaties.serializers.location import (
@@ -9,13 +16,6 @@ from rest_framework import serializers
 #     LocationSerializer,
 #     OrganisationSerializer,
 # )
-from open_producten.utils.serializers import build_array_duplicates_error_message
-
-from ..models import Onderwerp, ProductType, UniformeProductNaam
-from .bestand import BestandSerializer
-from .link import LinkSerializer
-from .prijs import PrijsSerializer
-from .vraag import VraagSerializer
 
 
 class SimpleOnderwerpSerializer(serializers.ModelSerializer):
@@ -80,6 +80,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductType
         fields = "__all__"
+        validators = [DuplicateIdValidator(["onderwerp_ids"])]
 
     def validate_onderwerp_ids(self, onderwerpen: list[Onderwerp]) -> list[Onderwerp]:
         if len(onderwerpen) == 0:
@@ -87,34 +88,6 @@ class ProductTypeSerializer(serializers.ModelSerializer):
                 _("Er is minimaal één onderwerp vereist.")
             )
         return onderwerpen
-
-    def _handle_relations(
-        self,
-        *,
-        instance,
-        onderwerpen: list[Onderwerp],
-        # locaties: list[Locatie],
-        # organisaties: list[Organisatie],
-        # contacten: list[Contact],
-    ) -> None:
-        errors = dict()
-        if onderwerpen is not None:
-            build_array_duplicates_error_message(onderwerpen, "onderwerp_ids", errors)
-            instance.onderwerpen.set(onderwerpen)
-        # if locaties is not None:
-        #     build_array_duplicates_error_message(locaties, "locatie_ids", errors)
-        #     instance.locations.set(locaties)
-        # if organisaties is not None:
-        #     build_array_duplicates_error_message(
-        #         organisaties, "organisatie_ids", errors
-        #     )
-        #     instance.organisations.set(organisaties)
-        # if contacten is not None:
-        #     build_array_duplicates_error_message(contacten, "contact_ids", errors)
-        #     instance.contacten.set(contacten)
-
-        if errors:
-            raise serializers.ValidationError(errors)
 
     @transaction.atomic()
     def create(self, validated_data):
@@ -124,14 +97,8 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         # contacten = validated_data.pop("contacten")
 
         product_type = ProductType.objects.create(**validated_data)
+        product_type.onderwerpen.set(onderwerpen)
 
-        self._handle_relations(
-            instance=product_type,
-            onderwerpen=onderwerpen,
-            # locaties=locaties,
-            # organisaties=organisaties,
-            # contacten=contacten,
-        )
         product_type.clean()
         product_type.save()
 
@@ -143,15 +110,9 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         # locaties = validated_data.pop("locaties", None)
         # organisaties = validated_data.pop("organisaties", None)
         # contacten = validated_data.pop("contacten", None)
-
         instance = super().update(instance, validated_data)
-        self._handle_relations(
-            instance=instance,
-            onderwerpen=onderwerpen,
-            # locaties=locaties,
-            # organisaties=organisaties,
-            # contacten=contacten,
-        )
+        if onderwerpen:
+            instance.onderwerpen.set(onderwerpen)
         instance.clean()
         instance.save()
 

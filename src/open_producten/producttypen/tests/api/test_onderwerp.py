@@ -43,6 +43,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.data = {
             "naam": "test-onderwerp",
             "hoofd_onderwerp": None,
+            "product_type_ids": [],
         }
         self.path = reverse("onderwerp-list")
 
@@ -95,7 +96,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel ProductType id: {product_type.id} op index 1.",
+                        string=f"Dubbel id: {product_type.id} op index 1.",
                         code="invalid",
                     )
                 ]
@@ -175,7 +176,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel ProductType id: {product_type.id} op index 1.",
+                        string=f"Dubbel id: {product_type.id} op index 1.",
                         code="invalid",
                     )
                 ]
@@ -280,7 +281,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel ProductType id: {product_type.id} op index 1.",
+                        string=f"Dubbel id: {product_type.id} op index 1.",
                         code="invalid",
                     )
                 ]
