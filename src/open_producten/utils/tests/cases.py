@@ -12,12 +12,6 @@ class BaseApiTestCase(APITestCase):
         token = Token.objects.create(user=user)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
 
-    # def reverse(self, name, id=None):
-    #     if id:
-    #         return reverse(name, args=[id])
-    #     else:
-    #         return reverse(name)
-
     def get(self, object_id=""):
         end = "/" if object_id else ""
         return self.client.get(f"{self.path}{object_id}{end}")

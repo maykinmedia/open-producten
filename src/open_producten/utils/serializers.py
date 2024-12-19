@@ -3,7 +3,19 @@ from uuid import UUID
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework.serializers import Serializer
+
 from .models import BaseModel
+
+
+def get_from_serializer_data_or_instance(
+    field: str, data: dict, serializer: Serializer
+):
+    if data.get(field):
+        return data[field]
+
+    if serializer.instance:
+        return getattr(serializer.instance, field)
 
 
 def clean_duplicate_ids_in_list(values: list, field: str, errors):

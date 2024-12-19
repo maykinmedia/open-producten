@@ -44,17 +44,19 @@ class Vraag(BaseModel):
         verbose_name_plural = _("Vragen")
 
     def clean(self):
-        if self.onderwerp and self.product_type:
-            raise ValidationError(
-                _(
-                    "Een vraag kan niet gelink zijn aan een onderwerp en een product type."
-                )
-            )
-
-        if not self.onderwerp and not self.product_type:
-            raise ValidationError(
-                _("Een vraag moet gelinkt zijn aan een onderwerp of een product type.")
-            )
+        validate_onderwerp_or_product_type(self.onderwerp, self.product_type)
 
     def __str__(self):
         return self.vraag
+
+
+def validate_onderwerp_or_product_type(onderwerp, product_type):
+    if onderwerp and product_type:
+        raise ValidationError(
+            _("Een vraag kan niet gelink zijn aan een onderwerp en een product type.")
+        )
+
+    if not onderwerp and not product_type:
+        raise ValidationError(
+            _("Een vraag moet gelinkt zijn aan een onderwerp of een product type.")
+        )

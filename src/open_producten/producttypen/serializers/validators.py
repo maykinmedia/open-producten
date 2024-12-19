@@ -1,8 +1,25 @@
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from ...utils.serializers import get_from_serializer_data_or_instance
 from ..models import PrijsOptie
+from ..models.vraag import validate_onderwerp_or_product_type
+
+
+class ProductTypeOrOnderwerpValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        onderwerp = get_from_serializer_data_or_instance("onderwerp", value, serializer)
+        product_type = get_from_serializer_data_or_instance(
+            "product_type", value, serializer
+        )
+        try:
+            validate_onderwerp_or_product_type(onderwerp, product_type)
+        except ValidationError as e:
+            raise serializers.ValidationError({"product_type_onderwerp": e.message})
 
 
 class PrijsOptieValidator:
