@@ -73,12 +73,8 @@ class OnderwerpSerializer(serializers.ModelSerializer):
     @transaction.atomic()
     def create(self, validated_data):
         product_typen = validated_data.pop("product_typen")
-        hoofd_onderwerp = validated_data.pop("hoofd_onderwerp")
 
-        if hoofd_onderwerp:
-            onderwerp = hoofd_onderwerp.add_child(**validated_data)
-        else:
-            onderwerp = Onderwerp.add_root(**validated_data)
+        onderwerp = Onderwerp.objects.create(**validated_data)
 
         self._validate_onderwerp(onderwerp)
         onderwerp.product_typen.set(product_typen)
@@ -94,15 +90,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
         )  # None is a valid value
 
         if hoofd_onderwerp != "ignore":
-            instance_hoofd_onderwerp = instance.get_parent()
-            if hoofd_onderwerp is None and instance_hoofd_onderwerp is not None:
-                last_root = Onderwerp.get_last_root_node()
-                instance.move(last_root, "sorted-sibling")
-
-            elif hoofd_onderwerp != instance_hoofd_onderwerp:
-                instance.move(hoofd_onderwerp, "sorted-child")
-
-            instance.refresh_from_db()
+            instance.hoofd_onderwerp = hoofd_onderwerp
 
         instance = super().update(instance, validated_data)
         self._validate_onderwerp(instance)

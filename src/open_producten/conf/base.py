@@ -18,7 +18,6 @@ INSTALLED_APPS += [
     # Project applications.
     "rest_framework.authtoken",
     "localflavor",
-    "treebeard",
     "markdownx",
     "django.contrib.gis",
     "open_producten.accounts",

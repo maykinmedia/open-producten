@@ -45,9 +45,7 @@ def product_type_to_dict(product_type):
 
     product_type_dict["onderwerpen"] = []
     for onderwerp in product_type.onderwerpen.all():
-        onderwerp_dict = model_to_dict_with_id(
-            onderwerp, exclude=("path", "depth", "numchild")
-        )
+        onderwerp_dict = model_to_dict_with_id(onderwerp)
         onderwerp_dict["aanmaak_datum"] = str(
             onderwerp.aanmaak_datum.astimezone().isoformat()
         )

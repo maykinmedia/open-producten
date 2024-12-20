@@ -2,7 +2,7 @@ from .bestand import Bestand
 from .link import Link
 from .onderwerp import Onderwerp
 from .prijs import Prijs, PrijsOptie
-from .producttype import OnderwerpProductType, ProductType
+from .producttype import ProductType
 from .upn import UniformeProductNaam
 from .vraag import Vraag
 
@@ -15,5 +15,4 @@ __all__ = [
     "PrijsOptie",
     "ProductType",
     "Bestand",
-    "OnderwerpProductType",
 ]

@@ -3,28 +3,24 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from markdownx.models import MarkdownxField
-from treebeard.exceptions import InvalidMoveToDescendant
-from treebeard.mp_tree import MP_MoveHandler, MP_Node
 
 from open_producten.utils.models import BasePublishableModel
 
 
-class PublishedMoveHandler(MP_MoveHandler):
-    def process(self):
-        if self.node.gepubliceerd and not self.target.gepubliceerd:
-            raise InvalidMoveToDescendant(
-                _(
-                    "Gepubliceerde onderwerpen kunnen kunnen geen ongepubliceerd hoofd-onderwerp hebben."
-                )
-            )
-        return super().process()
-
-
-class Onderwerp(MP_Node, BasePublishableModel):
-    node_order_by = ["naam"]
+class Onderwerp(BasePublishableModel):
 
     naam = models.CharField(
         verbose_name=_("naam"), max_length=100, help_text=_("Naam van het onderwerp.")
+    )
+
+    hoofd_onderwerp = models.ForeignKey(
+        "self",
+        verbose_name=_("hoofd onderwerp"),
+        help_text=_("Het hoofd onderwerp van het onderwerp."),
+        related_name="sub_onderwerpen",
+        null=True,
+        blank=True,
+        on_delete=models.RESTRICT,
     )
 
     beschrijving = MarkdownxField(
@@ -37,17 +33,9 @@ class Onderwerp(MP_Node, BasePublishableModel):
     class Meta:
         verbose_name = _("Onderwerp")
         verbose_name_plural = _("Onderwerpen")
-        ordering = ("path",)
 
     def __str__(self):
         return self.naam
-
-    @property
-    def hoofd_onderwerp(self):
-        return self.get_parent()
-
-    def move(self, target, pos=None):
-        return PublishedMoveHandler(self, target, pos).process()
 
     def clean(self):
         if (
@@ -63,7 +51,7 @@ class Onderwerp(MP_Node, BasePublishableModel):
 
         if (
             not self.gepubliceerd
-            and self.get_children().filter(gepubliceerd=True).exists()
+            and self.sub_onderwerpen.filter(gepubliceerd=True).exists()
         ):
             raise ValidationError(
                 _(
