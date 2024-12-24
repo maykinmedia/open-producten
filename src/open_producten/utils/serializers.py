@@ -11,7 +11,7 @@ from .models import BaseModel
 def get_from_serializer_data_or_instance(
     field: str, data: dict, serializer: Serializer
 ):
-    if data.get(field):
+    if field in data:
         return data[field]
 
     if serializer.instance:

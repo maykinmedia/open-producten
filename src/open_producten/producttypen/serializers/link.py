@@ -11,3 +11,9 @@ class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
         fields = ("id", "naam", "url", "product_type_id")
+
+
+class NestedLinkSerializer(LinkSerializer):
+    class Meta:
+        model = Link
+        fields = ("id", "naam", "url")

@@ -5,10 +5,10 @@ from rest_framework import serializers
 
 from ...utils.drf_validators import DuplicateIdValidator
 from ..models import Onderwerp, ProductType, UniformeProductNaam
-from .bestand import BestandSerializer
-from .link import LinkSerializer
-from .prijs import PrijsSerializer
-from .vraag import VraagSerializer
+from .bestand import NestedBestandSerializer
+from .link import NestedLinkSerializer
+from .prijs import NestedPrijsSerializer, PrijsSerializer
+from .vraag import NestedVraagSerializer
 
 # from open_producten.locaties.models import Contact, Locatie, Organisatie
 # from open_producten.locaties.serializers.location import (
@@ -18,7 +18,7 @@ from .vraag import VraagSerializer
 # )
 
 
-class SimpleOnderwerpSerializer(serializers.ModelSerializer):
+class NestedOnderwerpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Onderwerp
         fields = (
@@ -37,7 +37,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         slug_field="uri", queryset=UniformeProductNaam.objects.all()
     )
 
-    onderwerpen = SimpleOnderwerpSerializer(many=True, read_only=True)
+    onderwerpen = NestedOnderwerpSerializer(many=True, read_only=True)
     onderwerp_ids = serializers.PrimaryKeyRelatedField(
         many=True,
         write_only=True,
@@ -72,10 +72,10 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     #     source="contacten",
     # )
 
-    vragen = VraagSerializer(many=True, read_only=True)
-    prijzen = PrijsSerializer(many=True, read_only=True)
-    links = LinkSerializer(many=True, read_only=True)
-    bestanden = BestandSerializer(many=True, read_only=True)
+    vragen = NestedVraagSerializer(many=True, read_only=True)
+    prijzen = NestedPrijsSerializer(many=True, read_only=True)
+    links = NestedLinkSerializer(many=True, read_only=True)
+    bestanden = NestedBestandSerializer(many=True, read_only=True)
 
     class Meta:
         model = ProductType

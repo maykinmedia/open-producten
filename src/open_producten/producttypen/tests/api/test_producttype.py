@@ -3,7 +3,6 @@
 # from django.contrib.gis.geos import Point
 import datetime
 
-from django.forms import model_to_dict
 from django.urls import reverse
 
 from freezegun import freeze_time
@@ -17,54 +16,16 @@ from rest_framework.test import APIClient
 # )
 from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
+    BestandFactory,
     LinkFactory,
     OnderwerpFactory,
     PrijsFactory,
     PrijsOptieFactory,
     ProductTypeFactory,
     UniformeProductNaamFactory,
+    VraagFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
-from open_producten.utils.tests.helpers import model_to_dict_with_id
-
-
-def product_type_to_dict(product_type):
-    product_type_dict = model_to_dict_with_id(product_type)
-    product_type_dict["vragen"] = [
-        model_to_dict(vraag) for vraag in product_type.vragen.all()
-    ]
-    product_type_dict["prijzen"] = [
-        model_to_dict(prijs) for prijs in product_type.prijzen.all()
-    ]
-    product_type_dict["links"] = [
-        model_to_dict(link) for link in product_type.links.all()
-    ]
-    product_type_dict["bestanden"] = [
-        model_to_dict(bestand) for bestand in product_type.bestanden.all()
-    ]
-
-    product_type_dict["onderwerpen"] = []
-    for onderwerp in product_type.onderwerpen.all():
-        onderwerp_dict = model_to_dict_with_id(
-            onderwerp, exclude=("path", "depth", "numchild")
-        )
-        onderwerp_dict["aanmaak_datum"] = str(
-            onderwerp.aanmaak_datum.astimezone().isoformat()
-        )
-        onderwerp_dict["update_datum"] = str(
-            onderwerp.update_datum.astimezone().isoformat()
-        )
-        onderwerp_dict["hoofd_onderwerp"] = onderwerp.hoofd_onderwerp
-        product_type_dict["onderwerpen"].append(onderwerp_dict)
-
-    product_type_dict["aanmaak_datum"] = str(
-        product_type.aanmaak_datum.astimezone().isoformat()
-    )
-    product_type_dict["update_datum"] = str(
-        product_type.update_datum.astimezone().isoformat()
-    )
-    product_type_dict["uniforme_product_naam"] = product_type.uniforme_product_naam.uri
-    return product_type_dict
 
 
 class TestProducttypeViewSet(BaseApiTestCase):
@@ -72,34 +33,86 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def setUp(self):
         super().setUp()
         upn = UniformeProductNaamFactory.create()
-        onderwerp = OnderwerpFactory()
+        self.onderwerp = OnderwerpFactory()
 
         self.data = {
             "naam": "test-product-type",
             "samenvatting": "test",
             "beschrijving": "test test",
             "uniforme_product_naam": upn.uri,
-            "onderwerp_ids": [onderwerp.id],
+            "onderwerp_ids": [self.onderwerp.id],
         }
+        self.product_type = ProductTypeFactory.create()
+        self.product_type.onderwerpen.add(self.onderwerp)
+        self.product_type.save()
 
         self.path = reverse("producttype-list")
+        self.detail_path = reverse("producttype-detail", args=[self.product_type.id])
 
     def test_read_product_type_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
         self.assertEqual(response.status_code, 401)
 
+    def test_required_fields(self):
+        response = self.client.post(self.path, {})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "uniforme_product_naam": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+                "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "onderwerp_ids": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+                "beschrijving": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+            },
+        )
+
     def test_create_minimal_product_type(self):
-        response = self.post(self.data)
+        response = self.client.post(self.path, self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(ProductType.objects.count(), 1)
-        product_type = ProductType.objects.first()
-        self.assertEqual(response.data, product_type_to_dict(product_type))
+        self.assertEqual(ProductType.objects.count(), 2)
+
+        product_type = ProductType.objects.get(id=response.data["id"])
+        onderwerp = product_type.onderwerpen.first()
+        expected_data = {
+            "id": str(product_type.id),
+            "naam": product_type.naam,
+            "samenvatting": product_type.samenvatting,
+            "beschrijving": product_type.beschrijving,
+            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "vragen": [],
+            "prijzen": [],
+            "links": [],
+            "bestanden": [],
+            "gepubliceerd": False,
+            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product_type.update_datum.astimezone().isoformat(),
+            "keywords": [],
+            "onderwerpen": [
+                {
+                    "id": str(onderwerp.id),
+                    "naam": onderwerp.naam,
+                    "gepubliceerd": True,
+                    "aanmaak_datum": onderwerp.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": onderwerp.update_datum.astimezone().isoformat(),
+                    "beschrijving": onderwerp.beschrijving,
+                    "hoofd_onderwerp": onderwerp.hoofd_onderwerp,
+                }
+            ],
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_create_product_type_without_fields_returns_error(self):
         data = self.data.copy()
         data["onderwerp_ids"] = []
-        response = self.post(data)
+        response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -111,19 +124,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     )
                 ]
             },
-        )
-
-    def test_create_product_type_with_onderwerp(self):
-        onderwerp = OnderwerpFactory.create()
-
-        data = self.data | {"onderwerp_ids": [onderwerp.id]}
-        response = self.post(data)
-
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(ProductType.objects.count(), 1)
-        self.assertEqual(
-            list(ProductType.objects.values_list("onderwerpen__naam", flat=True)),
-            [onderwerp.naam],
         )
 
     # @patch(
@@ -189,7 +189,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
         }
 
-        response = self.post(data)
+        response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -205,25 +205,39 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_update_minimal_product_type(self):
-        product_type = ProductTypeFactory.create()
 
-        response = self.put(product_type.id, self.data)
+        response = self.client.put(self.detail_path, self.data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
 
     def test_update_product_type_with_onderwerp(self):
-        product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
 
         data = self.data | {"onderwerp_ids": [onderwerp.id]}
-        response = self.put(product_type.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(
             list(ProductType.objects.values_list("onderwerpen__naam", flat=True)),
             [onderwerp.naam],
+        )
+
+    def test_update_product_type_removing_onderwerp(self):
+        data = self.data | {"onderwerp_ids": []}
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "onderwerp_ids": [
+                    ErrorDetail(
+                        string="Er is minimaal één onderwerp vereist.", code="invalid"
+                    )
+                ]
+            },
         )
 
     # @patch(
@@ -284,7 +298,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
-        product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
 
         # TODO add location_ids
@@ -293,7 +306,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
         }
 
-        response = self.put(product_type.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -309,28 +322,23 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_partial_update_product_type(self):
-        product_type = ProductTypeFactory.create()
-
         # TODO add location_ids
-
-        product_type.save()
 
         data = {"naam": "update"}
 
-        response = self.patch(product_type.id, data)
-        product_type.refresh_from_db()
+        response = self.client.patch(self.detail_path, data)
+        self.product_type.refresh_from_db()
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(product_type.naam, "update")
+        self.assertEqual(self.product_type.naam, "update")
 
     def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
-        product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
 
         data = {
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
         }
 
-        response = self.patch(product_type.id, data)
+        response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -345,29 +353,201 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
+    def test_partial_update_product_type_removing_onderwerp(self):
+        data = {"onderwerp_ids": []}
+        response = self.client.patch(self.detail_path, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "onderwerp_ids": [
+                    ErrorDetail(
+                        string="Er is minimaal één onderwerp vereist.", code="invalid"
+                    )
+                ]
+            },
+        )
+
+    def test_read_product_type_link(self):
+        link = LinkFactory.create()
+        self.product_type.links.add(link)
+        self.product_type.save()
+
+        response = self.client.get(self.detail_path)
+
+        self.assertEqual(response.status_code, 200)
+        expected_data = [
+            {
+                "id": str(link.id),
+                "naam": link.naam,
+                "url": link.url,
+            }
+        ]
+
+        self.assertEqual(response.data["links"], expected_data)
+
+    def test_read_product_type_vraag(self):
+        vraag = VraagFactory.create()
+        self.product_type.vragen.add(vraag)
+        self.product_type.save()
+
+        response = self.client.get(self.detail_path)
+
+        self.assertEqual(response.status_code, 200)
+        expected_data = [
+            {
+                "id": str(vraag.id),
+                "vraag": vraag.vraag,
+                "antwoord": vraag.antwoord,
+            }
+        ]
+
+        self.assertEqual(response.data["vragen"], expected_data)
+
+    def test_read_product_type_bestand(self):
+        bestand = BestandFactory.create()
+        self.product_type.bestanden.add(bestand)
+        self.product_type.save()
+
+        response = self.client.get(self.detail_path)
+
+        self.assertEqual(response.status_code, 200)
+        expected_data = [
+            {
+                "id": str(bestand.id),
+                "bestand": "http://testserver" + bestand.bestand.url,
+            }
+        ]
+        self.assertEqual(response.data["bestanden"], expected_data)
+
+    def test_read_product_type_prijs(self):
+        prijs = PrijsFactory.create()
+        prijs_optie = PrijsOptieFactory.create(prijs=prijs)
+        self.product_type.prijzen.add(prijs)
+        self.product_type.save()
+
+        response = self.client.get(self.detail_path)
+
+        self.assertEqual(response.status_code, 200)
+        expected_data = [
+            {
+                "id": str(prijs.id),
+                "actief_vanaf": str(prijs.actief_vanaf),
+                "prijsopties": [
+                    {
+                        "id": str(prijs_optie.id),
+                        "bedrag": str(prijs_optie.bedrag),
+                        "beschrijving": prijs_optie.beschrijving,
+                    }
+                ],
+            }
+        ]
+        self.assertEqual(response.data["prijzen"], expected_data)
+
     def test_read_product_typen(self):
         product_type = ProductTypeFactory.create()
+        product_type.onderwerpen.add(self.onderwerp)
+        product_type.save()
 
-        response = self.get()
+        response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [product_type_to_dict(product_type)])
+        self.assertEqual(response.data["count"], 2)
+        expected_data = [
+            {
+                "id": str(self.product_type.id),
+                "naam": self.product_type.naam,
+                "samenvatting": self.product_type.samenvatting,
+                "beschrijving": self.product_type.beschrijving,
+                "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                "vragen": [],
+                "prijzen": [],
+                "links": [],
+                "bestanden": [],
+                "gepubliceerd": True,
+                "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+                "keywords": [],
+                "onderwerpen": [
+                    {
+                        "id": str(self.onderwerp.id),
+                        "naam": self.onderwerp.naam,
+                        "gepubliceerd": True,
+                        "aanmaak_datum": self.onderwerp.aanmaak_datum.astimezone().isoformat(),
+                        "update_datum": self.onderwerp.update_datum.astimezone().isoformat(),
+                        "beschrijving": self.onderwerp.beschrijving,
+                        "hoofd_onderwerp": self.onderwerp.hoofd_onderwerp,
+                    }
+                ],
+            },
+            {
+                "id": str(product_type.id),
+                "naam": product_type.naam,
+                "samenvatting": product_type.samenvatting,
+                "beschrijving": product_type.beschrijving,
+                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "vragen": [],
+                "prijzen": [],
+                "links": [],
+                "bestanden": [],
+                "gepubliceerd": True,
+                "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product_type.update_datum.astimezone().isoformat(),
+                "keywords": [],
+                "onderwerpen": [
+                    {
+                        "id": str(self.onderwerp.id),
+                        "naam": self.onderwerp.naam,
+                        "gepubliceerd": True,
+                        "aanmaak_datum": self.onderwerp.aanmaak_datum.astimezone().isoformat(),
+                        "update_datum": self.onderwerp.update_datum.astimezone().isoformat(),
+                        "beschrijving": self.onderwerp.beschrijving,
+                        "hoofd_onderwerp": self.onderwerp.hoofd_onderwerp,
+                    }
+                ],
+            },
+        ]
+        self.assertCountEqual(response.data["results"], expected_data)
 
     def test_read_product_type(self):
-        product_type = ProductTypeFactory.create()
 
-        response = self.get(product_type.id)
+        response = self.client.get(self.detail_path)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, product_type_to_dict(product_type))
+        expected_data = {
+            "id": str(self.product_type.id),
+            "naam": self.product_type.naam,
+            "samenvatting": self.product_type.samenvatting,
+            "beschrijving": self.product_type.beschrijving,
+            "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+            "vragen": [],
+            "prijzen": [],
+            "links": [],
+            "bestanden": [],
+            "gepubliceerd": True,
+            "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+            "keywords": [],
+            "onderwerpen": [
+                {
+                    "id": str(self.onderwerp.id),
+                    "naam": self.onderwerp.naam,
+                    "gepubliceerd": True,
+                    "aanmaak_datum": self.onderwerp.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": self.onderwerp.update_datum.astimezone().isoformat(),
+                    "beschrijving": self.onderwerp.beschrijving,
+                    "hoofd_onderwerp": self.onderwerp.hoofd_onderwerp,
+                }
+            ],
+        }
+
+        self.assertEqual(response.data, expected_data)
 
     def test_delete_product_type(self):
-        product_type = ProductTypeFactory.create()
-        product_type.save()
-        LinkFactory.create(product_type=product_type)
+        LinkFactory.create(product_type=self.product_type)
 
-        response = self.delete(product_type.id)
+        response = self.client.delete(self.detail_path)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(ProductType.objects.count(), 0)

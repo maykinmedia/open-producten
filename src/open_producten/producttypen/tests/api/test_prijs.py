@@ -2,7 +2,6 @@ import datetime
 import uuid
 from decimal import Decimal
 
-from django.forms import model_to_dict
 from django.urls import reverse
 
 from freezegun import freeze_time
@@ -16,18 +15,6 @@ from open_producten.producttypen.tests.factories import (
     ProductTypeFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
-from open_producten.utils.tests.helpers import model_to_dict_with_id
-
-
-def prijs_to_dict(prijs):
-    prijs_dict = model_to_dict_with_id(prijs, exclude=["product_type"])
-    prijs_dict["product_type_id"] = prijs.product_type.id
-    prijs_dict["prijsopties"] = [
-        model_to_dict(optie) for optie in prijs.prijsopties.all()
-    ]
-    prijs_dict["actief_vanaf"] = str(prijs_dict["actief_vanaf"])
-
-    return prijs_dict
 
 
 @freeze_time("2024-01-01")
@@ -40,19 +27,40 @@ class TestProductTypePrijs(BaseApiTestCase):
             "actief_vanaf": datetime.date(2024, 1, 2),
             "product_type_id": self.product_type.id,
         }
-        self.path = reverse("prijs-list")
-
-    def _create_prijs(self):
-        return PrijsFactory.create(
+        self.prijs = PrijsFactory.create(
             product_type=self.product_type, actief_vanaf=datetime.date(2024, 1, 2)
         )
+
+        self.path = reverse("prijs-list")
+        self.detail_path = reverse("prijs-detail", args=[self.prijs.id])
 
     def test_read_prijs_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
         self.assertEqual(response.status_code, 401)
 
+    def test_required_fields(self):
+        response = self.client.post(self.path, {})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "actief_vanaf": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+                "prijsopties": [
+                    ErrorDetail(
+                        string="Er is minimaal één optie vereist.", code="invalid"
+                    )
+                ],
+                "product_type_id": [
+                    ErrorDetail("Dit veld is vereist.", code="required")
+                ],
+            },
+        )
+
     def test_create_prijs_without_opties(self):
-        response = self.post(self.prijs_data)
+        response = self.client.post(self.path, self.prijs_data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -69,33 +77,32 @@ class TestProductTypePrijs(BaseApiTestCase):
 
     def test_create_prijs_with_prijs_opties(self):
         data = {
-            "actief_vanaf": datetime.date(2024, 1, 2),
+            "actief_vanaf": datetime.date(2024, 1, 3),
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "product_type_id": self.product_type.id,
         }
 
-        response = self.post(data)
+        response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Prijs.objects.count(), 1)
+        self.assertEqual(Prijs.objects.count(), 2)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(
-            self.product_type.prijzen.first().prijsopties.first().bedrag,
+            PrijsOptie.objects.first().bedrag,
             Decimal("74.99"),
         )
 
     def test_update_prijs_removing_all_opties(self):
-        prijs = self._create_prijs()
-        PrijsOptieFactory.create(prijs=prijs)
-        PrijsOptieFactory.create(prijs=prijs)
+        PrijsOptieFactory.create(prijs=self.prijs)
+        PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [],
         }
 
-        response = self.put(prijs.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -111,12 +118,12 @@ class TestProductTypePrijs(BaseApiTestCase):
         )
 
     def test_update_prijs_updating_and_removing_opties(self):
-        prijs = self._create_prijs()
-        optie_to_be_updated = PrijsOptieFactory.create(prijs=prijs)
-        PrijsOptieFactory.create(prijs=prijs)
+
+        optie_to_be_updated = PrijsOptieFactory.create(prijs=self.prijs)
+        PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [
                 {
@@ -127,7 +134,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             ],
         }
 
-        response = self.put(prijs.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Prijs.objects.count(), 1)
@@ -135,16 +142,16 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
 
     def test_update_prijs_creating_and_deleting_opties(self):
-        prijs = self._create_prijs()
-        PrijsOptieFactory.create(prijs=prijs)
+
+        PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "prijsopties": [{"bedrag": "20", "beschrijving": "test"}],
             "product_type_id": self.product_type.id,
         }
 
-        response = self.put(prijs.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Prijs.objects.count(), 1)
@@ -152,19 +159,18 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
 
     def test_update_prijs_with_optie_not_part_of_prijs_returns_error(self):
-        prijs = self._create_prijs()
 
         optie = PrijsOptieFactory.create(prijs=PrijsFactory.create())
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving}
             ],
         }
 
-        response = self.put(prijs.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -180,18 +186,18 @@ class TestProductTypePrijs(BaseApiTestCase):
         )
 
     def test_update_prijs_with_optie_with_unknown_id_returns_error(self):
-        prijs = self._create_prijs()
+
         non_existing_id = uuid.uuid4()
 
         data = {
             "product_type_id": self.product_type.id,
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "prijsopties": [
                 {"id": non_existing_id, "bedrag": "20", "beschrijving": "test"}
             ],
         }
 
-        response = self.put(prijs.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -207,12 +213,11 @@ class TestProductTypePrijs(BaseApiTestCase):
         )
 
     def test_update_prijs_with_duplicate_optie_ids_returns_error(self):
-        prijs = self._create_prijs()
 
-        optie = PrijsOptieFactory.create(prijs=prijs)
+        optie = PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving},
@@ -220,7 +225,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             ],
         }
 
-        response = self.put(prijs.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -236,12 +241,12 @@ class TestProductTypePrijs(BaseApiTestCase):
         )
 
     def test_partial_update_prijs(self):
-        prijs = self._create_prijs()
-        PrijsOptieFactory.create(prijs=prijs)
+
+        PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {"actief_vanaf": datetime.date(2024, 1, 4)}
 
-        response = self.patch(prijs.id, data)
+        response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Prijs.objects.count(), 1)
@@ -252,12 +257,12 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.count(), 1)
 
     def test_partial_update_prijs_updating_and_removing_opties(self):
-        prijs = self._create_prijs()
-        optie_to_be_updated = PrijsOptieFactory.create(prijs=prijs)
-        PrijsOptieFactory.create(prijs=prijs)
+
+        optie_to_be_updated = PrijsOptieFactory.create(prijs=self.prijs)
+        PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {
-            "actief_vanaf": prijs.actief_vanaf,
+            "actief_vanaf": self.prijs.actief_vanaf,
             "prijsopties": [
                 {
                     "id": optie_to_be_updated.id,
@@ -267,7 +272,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             ],
         }
 
-        response = self.patch(prijs.id, data)
+        response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Prijs.objects.count(), 1)
@@ -275,15 +280,15 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
 
     def test_partial_update_prijs_creating_and_deleting_opties(self):
-        prijs = self._create_prijs()
-        PrijsOptieFactory.create(prijs=prijs)
+
+        PrijsOptieFactory.create(prijs=self.prijs)
 
         data = {
             "actief_vanaf": datetime.date(2024, 1, 4),
             "prijsopties": [{"bedrag": "20", "beschrijving": "test"}],
         }
 
-        response = self.patch(prijs.id, data)
+        response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Prijs.objects.count(), 1)
@@ -295,8 +300,8 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.first().beschrijving, "test")
 
     def test_partial_update_with_multiple_errors(self):
-        prijs = self._create_prijs()
-        optie = PrijsOptieFactory.create(prijs=prijs)
+
+        optie = PrijsOptieFactory.create(prijs=self.prijs)
         optie_of_other_prijs = PrijsOptieFactory.create(prijs=PrijsFactory.create())
         non_existing_optie = uuid.uuid4()
 
@@ -313,7 +318,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             ]
         }
 
-        response = self.patch(prijs.id, data)
+        response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -337,24 +342,43 @@ class TestProductTypePrijs(BaseApiTestCase):
         )
 
     def test_read_prijzen(self):
-        prijs = self._create_prijs()
-
-        response = self.get()
+        prijs = PrijsFactory.create(
+            product_type=self.product_type, actief_vanaf=datetime.date(2024, 2, 2)
+        )
+        response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [prijs_to_dict(prijs)])
+        self.assertEqual(response.data["count"], 2)
+        expected_data = [
+            {
+                "id": str(self.prijs.id),
+                "actief_vanaf": str(self.prijs.actief_vanaf),
+                "prijsopties": [],
+                "product_type_id": self.product_type.id,
+            },
+            {
+                "id": str(prijs.id),
+                "actief_vanaf": str(prijs.actief_vanaf),
+                "prijsopties": [],
+                "product_type_id": self.product_type.id,
+            },
+        ]
+        self.assertCountEqual(response.data["results"], expected_data)
 
     def test_read_prijs(self):
-        prijs = self._create_prijs()
-
-        response = self.get(prijs.id)
+        response = self.client.get(self.detail_path)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, prijs_to_dict(prijs))
+        expected_data = {
+            "id": str(self.prijs.id),
+            "actief_vanaf": str(self.prijs.actief_vanaf),
+            "prijsopties": [],
+            "product_type_id": self.product_type.id,
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_delete_prijs(self):
-        prijs = self._create_prijs()
-        response = self.delete(prijs.id)
+
+        response = self.client.delete(self.detail_path)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Prijs.objects.count(), 0)

@@ -12,3 +12,9 @@ class BestandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bestand
         fields = ("id", "bestand", "product_type_id")
+
+
+class NestedBestandSerializer(BestandSerializer):
+    class Meta:
+        model = Bestand
+        fields = ("id", "bestand")

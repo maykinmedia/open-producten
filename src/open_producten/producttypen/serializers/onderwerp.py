@@ -13,7 +13,7 @@ from ...utils.drf_validators import DuplicateIdValidator
 from .vraag import VraagSerializer
 
 
-class SimpleProductTypeSerializer(serializers.ModelSerializer):
+class NestedProductTypeSerializer(serializers.ModelSerializer):
     uniforme_product_naam = serializers.SlugRelatedField(
         slug_field="uri", queryset=UniformeProductNaam.objects.all()
     )
@@ -38,7 +38,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
         queryset=Onderwerp.objects.all(),
         allow_null=True,
     )
-    product_typen = SimpleProductTypeSerializer(many=True, read_only=True)
+    product_typen = NestedProductTypeSerializer(many=True, read_only=True)
     vragen = VraagSerializer(many=True, read_only=True)
 
     product_type_ids = serializers.PrimaryKeyRelatedField(

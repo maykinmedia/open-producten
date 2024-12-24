@@ -1,48 +1,60 @@
 from django.urls import reverse
 
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
 from open_producten.producttypen.models import Link, ProductType
 from open_producten.utils.tests.cases import BaseApiTestCase
-from open_producten.utils.tests.helpers import model_to_dict_with_id
 
 from ..factories import LinkFactory, ProductTypeFactory
-
-
-def link_to_dict(link):
-    link_dict = model_to_dict_with_id(link, exclude=["product_type"])
-    link_dict["product_type_id"] = link.product_type.id
-
-    return link_dict
 
 
 class TestProductTypeLink(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
-        product_type = ProductTypeFactory.create()
+        self.product_type = ProductTypeFactory.create()
         self.data = {
             "naam": "test link",
             "url": "https://www.google.com",
-            "product_type_id": product_type.id,
+            "product_type_id": self.product_type.id,
         }
-        self.path = reverse("link-list")
+        self.link = LinkFactory.create(product_type=self.product_type)
 
-        self.link = LinkFactory.create(product_type=product_type)
+        self.path = reverse("link-list")
+        self.detail_path = reverse("link-detail", args=[self.link.id])
 
     def test_read_link_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
         self.assertEqual(response.status_code, 401)
 
+    def test_required_fields(self):
+        response = self.client.post(self.path, {})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "url": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "product_type_id": [
+                    ErrorDetail("Dit veld is vereist.", code="required")
+                ],
+            },
+        )
+
     def test_create_link(self):
-        response = self.post(self.data)
+        response = self.client.post(self.path, self.data)
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Link.objects.count(), 2)
 
+        response.data.pop("id")
+        self.assertEqual(response.data, self.data)
+
     def test_update_link(self):
         data = self.data | {"naam": "update"}
-        response = self.put(self.link.id, data)
+        response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Link.objects.count(), 1)
@@ -50,27 +62,49 @@ class TestProductTypeLink(BaseApiTestCase):
 
     def test_partial_update_link(self):
         data = {"naam": "update"}
-        response = self.patch(self.link.id, data)
+        response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Link.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().links.first().naam, "update")
 
     def test_read_links(self):
-        response = self.get()
+        link = LinkFactory.create(product_type=self.product_type)
+        response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [link_to_dict(self.link)])
+        self.assertEqual(response.data["count"], 2)
+        expected_data = [
+            {
+                "id": str(self.link.id),
+                "naam": self.link.naam,
+                "url": self.link.url,
+                "product_type_id": self.product_type.id,
+            },
+            {
+                "id": str(link.id),
+                "naam": link.naam,
+                "url": link.url,
+                "product_type_id": self.product_type.id,
+            },
+        ]
+        self.assertCountEqual(response.data["results"], expected_data)
 
     def test_read_link(self):
-        response = self.get(self.link.id)
+        response = self.client.get(self.detail_path)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, link_to_dict(self.link))
+
+        expected_data = {
+            "id": str(self.link.id),
+            "naam": self.link.naam,
+            "url": self.link.url,
+            "product_type_id": self.product_type.id,
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_delete_link(self):
-        response = self.delete(self.link.id)
+        response = self.client.delete(self.detail_path)
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Link.objects.count(), 0)

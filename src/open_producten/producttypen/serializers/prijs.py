@@ -70,3 +70,9 @@ class PrijsSerializer(serializers.ModelSerializer):
             ).delete()
 
         return prijs
+
+
+class NestedPrijsSerializer(PrijsSerializer):
+    class Meta:
+        model = Prijs
+        fields = ("id", "prijsopties", "actief_vanaf")
