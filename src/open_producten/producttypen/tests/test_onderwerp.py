@@ -8,8 +8,8 @@ class TestVraag(TestCase):
 
     def test_hoofd_onderwerpen_must_be_published_when_publishing_sub_onderwerp(self):
         hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
-        sub_onderwerp = hoofd_onderwerp.add_child(
-            **{"naam": "sub onderwerp", "gepubliceerd": True}
+        sub_onderwerp = OnderwerpFactory.create(
+            gepubliceerd=True, hoofd_onderwerp=hoofd_onderwerp
         )
 
         with self.assertRaisesMessage(
@@ -23,11 +23,11 @@ class TestVraag(TestCase):
 
         sub_onderwerp.clean()
 
-    def test_hoofd_onderwerpen_cannot_be_published_with_published_sub_onderwerpen(self):
+    def test_hoofd_onderwerpen_cannot_be_unpublished_with_published_sub_onderwerpen(
+        self,
+    ):
         hoofd_onderwerp = OnderwerpFactory.create(gepubliceerd=False)
-        hoofd_onderwerp.add_child(**{"naam": "sub onderwerp", "gepubliceerd": True})
-
-        hoofd_onderwerp.gepubliceerd = False
+        OnderwerpFactory.create(gepubliceerd=True, hoofd_onderwerp=hoofd_onderwerp)
 
         with self.assertRaisesMessage(
             ValidationError,

@@ -1,77 +1,72 @@
-from django import forms
 from django.contrib import admin
-from django.forms import BaseModelFormSet
-from django.utils.translation import gettext as _
+from django.db.models import Count
+from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
-from treebeard.admin import TreeAdmin
-from treebeard.forms import movenodeform_factory
-
-from ..models import Onderwerp, OnderwerpProductType
+from ..models import Onderwerp, ProductType
 from .vraag import VraagInline
 
 
 class ProductTypeInline(admin.TabularInline):
-    model = OnderwerpProductType
-    fields = ("product_type",)
-    extra = 1
+    model = ProductType.onderwerpen.through
+    extra = 0
 
+    verbose_name = _("Product type")
+    verbose_name_plural = _("Product typen")
 
-class OnderwerpAdminForm(movenodeform_factory(Onderwerp)):
-    class Meta:
-        model = Onderwerp
-        fields = "__all__"
+    def has_change_permission(self, request, obj=None):
+        return False
 
+    def has_delete_permission(self, request, obj=None):
+        return False
 
-class OnderwerpAdminFormSet(BaseModelFormSet):
-    def clean(self):
-        super().clean()
-
-        data = {
-            form.cleaned_data["id"]: form.cleaned_data["gepubliceerd"]
-            for form in self.forms
-        }
-
-        for onderwerp, gepubliceerd in data.items():
-            if children := onderwerp.get_children():
-                if not gepubliceerd and any([data[child] for child in children]):
-                    raise forms.ValidationError(
-                        _(
-                            "Onderwerpen moeten gepubliceerd zijn met gepubliceerde sub onderwerpen."
-                        )
-                    )
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Onderwerp)
-class OnderwerpAdmin(TreeAdmin):
-    form = OnderwerpAdminForm
+class OnderwerpAdmin(admin.ModelAdmin):
     inlines = (
-        ProductTypeInline,
         VraagInline,
+        ProductTypeInline,
     )
-    search_fields = ("naam",)
-    list_display = (
-        "naam",
-        "gepubliceerd",
-    )
-    list_editable = ("gepubliceerd",)
-    exclude = ("path", "depth", "numchild")
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "naam",
-                    "beschrijving",
-                    "gepubliceerd",
-                    "_position",
-                    "_ref_node_id",
-                ),
-            },
-        ),
-    )
+    search_fields = ("naam", "hoofd_onderwerp__naam")
+    list_display = ("naam", "hoofd_onderwerp", "gepubliceerd", "product_typen_count")
 
-    list_filter = ["gepubliceerd", "product_typen"]
+    @admin.display(description=_("Aantal product typen"))
+    def product_typen_count(self, obj):
+        return obj.product_typen_count
 
-    def get_changelist_formset(self, request, **kwargs):
-        kwargs["formset"] = OnderwerpAdminFormSet
-        return super().get_changelist_formset(request, **kwargs)
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(product_typen_count=Count("product_typen"))
+        return queryset
+
+    list_filter = ["gepubliceerd", "product_typen", "hoofd_onderwerp"]
+
+    def get_deleted_objects(self, objs, request):
+        """
+        Product_typen need at least one onderwerp.
+        """
+
+        def get_product_type_url(instance):
+            return reverse("admin:producttypen_producttype_change", args=(instance.id,))
+
+        def get_current_product_type_onderwerpen(instance):
+            return ", ".join(instance.onderwerpen.values_list("naam", flat=True))
+
+        errors = []
+        for product_type in ProductType.objects.filter(onderwerpen__in=objs).distinct():
+            if product_type.onderwerpen.count() <= objs.count():
+                errors.append(
+                    format_html(
+                        "Product Type <a href='{}'>{}</a> moet aan een minimaal één onderwerp zijn gelinkt. Huidige onderwerpen: {}.",
+                        get_product_type_url(product_type),
+                        product_type,
+                        get_current_product_type_onderwerpen(product_type),
+                    )
+                )
+        if errors:
+            return [], [], [], errors
+        return super().get_deleted_objects(objs, request)

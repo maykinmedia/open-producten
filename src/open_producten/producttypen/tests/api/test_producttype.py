@@ -42,12 +42,14 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": upn.uri,
             "onderwerp_ids": [self.onderwerp.id],
         }
-        self.product_type = ProductTypeFactory.create()
-        self.product_type.onderwerpen.add(self.onderwerp)
-        self.product_type.save()
+        # self.product_type = ProductTypeFactory.create()
+        # self.product_type.onderwerpen.add(self.onderwerp)
+        # self.product_type.save()
 
         self.path = reverse("producttype-list")
-        self.detail_path = reverse("producttype-detail", args=[self.product_type.id])
+
+    def detail_path(self, product_type):
+        return reverse("producttype-detail", args=[product_type.id])
 
     def test_read_product_type_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -77,7 +79,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         response = self.client.post(self.path, self.data)
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(ProductType.objects.count(), 2)
+        self.assertEqual(ProductType.objects.count(), 1)
 
         product_type = ProductType.objects.get(id=response.data["id"])
         onderwerp = product_type.onderwerpen.first()
@@ -205,17 +207,18 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_update_minimal_product_type(self):
-
-        response = self.client.put(self.detail_path, self.data)
+        product_type = ProductTypeFactory.create()
+        response = self.client.put(self.detail_path(product_type), self.data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
 
     def test_update_product_type_with_onderwerp(self):
+        product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
 
         data = self.data | {"onderwerp_ids": [onderwerp.id]}
-        response = self.client.put(self.detail_path, data)
+        response = self.client.put(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ProductType.objects.count(), 1)
@@ -225,8 +228,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_update_product_type_removing_onderwerp(self):
+        product_type = ProductTypeFactory.create()
         data = self.data | {"onderwerp_ids": []}
-        response = self.client.put(self.detail_path, data)
+        response = self.client.put(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -298,6 +302,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
+        product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
 
         # TODO add location_ids
@@ -306,7 +311,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
         }
 
-        response = self.client.put(self.detail_path, data)
+        response = self.client.put(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -322,23 +327,26 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_partial_update_product_type(self):
+        product_type = ProductTypeFactory.create()
+
         # TODO add location_ids
 
         data = {"naam": "update"}
 
-        response = self.client.patch(self.detail_path, data)
-        self.product_type.refresh_from_db()
+        response = self.client.patch(self.detail_path(product_type), data)
+        product_type.refresh_from_db()
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.product_type.naam, "update")
+        self.assertEqual(product_type.naam, "update")
 
     def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
+        product_type = ProductTypeFactory.create()
         onderwerp = OnderwerpFactory.create()
 
         data = {
             "onderwerp_ids": [onderwerp.id, onderwerp.id],
         }
 
-        response = self.client.patch(self.detail_path, data)
+        response = self.client.patch(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -354,8 +362,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_partial_update_product_type_removing_onderwerp(self):
+        product_type = ProductTypeFactory.create()
         data = {"onderwerp_ids": []}
-        response = self.client.patch(self.detail_path, data)
+        response = self.client.patch(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -370,11 +379,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
     def test_read_product_type_link(self):
-        link = LinkFactory.create()
-        self.product_type.links.add(link)
-        self.product_type.save()
+        product_type = ProductTypeFactory.create()
+        link = LinkFactory.create(product_type=product_type)
 
-        response = self.client.get(self.detail_path)
+        response = self.client.get(self.detail_path(product_type))
 
         self.assertEqual(response.status_code, 200)
         expected_data = [
@@ -388,11 +396,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data["links"], expected_data)
 
     def test_read_product_type_vraag(self):
-        vraag = VraagFactory.create()
-        self.product_type.vragen.add(vraag)
-        self.product_type.save()
+        product_type = ProductTypeFactory.create()
+        vraag = VraagFactory.create(product_type=product_type)
 
-        response = self.client.get(self.detail_path)
+        response = self.client.get(self.detail_path(product_type))
 
         self.assertEqual(response.status_code, 200)
         expected_data = [
@@ -406,11 +413,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data["vragen"], expected_data)
 
     def test_read_product_type_bestand(self):
-        bestand = BestandFactory.create()
-        self.product_type.bestanden.add(bestand)
-        self.product_type.save()
+        product_type = ProductTypeFactory.create()
+        bestand = BestandFactory.create(product_type=product_type)
 
-        response = self.client.get(self.detail_path)
+        response = self.client.get(self.detail_path(product_type))
 
         self.assertEqual(response.status_code, 200)
         expected_data = [
@@ -422,12 +428,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data["bestanden"], expected_data)
 
     def test_read_product_type_prijs(self):
-        prijs = PrijsFactory.create()
+        product_type = ProductTypeFactory.create()
+        prijs = PrijsFactory.create(product_type=product_type)
         prijs_optie = PrijsOptieFactory.create(prijs=prijs)
-        self.product_type.prijzen.add(prijs)
-        self.product_type.save()
 
-        response = self.client.get(self.detail_path)
+        response = self.client.get(self.detail_path(product_type))
 
         self.assertEqual(response.status_code, 200)
         expected_data = [
@@ -446,9 +451,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data["prijzen"], expected_data)
 
     def test_read_product_typen(self):
-        product_type = ProductTypeFactory.create()
-        product_type.onderwerpen.add(self.onderwerp)
-        product_type.save()
+        product_type1 = ProductTypeFactory.create()
+        product_type1.onderwerpen.add(self.onderwerp)
+        product_type1.save()
+
+        product_type2 = ProductTypeFactory.create()
+        product_type2.onderwerpen.add(self.onderwerp)
+        product_type2.save()
 
         response = self.client.get(self.path)
 
@@ -456,18 +465,18 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
-                "id": str(self.product_type.id),
-                "naam": self.product_type.naam,
-                "samenvatting": self.product_type.samenvatting,
-                "beschrijving": self.product_type.beschrijving,
-                "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                "id": str(product_type1.id),
+                "naam": product_type1.naam,
+                "samenvatting": product_type1.samenvatting,
+                "beschrijving": product_type1.beschrijving,
+                "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
                 "gepubliceerd": True,
-                "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
-                "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+                "aanmaak_datum": product_type1.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product_type1.update_datum.astimezone().isoformat(),
                 "keywords": [],
                 "onderwerpen": [
                     {
@@ -482,18 +491,18 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 ],
             },
             {
-                "id": str(product_type.id),
-                "naam": product_type.naam,
-                "samenvatting": product_type.samenvatting,
-                "beschrijving": product_type.beschrijving,
-                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "id": str(product_type2.id),
+                "naam": product_type2.naam,
+                "samenvatting": product_type2.samenvatting,
+                "beschrijving": product_type2.beschrijving,
+                "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
                 "gepubliceerd": True,
-                "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
-                "update_datum": product_type.update_datum.astimezone().isoformat(),
+                "aanmaak_datum": product_type2.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product_type2.update_datum.astimezone().isoformat(),
                 "keywords": [],
                 "onderwerpen": [
                     {
@@ -511,23 +520,26 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertCountEqual(response.data["results"], expected_data)
 
     def test_read_product_type(self):
+        product_type = ProductTypeFactory.create()
+        product_type.onderwerpen.add(self.onderwerp)
+        product_type.save()
 
-        response = self.client.get(self.detail_path)
+        response = self.client.get(self.detail_path(product_type))
 
         self.assertEqual(response.status_code, 200)
         expected_data = {
-            "id": str(self.product_type.id),
-            "naam": self.product_type.naam,
-            "samenvatting": self.product_type.samenvatting,
-            "beschrijving": self.product_type.beschrijving,
-            "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+            "id": str(product_type.id),
+            "naam": product_type.naam,
+            "samenvatting": product_type.samenvatting,
+            "beschrijving": product_type.beschrijving,
+            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "vragen": [],
             "prijzen": [],
             "links": [],
             "bestanden": [],
             "gepubliceerd": True,
-            "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
-            "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product_type.update_datum.astimezone().isoformat(),
             "keywords": [],
             "onderwerpen": [
                 {
@@ -545,9 +557,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data, expected_data)
 
     def test_delete_product_type(self):
-        LinkFactory.create(product_type=self.product_type)
+        product_type = ProductTypeFactory.create()
 
-        response = self.client.delete(self.detail_path)
+        LinkFactory.create(product_type=product_type)
+
+        response = self.client.delete(self.detail_path(product_type))
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(ProductType.objects.count(), 0)
@@ -555,7 +569,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
 
 @freeze_time("2024-01-01")
-class testProductTypeActions(BaseApiTestCase):
+class TestProductTypeActions(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()

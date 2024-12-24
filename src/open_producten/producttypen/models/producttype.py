@@ -13,15 +13,6 @@ from .onderwerp import Onderwerp
 from .upn import UniformeProductNaam
 
 
-class OnderwerpProductType(models.Model):
-    """
-    Through-model for Onderwerp-ProductType m2m-relations.
-    """
-
-    onderwerp = models.ForeignKey(Onderwerp, on_delete=models.CASCADE)
-    product_type = models.ForeignKey("ProductType", on_delete=models.CASCADE)
-
-
 class ProductType(BasePublishableModel):
     naam = models.CharField(
         verbose_name=_("product type naam"),
@@ -63,7 +54,6 @@ class ProductType(BasePublishableModel):
         blank=True,
         related_name="product_typen",
         help_text=_("onderwerpen waaraan het product type is gelinkt."),
-        through=OnderwerpProductType,
     )
 
     # organisations = models.ManyToManyField(

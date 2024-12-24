@@ -39,11 +39,6 @@ class OnderwerpFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Onderwerp
 
-    @classmethod
-    def _create(cls, model_class, *args, **kwargs):
-        """For now factory creates only root onderwerpen"""
-        return Onderwerp.add_root(**kwargs)
-
 
 class VraagFactory(factory.django.DjangoModelFactory):
     vraag = factory.Faker("sentence")

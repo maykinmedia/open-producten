@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -74,3 +76,18 @@ class OnderwerpViewSet(OrderedModelViewSet):
     queryset = Onderwerp.objects.all()
     serializer_class = OnderwerpSerializer
     lookup_url_kwarg = "id"
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        errors = []
+        for product_type in ProductType.objects.filter(onderwerpen__in=[instance]):
+            if product_type.onderwerpen.count() <= 1:
+                errors.append(
+                    _(
+                        "Product Type {} moet aan een minimaal één onderwerp zijn gelinkt."
+                    ).format(product_type)
+                )
+
+        if errors:
+            return Response(data={"product_typen": errors}, status=400)
+        return super().destroy(request, *args, **kwargs)
