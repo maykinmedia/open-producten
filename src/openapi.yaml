@@ -546,6 +546,28 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/producttypen/{id}/actuele-prijs/:
+    get:
+      operationId: producttypen_actuele_prijs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type.
+        required: true
+      tags:
+      - producttypen
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductTypeActuelePrijs'
+          description: ''
   /api/v1/producttypen/actuele-prijzen/:
     get:
       operationId: producttypen_actuele_prijzen_retrieve
@@ -708,23 +730,6 @@ paths:
           description: No response body
 components:
   schemas:
-    Bestand:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        product_type_id:
-          type: string
-          format: uuid
-        bestand:
-          type: string
-          format: uri
-      required:
-      - bestand
-      - id
-      - product_type_id
     Link:
       type: object
       properties:
@@ -732,9 +737,43 @@ components:
           type: string
           format: uuid
           readOnly: true
+        naam:
+          type: string
+          description: Naam van de link.
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Url van de link.
+          maxLength: 200
         product_type_id:
           type: string
           format: uuid
+      required:
+      - id
+      - naam
+      - product_type_id
+      - url
+    NestedBestand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        bestand:
+          type: string
+          format: uri
+      required:
+      - bestand
+      - id
+    NestedLink:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         naam:
           type: string
           description: Naam van de link.
@@ -747,36 +786,21 @@ components:
       required:
       - id
       - naam
-      - product_type_id
       - url
-    Onderwerp:
+    NestedOnderwerp:
       type: object
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-        hoofd_onderwerp:
+        naam:
           type: string
-          format: uuid
-          nullable: true
-        product_typen:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleProductType'
-          readOnly: true
-        vragen:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vraag'
-          readOnly: true
-        product_type_ids:
-          type: array
-          items:
-            type: string
-            format: uuid
-          writeOnly: true
-          default: []
+          description: Naam van het onderwerp.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het onderwerp, ondersteund markdown format.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -792,6 +816,112 @@ components:
           readOnly: true
           title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
+        hoofd_onderwerp:
+          type: string
+          format: uuid
+          nullable: true
+          description: Het hoofd onderwerp van het onderwerp.
+      required:
+      - aanmaak_datum
+      - id
+      - naam
+      - update_datum
+    NestedPrijs:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        prijsopties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsOptie'
+          default: []
+        actief_vanaf:
+          type: string
+          format: date
+          title: Start datum
+          description: De datum vanaf wanneer de prijs actief is.
+      required:
+      - actief_vanaf
+      - id
+    NestedProductType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          title: Product type naam
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          description: Product type beschrijving, ondersteund markdown format.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        uniforme_product_naam:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+      required:
+      - aanmaak_datum
+      - beschrijving
+      - id
+      - naam
+      - uniforme_product_naam
+      - update_datum
+    NestedVraag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        vraag:
+          type: string
+          description: De vraag die wordt beantwoord.
+          maxLength: 250
+        antwoord:
+          type: string
+          description: Het antwoord op de vraag, ondersteund markdown format.
+      required:
+      - antwoord
+      - id
+      - vraag
+    Onderwerp:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
         naam:
           type: string
           description: Naam van het onderwerp.
@@ -799,11 +929,48 @@ components:
         beschrijving:
           type: string
           description: Beschrijving van het onderwerp, ondersteund markdown format.
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedVraag'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        hoofd_onderwerp:
+          type: string
+          format: uuid
+          nullable: true
+        product_typen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductType'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
       required:
       - aanmaak_datum
       - hoofd_onderwerp
       - id
       - naam
+      - product_type_ids
       - product_typen
       - update_datum
       - vragen
@@ -929,9 +1096,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-        product_type_id:
-          type: string
-          format: uuid
         naam:
           type: string
           description: Naam van de link.
@@ -941,6 +1105,9 @@ components:
           format: uri
           description: Url van de link.
           maxLength: 200
+        product_type_id:
+          type: string
+          format: uuid
     PatchedOnderwerp:
       type: object
       properties:
@@ -948,27 +1115,18 @@ components:
           type: string
           format: uuid
           readOnly: true
-        hoofd_onderwerp:
+        naam:
           type: string
-          format: uuid
-          nullable: true
-        product_typen:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleProductType'
-          readOnly: true
+          description: Naam van het onderwerp.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het onderwerp, ondersteund markdown format.
         vragen:
           type: array
           items:
-            $ref: '#/components/schemas/Vraag'
+            $ref: '#/components/schemas/NestedVraag'
           readOnly: true
-        product_type_ids:
-          type: array
-          items:
-            type: string
-            format: uuid
-          writeOnly: true
-          default: []
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -984,13 +1142,22 @@ components:
           readOnly: true
           title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
-        naam:
+        hoofd_onderwerp:
           type: string
-          description: Naam van het onderwerp.
-          maxLength: 100
-        beschrijving:
-          type: string
-          description: Beschrijving van het onderwerp, ondersteund markdown format.
+          format: uuid
+          nullable: true
+        product_typen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductType'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
     PatchedPrijs:
       type: object
       properties:
@@ -998,14 +1165,14 @@ components:
           type: string
           format: uuid
           readOnly: true
+        product_type_id:
+          type: string
+          format: uuid
         prijsopties:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
           default: []
-        product_type_id:
-          type: string
-          format: uuid
         actief_vanaf:
           type: string
           format: date
@@ -1025,7 +1192,7 @@ components:
         onderwerpen:
           type: array
           items:
-            $ref: '#/components/schemas/SimpleOnderwerp'
+            $ref: '#/components/schemas/NestedOnderwerp'
           readOnly: true
         onderwerp_ids:
           type: array
@@ -1037,22 +1204,22 @@ components:
         vragen:
           type: array
           items:
-            $ref: '#/components/schemas/Vraag'
+            $ref: '#/components/schemas/NestedVraag'
           readOnly: true
         prijzen:
           type: array
           items:
-            $ref: '#/components/schemas/Prijs'
+            $ref: '#/components/schemas/NestedPrijs'
           readOnly: true
         links:
           type: array
           items:
-            $ref: '#/components/schemas/Link'
+            $ref: '#/components/schemas/NestedLink'
           readOnly: true
         bestanden:
           type: array
           items:
-            $ref: '#/components/schemas/Bestand'
+            $ref: '#/components/schemas/NestedBestand'
           readOnly: true
         gepubliceerd:
           type: boolean
@@ -1097,9 +1264,11 @@ components:
         product_type_id:
           type: string
           format: uuid
+          nullable: true
         onderwerp_id:
           type: string
           format: uuid
+          nullable: true
         vraag:
           type: string
           description: De vraag die wordt beantwoord.
@@ -1114,14 +1283,14 @@ components:
           type: string
           format: uuid
           readOnly: true
+        product_type_id:
+          type: string
+          format: uuid
         prijsopties:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
           default: []
-        product_type_id:
-          type: string
-          format: uuid
         actief_vanaf:
           type: string
           format: date
@@ -1163,7 +1332,7 @@ components:
         onderwerpen:
           type: array
           items:
-            $ref: '#/components/schemas/SimpleOnderwerp'
+            $ref: '#/components/schemas/NestedOnderwerp'
           readOnly: true
         onderwerp_ids:
           type: array
@@ -1175,22 +1344,22 @@ components:
         vragen:
           type: array
           items:
-            $ref: '#/components/schemas/Vraag'
+            $ref: '#/components/schemas/NestedVraag'
           readOnly: true
         prijzen:
           type: array
           items:
-            $ref: '#/components/schemas/Prijs'
+            $ref: '#/components/schemas/NestedPrijs'
           readOnly: true
         links:
           type: array
           items:
-            $ref: '#/components/schemas/Link'
+            $ref: '#/components/schemas/NestedLink'
           readOnly: true
         bestanden:
           type: array
           items:
-            $ref: '#/components/schemas/Bestand'
+            $ref: '#/components/schemas/NestedBestand'
           readOnly: true
         gepubliceerd:
           type: boolean
@@ -1269,91 +1438,6 @@ components:
       - naam
       - upl_naam
       - upl_uri
-    SimpleOnderwerp:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        naam:
-          type: string
-          description: Naam van het onderwerp.
-          maxLength: 100
-        beschrijving:
-          type: string
-          description: Beschrijving van het onderwerp, ondersteund markdown format.
-      required:
-      - aanmaak_datum
-      - id
-      - naam
-      - update_datum
-    SimpleProductType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        uniforme_product_naam:
-          type: string
-          format: uri
-          description: Uri naar de UPN definitie.
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        naam:
-          type: string
-          title: Product type naam
-          description: naam van het product type.
-          maxLength: 100
-        samenvatting:
-          type: string
-          description: Korte beschrijving van het product type, maximaal 300 karakters.
-          maxLength: 300
-        beschrijving:
-          type: string
-          description: Product type beschrijving, ondersteund markdown format.
-        keywords:
-          type: array
-          items:
-            type: string
-            maxLength: 100
-          description: Lijst van keywords waarop kan worden gezocht.
-      required:
-      - aanmaak_datum
-      - beschrijving
-      - id
-      - naam
-      - uniforme_product_naam
-      - update_datum
     Vraag:
       type: object
       properties:
@@ -1364,9 +1448,11 @@ components:
         product_type_id:
           type: string
           format: uuid
+          nullable: true
         onderwerp_id:
           type: string
           format: uuid
+          nullable: true
         vraag:
           type: string
           description: De vraag die wordt beantwoord.
