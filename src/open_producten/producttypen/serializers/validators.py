@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from ...utils.serializers import get_from_serializer_data_or_instance
 from ..models import PrijsOptie
+from ..models.onderwerp import validate_gepubliceerd_state
 from ..models.vraag import validate_onderwerp_or_product_type
 
 
@@ -20,6 +21,26 @@ class ProductTypeOrOnderwerpValidator:
             validate_onderwerp_or_product_type(onderwerp, product_type)
         except ValidationError as e:
             raise serializers.ValidationError({"product_type_onderwerp": e.message})
+
+
+class OnderwerpGepubliceerdStateValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        hoofd_onderwerp = get_from_serializer_data_or_instance(
+            "hoofd_onderwerp", value, serializer
+        )
+        gepubliceerd = get_from_serializer_data_or_instance(
+            "gepubliceerd", value, serializer
+        )
+        sub_onderwerpen = (
+            serializer.instance.sub_onderwerpen if serializer.instance else None
+        )
+
+        try:
+            validate_gepubliceerd_state(hoofd_onderwerp, gepubliceerd, sub_onderwerpen)
+        except ValidationError as e:
+            raise serializers.ValidationError({"hoofd_onderwerp": e.message})
 
 
 class PrijsOptieValidator:

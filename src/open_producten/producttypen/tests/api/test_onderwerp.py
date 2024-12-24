@@ -124,10 +124,12 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": ErrorDetail(
-                    string="Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
-                    code="invalid",
-                )
+                "hoofd_onderwerp": [
+                    ErrorDetail(
+                        string="Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
+                        code="invalid",
+                    )
+                ]
             },
         )
 
@@ -211,10 +213,12 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": ErrorDetail(
-                    string="Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
-                    code="invalid",
-                )
+                "hoofd_onderwerp": [
+                    ErrorDetail(
+                        string="Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
+                        code="invalid",
+                    )
+                ]
             },
         )
 
@@ -234,10 +238,12 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": ErrorDetail(
-                    string="Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben.",
-                    code="invalid",
-                )
+                "hoofd_onderwerp": [
+                    ErrorDetail(
+                        string="Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben.",
+                        code="invalid",
+                    )
+                ]
             },
         )
 
@@ -326,10 +332,12 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": ErrorDetail(
-                    string="Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
-                    code="invalid",
-                )
+                "hoofd_onderwerp": [
+                    ErrorDetail(
+                        string="Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd.",
+                        code="invalid",
+                    )
+                ]
             },
         )
 
@@ -349,10 +357,12 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "hoofd_onderwerp": ErrorDetail(
-                    string="Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben.",
-                    code="invalid",
-                )
+                "hoofd_onderwerp": [
+                    ErrorDetail(
+                        string="Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben.",
+                        code="invalid",
+                    )
+                ]
             },
         )
 

@@ -38,23 +38,26 @@ class Onderwerp(BasePublishableModel):
         return self.naam
 
     def clean(self):
-        if (
-            self.gepubliceerd
-            and self.hoofd_onderwerp
-            and not self.hoofd_onderwerp.gepubliceerd
-        ):
-            raise ValidationError(
-                _(
-                    "Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
-                )
-            )
+        validate_gepubliceerd_state(
+            self.hoofd_onderwerp, self.gepubliceerd, self.sub_onderwerpen
+        )
 
-        if (
-            not self.gepubliceerd
-            and self.sub_onderwerpen.filter(gepubliceerd=True).exists()
-        ):
-            raise ValidationError(
-                _(
-                    "Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben."
-                )
+
+def validate_gepubliceerd_state(hoofd_onderwerp, gepubliceerd, sub_onderwerpen=None):
+    if gepubliceerd and hoofd_onderwerp and not hoofd_onderwerp.gepubliceerd:
+        raise ValidationError(
+            _(
+                "Onderwerpen moeten gepubliceerd zijn voordat sub-onderwerpen kunnen worden gepubliceerd."
             )
+        )
+
+    if (
+        not gepubliceerd
+        and sub_onderwerpen
+        and sub_onderwerpen.filter(gepubliceerd=True).exists()
+    ):
+        raise ValidationError(
+            _(
+                "Onderwerpen kunnen niet ongepubliceerd worden als ze gepubliceerde sub-onderwerpen hebben."
+            )
+        )

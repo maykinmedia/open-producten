@@ -99,7 +99,6 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         product_type = ProductType.objects.create(**validated_data)
         product_type.onderwerpen.set(onderwerpen)
 
-        product_type.clean()
         product_type.save()
 
         return product_type
@@ -113,7 +112,6 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
         if onderwerpen:
             instance.onderwerpen.set(onderwerpen)
-        instance.clean()
         instance.save()
 
         return instance

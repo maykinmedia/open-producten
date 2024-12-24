@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from rest_framework import serializers
@@ -10,6 +9,7 @@ from open_producten.producttypen.models import (
 )
 
 from ...utils.drf_validators import DuplicateIdValidator
+from .validators import OnderwerpGepubliceerdStateValidator
 from .vraag import NestedVraagSerializer
 
 
@@ -62,21 +62,16 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             "product_typen",
             "product_type_ids",
         )
-        validators = [DuplicateIdValidator(["product_type_ids"])]
-
-    def _validate_onderwerp(self, onderwerp):
-        try:
-            onderwerp.clean()
-        except ValidationError as err:
-            raise serializers.ValidationError({"hoofd_onderwerp": err.message})
+        validators = [
+            DuplicateIdValidator(["product_type_ids"]),
+            OnderwerpGepubliceerdStateValidator(),
+        ]
 
     @transaction.atomic()
     def create(self, validated_data):
         product_typen = validated_data.pop("product_typen")
 
         onderwerp = Onderwerp.objects.create(**validated_data)
-
-        self._validate_onderwerp(onderwerp)
         onderwerp.product_typen.set(product_typen)
         onderwerp.save()
 
@@ -93,7 +88,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             instance.hoofd_onderwerp = hoofd_onderwerp
 
         instance = super().update(instance, validated_data)
-        self._validate_onderwerp(instance)
+
         if product_typen:
             instance.product_typen.set(product_typen)
         instance.save()
