@@ -5,6 +5,7 @@ from decimal import Decimal
 from django.urls import reverse
 
 from freezegun import freeze_time
+from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
@@ -36,12 +37,12 @@ class TestProductTypePrijs(BaseApiTestCase):
 
     def test_read_prijs_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_required_fields(self):
         response = self.client.post(self.path, {})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -62,7 +63,7 @@ class TestProductTypePrijs(BaseApiTestCase):
     def test_create_prijs_without_opties(self):
         response = self.client.post(self.path, self.prijs_data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -84,7 +85,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Prijs.objects.count(), 2)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(
@@ -104,7 +105,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -136,7 +137,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
@@ -153,7 +154,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
@@ -172,7 +173,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -199,7 +200,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -227,7 +228,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -248,7 +249,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(
             ProductType.objects.first().prijzen.first().actief_vanaf,
@@ -274,7 +275,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
@@ -290,7 +291,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(
             ProductType.objects.first().prijzen.first().actief_vanaf,
@@ -320,7 +321,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -347,7 +348,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         )
         response = self.client.get(self.path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
@@ -367,7 +368,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
     def test_read_prijs(self):
         response = self.client.get(self.detail_path)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(self.prijs.id),
             "actief_vanaf": str(self.prijs.actief_vanaf),
@@ -380,6 +381,6 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         response = self.client.delete(self.detail_path)
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Prijs.objects.count(), 0)
         self.assertEqual(PrijsOptie.objects.count(), 0)

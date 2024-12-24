@@ -1,5 +1,6 @@
 from django.urls import reverse
 
+from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
@@ -25,12 +26,12 @@ class TestProductTypeVraag(BaseApiTestCase):
 
     def test_read_vraag_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_required_fields(self):
         response = self.client.post(self.path, {})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -45,7 +46,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         response = self.client.post(
             self.path, self.data | {"product_type_id": self.product_type.id}
         )
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Vraag.objects.count(), 2)
         response.data.pop("id")
         self.assertEqual(
@@ -57,7 +58,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         response = self.client.post(
             self.path, self.data | {"onderwerp_id": self.onderwerp.id}
         )
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Vraag.objects.count(), 2)
         response.data.pop("id")
         self.assertEqual(
@@ -75,7 +76,7 @@ class TestProductTypeVraag(BaseApiTestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -91,7 +92,7 @@ class TestProductTypeVraag(BaseApiTestCase):
     def test_create_vraag_without_product_type_or_onderwerp(self):
         response = self.client.post(self.path, self.data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -108,7 +109,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         data = self.data | {"vraag": "21?", "product_type_id": self.product_type.id}
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Vraag.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().vragen.first().vraag, "21?")
 
@@ -116,7 +117,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         data = self.data | {"vraag": "21?", "onderwerp_id": self.onderwerp.id}
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -137,7 +138,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         }
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -157,7 +158,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         }
         response = self.client.put(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Vraag.objects.count(), 1)
         self.assertEqual(Vraag.objects.first().product_type, None)
         self.assertEqual(Vraag.objects.first().onderwerp, self.onderwerp)
@@ -166,7 +167,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         data = {"vraag": "21?"}
         response = self.client.patch(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Vraag.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().vragen.first().vraag, "21?")
 
@@ -174,7 +175,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         data = {"vraag": "21?", "onderwerp_id": self.onderwerp.id}
         response = self.client.patch(self.detail_path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -191,7 +192,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         vraag = VraagFactory.create(product_type=self.product_type)
         response = self.client.get(self.path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
@@ -214,7 +215,7 @@ class TestProductTypeVraag(BaseApiTestCase):
     def test_read_vraag(self):
         response = self.client.get(self.detail_path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(self.vraag.id),
             "vraag": self.vraag.vraag,
@@ -228,5 +229,5 @@ class TestProductTypeVraag(BaseApiTestCase):
     def test_delete_vraag(self):
         response = self.client.delete(self.detail_path)
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Vraag.objects.count(), 0)

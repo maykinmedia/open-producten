@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -89,5 +90,7 @@ class OnderwerpViewSet(OrderedModelViewSet):
                 )
 
         if errors:
-            return Response(data={"product_typen": errors}, status=400)
+            return Response(
+                data={"product_typen": errors}, status=status.HTTP_400_BAD_REQUEST
+            )
         return super().destroy(request, *args, **kwargs)

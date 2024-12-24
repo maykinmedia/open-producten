@@ -6,6 +6,7 @@ import datetime
 from django.urls import reverse
 
 from freezegun import freeze_time
+from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
@@ -53,12 +54,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_read_product_type_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_required_fields(self):
         response = self.client.post(self.path, {})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -78,7 +79,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_create_minimal_product_type(self):
         response = self.client.post(self.path, self.data)
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ProductType.objects.count(), 1)
 
         product_type = ProductType.objects.get(id=response.data["id"])
@@ -116,7 +117,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         data["onderwerp_ids"] = []
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -138,7 +139,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     data = self.data | {"locatie_ids": [locatie.id]}
     #     response = self.post(data)
     #
-    #     self.assertEqual(response.status_code, 201)
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     #     self.assertEqual(ProductType.objects.count(), 1)
     #     self.assertEqual(
     #         list(ProductType.objects.values_list("locaties__naam", flat=True)),
@@ -155,7 +156,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     data = self.data | {"organisatie_ids": [organisatie.id]}
     #     response = self.post(data)
     #
-    #     self.assertEqual(response.status_code, 201)
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     #     self.assertEqual(ProductType.objects.count(), 1)
     #     self.assertEqual(
     #         list(ProductType.objects.values_list("organisaties__naam", flat=True)),
@@ -172,7 +173,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     data = self.data | {"contact_ids": [contact.id]}
     #     response = self.post(data)
     #
-    #     self.assertEqual(response.status_code, 201)
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     #     self.assertEqual(ProductType.objects.count(), 1)
     #     self.assertEqual(
     #         list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
@@ -193,7 +194,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -210,7 +211,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         product_type = ProductTypeFactory.create()
         response = self.client.put(self.detail_path(product_type), self.data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
 
     def test_update_product_type_with_onderwerp(self):
@@ -220,7 +221,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         data = self.data | {"onderwerp_ids": [onderwerp.id]}
         response = self.client.put(self.detail_path(product_type), data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(
             list(ProductType.objects.values_list("onderwerpen__naam", flat=True)),
@@ -232,7 +233,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         data = self.data | {"onderwerp_ids": []}
         response = self.client.put(self.detail_path(product_type), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -255,7 +256,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     data = self.data | {"locatie_ids": [locatie.id]}
     #     response = self.put(product_type.id, data)
     #
-    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
     #     self.assertEqual(ProductType.objects.count(), 1)
     #     self.assertEqual(
     #         list(ProductType.objects.values_list("locaties__naam", flat=True)),
@@ -273,7 +274,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     data = self.data | {"organisation_ids": [organisatie.id]}
     #     response = self.put(product_type.id, data)
     #
-    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
     #     self.assertEqual(ProductType.objects.count(), 1)
     #     self.assertEqual(
     #         list(ProductType.objects.values_list("organisaties__naam", flat=True)),
@@ -291,7 +292,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     data = self.data | {"contact_ids": [contact.id]}
     #     response = self.put(product_type.id, data)
     #
-    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
     #     self.assertEqual(ProductType.objects.count(), 1)
     #     self.assertEqual(
     #         list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
@@ -313,7 +314,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.put(self.detail_path(product_type), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -335,7 +336,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path(product_type), data)
         product_type.refresh_from_db()
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(product_type.naam, "update")
 
     def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
@@ -348,7 +349,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path(product_type), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -366,7 +367,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         data = {"onderwerp_ids": []}
         response = self.client.patch(self.detail_path(product_type), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -384,7 +385,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(product_type))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
             {
                 "id": str(link.id),
@@ -401,7 +402,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(product_type))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
             {
                 "id": str(vraag.id),
@@ -418,7 +419,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(product_type))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
             {
                 "id": str(bestand.id),
@@ -434,7 +435,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(product_type))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
             {
                 "id": str(prijs.id),
@@ -461,7 +462,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.get(self.path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
@@ -526,7 +527,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(product_type))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
@@ -563,7 +564,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         response = self.client.delete(self.detail_path(product_type))
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(ProductType.objects.count(), 0)
         self.assertEqual(Link.objects.count(), 0)
 
@@ -589,7 +590,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
     def test_get_actuele_prijzen_when_product_type_has_no_prijzen(self):
         response = self.client.get(self.list_path)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data,
             [
@@ -599,7 +600,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
     def test_get_actuele_prijs_when_product_type_has_no_prijzen(self):
         response = self.client.get(self.detail_path)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data,
             self.expected_data,
@@ -612,7 +613,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
         response = self.client.get(self.list_path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data,
             [
@@ -630,7 +631,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
         response = self.client.get(self.list_path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data,
             [
@@ -662,7 +663,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
         response = self.client.get(self.detail_path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data,
             self.expected_data

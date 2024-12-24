@@ -1,5 +1,6 @@
 from django.urls import reverse
 
+from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
@@ -28,12 +29,12 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
     def test_read_onderwerp_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_required_fields(self):
         response = self.client.post(self.path, {})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -50,7 +51,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
     def test_create_minimal_onderwerp(self):
         response = self.client.post(self.path, self.data)
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Onderwerp.objects.count(), 1)
 
     def test_create_onderwerp_with_hoofd_onderwerp(self):
@@ -60,7 +61,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Onderwerp.objects.count(), 2)
 
         onderwerp = Onderwerp.objects.get(id=response.data["id"])
@@ -84,7 +85,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Onderwerp.objects.count(), 1)
         self.assertEqual(
             list(Onderwerp.objects.values_list("product_typen", flat=True)),
@@ -97,7 +98,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -119,7 +120,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.post(self.path, data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -139,7 +140,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(onderwerp.hoofd_onderwerp, new_hoofd_onderwerp)
 
     def test_update_change_from_hoofd_onderwerp_to_root(self):
@@ -153,7 +154,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(onderwerp.hoofd_onderwerp, None)
 
     def test_update_change_from_hoofd_onderwerp_to_hoofd_onderwerp(self):
@@ -169,7 +170,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(onderwerp.hoofd_onderwerp, new_hoofd_onderwerp)
 
     def test_update_hoofd_onderwerp_with_duplicate_product_typen_returns_error(self):
@@ -181,7 +182,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -206,7 +207,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.put(self.detail_path(sub_onderwerp), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -229,7 +230,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.put(self.detail_path(hoofd_onderwerp), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -251,7 +252,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(onderwerp.naam, "update")
         self.assertEqual(onderwerp.hoofd_onderwerp, hoofd_onderwerp)
 
@@ -268,7 +269,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(onderwerp.hoofd_onderwerp, new_hoofd_onderwerp)
 
     def test_partial_update_change_hoofd_onderwerp_to_root(self):
@@ -282,7 +283,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(onderwerp.hoofd_onderwerp, None)
 
     def test_partial_update_hoofd_onderwerp_with_duplicate_product_typen_returns_error(
@@ -296,7 +297,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         onderwerp.refresh_from_db()
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -321,7 +322,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path(sub_onderwerp), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -344,7 +345,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.patch(self.detail_path(hoofd_onderwerp), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -361,7 +362,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(onderwerp))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
             {
                 "id": str(vraag.id),
@@ -380,7 +381,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(onderwerp))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
             {
                 "id": str(product_type.id),
@@ -403,7 +404,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.get(self.path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
@@ -436,7 +437,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(onderwerp))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(onderwerp.id),
             "naam": onderwerp.naam,
@@ -456,7 +457,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.delete(self.detail_path(onderwerp))
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Onderwerp.objects.count(), 0)
         self.assertEqual(Vraag.objects.count(), 0)
 
@@ -468,7 +469,7 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.delete(self.detail_path(onderwerp))
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -487,5 +488,5 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         response = self.client.delete(self.detail_path(onderwerp))
 
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Onderwerp.objects.count(), 1)
