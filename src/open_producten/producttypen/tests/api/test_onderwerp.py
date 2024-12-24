@@ -68,7 +68,6 @@ class TestOnderwerpViewSet(BaseApiTestCase):
         self.assertEqual(response.data, expected_data)
 
     def test_create_onderwerp_with_hoofd_onderwerp(self):
-        self.maxDiff = None
         hoofd_onderwerp = OnderwerpFactory.create()
         data = self.data | {"hoofd_onderwerp": hoofd_onderwerp.id}
 

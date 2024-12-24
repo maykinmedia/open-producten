@@ -43,9 +43,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": upn.uri,
             "onderwerp_ids": [self.onderwerp.id],
         }
-        # self.product_type = ProductTypeFactory.create()
-        # self.product_type.onderwerpen.add(self.onderwerp)
-        # self.product_type.save()
 
         self.path = reverse("producttype-list")
 
