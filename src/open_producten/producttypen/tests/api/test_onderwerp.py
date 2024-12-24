@@ -53,6 +53,19 @@ class TestOnderwerpViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Onderwerp.objects.count(), 1)
+        onderwerp = Onderwerp.objects.first()
+        expected_data = {
+            "id": str(onderwerp.id),
+            "naam": onderwerp.naam,
+            "beschrijving": onderwerp.beschrijving,
+            "vragen": [],
+            "gepubliceerd": False,
+            "hoofd_onderwerp": None,
+            "product_typen": [],
+            "aanmaak_datum": onderwerp.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": onderwerp.update_datum.astimezone().isoformat(),
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_create_onderwerp_with_hoofd_onderwerp(self):
         self.maxDiff = None

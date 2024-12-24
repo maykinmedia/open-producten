@@ -82,7 +82,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ProductType.objects.count(), 1)
 
-        product_type = ProductType.objects.get(id=response.data["id"])
+        product_type = ProductType.objects.first()
         onderwerp = product_type.onderwerpen.first()
         expected_data = {
             "id": str(product_type.id),
