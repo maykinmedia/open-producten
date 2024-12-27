@@ -48,10 +48,12 @@ class Product(BasePublishableModel):
         verbose_name_plural = _("Producten")
 
     def clean(self):
-        if not self.bsn and not self.kvk:
-            raise ValidationError(
-                "Een product moet een bsn, kvk nummer of beiden hebben."
-            )
+        validate_bsn_or_kvk(self.bsn, self.kvk)
 
     def __str__(self):
         return f"{self.bsn if self.bsn else self.kvk} {self.product_type.naam}"
+
+
+def validate_bsn_or_kvk(bsn, kvk):
+    if not bsn and not kvk:
+        raise ValidationError("Een product moet een bsn, kvk nummer of beiden hebben.")
