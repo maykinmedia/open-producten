@@ -19,7 +19,6 @@ INSTALLED_APPS += [
     "rest_framework.authtoken",
     "localflavor",
     "markdownx",
-    "django.contrib.gis",
     "open_producten.accounts",
     "open_producten.utils",
     "open_producten.producttypen",
@@ -29,7 +28,7 @@ INSTALLED_APPS += [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": config("DB_NAME", PROJECT_DIRNAME),
         "USER": config("DB_USER", PROJECT_DIRNAME),
         "PASSWORD": config("DB_PASSWORD", PROJECT_DIRNAME),
@@ -119,15 +118,6 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     ),
     "COMPONENT_SPLIT_REQUEST": True,
 }
-
-#
-# geopy
-#
-
-GEOPY_APP = "Openproducten"
-GEOPY_TIMEOUT = 10  # in seconds
-LOCATION_SERVICE_URL = "https://api.pdok.nl/bzk/locatieserver/search/v3_1/free"
-GEOCODER = "open_producten.utils.geocode.PdocLocatieserver"
 
 # Subpath (optional)
 # This environment variable can be configured during deployment.

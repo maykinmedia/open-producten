@@ -1,6 +1,3 @@
-from unittest.mock import Mock, patch
-
-from django.contrib.gis.geos import Point
 from django.urls import reverse
 
 from rest_framework import status
@@ -12,16 +9,9 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 from ..factories import OrganisatieFactory
 
-@patch(
-    "open_producten.locaties.models.locatie.geocode_address",
-    new=Mock(return_value=Point((4.84303667, 52.38559043))),
-)
+
 class TestOrganisatie(BaseApiTestCase):
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def setUp(self):
         super().setUp()
 
@@ -68,7 +58,6 @@ class TestOrganisatie(BaseApiTestCase):
             "huisnummer": organisatie.huisnummer,
             "postcode": organisatie.postcode,
             "stad": organisatie.stad,
-            "coordinaten": organisatie.coordinaten.coords,
         }
         self.assertEqual(response.data, expected_data)
 
@@ -104,7 +93,6 @@ class TestOrganisatie(BaseApiTestCase):
                 "huisnummer": self.organisatie.huisnummer,
                 "postcode": self.organisatie.postcode,
                 "stad": self.organisatie.stad,
-                "coordinaten": self.organisatie.coordinaten.coords,
             },
             {
                 "id": str(organisatie.id),
@@ -115,7 +103,6 @@ class TestOrganisatie(BaseApiTestCase):
                 "huisnummer": organisatie.huisnummer,
                 "postcode": organisatie.postcode,
                 "stad": organisatie.stad,
-                "coordinaten": organisatie.coordinaten.coords,
             },
         ]
         self.assertCountEqual(response.data["results"], expected_data)
@@ -133,7 +120,6 @@ class TestOrganisatie(BaseApiTestCase):
             "huisnummer": self.organisatie.huisnummer,
             "postcode": self.organisatie.postcode,
             "stad": self.organisatie.stad,
-            "coordinaten": self.organisatie.coordinaten.coords,
         }
         self.assertEqual(response.data, expected_data)
 

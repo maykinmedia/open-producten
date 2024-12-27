@@ -1,13 +1,11 @@
 from django.contrib.gis import admin
 from django.utils.translation import gettext_lazy as _
 
-from open_producten.utils.geocode import GeoAdminMixin
-
 from ..models import Organisatie
 
 
 @admin.register(Organisatie)
-class OrganisatieAdmin(GeoAdminMixin, admin.GISModelAdmin):
+class OrganisatieAdmin(admin.ModelAdmin):
     list_display = ("naam",)
     list_filter = ("stad",)
     search_fields = ("naam",)
@@ -21,6 +19,6 @@ class OrganisatieAdmin(GeoAdminMixin, admin.GISModelAdmin):
         (_("Contact"), {"fields": ("email", "telefoonnummer")}),
         (
             _("Address"),
-            {"fields": ("straat", "huisnummer", "postcode", "stad", "coordinaten")},
+            {"fields": ("straat", "huisnummer", "postcode", "stad")},
         ),
     )

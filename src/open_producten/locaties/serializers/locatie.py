@@ -4,14 +4,10 @@ from open_producten.locaties.models import Contact, Locatie, Organisatie
 
 
 class LocatieSerializer(serializers.ModelSerializer):
-    coordinaten = serializers.SerializerMethodField()
 
     class Meta:
         model = Locatie
         fields = "__all__"
-
-    def get_coordinaten(self, obj) -> list:
-        return obj.coordinaten.coords
 
     def create(self, validated_data: dict) -> Locatie:
         locatie = Locatie(**validated_data)
@@ -27,14 +23,10 @@ class LocatieSerializer(serializers.ModelSerializer):
 
 
 class OrganisatieSerializer(serializers.ModelSerializer):
-    coordinaten = serializers.SerializerMethodField()
 
     class Meta:
         model = Organisatie
         fields = "__all__"
-
-    def get_coordinaten(self, obj) -> list:
-        return obj.coordinaten.coords
 
     def create(self, validated_data: dict) -> Organisatie:
         organisatie = Organisatie(**validated_data)

@@ -401,15 +401,6 @@ gemma-zds-client==2.0.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
-geographiclib==2.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   geopy
-geopy==2.4.1
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
 glom==24.11.0
     # via
     #   -c requirements/base.txt

@@ -1,7 +1,5 @@
 import datetime
-from unittest.mock import Mock, patch
 
-from django.contrib.gis.geos import Point
 from django.urls import reverse
 
 from freezegun import freeze_time
@@ -128,10 +126,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def test_create_product_type_with_location(self):
         locatie = LocatieFactory.create()
 
@@ -145,10 +139,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [locatie.naam],
         )
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def test_create_product_type_with_organisatie(self):
         organisatie = OrganisatieFactory.create()
 
@@ -162,10 +152,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [organisatie.naam],
         )
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def test_create_product_type_with_contact(self):
         contact = ContactFactory.create()
 
@@ -251,10 +237,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def test_update_product_type_with_location(self):
         product_type = ProductTypeFactory.create()
         locatie = LocatieFactory.create()
@@ -269,10 +251,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [locatie.naam],
         )
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def test_update_product_type_with_organisatie(self):
         product_type = ProductTypeFactory.create()
         organisatie = OrganisatieFactory.create()
@@ -287,10 +265,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [organisatie.naam],
         )
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def test_update_product_type_with_contact(self):
         product_type = ProductTypeFactory.create()
         contact = ContactFactory.create()

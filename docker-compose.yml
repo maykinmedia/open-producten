@@ -6,7 +6,7 @@ services:
     # NOTE: No persistance storage configured.
     # Using v14 to prevent schema permissions. See also docker-init-db.sql.
     # See: https://hub.docker.com/_/postgres/
-    image: postgis/postgis:14-3.4
+    image: postgres:15
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:

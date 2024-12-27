@@ -1,6 +1,3 @@
-from unittest.mock import Mock, patch
-
-from django.contrib.gis.geos import Point
 from django.urls import reverse
 
 from rest_framework import status
@@ -13,16 +10,8 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 from ..factories import LocatieFactory
 
 
-@patch(
-    "open_producten.locaties.models.locatie.geocode_address",
-    new=Mock(return_value=Point((4.84303667, 52.38559043))),
-)
 class TestLocatie(BaseApiTestCase):
 
-    @patch(
-        "open_producten.locaties.models.locatie.geocode_address",
-        new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    )
     def setUp(self):
         super().setUp()
         self.data = {"naam": "locatie", "postcode": "1111 AA", "stad": "Amsterdam"}
@@ -65,7 +54,6 @@ class TestLocatie(BaseApiTestCase):
             "huisnummer": locatie.huisnummer,
             "postcode": locatie.postcode,
             "stad": locatie.stad,
-            "coordinaten": locatie.coordinaten.coords,
         }
         self.assertEqual(response.data, expected_data)
 
@@ -101,7 +89,6 @@ class TestLocatie(BaseApiTestCase):
                 "huisnummer": self.locatie.huisnummer,
                 "postcode": self.locatie.postcode,
                 "stad": self.locatie.stad,
-                "coordinaten": self.locatie.coordinaten.coords,
             },
             {
                 "id": str(locatie.id),
@@ -112,7 +99,6 @@ class TestLocatie(BaseApiTestCase):
                 "huisnummer": locatie.huisnummer,
                 "postcode": locatie.postcode,
                 "stad": locatie.stad,
-                "coordinaten": locatie.coordinaten.coords,
             },
         ]
         self.assertCountEqual(response.data["results"], expected_data)
@@ -130,7 +116,6 @@ class TestLocatie(BaseApiTestCase):
             "huisnummer": self.locatie.huisnummer,
             "postcode": self.locatie.postcode,
             "stad": self.locatie.stad,
-            "coordinaten": self.locatie.coordinaten.coords,
         }
         self.assertEqual(response.data, expected_data)
 
