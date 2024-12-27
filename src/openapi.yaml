@@ -16,6 +16,12 @@ paths:
         description: Een pagina binnen de gepagineerde set resultaten.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       - in: query
         name: product_type_id
         schema:
@@ -154,6 +160,12 @@ paths:
         description: Een pagina binnen de gepagineerde set resultaten.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
       - contacten
       security:
@@ -284,6 +296,12 @@ paths:
         required: false
         in: query
         description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
       - in: query
@@ -424,6 +442,12 @@ paths:
         description: Een pagina binnen de gepagineerde set resultaten.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       tags:
       - locaties
       security:
@@ -554,6 +578,12 @@ paths:
         required: false
         in: query
         description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
       tags:
@@ -688,6 +718,12 @@ paths:
         description: Een pagina binnen de gepagineerde set resultaten.
         schema:
           type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
       - in: query
         name: product_type_id
         schema:
@@ -816,14 +852,166 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producttypen/:
+  /api/v1/producten/:
     get:
-      operationId: producttypen_list
+      operationId: producten_list
       parameters:
+      - in: query
+        name: gepubliceerd
+        schema:
+          type: boolean
       - name: page
         required: false
         in: query
         description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+    post:
+      operationId: producten_create
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/v1/producten/{id}/:
+    get:
+      operationId: producten_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    put:
+      operationId: producten_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: producten_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: producten_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/producttypen/:
+    get:
+      operationId: producttypen_list
+      parameters:
+      - in: query
+        name: gepubliceerd
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
       tags:
@@ -988,10 +1176,20 @@ paths:
     get:
       operationId: themas_list
       parameters:
+      - in: query
+        name: gepubliceerd
+        schema:
+          type: boolean
       - name: page
         required: false
         in: query
         description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
       tags:
@@ -1124,6 +1322,12 @@ paths:
         required: false
         in: query
         description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
       - in: query
@@ -1973,6 +2177,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Prijs'
+    PaginatedProductList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
     PaginatedProductTypeList:
       type: object
       required:
@@ -2183,6 +2410,37 @@ components:
           format: date
           title: Start datum
           description: De datum vanaf wanneer de prijs actief is.
+    PatchedProductRequest:
+      type: object
+      properties:
+        product_type_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        start_datum:
+          type: string
+          format: date
+          description: De start datum van dit product.
+        eind_datum:
+          type: string
+          format: date
+          description: De einddatum van dit product.
+        bsn:
+          type: string
+          nullable: true
+          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk:
+          type: string
+          nullable: true
+          title: KVK nummer
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
     PatchedProductTypeRequest:
       type: object
       properties:
@@ -2368,6 +2626,95 @@ components:
       required:
       - actief_vanaf
       - product_type_id
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_type:
+          allOf:
+          - $ref: '#/components/schemas/NestedProductType'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        start_datum:
+          type: string
+          format: date
+          description: De start datum van dit product.
+        eind_datum:
+          type: string
+          format: date
+          description: De einddatum van dit product.
+        bsn:
+          type: string
+          nullable: true
+          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk:
+          type: string
+          nullable: true
+          title: KVK nummer
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+      required:
+      - aanmaak_datum
+      - eind_datum
+      - id
+      - product_type
+      - start_datum
+      - update_datum
+    ProductRequest:
+      type: object
+      properties:
+        product_type_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        start_datum:
+          type: string
+          format: date
+          description: De start datum van dit product.
+        eind_datum:
+          type: string
+          format: date
+          description: De einddatum van dit product.
+        bsn:
+          type: string
+          nullable: true
+          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk:
+          type: string
+          nullable: true
+          title: KVK nummer
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+      required:
+      - eind_datum
+      - product_type_id
+      - start_datum
     ProductType:
       type: object
       properties:

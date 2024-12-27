@@ -1,6 +1,9 @@
 import datetime
 
+from django.urls import reverse
+
 from freezegun import freeze_time
+from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
@@ -8,36 +11,6 @@ from open_producten.producten.models import Product
 from open_producten.producten.tests.factories import ProductFactory
 from open_producten.producttypen.tests.factories import ProductTypeFactory
 from open_producten.utils.tests.cases import BaseApiTestCase
-from open_producten.utils.tests.helpers import model_to_dict_with_id
-
-
-def product_to_dict(product):
-    product_dict = model_to_dict_with_id(product)
-    product_dict["start_datum"] = str(product_dict["start_datum"])
-    product_dict["eind_datum"] = str(product_dict["eind_datum"])
-    product_dict["aanmaak_datum"] = str(product.aanmaak_datum.astimezone().isoformat())
-    product_dict["update_datum"] = str(product.update_datum.astimezone().isoformat())
-
-    product_dict["product_type"] = model_to_dict_with_id(
-        product.product_type,
-        exclude=(
-            "onderwerpen",
-            "contacten",
-            "locaties",
-            "organisaties",
-        ),
-    )
-    product_dict["product_type"][
-        "uniforme_product_naam"
-    ] = product.product_type.uniforme_product_naam.uri
-
-    product_dict["product_type"]["aanmaak_datum"] = str(
-        product.product_type.aanmaak_datum.astimezone().isoformat()
-    )
-    product_dict["product_type"]["update_datum"] = str(
-        product.product_type.update_datum.astimezone().isoformat()
-    )
-    return product_dict
 
 
 @freeze_time("2024-01-01")
@@ -53,27 +26,68 @@ class TestProduct(BaseApiTestCase):
             "eind_datum": datetime.date(2024, 12, 31),
             "data": [],
         }
-        self.path = "/api/v1/producten/"
+        self.path = reverse("product-list")
+
+    def detail_path(self, product_type):
+        return reverse("product-detail", args=[product_type.id])
 
     def test_read_product_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
         self.assertEqual(response.status_code, 401)
 
-    def _create_product(self):
-        return ProductFactory.create(bsn="111222333")
+    def test_required_fields(self):
+        response = self.client.post(self.path, {})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "product_type_id": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+                "start_datum": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+                "eind_datum": [
+                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                ],
+            },
+        )
 
     def test_create_product(self):
-        response = self.post(self.data)
+        response = self.client.post(self.path, self.data)
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 1)
         product = Product.objects.first()
-        self.assertEqual(response.data, product_to_dict(product))
+        product_type = product.product_type
+        expected_data = {
+            "id": str(product.id),
+            "bsn": product.bsn,
+            "kvk": product.kvk,
+            "gepubliceerd": False,
+            "start_datum": str(product.start_datum),
+            "eind_datum": str(product.eind_datum),
+            "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product.update_datum.astimezone().isoformat(),
+            "product_type": {
+                "id": str(product_type.id),
+                "naam": product_type.naam,
+                "samenvatting": product_type.samenvatting,
+                "beschrijving": product_type.beschrijving,
+                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "gepubliceerd": True,
+                "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product_type.update_datum.astimezone().isoformat(),
+                "keywords": [],
+            },
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_create_product_without_bsn_or_kvk_returns_error(self):
         data = self.data.copy()
         data.pop("bsn")
-        response = self.post(data)
+        response = self.client.post(self.path, data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.data,
@@ -89,21 +103,20 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(Product.objects.count(), 0)
 
     def test_update_product(self):
-        product = self._create_product()
+        product = ProductFactory.create(bsn="111222333")
 
         data = self.data | {"eind_datum": datetime.date(2025, 12, 31)}
-        response = self.put(product.id, data)
+        response = self.client.put(self.detail_path(product), data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Product.objects.count(), 1)
         self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
 
     def test_update_product_without_bsn_or_kvk(self):
-        product = self._create_product()
+        product = ProductFactory.create(bsn="111222333")
 
-        data = self.data.copy()
-        data.pop("bsn")
-        response = self.put(product.id, data)
+        data = self.data | {"bsn": None}
+        response = self.client.put(self.detail_path(product), data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -119,34 +132,105 @@ class TestProduct(BaseApiTestCase):
         )
 
     def test_partial_update_product(self):
-        product = self._create_product()
+        product = ProductFactory.create(bsn="111222333")
 
         data = {"eind_datum": datetime.date(2025, 12, 31)}
-        response = self.patch(product.id, data)
+        response = self.client.patch(self.detail_path(product), data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Product.objects.count(), 1)
+        self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
 
     def test_read_producten(self):
-        product = self._create_product()
+        product1 = ProductFactory.create(
+            bsn="111222333", product_type=self.product_type
+        )
+        product2 = ProductFactory.create(
+            bsn="111222444", product_type=self.product_type
+        )
 
-        response = self.get()
+        response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"], [product_to_dict(product)])
+        self.assertEqual(response.data["count"], 2)
+        expected_data = [
+            {
+                "id": str(product1.id),
+                "bsn": product1.bsn,
+                "kvk": product1.kvk,
+                "gepubliceerd": False,
+                "start_datum": str(product1.start_datum),
+                "eind_datum": str(product1.eind_datum),
+                "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product1.update_datum.astimezone().isoformat(),
+                "product_type": {
+                    "id": str(self.product_type.id),
+                    "naam": self.product_type.naam,
+                    "samenvatting": self.product_type.samenvatting,
+                    "beschrijving": self.product_type.beschrijving,
+                    "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "gepubliceerd": True,
+                    "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+                    "keywords": [],
+                },
+            },
+            {
+                "id": str(product2.id),
+                "bsn": product2.bsn,
+                "kvk": product2.kvk,
+                "gepubliceerd": False,
+                "start_datum": str(product2.start_datum),
+                "eind_datum": str(product2.eind_datum),
+                "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product2.update_datum.astimezone().isoformat(),
+                "product_type": {
+                    "id": str(self.product_type.id),
+                    "naam": self.product_type.naam,
+                    "samenvatting": self.product_type.samenvatting,
+                    "beschrijving": self.product_type.beschrijving,
+                    "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "gepubliceerd": True,
+                    "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+                    "keywords": [],
+                },
+            },
+        ]
+        self.assertCountEqual(response.data["results"], expected_data)
 
     def test_read_product(self):
-        product = self._create_product()
+        product = ProductFactory.create(bsn="111222333", product_type=self.product_type)
 
-        response = self.get(product.id)
+        response = self.client.get(self.detail_path(product))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, product_to_dict(product))
+        expected_data = {
+            "id": str(product.id),
+            "bsn": product.bsn,
+            "kvk": product.kvk,
+            "gepubliceerd": False,
+            "start_datum": str(product.start_datum),
+            "eind_datum": str(product.eind_datum),
+            "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product.update_datum.astimezone().isoformat(),
+            "product_type": {
+                "id": str(self.product_type.id),
+                "naam": self.product_type.naam,
+                "samenvatting": self.product_type.samenvatting,
+                "beschrijving": self.product_type.beschrijving,
+                "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                "gepubliceerd": True,
+                "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+                "keywords": [],
+            },
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_delete_product(self):
-        product = self._create_product()
-        response = self.delete(product.id)
+        product = ProductFactory.create(bsn="111222333")
+        response = self.client.delete(self.detail_path(product))
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Product.objects.count(), 0)
