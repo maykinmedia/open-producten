@@ -117,6 +117,7 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
         "drf_spectacular.hooks.postprocess_schema_enums",
         "open_producten.utils.spectacular_hooks.custom_postprocessing_hook",
     ),
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 #

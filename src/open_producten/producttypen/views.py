@@ -4,10 +4,19 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
-from open_producten.producttypen.models import Link, Prijs, ProductType, Thema, Vraag
+from open_producten.producttypen.models import (
+    Bestand,
+    Link,
+    Prijs,
+    ProductType,
+    Thema,
+    Vraag,
+)
 from open_producten.producttypen.serializers import (
+    BestandSerializer,
     LinkSerializer,
     PrijsSerializer,
     ProductTypeActuelePrijsSerializer,
@@ -66,6 +75,15 @@ class VraagViewSet(OrderedModelViewSet):
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["product_type_id", "thema_id"]
+
+
+class BestandViewSet(OrderedModelViewSet):
+    queryset = Bestand.objects.all()
+    parser_classes = [MultiPartParser]
+    serializer_class = BestandSerializer
+    lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["product_type_id"]
 
 
 class ThemaViewSet(OrderedModelViewSet):
