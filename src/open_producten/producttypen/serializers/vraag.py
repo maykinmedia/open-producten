@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from open_producten.producttypen.models import Onderwerp, ProductType, Vraag
+from open_producten.producttypen.models import ProductType, Thema, Vraag
 from open_producten.producttypen.serializers.validators import (
-    ProductTypeOrOnderwerpValidator,
+    ProductTypeOrThemaValidator,
 )
 
 
@@ -13,17 +13,17 @@ class VraagSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
-    onderwerp_id = serializers.PrimaryKeyRelatedField(
-        source="onderwerp",
-        queryset=Onderwerp.objects.all(),
+    thema_id = serializers.PrimaryKeyRelatedField(
+        source="thema",
+        queryset=Thema.objects.all(),
         required=False,
         allow_null=True,
     )
 
     class Meta:
         model = Vraag
-        fields = ("id", "product_type_id", "onderwerp_id", "vraag", "antwoord")
-        validators = [ProductTypeOrOnderwerpValidator()]
+        fields = ("id", "product_type_id", "thema_id", "vraag", "antwoord")
+        validators = [ProductTypeOrThemaValidator()]
 
 
 class NestedVraagSerializer(VraagSerializer):

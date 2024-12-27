@@ -1,8 +1,8 @@
 from django.test import TestCase
 
 from ..admin.producttype import ProductTypeAdminForm
-from ..models import Onderwerp
-from .factories import OnderwerpFactory, UniformeProductNaamFactory
+from ..models import Thema
+from .factories import ThemaFactory, UniformeProductNaamFactory
 
 
 class TestProductTypeAdminForm(TestCase):
@@ -15,16 +15,14 @@ class TestProductTypeAdminForm(TestCase):
             "samenvatting": "samenvatting",
         }
 
-    def test_at_least_one_onderwerp_is_required(self):
+    def test_at_least_one_thema_is_required(self):
         form = ProductTypeAdminForm(data=self.data)
 
         self.assertEquals(
-            form.errors, {"onderwerpen": ["Er is minimaal één onderwerp vereist."]}
+            form.errors, {"themas": ["Er is minimaal één thema vereist."]}
         )
 
-        OnderwerpFactory.create()
-        form = ProductTypeAdminForm(
-            data=self.data | {"onderwerpen": Onderwerp.objects.all()}
-        )
+        ThemaFactory.create()
+        form = ProductTypeAdminForm(data=self.data | {"themas": Thema.objects.all()})
 
         self.assertEquals(form.errors, {})

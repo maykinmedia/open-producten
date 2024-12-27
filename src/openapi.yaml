@@ -144,138 +144,6 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/onderwerpen/:
-    get:
-      operationId: onderwerpen_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      tags:
-      - onderwerpen
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedOnderwerpList'
-          description: ''
-    post:
-      operationId: onderwerpen_create
-      tags:
-      - onderwerpen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Onderwerp'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Onderwerp'
-          description: ''
-  /api/v1/onderwerpen/{id}/:
-    get:
-      operationId: onderwerpen_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Onderwerp.
-        required: true
-      tags:
-      - onderwerpen
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Onderwerp'
-          description: ''
-    put:
-      operationId: onderwerpen_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Onderwerp.
-        required: true
-      tags:
-      - onderwerpen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Onderwerp'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Onderwerp'
-          description: ''
-    patch:
-      operationId: onderwerpen_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Onderwerp.
-        required: true
-      tags:
-      - onderwerpen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedOnderwerp'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Onderwerp'
-          description: ''
-    delete:
-      operationId: onderwerpen_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Onderwerp.
-        required: true
-      tags:
-      - onderwerpen
-      security:
-      - tokenAuth: []
-      responses:
-        '204':
-          description: No response body
   /api/v1/prijzen/:
     get:
       operationId: prijzen_list
@@ -582,17 +450,142 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
           description: ''
+  /api/v1/themas/:
+    get:
+      operationId: themas_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      tags:
+      - themas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedThemaList'
+          description: ''
+    post:
+      operationId: themas_create
+      tags:
+      - themas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Thema'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thema'
+          description: ''
+  /api/v1/themas/{id}/:
+    get:
+      operationId: themas_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this thema.
+        required: true
+      tags:
+      - themas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thema'
+          description: ''
+    put:
+      operationId: themas_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this thema.
+        required: true
+      tags:
+      - themas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Thema'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thema'
+          description: ''
+    patch:
+      operationId: themas_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this thema.
+        required: true
+      tags:
+      - themas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedThema'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thema'
+          description: ''
+    delete:
+      operationId: themas_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this thema.
+        required: true
+      tags:
+      - themas
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/v1/vragen/:
     get:
       operationId: vragen_list
       parameters:
-      - in: query
-        name: onderwerp_id
-        schema:
-          type: string
-          format: uuid
-          nullable: true
-        description: Het onderwerp waarbij deze vraag hoort.
       - name: page
         required: false
         in: query
@@ -606,6 +599,13 @@ paths:
           format: uuid
           nullable: true
         description: Het product type waarbij deze vraag hoort.
+      - in: query
+        name: thema_id
+        schema:
+          type: string
+          format: uuid
+          nullable: true
+        description: Het thema waarbij deze vraag hoort.
       tags:
       - vragen
       security:
@@ -787,45 +787,6 @@ components:
       - id
       - naam
       - url
-    NestedOnderwerp:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        naam:
-          type: string
-          description: Naam van het onderwerp.
-          maxLength: 100
-        beschrijving:
-          type: string
-          description: Beschrijving van het onderwerp, ondersteund markdown format.
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        hoofd_onderwerp:
-          type: string
-          format: uuid
-          nullable: true
-          description: Het hoofd onderwerp van het onderwerp.
-      required:
-      - aanmaak_datum
-      - id
-      - naam
-      - update_datum
     NestedPrijs:
       type: object
       properties:
@@ -897,6 +858,45 @@ components:
       - naam
       - uniforme_product_naam
       - update_datum
+    NestedThema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: Naam van het thema.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het thema, ondersteund markdown format.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        hoofd_thema:
+          type: string
+          format: uuid
+          nullable: true
+          description: Het hoofd thema van het thema.
+      required:
+      - aanmaak_datum
+      - id
+      - naam
+      - update_datum
     NestedVraag:
       type: object
       properties:
@@ -915,65 +915,6 @@ components:
       - antwoord
       - id
       - vraag
-    Onderwerp:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        naam:
-          type: string
-          description: Naam van het onderwerp.
-          maxLength: 100
-        beschrijving:
-          type: string
-          description: Beschrijving van het onderwerp, ondersteund markdown format.
-        vragen:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedVraag'
-          readOnly: true
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        hoofd_onderwerp:
-          type: string
-          format: uuid
-          nullable: true
-        product_typen:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedProductType'
-          readOnly: true
-        product_type_ids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-      required:
-      - aanmaak_datum
-      - hoofd_onderwerp
-      - id
-      - naam
-      - product_type_ids
-      - product_typen
-      - update_datum
-      - vragen
     PaginatedLinkList:
       type: object
       required:
@@ -997,29 +938,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Link'
-    PaginatedOnderwerpList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Onderwerp'
     PaginatedPrijsList:
       type: object
       required:
@@ -1066,6 +984,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductType'
+    PaginatedThemaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Thema'
     PaginatedVraagList:
       type: object
       required:
@@ -1108,56 +1049,6 @@ components:
         product_type_id:
           type: string
           format: uuid
-    PatchedOnderwerp:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        naam:
-          type: string
-          description: Naam van het onderwerp.
-          maxLength: 100
-        beschrijving:
-          type: string
-          description: Beschrijving van het onderwerp, ondersteund markdown format.
-        vragen:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedVraag'
-          readOnly: true
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        hoofd_onderwerp:
-          type: string
-          format: uuid
-          nullable: true
-        product_typen:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedProductType'
-          readOnly: true
-        product_type_ids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
     PatchedPrijs:
       type: object
       properties:
@@ -1189,12 +1080,12 @@ components:
           type: string
           format: uri
           description: Uri naar de UPN definitie.
-        onderwerpen:
+        themas:
           type: array
           items:
-            $ref: '#/components/schemas/NestedOnderwerp'
+            $ref: '#/components/schemas/NestedThema'
           readOnly: true
-        onderwerp_ids:
+        thema_ids:
           type: array
           items:
             type: string
@@ -1254,6 +1145,56 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
+    PatchedThema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: Naam van het thema.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het thema, ondersteund markdown format.
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedVraag'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        hoofd_thema:
+          type: string
+          format: uuid
+          nullable: true
+        product_typen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductType'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
     PatchedVraag:
       type: object
       properties:
@@ -1265,7 +1206,7 @@ components:
           type: string
           format: uuid
           nullable: true
-        onderwerp_id:
+        thema_id:
           type: string
           format: uuid
           nullable: true
@@ -1329,12 +1270,12 @@ components:
           type: string
           format: uri
           description: Uri naar de UPN definitie.
-        onderwerpen:
+        themas:
           type: array
           items:
-            $ref: '#/components/schemas/NestedOnderwerp'
+            $ref: '#/components/schemas/NestedThema'
           readOnly: true
-        onderwerp_ids:
+        thema_ids:
           type: array
           items:
             type: string
@@ -1401,9 +1342,9 @@ components:
       - id
       - links
       - naam
-      - onderwerp_ids
-      - onderwerpen
       - prijzen
+      - thema_ids
+      - themas
       - uniforme_product_naam
       - update_datum
       - vragen
@@ -1438,6 +1379,65 @@ components:
       - naam
       - upl_naam
       - upl_uri
+    Thema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: Naam van het thema.
+          maxLength: 100
+        beschrijving:
+          type: string
+          description: Beschrijving van het thema, ondersteund markdown format.
+        vragen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedVraag'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        hoofd_thema:
+          type: string
+          format: uuid
+          nullable: true
+        product_typen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductType'
+          readOnly: true
+        product_type_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+      required:
+      - aanmaak_datum
+      - hoofd_thema
+      - id
+      - naam
+      - product_type_ids
+      - product_typen
+      - update_datum
+      - vragen
     Vraag:
       type: object
       properties:
@@ -1449,7 +1449,7 @@ components:
           type: string
           format: uuid
           nullable: true
-        onderwerp_id:
+        thema_id:
           type: string
           format: uuid
           nullable: true

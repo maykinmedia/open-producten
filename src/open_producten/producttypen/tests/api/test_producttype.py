@@ -19,10 +19,10 @@ from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
     LinkFactory,
-    OnderwerpFactory,
     PrijsFactory,
     PrijsOptieFactory,
     ProductTypeFactory,
+    ThemaFactory,
     UniformeProductNaamFactory,
     VraagFactory,
 )
@@ -34,14 +34,14 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def setUp(self):
         super().setUp()
         upn = UniformeProductNaamFactory.create()
-        self.onderwerp = OnderwerpFactory()
+        self.thema = ThemaFactory()
 
         self.data = {
             "naam": "test-product-type",
             "samenvatting": "test",
             "beschrijving": "test test",
             "uniforme_product_naam": upn.uri,
-            "onderwerp_ids": [self.onderwerp.id],
+            "thema_ids": [self.thema.id],
         }
 
         self.path = reverse("producttype-list")
@@ -64,7 +64,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     ErrorDetail(string="Dit veld is vereist.", code="required")
                 ],
                 "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(string="Dit veld is vereist.", code="required")
                 ],
                 "beschrijving": [
@@ -80,7 +80,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ProductType.objects.count(), 1)
 
         product_type = ProductType.objects.first()
-        onderwerp = product_type.onderwerpen.first()
+        thema = product_type.themas.first()
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
@@ -95,15 +95,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
             "keywords": [],
-            "onderwerpen": [
+            "themas": [
                 {
-                    "id": str(onderwerp.id),
-                    "naam": onderwerp.naam,
+                    "id": str(thema.id),
+                    "naam": thema.naam,
                     "gepubliceerd": True,
-                    "aanmaak_datum": onderwerp.aanmaak_datum.astimezone().isoformat(),
-                    "update_datum": onderwerp.update_datum.astimezone().isoformat(),
-                    "beschrijving": onderwerp.beschrijving,
-                    "hoofd_onderwerp": onderwerp.hoofd_onderwerp,
+                    "aanmaak_datum": thema.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": thema.update_datum.astimezone().isoformat(),
+                    "beschrijving": thema.beschrijving,
+                    "hoofd_thema": thema.hoofd_thema,
                 }
             ],
         }
@@ -111,16 +111,16 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_create_product_type_without_fields_returns_error(self):
         data = self.data.copy()
-        data["onderwerp_ids"] = []
+        data["thema_ids"] = []
         response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(
-                        string="Er is minimaal één onderwerp vereist.", code="invalid"
+                        string="Er is minimaal één thema vereist.", code="invalid"
                     )
                 ]
             },
@@ -181,12 +181,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
     #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):
-        onderwerp = OnderwerpFactory.create()
+        thema = ThemaFactory.create()
 
         # TODO add location_ids
 
         data = self.data | {
-            "onderwerp_ids": [onderwerp.id, onderwerp.id],
+            "thema_ids": [thema.id, thema.id],
         }
 
         response = self.client.post(self.path, data)
@@ -195,9 +195,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {onderwerp.id} op index 1.",
+                        string=f"Dubbel id: {thema.id} op index 1.",
                         code="invalid",
                     )
                 ],
@@ -211,32 +211,32 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
 
-    def test_update_product_type_with_onderwerp(self):
+    def test_update_product_type_with_thema(self):
         product_type = ProductTypeFactory.create()
-        onderwerp = OnderwerpFactory.create()
+        thema = ThemaFactory.create()
 
-        data = self.data | {"onderwerp_ids": [onderwerp.id]}
+        data = self.data | {"thema_ids": [thema.id]}
         response = self.client.put(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(
-            list(ProductType.objects.values_list("onderwerpen__naam", flat=True)),
-            [onderwerp.naam],
+            list(ProductType.objects.values_list("themas__naam", flat=True)),
+            [thema.naam],
         )
 
-    def test_update_product_type_removing_onderwerp(self):
+    def test_update_product_type_removing_thema(self):
         product_type = ProductTypeFactory.create()
-        data = self.data | {"onderwerp_ids": []}
+        data = self.data | {"thema_ids": []}
         response = self.client.put(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(
-                        string="Er is minimaal één onderwerp vereist.", code="invalid"
+                        string="Er is minimaal één thema vereist.", code="invalid"
                     )
                 ]
             },
@@ -301,12 +301,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
         product_type = ProductTypeFactory.create()
-        onderwerp = OnderwerpFactory.create()
+        thema = ThemaFactory.create()
 
         # TODO add location_ids
 
         data = self.data | {
-            "onderwerp_ids": [onderwerp.id, onderwerp.id],
+            "thema_ids": [thema.id, thema.id],
         }
 
         response = self.client.put(self.detail_path(product_type), data)
@@ -315,9 +315,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {onderwerp.id} op index 1.",
+                        string=f"Dubbel id: {thema.id} op index 1.",
                         code="invalid",
                     )
                 ],
@@ -338,10 +338,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
         product_type = ProductTypeFactory.create()
-        onderwerp = OnderwerpFactory.create()
+        thema = ThemaFactory.create()
 
         data = {
-            "onderwerp_ids": [onderwerp.id, onderwerp.id],
+            "thema_ids": [thema.id, thema.id],
         }
 
         response = self.client.patch(self.detail_path(product_type), data)
@@ -350,27 +350,27 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {onderwerp.id} op index 1.",
+                        string=f"Dubbel id: {thema.id} op index 1.",
                         code="invalid",
                     )
                 ],
             },
         )
 
-    def test_partial_update_product_type_removing_onderwerp(self):
+    def test_partial_update_product_type_removing_thema(self):
         product_type = ProductTypeFactory.create()
-        data = {"onderwerp_ids": []}
+        data = {"thema_ids": []}
         response = self.client.patch(self.detail_path(product_type), data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
-                "onderwerp_ids": [
+                "thema_ids": [
                     ErrorDetail(
-                        string="Er is minimaal één onderwerp vereist.", code="invalid"
+                        string="Er is minimaal één thema vereist.", code="invalid"
                     )
                 ]
             },
@@ -450,11 +450,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_read_product_typen(self):
         product_type1 = ProductTypeFactory.create()
-        product_type1.onderwerpen.add(self.onderwerp)
+        product_type1.themas.add(self.thema)
         product_type1.save()
 
         product_type2 = ProductTypeFactory.create()
-        product_type2.onderwerpen.add(self.onderwerp)
+        product_type2.themas.add(self.thema)
         product_type2.save()
 
         response = self.client.get(self.path)
@@ -476,15 +476,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "aanmaak_datum": product_type1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type1.update_datum.astimezone().isoformat(),
                 "keywords": [],
-                "onderwerpen": [
+                "themas": [
                     {
-                        "id": str(self.onderwerp.id),
-                        "naam": self.onderwerp.naam,
+                        "id": str(self.thema.id),
+                        "naam": self.thema.naam,
                         "gepubliceerd": True,
-                        "aanmaak_datum": self.onderwerp.aanmaak_datum.astimezone().isoformat(),
-                        "update_datum": self.onderwerp.update_datum.astimezone().isoformat(),
-                        "beschrijving": self.onderwerp.beschrijving,
-                        "hoofd_onderwerp": self.onderwerp.hoofd_onderwerp,
+                        "aanmaak_datum": self.thema.aanmaak_datum.astimezone().isoformat(),
+                        "update_datum": self.thema.update_datum.astimezone().isoformat(),
+                        "beschrijving": self.thema.beschrijving,
+                        "hoofd_thema": self.thema.hoofd_thema,
                     }
                 ],
             },
@@ -502,15 +502,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "aanmaak_datum": product_type2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type2.update_datum.astimezone().isoformat(),
                 "keywords": [],
-                "onderwerpen": [
+                "themas": [
                     {
-                        "id": str(self.onderwerp.id),
-                        "naam": self.onderwerp.naam,
+                        "id": str(self.thema.id),
+                        "naam": self.thema.naam,
                         "gepubliceerd": True,
-                        "aanmaak_datum": self.onderwerp.aanmaak_datum.astimezone().isoformat(),
-                        "update_datum": self.onderwerp.update_datum.astimezone().isoformat(),
-                        "beschrijving": self.onderwerp.beschrijving,
-                        "hoofd_onderwerp": self.onderwerp.hoofd_onderwerp,
+                        "aanmaak_datum": self.thema.aanmaak_datum.astimezone().isoformat(),
+                        "update_datum": self.thema.update_datum.astimezone().isoformat(),
+                        "beschrijving": self.thema.beschrijving,
+                        "hoofd_thema": self.thema.hoofd_thema,
                     }
                 ],
             },
@@ -519,7 +519,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
     def test_read_product_type(self):
         product_type = ProductTypeFactory.create()
-        product_type.onderwerpen.add(self.onderwerp)
+        product_type.themas.add(self.thema)
         product_type.save()
 
         response = self.client.get(self.detail_path(product_type))
@@ -539,15 +539,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
             "keywords": [],
-            "onderwerpen": [
+            "themas": [
                 {
-                    "id": str(self.onderwerp.id),
-                    "naam": self.onderwerp.naam,
+                    "id": str(self.thema.id),
+                    "naam": self.thema.naam,
                     "gepubliceerd": True,
-                    "aanmaak_datum": self.onderwerp.aanmaak_datum.astimezone().isoformat(),
-                    "update_datum": self.onderwerp.update_datum.astimezone().isoformat(),
-                    "beschrijving": self.onderwerp.beschrijving,
-                    "hoofd_onderwerp": self.onderwerp.hoofd_onderwerp,
+                    "aanmaak_datum": self.thema.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": self.thema.update_datum.astimezone().isoformat(),
+                    "beschrijving": self.thema.beschrijving,
+                    "hoofd_thema": self.thema.hoofd_thema,
                 }
             ],
         }

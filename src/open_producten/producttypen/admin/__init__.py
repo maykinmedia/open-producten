@@ -1,8 +1,8 @@
 from .bestand import BestandAdmin
 from .link import LinkAdmin
-from .onderwerp import OnderwerpAdmin
 from .prijs import PrijsAdmin
 from .producttype import ProductTypeAdmin
+from .thema import ThemaAdmin
 from .upn import UniformeProductNaamAdmin
 from .vraag import VraagAdmin
 
@@ -13,5 +13,5 @@ __all__ = [
     "VraagAdmin",
     "UniformeProductNaamAdmin",
     "PrijsAdmin",
-    "OnderwerpAdmin",
+    "ThemaAdmin",
 ]

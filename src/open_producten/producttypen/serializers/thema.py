@@ -2,14 +2,10 @@ from django.db import transaction
 
 from rest_framework import serializers
 
-from open_producten.producttypen.models import (
-    Onderwerp,
-    ProductType,
-    UniformeProductNaam,
-)
+from open_producten.producttypen.models import ProductType, Thema, UniformeProductNaam
 
 from ...utils.drf_validators import DuplicateIdValidator
-from .validators import OnderwerpGepubliceerdStateValidator
+from .validators import ThemaGepubliceerdStateValidator, ThemaSelfReferenceValidator
 from .vraag import NestedVraagSerializer
 
 
@@ -33,9 +29,9 @@ class NestedProductTypeSerializer(serializers.ModelSerializer):
         )
 
 
-class OnderwerpSerializer(serializers.ModelSerializer):
-    hoofd_onderwerp = serializers.PrimaryKeyRelatedField(
-        queryset=Onderwerp.objects.all(),
+class ThemaSerializer(serializers.ModelSerializer):
+    hoofd_thema = serializers.PrimaryKeyRelatedField(
+        queryset=Thema.objects.all(),
         allow_null=True,
     )
     product_typen = NestedProductTypeSerializer(many=True, read_only=True)
@@ -49,7 +45,7 @@ class OnderwerpSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Onderwerp
+        model = Thema
         fields = (
             "id",
             "naam",
@@ -58,34 +54,35 @@ class OnderwerpSerializer(serializers.ModelSerializer):
             "gepubliceerd",
             "aanmaak_datum",
             "update_datum",
-            "hoofd_onderwerp",
+            "hoofd_thema",
             "product_typen",
             "product_type_ids",
         )
         validators = [
             DuplicateIdValidator(["product_type_ids"]),
-            OnderwerpGepubliceerdStateValidator(),
+            ThemaGepubliceerdStateValidator(),
+            ThemaSelfReferenceValidator(),
         ]
 
     @transaction.atomic()
     def create(self, validated_data):
         product_typen = validated_data.pop("product_typen")
 
-        onderwerp = Onderwerp.objects.create(**validated_data)
-        onderwerp.product_typen.set(product_typen)
-        onderwerp.save()
+        thema = Thema.objects.create(**validated_data)
+        thema.product_typen.set(product_typen)
+        thema.save()
 
-        return onderwerp
+        return thema
 
     @transaction.atomic()
     def update(self, instance, validated_data):
         product_typen = validated_data.pop("product_typen", None)
-        hoofd_onderwerp = validated_data.pop(
-            "hoofd_onderwerp", "ignore"
+        hoofd_thema = validated_data.pop(
+            "hoofd_thema", "ignore"
         )  # None is a valid value
 
-        if hoofd_onderwerp != "ignore":
-            instance.hoofd_onderwerp = hoofd_onderwerp
+        if hoofd_thema != "ignore":
+            instance.hoofd_thema = hoofd_thema
 
         instance = super().update(instance, validated_data)
 

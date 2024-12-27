@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext as _
 
-from ..models import Onderwerp, ProductType
+from ..models import ProductType, Thema
 from .bestand import BestandInline
 from .link import LinkInline
 from .vraag import VraagInline
@@ -14,17 +14,17 @@ class ProductTypeAdminForm(forms.ModelForm):
         model = ProductType
         fields = "__all__"
 
-    onderwerpen = forms.ModelMultipleChoiceField(
-        label=_("onderwerpen"),
-        queryset=Onderwerp.objects.all(),
+    themas = forms.ModelMultipleChoiceField(
+        label=_("thema's"),
+        queryset=Thema.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple(verbose_name=_("Onderwerp"), is_stacked=False),
+        widget=FilteredSelectMultiple(verbose_name=_("Thema"), is_stacked=False),
     )
 
     def clean(self):
         cleaned_data = super().clean()
-        if len(cleaned_data["onderwerpen"]) == 0:
-            self.add_error("onderwerpen", _("Er is minimaal één onderwerp vereist."))
+        if len(cleaned_data["themas"]) == 0:
+            self.add_error("themas", _("Er is minimaal één thema vereist."))
         return cleaned_data
 
 
@@ -34,11 +34,11 @@ class ProductTypeAdmin(admin.ModelAdmin):
         "naam",
         "uniforme_product_naam",
         "aanmaak_datum",
-        "display_onderwerpen",
+        "display_themas",
         "gepubliceerd",
         "keywords",
     )
-    list_filter = ("gepubliceerd", "onderwerpen")
+    list_filter = ("gepubliceerd", "themas")
     list_editable = ("gepubliceerd",)
     date_hierarchy = "aanmaak_datum"
     autocomplete_fields = (
@@ -57,11 +57,11 @@ class ProductTypeAdmin(admin.ModelAdmin):
             super()
             .get_queryset(request)
             .prefetch_related(
-                "onderwerpen",
+                "themas",
                 # "contacts", "locations", "organisations"
             )
         )
 
-    @admin.display(description="onderwerpen")
-    def display_onderwerpen(self, obj):
-        return ", ".join(p.naam for p in obj.onderwerpen.all())
+    @admin.display(description="thema's")
+    def display_themas(self, obj):
+        return ", ".join(p.naam for p in obj.themas.all())

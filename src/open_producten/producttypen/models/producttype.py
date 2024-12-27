@@ -9,7 +9,7 @@ from markdownx.models import MarkdownxField
 # from open_producten.locations.models import Contact, Location, Organisation
 from open_producten.utils.models import BasePublishableModel
 
-from .onderwerp import Onderwerp
+from .thema import Thema
 from .upn import UniformeProductNaam
 
 
@@ -48,12 +48,12 @@ class ProductType(BasePublishableModel):
         related_name="product_typen",
     )
 
-    onderwerpen = models.ManyToManyField(
-        Onderwerp,
-        verbose_name=_("onderwerp"),
+    themas = models.ManyToManyField(
+        Thema,
+        verbose_name=_("thema's"),
         blank=True,
         related_name="product_typen",
-        help_text=_("onderwerpen waaraan het product type is gelinkt."),
+        help_text=_("thema's waaraan het product type is gelinkt."),
     )
 
     # organisations = models.ManyToManyField(

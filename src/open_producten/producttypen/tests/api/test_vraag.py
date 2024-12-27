@@ -6,8 +6,8 @@ from rest_framework.test import APIClient
 
 from open_producten.producttypen.models import ProductType, Vraag
 from open_producten.producttypen.tests.factories import (
-    OnderwerpFactory,
     ProductTypeFactory,
+    ThemaFactory,
     VraagFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
@@ -18,7 +18,7 @@ class TestProductTypeVraag(BaseApiTestCase):
     def setUp(self):
         super().setUp()
         self.product_type = ProductTypeFactory.create()
-        self.onderwerp = OnderwerpFactory.create()
+        self.thema = ThemaFactory.create()
         self.data = {"vraag": "18?", "antwoord": "in aanmerking"}
         self.vraag = VraagFactory.create(product_type=self.product_type)
         self.path = reverse("vraag-list")
@@ -51,27 +51,25 @@ class TestProductTypeVraag(BaseApiTestCase):
         response.data.pop("id")
         self.assertEqual(
             response.data,
-            self.data | {"product_type_id": self.product_type.id, "onderwerp_id": None},
+            self.data | {"product_type_id": self.product_type.id, "thema_id": None},
         )
 
-    def test_create_vraag_with_onderwerp(self):
-        response = self.client.post(
-            self.path, self.data | {"onderwerp_id": self.onderwerp.id}
-        )
+    def test_create_vraag_with_thema(self):
+        response = self.client.post(self.path, self.data | {"thema_id": self.thema.id})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Vraag.objects.count(), 2)
         response.data.pop("id")
         self.assertEqual(
             response.data,
-            self.data | {"onderwerp_id": self.onderwerp.id, "product_type_id": None},
+            self.data | {"thema_id": self.thema.id, "product_type_id": None},
         )
 
-    def test_create_vraag_with_both_product_type_and_onderwerp(self):
+    def test_create_vraag_with_both_product_type_and_thema(self):
         response = self.client.post(
             self.path,
             self.data
             | {
-                "onderwerp_id": self.onderwerp.id,
+                "thema_id": self.thema.id,
                 "product_type_id": self.product_type.id,
             },
         )
@@ -80,25 +78,25 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "product_type_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
+                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
                     )
                 ]
             },
         )
 
-    def test_create_vraag_without_product_type_or_onderwerp(self):
+    def test_create_vraag_without_product_type_or_thema(self):
         response = self.client.post(self.path, self.data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "product_type_thema": [
                     ErrorDetail(
-                        string="Een vraag moet gelinkt zijn aan een onderwerp of een product type.",
+                        string="Een vraag moet gelinkt zijn aan een thema of een product type.",
                         code="invalid",
                     )
                 ]
@@ -113,27 +111,27 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(Vraag.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().vragen.first().vraag, "21?")
 
-    def test_update_vraag_with_onderwerp(self):
-        data = self.data | {"vraag": "21?", "onderwerp_id": self.onderwerp.id}
+    def test_update_vraag_with_thema(self):
+        data = self.data | {"vraag": "21?", "thema_id": self.thema.id}
         response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "product_type_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
+                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
                     )
                 ]
             },
         )
 
-    def test_update_vraag_with_onderwerp_and_product_type(self):
+    def test_update_vraag_with_thema_and_product_type(self):
         data = self.data | {
             "vraag": "21?",
-            "onderwerp_id": self.onderwerp.id,
+            "thema_id": self.thema.id,
             "product_type_id": self.product_type.id,
         }
         response = self.client.put(self.detail_path, data)
@@ -142,18 +140,18 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "product_type_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
+                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
                     )
                 ]
             },
         )
 
-    def test_update_vraag_change_to_onderwerp(self):
+    def test_update_vraag_change_to_thema(self):
         data = self.data | {
-            "onderwerp_id": self.onderwerp.id,
+            "thema_id": self.thema.id,
             "product_type_id": None,
         }
         response = self.client.put(self.detail_path, data)
@@ -161,7 +159,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Vraag.objects.count(), 1)
         self.assertEqual(Vraag.objects.first().product_type, None)
-        self.assertEqual(Vraag.objects.first().onderwerp, self.onderwerp)
+        self.assertEqual(Vraag.objects.first().thema, self.thema)
 
     def test_partial_update_vraag(self):
         data = {"vraag": "21?"}
@@ -171,17 +169,17 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(Vraag.objects.count(), 1)
         self.assertEqual(ProductType.objects.first().vragen.first().vraag, "21?")
 
-    def test_partial_update_vraag_with_onderwerp(self):
-        data = {"vraag": "21?", "onderwerp_id": self.onderwerp.id}
+    def test_partial_update_vraag_with_thema(self):
+        data = {"vraag": "21?", "thema_id": self.thema.id}
         response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
-                "product_type_onderwerp": [
+                "product_type_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
+                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
                     )
                 ]
@@ -200,14 +198,14 @@ class TestProductTypeVraag(BaseApiTestCase):
                 "vraag": self.vraag.vraag,
                 "antwoord": self.vraag.antwoord,
                 "product_type_id": self.product_type.id,
-                "onderwerp_id": None,
+                "thema_id": None,
             },
             {
                 "id": str(vraag.id),
                 "vraag": vraag.vraag,
                 "antwoord": vraag.antwoord,
                 "product_type_id": self.product_type.id,
-                "onderwerp_id": None,
+                "thema_id": None,
             },
         ]
         self.assertCountEqual(response.data["results"], expected_data)
@@ -221,7 +219,7 @@ class TestProductTypeVraag(BaseApiTestCase):
             "vraag": self.vraag.vraag,
             "antwoord": self.vraag.antwoord,
             "product_type_id": self.product_type.id,
-            "onderwerp_id": None,
+            "thema_id": None,
         }
 
         self.assertEqual(response.data, expected_data)

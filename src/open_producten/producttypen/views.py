@@ -1,3 +1,4 @@
+from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -5,19 +6,13 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from open_producten.producttypen.models import (
-    Link,
-    Onderwerp,
-    Prijs,
-    ProductType,
-    Vraag,
-)
+from open_producten.producttypen.models import Link, Prijs, ProductType, Thema, Vraag
 from open_producten.producttypen.serializers import (
     LinkSerializer,
-    OnderwerpSerializer,
     PrijsSerializer,
     ProductTypeActuelePrijsSerializer,
     ProductTypeSerializer,
+    ThemaSerializer,
     VraagSerializer,
 )
 from open_producten.utils.views import OrderedModelViewSet
@@ -70,22 +65,22 @@ class VraagViewSet(OrderedModelViewSet):
     serializer_class = VraagSerializer
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product_type_id", "onderwerp_id"]
+    filterset_fields = ["product_type_id", "thema_id"]
 
 
-class OnderwerpViewSet(OrderedModelViewSet):
-    queryset = Onderwerp.objects.all()
-    serializer_class = OnderwerpSerializer
+class ThemaViewSet(OrderedModelViewSet):
+    queryset = Thema.objects.all()
+    serializer_class = ThemaSerializer
     lookup_url_kwarg = "id"
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         errors = []
-        for product_type in ProductType.objects.filter(onderwerpen__in=[instance]):
-            if product_type.onderwerpen.count() <= 1:
+        for product_type in ProductType.objects.filter(themas__in=[instance]):
+            if product_type.themas.count() <= 1:
                 errors.append(
                     _(
-                        "Product Type {} moet aan een minimaal één onderwerp zijn gelinkt."
+                        "Product Type {} moet aan een minimaal één thema zijn gelinkt."
                     ).format(product_type)
                 )
 
@@ -93,4 +88,16 @@ class OnderwerpViewSet(OrderedModelViewSet):
             return Response(
                 data={"product_typen": errors}, status=status.HTTP_400_BAD_REQUEST
             )
-        return super().destroy(request, *args, **kwargs)
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                data={
+                    "sub_themas": [
+                        _(
+                            "Dit thema kan niet worden verwijderd omdat er gerelateerde sub_themas zijn."
+                        )
+                    ]
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )

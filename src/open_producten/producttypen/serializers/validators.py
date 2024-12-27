@@ -5,42 +5,55 @@ from rest_framework import serializers
 
 from ...utils.serializers import get_from_serializer_data_or_instance
 from ..models import PrijsOptie
-from ..models.onderwerp import validate_gepubliceerd_state
-from ..models.vraag import validate_onderwerp_or_product_type
+from ..models.thema import disallow_self_reference, validate_gepubliceerd_state
+from ..models.vraag import validate_thema_or_product_type
 
 
-class ProductTypeOrOnderwerpValidator:
+class ProductTypeOrThemaValidator:
     requires_context = True
 
     def __call__(self, value, serializer):
-        onderwerp = get_from_serializer_data_or_instance("onderwerp", value, serializer)
+        thema = get_from_serializer_data_or_instance("thema", value, serializer)
         product_type = get_from_serializer_data_or_instance(
             "product_type", value, serializer
         )
         try:
-            validate_onderwerp_or_product_type(onderwerp, product_type)
+            validate_thema_or_product_type(thema, product_type)
         except ValidationError as e:
-            raise serializers.ValidationError({"product_type_onderwerp": e.message})
+            raise serializers.ValidationError({"product_type_thema": e.message})
 
 
-class OnderwerpGepubliceerdStateValidator:
+class ThemaGepubliceerdStateValidator:
     requires_context = True
 
     def __call__(self, value, serializer):
-        hoofd_onderwerp = get_from_serializer_data_or_instance(
-            "hoofd_onderwerp", value, serializer
+        hoofd_thema = get_from_serializer_data_or_instance(
+            "hoofd_thema", value, serializer
         )
         gepubliceerd = get_from_serializer_data_or_instance(
             "gepubliceerd", value, serializer
         )
-        sub_onderwerpen = (
-            serializer.instance.sub_onderwerpen if serializer.instance else None
+        sub_themas = serializer.instance.sub_themas if serializer.instance else None
+
+        try:
+            validate_gepubliceerd_state(hoofd_thema, gepubliceerd, sub_themas)
+        except ValidationError as e:
+            raise serializers.ValidationError({"hoofd_thema": e.message})
+
+
+class ThemaSelfReferenceValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        thema = serializer.instance
+        hoofd_thema = get_from_serializer_data_or_instance(
+            "hoofd_thema", value, serializer
         )
 
         try:
-            validate_gepubliceerd_state(hoofd_onderwerp, gepubliceerd, sub_onderwerpen)
+            disallow_self_reference(thema, hoofd_thema)
         except ValidationError as e:
-            raise serializers.ValidationError({"hoofd_onderwerp": e.message})
+            raise serializers.ValidationError({"hoofd_thema": e.message})
 
 
 class PrijsOptieValidator:

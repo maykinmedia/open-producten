@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from ...utils.drf_validators import DuplicateIdValidator
-from ..models import Onderwerp, ProductType, UniformeProductNaam
+from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
@@ -18,9 +18,9 @@ from .vraag import NestedVraagSerializer
 # )
 
 
-class NestedOnderwerpSerializer(serializers.ModelSerializer):
+class NestedThemaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Onderwerp
+        model = Thema
         fields = (
             "id",
             "naam",
@@ -28,7 +28,7 @@ class NestedOnderwerpSerializer(serializers.ModelSerializer):
             "gepubliceerd",
             "aanmaak_datum",
             "update_datum",
-            "hoofd_onderwerp",
+            "hoofd_thema",
         )
 
 
@@ -37,12 +37,12 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         slug_field="uri", queryset=UniformeProductNaam.objects.all()
     )
 
-    onderwerpen = NestedOnderwerpSerializer(many=True, read_only=True)
-    onderwerp_ids = serializers.PrimaryKeyRelatedField(
+    themas = NestedThemaSerializer(many=True, read_only=True)
+    thema_ids = serializers.PrimaryKeyRelatedField(
         many=True,
         write_only=True,
-        queryset=Onderwerp.objects.all(),
-        source="onderwerpen",
+        queryset=Thema.objects.all(),
+        source="themas",
     )
 
     # locaties = LocationSerializer(many=True, read_only=True)
@@ -80,24 +80,22 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductType
         fields = "__all__"
-        validators = [DuplicateIdValidator(["onderwerp_ids"])]
+        validators = [DuplicateIdValidator(["thema_ids"])]
 
-    def validate_onderwerp_ids(self, onderwerpen: list[Onderwerp]) -> list[Onderwerp]:
-        if len(onderwerpen) == 0:
-            raise serializers.ValidationError(
-                _("Er is minimaal één onderwerp vereist.")
-            )
-        return onderwerpen
+    def validate_thema_ids(self, themas: list[Thema]) -> list[Thema]:
+        if len(themas) == 0:
+            raise serializers.ValidationError(_("Er is minimaal één thema vereist."))
+        return themas
 
     @transaction.atomic()
     def create(self, validated_data):
-        onderwerpen = validated_data.pop("onderwerpen")
+        themas = validated_data.pop("themas")
         # locaties = validated_data.pop("locaties")
         # organisaties = validated_data.pop("organisaties")
         # contacten = validated_data.pop("contacten")
 
         product_type = ProductType.objects.create(**validated_data)
-        product_type.onderwerpen.set(onderwerpen)
+        product_type.themas.set(themas)
 
         product_type.save()
 
@@ -105,13 +103,13 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
     @transaction.atomic()
     def update(self, instance, validated_data):
-        onderwerpen = validated_data.pop("onderwerpen", None)
+        themas = validated_data.pop("themas", None)
         # locaties = validated_data.pop("locaties", None)
         # organisaties = validated_data.pop("organisaties", None)
         # contacten = validated_data.pop("contacten", None)
         instance = super().update(instance, validated_data)
-        if onderwerpen:
-            instance.onderwerpen.set(onderwerpen)
+        if themas:
+            instance.themas.set(themas)
         instance.save()
 
         return instance

@@ -12,7 +12,7 @@ def custom_postprocessing_hook(result, generator, request, public):
         write_only=True,
         source="product_typen",
     )`
-    (src/open_producten/producttypen/serializers/onderwerp.py)
+    (src/open_producten/producttypen/serializers/thema.py)
 
     This generates the following schema:
 

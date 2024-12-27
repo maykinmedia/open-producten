@@ -8,21 +8,21 @@ from ..models import Vraag
 
 @admin.register(Vraag)
 class VraagAdmin(OrderedModelAdmin, MarkdownxModelAdmin):
-    list_filter = ("onderwerp",)
+    list_filter = ("thema",)
     list_display = (
         "vraag",
-        "onderwerp",
+        "thema",
         "product_type",
     )
     search_fields = (
         "vraag",
         "antwoord",
-        "onderwerp__naam",
+        "thema__naam",
         "product_type__naam",
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related("onderwerp", "product_type")
+        return super().get_queryset(request).select_related("thema", "product_type")
 
 
 class VraagInline(admin.TabularInline):

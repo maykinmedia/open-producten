@@ -3,10 +3,10 @@ import factory.fuzzy
 from ..models import (
     Bestand,
     Link,
-    Onderwerp,
     Prijs,
     PrijsOptie,
     ProductType,
+    Thema,
     UniformeProductNaam,
     Vraag,
 )
@@ -31,13 +31,13 @@ class ProductTypeFactory(factory.django.DjangoModelFactory):
         model = ProductType
 
 
-class OnderwerpFactory(factory.django.DjangoModelFactory):
-    naam = factory.Sequence(lambda n: f"onderwerp {n}")
+class ThemaFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"thema {n}")
     beschrijving = factory.Faker("sentence")
     gepubliceerd = True
 
     class Meta:
-        model = Onderwerp
+        model = Thema
 
 
 class VraagFactory(factory.django.DjangoModelFactory):

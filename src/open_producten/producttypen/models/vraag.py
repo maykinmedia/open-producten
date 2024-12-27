@@ -6,19 +6,19 @@ from markdownx.models import MarkdownxField
 
 from open_producten.utils.models import BaseModel
 
-from .onderwerp import Onderwerp
 from .producttype import ProductType
+from .thema import Thema
 
 
 class Vraag(BaseModel):
-    onderwerp = models.ForeignKey(
-        Onderwerp,
-        verbose_name=_("onderwerp"),
+    thema = models.ForeignKey(
+        Thema,
+        verbose_name=_("thema"),
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="vragen",
-        help_text=_("Het onderwerp waarbij deze vraag hoort."),
+        help_text=_("Het thema waarbij deze vraag hoort."),
     )
     product_type = models.ForeignKey(
         ProductType,
@@ -44,19 +44,19 @@ class Vraag(BaseModel):
         verbose_name_plural = _("Vragen")
 
     def clean(self):
-        validate_onderwerp_or_product_type(self.onderwerp, self.product_type)
+        validate_thema_or_product_type(self.thema, self.product_type)
 
     def __str__(self):
         return self.vraag
 
 
-def validate_onderwerp_or_product_type(onderwerp, product_type):
-    if onderwerp and product_type:
+def validate_thema_or_product_type(thema, product_type):
+    if thema and product_type:
         raise ValidationError(
-            _("Een vraag kan niet gelink zijn aan een onderwerp en een product type.")
+            _("Een vraag kan niet gelink zijn aan een thema en een product type.")
         )
 
-    if not onderwerp and not product_type:
+    if not thema and not product_type:
         raise ValidationError(
-            _("Een vraag moet gelinkt zijn aan een onderwerp of een product type.")
+            _("Een vraag moet gelinkt zijn aan een thema of een product type.")
         )

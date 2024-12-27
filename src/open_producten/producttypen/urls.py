@@ -4,9 +4,9 @@ from rest_framework.routers import DefaultRouter
 
 from open_producten.producttypen.views import (
     LinkViewSet,
-    OnderwerpViewSet,
     PrijsViewSet,
     ProductTypeViewSet,
+    ThemaViewSet,
     VraagViewSet,
 )
 
@@ -19,7 +19,7 @@ ProductTypenRouter.register(r"prijzen", PrijsViewSet, basename="prijs")
 
 ProductTypenRouter.register(r"vragen", VraagViewSet, basename="vraag")
 
-ProductTypenRouter.register("onderwerpen", OnderwerpViewSet, basename="onderwerp")
+ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 
 product_type_urlpatterns = [
     path("", include(ProductTypenRouter.urls)),
