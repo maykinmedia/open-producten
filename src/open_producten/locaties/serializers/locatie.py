@@ -9,36 +9,12 @@ class LocatieSerializer(serializers.ModelSerializer):
         model = Locatie
         fields = "__all__"
 
-    def create(self, validated_data: dict) -> Locatie:
-        locatie = Locatie(**validated_data)
-        locatie.clean()
-        locatie.save()
-        return locatie
-
-    def update(self, instance, validated_data: dict) -> Locatie:
-        locatie = super().update(instance, validated_data)
-        locatie.clean()
-        locatie.save()
-        return locatie
-
 
 class OrganisatieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organisatie
         fields = "__all__"
-
-    def create(self, validated_data: dict) -> Organisatie:
-        organisatie = Organisatie(**validated_data)
-        organisatie.clean()
-        organisatie.save()
-        return organisatie
-
-    def update(self, instance, validated_data: dict) -> Organisatie:
-        organisatie = super().update(instance, validated_data)
-        organisatie.clean()
-        organisatie.save()
-        return organisatie
 
 
 class ContactSerializer(serializers.ModelSerializer):

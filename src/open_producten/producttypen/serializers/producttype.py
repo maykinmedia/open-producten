@@ -17,13 +17,6 @@ from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 from .vraag import NestedVraagSerializer
 
-# from open_producten.locaties.models import Contact, Locatie, Organisatie
-# from open_producten.locaties.serializers.location import (
-#     ContactSerializer,
-#     LocationSerializer,
-#     OrganisationSerializer,
-# )
-
 
 class NestedThemaSerializer(serializers.ModelSerializer):
     class Meta:
