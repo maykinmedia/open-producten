@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
-from django import forms
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 

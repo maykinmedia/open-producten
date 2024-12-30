@@ -8,7 +8,7 @@ from drf_spectacular.views import (
 )
 from rest_framework.routers import DefaultRouter
 
-from open_producten.locaties.router import LocatieRouter
+from open_producten.locaties.urls import LocatieRouter
 from open_producten.producttypen.views import (
     BestandViewSet,
     LinkViewSet,
@@ -38,7 +38,7 @@ Een Product type is de definitie van een Product. hierin word alle relevante dat
 
 Een Product (zie product api) is de instantie, hierin worden de specifieke gegevens van de instantie opgeslagen zoals bijvoorbeeld de gegevens van de eigenaar.
 
-Een product type valt onder een onderwerp. Onderwerpen volgen een boomstructuur om product typen verder te categoriseren.
+Een product type valt onder een thema. Thema's volgen een boomstructuur om product typen verder te categoriseren.
 
 Een product type kan worden gelinkt één of meerdere locaties, organisaties en/of contacten.
 
@@ -57,7 +57,7 @@ custom_settings = {
         {"url": f"/producttypen/api/v{settings.PRODUCTTYPEN_API_MAJOR_VERSION}"}
     ],
     "TAGS": [
-        {"name": "onderwerpen"},
+        {"name": "themas"},
         {"name": "producttypen"},
         {"name": "prijzen"},
         {"name": "links"},
@@ -73,7 +73,7 @@ urlpatterns = [
     path(
         "schema/openapi.yaml",
         SpectacularAPIView.as_view(
-            urlconf="open_producten.producttypen.router",
+            urlconf="open_producten.producttypen.urls",
             custom_settings=custom_settings,
         ),
         name="schema-producttypen",
