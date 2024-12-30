@@ -15,7 +15,7 @@ class TestVraag(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Een vraag kan niet gelink zijn aan een onderwerp en een product type.",
+            "Een vraag kan niet gelink zijn aan een thema en een product type.",
         ):
             vraag.clean()
 
@@ -24,6 +24,6 @@ class TestVraag(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Een vraag moet gelinkt zijn aan een onderwerp of een product type.",
+            "Een vraag moet gelinkt zijn aan een thema of een product type.",
         ):
             vraag.clean()
