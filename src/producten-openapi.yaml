@@ -22,7 +22,6 @@ paths:
         name: gepubliceerd
         schema:
           type: boolean
-        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -81,7 +80,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
             examples:
               CreateProduct:
                 value:
@@ -202,7 +201,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductUpdate'
+              $ref: '#/components/schemas/ProductRequest'
         required: true
       security:
       - tokenAuth: []
@@ -211,7 +210,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductUpdate'
+                $ref: '#/components/schemas/Product'
           description: ''
         '400':
           content:
@@ -256,7 +255,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedProductUpdate'
+              $ref: '#/components/schemas/PatchedProductRequest'
       security:
       - tokenAuth: []
       responses:
@@ -264,7 +263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductUpdate'
+                $ref: '#/components/schemas/Product'
           description: ''
         '400':
           content:
@@ -351,6 +350,93 @@ components:
           type: string
       required:
       - veld
+    NestedProductType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          title: Product type naam
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          description: Product type beschrijving, ondersteund markdown format.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        uniforme_product_naam:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+      required:
+      - aanmaak_datum
+      - beschrijving
+      - id
+      - naam
+      - uniforme_product_naam
+      - update_datum
+    NestedProductTypeRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          title: Product type naam
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          minLength: 1
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          minLength: 1
+          description: Product type beschrijving, ondersteund markdown format.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        uniforme_product_naam:
+          type: string
+          format: uri
+          minLength: 1
+          description: Uri naar de UPN definitie.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+      required:
+      - beschrijving
+      - naam
+      - uniforme_product_naam
     PaginatedProductList:
       type: object
       required:
@@ -374,28 +460,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Product'
-    PatchedProductUpdate:
+    PatchedProductRequest:
       type: object
       properties:
-        id:
+        product_type_id:
           type: string
           format: uuid
-          readOnly: true
+          writeOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         start_datum:
           type: string
           format: date
@@ -426,12 +500,8 @@ components:
           readOnly: true
         product_type:
           allOf:
-          - $ref: '#/components/schemas/SimpleProductType'
+          - $ref: '#/components/schemas/NestedProductType'
           readOnly: true
-        product_type_id:
-          type: string
-          format: uuid
-          writeOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -473,31 +543,18 @@ components:
       - eind_datum
       - id
       - product_type
-      - product_type_id
       - start_datum
       - update_datum
-    ProductUpdate:
+    ProductRequest:
       type: object
       properties:
-        id:
+        product_type_id:
           type: string
           format: uuid
-          readOnly: true
+          writeOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
         start_datum:
           type: string
           format: date
@@ -520,61 +577,9 @@ components:
           maxLength: 8
           minLength: 8
       required:
-      - aanmaak_datum
       - eind_datum
-      - id
+      - product_type_id
       - start_datum
-      - update_datum
-    SimpleProductType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        uniforme_product_naam:
-          type: string
-          format: uri
-          description: Uri naar de UPN definitie.
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        naam:
-          type: string
-          description: naam van het product type.
-          maxLength: 100
-        samenvatting:
-          type: string
-          description: Korte beschrijving van het product type, maximaal 300 karakters.
-          maxLength: 300
-        beschrijving:
-          type: string
-          description: Product type beschrijving met WYSIWYG editor.
-        keywords:
-          type: array
-          items:
-            type: string
-            maxLength: 100
-          description: Lijst van keywords waarop kan worden gezocht.
-      required:
-      - aanmaak_datum
-      - beschrijving
-      - id
-      - naam
-      - uniforme_product_naam
-      - update_datum
   securitySchemes:
     tokenAuth:
       type: apiKey

@@ -16,16 +16,14 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 class TestProductTypeVraag(BaseApiTestCase):
 
     def setUp(self):
+        super().setUp()
         self.product_type = ProductTypeFactory.create()
         self.thema = ThemaFactory.create()
         self.data = {"vraag": "18?", "antwoord": "in aanmerking"}
         self.vraag = VraagFactory.create(product_type=self.product_type)
+
         self.path = reverse("vraag-list")
         self.detail_path = reverse("vraag-detail", args=[self.vraag.id])
-
-        self.api = "producttypen"
-        self.object = "vragen"
-        super().setUp()
 
     def test_read_vraag_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -81,7 +79,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
@@ -97,7 +95,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
                         string="Een vraag moet gelinkt zijn aan een thema of een product type.",
                         code="invalid",
@@ -122,7 +120,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
@@ -143,7 +141,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",
@@ -180,7 +178,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
                         string="Een vraag kan niet gelink zijn aan een thema en een product type.",
                         code="invalid",

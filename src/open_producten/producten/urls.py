@@ -30,7 +30,7 @@ urlpatterns = [
     path(
         "schema/openapi.yaml",
         SpectacularAPIView.as_view(
-            urlconf="open_producten.producten.router",
+            urlconf="open_producten.producten.urls",
             custom_settings=custom_settings,
         ),
         name="schema-producten",

@@ -15,6 +15,7 @@ from mozilla_django_oidc_db.views import AdminLoginFailure
 from open_producten.accounts.views.password_reset import PasswordResetView
 from open_producten.producten.urls import urlpatterns as product_urlpatterns
 from open_producten.producttypen.urls import urlpatterns as product_type_urlpatterns
+from open_producten.utils.views import IndexView
 
 # Configure admin
 
