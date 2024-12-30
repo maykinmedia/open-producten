@@ -375,6 +375,7 @@ paths:
               CreateContact:
                 value:
                   organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                  code: org-1234
                   voornaam: Bob
                   achternaam: de Vries
                   email: bob@example.com
@@ -394,6 +395,7 @@ paths:
                 CreateContact:
                   value:
                     organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                    code: org-1234
                     voornaam: Bob
                     achternaam: de Vries
                     email: bob@example.com
@@ -2007,6 +2009,10 @@ paths:
                   - 6863d699-460d-4c1e-9297-16812d75d8ca
                   gepubliceerd: false
                   naam: Aanleunwoning
+                  code: PT-12345
+                  toegestane_statussen:
+                  - gereed
+                  - actief
                   samenvatting: korte samenvatting...
                   beschrijving: uitgebreide beschrijving...
                   keywords:
@@ -2035,6 +2041,10 @@ paths:
                     - 6863d699-460d-4c1e-9297-16812d75d8ca
                     gepubliceerd: false
                     naam: Aanleunwoning
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    - actief
                     samenvatting: korte samenvatting...
                     beschrijving: uitgebreide beschrijving...
                     keywords:
@@ -3345,6 +3355,10 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3362,6 +3376,11 @@ components:
           type: string
           format: uri
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -3380,6 +3399,7 @@ components:
       required:
       - aanmaak_datum
       - beschrijving
+      - code
       - id
       - naam
       - uniforme_product_naam
@@ -3392,6 +3412,11 @@ components:
           minLength: 1
           title: Product type naam
           description: naam van het product type.
+          maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
           maxLength: 100
         samenvatting:
           type: string
@@ -3413,11 +3438,17 @@ components:
           format: uri
           minLength: 1
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
       required:
       - beschrijving
+      - code
       - naam
       - uniforme_product_naam
     NestedThema:
@@ -3544,7 +3575,12 @@ components:
         stad:
           type: string
           maxLength: 250
+        code:
+          type: string
+          description: code van de organisatie.
+          maxLength: 100
       required:
+      - code
       - id
       - postcode
       - stad
@@ -3577,7 +3613,13 @@ components:
           type: string
           minLength: 1
           maxLength: 250
+        code:
+          type: string
+          minLength: 1
+          description: code van de organisatie.
+          maxLength: 100
       required:
+      - code
       - postcode
       - stad
     PaginatedBestandList:
@@ -3902,6 +3944,11 @@ components:
           type: string
           minLength: 1
           maxLength: 250
+        code:
+          type: string
+          minLength: 1
+          description: code van de organisatie.
+          maxLength: 100
     PatchedPrijsRequest:
       type: object
       properties:
@@ -3962,6 +4009,16 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           minLength: 1
@@ -4173,6 +4230,15 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -4190,6 +4256,7 @@ components:
       - aanmaak_datum
       - beschrijving
       - bestanden
+      - code
       - contacten
       - id
       - links
@@ -4277,6 +4344,16 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           minLength: 1
@@ -4294,6 +4371,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
       required:
       - beschrijving
+      - code
       - naam
       - thema_ids
       - uniforme_product_naam
@@ -4377,6 +4455,20 @@ components:
       - hoofd_thema
       - naam
       - product_type_ids
+    ToegestaneStatussenEnum:
+      enum:
+      - gereed
+      - actief
+      - ingetrokken
+      - geweigerd
+      - verlopen
+      type: string
+      description: |-
+        * `gereed` - Gereed
+        * `actief` - Actief
+        * `ingetrokken` - Ingetrokken
+        * `geweigerd` - Geweigerd
+        * `verlopen` - Verlopen
     Vraag:
       type: object
       properties:

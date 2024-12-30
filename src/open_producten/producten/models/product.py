@@ -75,21 +75,7 @@ class Product(BasePublishableModel):
 
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
-
-        if (
-            self.status != ProductStateChoices.INITIEEL.value
-            and self.status not in self.product_type.toegestane_statussen
-        ):
-            raise ValidationError(
-                {
-                    "status": _(
-                        "Status '{}' is niet toegestaan voor het product type {}.".format(
-                            ProductStateChoices(self.status).label,
-                            self.product_type.naam,
-                        )
-                    )
-                }
-            )
+        validate_status(self.status, self.product_type)
 
     def __str__(self):
         return f"{self.bsn if self.bsn else self.kvk} {self.product_type.naam}"
@@ -99,4 +85,21 @@ def validate_bsn_or_kvk(bsn, kvk):
     if not bsn and not kvk:
         raise ValidationError(
             _("Een product moet een bsn, kvk nummer of beiden hebben.")
+        )
+
+
+def validate_status(status, product_type):
+    if (
+        status != ProductStateChoices.INITIEEL.value
+        and status not in product_type.toegestane_statussen
+    ):
+        raise ValidationError(
+            {
+                "status": _(
+                    "Status '{}' is niet toegestaan voor het product type {}."
+                ).format(
+                    ProductStateChoices(status).label,
+                    product_type.naam,
+                )
+            }
         )

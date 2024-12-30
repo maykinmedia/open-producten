@@ -34,6 +34,26 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - actief
+          - gereed
+          - geweigerd
+          - ingetrokken
+          - initieel
+          - verlopen
+        description: |-
+          De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type.
+
+          * `initieel` - Initieel
+          * `gereed` - Gereed
+          * `actief` - Actief
+          * `ingetrokken` - Ingetrokken
+          * `geweigerd` - Geweigerd
+          * `verlopen` - Verlopen
       tags:
       - producten
       security:
@@ -256,6 +276,20 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedProductRequest'
+            examples:
+              PatchProduct:
+                value:
+                  gepubliceerd: true
+                  start_datum: '2019-08-24'
+                  eind_datum: '2019-08-24'
+                  bsn: string
+                  status: string
+                  kvk: ^$
+                summary: Patch product
+              UpdateProductStatus:
+                value:
+                  status: actief
+                summary: Update product status
       security:
       - tokenAuth: []
       responses:
@@ -264,6 +298,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                PatchProduct:
+                  value:
+                    gepubliceerd: true
+                    start_datum: '2019-08-24'
+                    eind_datum: '2019-08-24'
+                    bsn: string
+                    status: string
+                    kvk: ^$
+                  summary: Patch product
+                UpdateProductStatus:
+                  value:
+                    status: actief
+                  summary: Update product status
           description: ''
         '400':
           content:
@@ -362,6 +410,10 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -379,6 +431,11 @@ components:
           type: string
           format: uri
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -397,6 +454,7 @@ components:
       required:
       - aanmaak_datum
       - beschrijving
+      - code
       - id
       - naam
       - uniforme_product_naam
@@ -409,6 +467,11 @@ components:
           minLength: 1
           title: Product type naam
           description: naam van het product type.
+          maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
           maxLength: 100
         samenvatting:
           type: string
@@ -430,11 +493,17 @@ components:
           format: uri
           minLength: 1
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
       required:
       - beschrijving
+      - code
       - naam
       - uniforme_product_naam
     PaginatedProductList:
@@ -483,6 +552,18 @@ components:
           nullable: true
           description: De BSN van de product eigenaar, BSN van 8 karakters moet met
             een extra 0 beginnen.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type.
+
+            * `initieel` - Initieel
+            * `gereed` - Gereed
+            * `actief` - Actief
+            * `ingetrokken` - Ingetrokken
+            * `geweigerd` - Geweigerd
+            * `verlopen` - Verlopen
         kvk:
           type: string
           nullable: true
@@ -530,6 +611,18 @@ components:
           nullable: true
           description: De BSN van de product eigenaar, BSN van 8 karakters moet met
             een extra 0 beginnen.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type.
+
+            * `initieel` - Initieel
+            * `gereed` - Gereed
+            * `actief` - Actief
+            * `ingetrokken` - Ingetrokken
+            * `geweigerd` - Geweigerd
+            * `verlopen` - Verlopen
         kvk:
           type: string
           nullable: true
@@ -568,6 +661,18 @@ components:
           nullable: true
           description: De BSN van de product eigenaar, BSN van 8 karakters moet met
             een extra 0 beginnen.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: |-
+            De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type.
+
+            * `initieel` - Initieel
+            * `gereed` - Gereed
+            * `actief` - Actief
+            * `ingetrokken` - Ingetrokken
+            * `geweigerd` - Geweigerd
+            * `verlopen` - Verlopen
         kvk:
           type: string
           nullable: true
@@ -580,6 +685,36 @@ components:
       - eind_datum
       - product_type_id
       - start_datum
+    StatusEnum:
+      enum:
+      - initieel
+      - gereed
+      - actief
+      - ingetrokken
+      - geweigerd
+      - verlopen
+      type: string
+      description: |-
+        * `initieel` - Initieel
+        * `gereed` - Gereed
+        * `actief` - Actief
+        * `ingetrokken` - Ingetrokken
+        * `geweigerd` - Geweigerd
+        * `verlopen` - Verlopen
+    ToegestaneStatussenEnum:
+      enum:
+      - gereed
+      - actief
+      - ingetrokken
+      - geweigerd
+      - verlopen
+      type: string
+      description: |-
+        * `gereed` - Gereed
+        * `actief` - Actief
+        * `ingetrokken` - Ingetrokken
+        * `geweigerd` - Geweigerd
+        * `verlopen` - Verlopen
   securitySchemes:
     tokenAuth:
       type: apiKey
