@@ -63,6 +63,7 @@ class TestContact(BaseApiTestCase):
             "organisatie": {
                 "id": str(contact.organisatie.id),
                 "naam": contact.organisatie.naam,
+                "code": contact.organisatie.code,
                 "email": contact.organisatie.email,
                 "telefoonnummer": contact.organisatie.telefoonnummer,
                 "straat": contact.organisatie.straat,
@@ -106,6 +107,7 @@ class TestContact(BaseApiTestCase):
                 "organisatie": {
                     "id": str(self.contact.organisatie.id),
                     "naam": self.contact.organisatie.naam,
+                    "code": self.contact.organisatie.code,
                     "email": self.contact.organisatie.email,
                     "telefoonnummer": self.contact.organisatie.telefoonnummer,
                     "straat": self.contact.organisatie.straat,
@@ -124,6 +126,7 @@ class TestContact(BaseApiTestCase):
                 "organisatie": {
                     "id": str(contact.organisatie.id),
                     "naam": contact.organisatie.naam,
+                    "code": contact.organisatie.code,
                     "email": contact.organisatie.email,
                     "telefoonnummer": contact.organisatie.telefoonnummer,
                     "straat": contact.organisatie.straat,
@@ -149,6 +152,7 @@ class TestContact(BaseApiTestCase):
             "organisatie": {
                 "id": str(self.contact.organisatie.id),
                 "naam": self.contact.organisatie.naam,
+                "code": self.contact.organisatie.code,
                 "email": self.contact.organisatie.email,
                 "telefoonnummer": self.contact.organisatie.telefoonnummer,
                 "straat": self.contact.organisatie.straat,

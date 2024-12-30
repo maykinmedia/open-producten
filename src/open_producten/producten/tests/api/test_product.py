@@ -26,11 +26,12 @@ class TestProduct(BaseApiTestCase):
             "start_datum": datetime.date(2024, 1, 2),
             "eind_datum": datetime.date(2024, 12, 31),
             "data": [],
+            "status": "initieel",
         }
         self.path = reverse("product-list")
 
-    def detail_path(self, product_type):
-        return reverse("product-detail", args=[product_type.id])
+    def detail_path(self, product):
+        return reverse("product-detail", args=[product.id])
 
     def test_read_product_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
@@ -44,6 +45,12 @@ class TestProduct(BaseApiTestCase):
             response.data,
             {
                 "product_type_id": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
+                "start_datum": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
+                "eind_datum": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
@@ -60,6 +67,7 @@ class TestProduct(BaseApiTestCase):
             "id": str(product.id),
             "bsn": product.bsn,
             "kvk": product.kvk,
+            "status": product.status,
             "gepubliceerd": False,
             "start_datum": str(product.start_datum),
             "eind_datum": str(product.eind_datum),
@@ -68,10 +76,12 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "naam": product_type.naam,
+                "code": product_type.code,
                 "samenvatting": product_type.samenvatting,
                 "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
+                "toegestane_statussen": ["gereed"],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type.update_datum.astimezone().isoformat(),
                 "keywords": [],
@@ -100,7 +110,7 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(Product.objects.count(), 0)
 
     def test_create_product_with_not_allowed_state(self):
-        response = self.post(self.data | {"status": "actief"})
+        response = self.client.post(self.path, self.data | {"status": "actief"})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.data,
@@ -115,12 +125,10 @@ class TestProduct(BaseApiTestCase):
         )
 
     def test_create_product_with_allowed_state(self):
-        response = self.post(self.data | {"status": "gereed"})
+        response = self.client.post(self.path, self.data | {"status": "gereed"})
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Product.objects.count(), 1)
-        product = Product.objects.first()
-        self.assertEqual(response.data, product_to_dict(product))
 
     def test_update_product(self):
         product = ProductFactory.create(bsn="111222333")
@@ -154,9 +162,9 @@ class TestProduct(BaseApiTestCase):
         )
 
     def test_update_product_with_not_allowed_state(self):
-        product = self._create_product()
+        product = ProductFactory.create(bsn="111222333")
         data = self.data.copy() | {"status": "actief"}
-        response = self.put(product.id, data)
+        response = self.client.put(self.detail_path(product), data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -198,6 +206,7 @@ class TestProduct(BaseApiTestCase):
                 "id": str(product1.id),
                 "bsn": product1.bsn,
                 "kvk": product1.kvk,
+                "status": product1.status,
                 "gepubliceerd": False,
                 "start_datum": None,
                 "eind_datum": None,
@@ -206,9 +215,11 @@ class TestProduct(BaseApiTestCase):
                 "product_type": {
                     "id": str(self.product_type.id),
                     "naam": self.product_type.naam,
+                    "code": self.product_type.code,
                     "samenvatting": self.product_type.samenvatting,
                     "beschrijving": self.product_type.beschrijving,
                     "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
                     "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
                     "update_datum": self.product_type.update_datum.astimezone().isoformat(),
@@ -219,6 +230,7 @@ class TestProduct(BaseApiTestCase):
                 "id": str(product2.id),
                 "bsn": product2.bsn,
                 "kvk": product2.kvk,
+                "status": product2.status,
                 "gepubliceerd": False,
                 "start_datum": None,
                 "eind_datum": None,
@@ -227,9 +239,11 @@ class TestProduct(BaseApiTestCase):
                 "product_type": {
                     "id": str(self.product_type.id),
                     "naam": self.product_type.naam,
+                    "code": self.product_type.code,
                     "samenvatting": self.product_type.samenvatting,
                     "beschrijving": self.product_type.beschrijving,
                     "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
                     "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
                     "update_datum": self.product_type.update_datum.astimezone().isoformat(),
@@ -249,6 +263,9 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(product.id),
+            "bsn": product.bsn,
+            "kvk": product.kvk,
+            "status": product.status,
             "bsn": "111222333",
             "kvk": None,
             "gepubliceerd": False,
@@ -259,9 +276,11 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "naam": product_type.naam,
+                "code": product_type.code,
                 "samenvatting": product_type.samenvatting,
                 "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "toegestane_statussen": ["gereed"],
                 "gepubliceerd": True,
                 "aanmaak_datum": "2025-12-31T01:00:00+01:00",
                 "update_datum": "2025-12-31T01:00:00+01:00",

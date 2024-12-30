@@ -41,6 +41,7 @@ class TestOrganisatie(BaseApiTestCase):
                 "naam": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
+                "code": [ErrorDetail(string=_("This field is required."), code="required")],
             },
         )
 
@@ -53,6 +54,7 @@ class TestOrganisatie(BaseApiTestCase):
         expected_data = {
             "id": str(organisatie.id),
             "naam": organisatie.naam,
+            "code": organisatie.code,
             "email": organisatie.email,
             "telefoonnummer": organisatie.telefoonnummer,
             "straat": organisatie.straat,
@@ -65,7 +67,7 @@ class TestOrganisatie(BaseApiTestCase):
     def test_create_organisatie_without_code_returns_error(self):
         data = self.data.copy()
         data.pop("code")
-        response = self.post(data)
+        response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -101,6 +103,7 @@ class TestOrganisatie(BaseApiTestCase):
             {
                 "id": str(self.organisatie.id),
                 "naam": self.organisatie.naam,
+                "code": self.organisatie.code,
                 "email": self.organisatie.email,
                 "telefoonnummer": self.organisatie.telefoonnummer,
                 "straat": self.organisatie.straat,
@@ -111,6 +114,7 @@ class TestOrganisatie(BaseApiTestCase):
             {
                 "id": str(organisatie.id),
                 "naam": organisatie.naam,
+                "code": organisatie.code,
                 "email": organisatie.email,
                 "telefoonnummer": organisatie.telefoonnummer,
                 "straat": organisatie.straat,
@@ -128,6 +132,7 @@ class TestOrganisatie(BaseApiTestCase):
         expected_data = {
             "id": str(self.organisatie.id),
             "naam": self.organisatie.naam,
+            "code": self.organisatie.code,
             "email": self.organisatie.email,
             "telefoonnummer": self.organisatie.telefoonnummer,
             "straat": self.organisatie.straat,

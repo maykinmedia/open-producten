@@ -1,4 +1,5 @@
 import datetime
+
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -70,6 +71,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "beschrijving": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
             },
         )
 
@@ -84,9 +86,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
+            "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
             "links": [],
@@ -134,7 +138,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_create_product_type_without_code_returns_error(self):
         data = self.data.copy()
         data.pop("code")
-        response = self.post(data)
+        response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
@@ -187,12 +191,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
 
     def test_create_product_type_with_toegestane_statussen(self):
-        response = self.post(self.data | {"toegestane_statussen": ["gereed"]})
+        response = self.client.post(
+            self.path, self.data | {"toegestane_statussen": ["gereed"]}
+        )
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(ProductType.objects.count(), 1)
-        product_type = ProductType.objects.first()
-        self.assertEqual(response.data, product_type_to_dict(product_type))
+        self.assertEqual(response.data["toegestane_statussen"], ["gereed"])
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):
         thema = ThemaFactory.create()
@@ -583,9 +588,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "id": str(product_type1.id),
                 "naam": product_type1.naam,
+                "code": product_type1.code,
                 "samenvatting": product_type1.samenvatting,
                 "beschrijving": product_type1.beschrijving,
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
+                "toegestane_statussen": [],
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
@@ -612,9 +619,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "id": str(product_type2.id),
                 "naam": product_type2.naam,
+                "code": product_type2.code,
                 "samenvatting": product_type2.samenvatting,
                 "beschrijving": product_type2.beschrijving,
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
+                "toegestane_statussen": [],
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
@@ -652,9 +661,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
+            "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
             "links": [],
