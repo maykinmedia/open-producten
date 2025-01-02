@@ -1,51 +1,31 @@
-from unittest import TestCase
+from django.test import TestCase
 
-from ..serializers import build_array_duplicates_error_message
-
-
-class Dummy:
-
-    def __init__(self, id):
-        self.id = id
+from ..serializers import clean_duplicate_ids_in_list
 
 
-class TestBuildArrayError(TestCase):
+class TestDuplicateIds(TestCase):
 
-    def setUp(self):
-        self.object_a = Dummy("a")
-        self.object_b = Dummy("b")
-
-    def test_build_array_error_should_return_errors_when_list_has_duplicate_object(
-        self,
-    ):
+    def test_list_has_duplicates(self):
         errors = dict()
-        object_list = [self.object_a, self.object_b, self.object_b]
+        values = ["123", "123"]
 
-        build_array_duplicates_error_message(object_list, "test", errors)
+        clean_duplicate_ids_in_list(values, "test", errors)
 
-        self.assertEqual(errors, {"test": ["Duplicate Dummy id: b at index 2"]})
+        self.assertEqual(errors, {"test": ["Dubbel id: 123 op index 1."]})
 
-    def test_build_array_error_should_return_multiple_errors_when_list_has_multiple_duplicate_object(
-        self,
-    ):
+    def test_list_has_multiple_duplicates(self):
         errors = dict()
-        object_list = [self.object_a, self.object_b, self.object_b, self.object_b]
+        values = ["123", "123", "456", "456"]
 
-        build_array_duplicates_error_message(object_list, "test", errors)
+        clean_duplicate_ids_in_list(values, "test", errors)
 
         self.assertEqual(
             errors,
-            {
-                "test": [
-                    "Duplicate Dummy id: b at index 2",
-                    "Duplicate Dummy id: b at index 3",
-                ]
-            },
+            {"test": ["Dubbel id: 123 op index 1.", "Dubbel id: 456 op index 3."]},
         )
 
-    def test_build_array_error_should_not_return_errors_list_has_unique_values(self):
+    def test_list_has_no_duplicates(self):
         errors = dict()
-        object_list = [self.object_a, self.object_b]
-
-        build_array_duplicates_error_message(object_list, "test", errors)
+        values = ["123", "456"]
+        clean_duplicate_ids_in_list(values, "test", errors)
         self.assertEqual(errors, {})

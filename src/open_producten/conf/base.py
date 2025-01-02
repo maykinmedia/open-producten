@@ -18,7 +18,6 @@ INSTALLED_APPS += [
     # Project applications.
     "rest_framework.authtoken",
     "localflavor",
-    "treebeard",
     "markdownx",
     "django.contrib.gis",
     "open_producten.accounts",
@@ -92,6 +91,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 100,
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
 #
@@ -113,6 +113,11 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "POSTPROCESSING_HOOKS": (
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "open_producten.utils.spectacular_hooks.custom_postprocessing_hook",
+    ),
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 #

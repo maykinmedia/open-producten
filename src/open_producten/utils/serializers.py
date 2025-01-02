@@ -1,20 +1,31 @@
 from uuid import UUID
 
 from django.forms.models import model_to_dict
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework.serializers import Serializer
 
 from .models import BaseModel
 
 
-def build_array_duplicates_error_message(objects: list, field: str, errors):
-    object_set = set()
-    errors_messages = []
-    for idx, obj in enumerate(objects):
-        if obj in object_set:
-            errors_messages.append(
-                f"Duplicate {type(obj).__name__} id: {obj.id} at index {idx}"
-            )
+def get_from_serializer_data_or_instance(
+    field: str, data: dict, serializer: Serializer
+):
+    if field in data:
+        return data[field]
 
-        object_set.add(obj)
+    if serializer.instance:
+        return getattr(serializer.instance, field)
+
+
+def clean_duplicate_ids_in_list(values: list, field: str, errors):
+    value_set = set()
+    errors_messages = []
+    for idx, value in enumerate(values):
+        if value in value_set:
+            errors_messages.append(_("Dubbel id: {} op index {}.").format(value, idx))
+
+        value_set.add(value)
 
     if errors_messages:
         errors[field] = errors_messages
