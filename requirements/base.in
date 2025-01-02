@@ -8,7 +8,6 @@ open-api-framework
 # API libraries
 # django-extra-fields
 django-markdownx
-geopy
 django-localflavor
 
 # waiting for > 2.0.1

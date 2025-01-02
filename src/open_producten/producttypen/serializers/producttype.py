@@ -3,19 +3,19 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from open_producten.locaties.models import Contact, Locatie, Organisatie
+from open_producten.locaties.serializers.locatie import (
+    ContactSerializer,
+    LocatieSerializer,
+    OrganisatieSerializer,
+)
+
 from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 from .vraag import NestedVraagSerializer
-
-# from open_producten.locaties.models import Contact, Locatie, Organisatie
-# from open_producten.locaties.serializers.location import (
-#     ContactSerializer,
-#     LocationSerializer,
-#     OrganisationSerializer,
-# )
 
 
 class NestedThemaSerializer(serializers.ModelSerializer):
@@ -45,32 +45,32 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         source="themas",
     )
 
-    # locaties = LocationSerializer(many=True, read_only=True)
-    # locatie_ids = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     write_only=True,
-    #     queryset=Locatie.objects.all(),
-    #     default=[],
-    #     source="locaties",
-    # )
-    #
-    # organisaties = OrganisationSerializer(many=True, read_only=True)
-    # organisatie_ids = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     write_only=True,
-    #     queryset=Organisatie.objects.all(),
-    #     default=[],
-    #     source="organisaties",
-    # )
-    #
-    # contacts = ContactSerializer(many=True, read_only=True)
-    # contact_ids = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     write_only=True,
-    #     queryset=Contact.objects.all(),
-    #     default=[],
-    #     source="contacten",
-    # )
+    locaties = LocatieSerializer(many=True, read_only=True)
+    locatie_ids = serializers.PrimaryKeyRelatedField(
+        many=True,
+        write_only=True,
+        queryset=Locatie.objects.all(),
+        default=[],
+        source="locaties",
+    )
+
+    organisaties = OrganisatieSerializer(many=True, read_only=True)
+    organisatie_ids = serializers.PrimaryKeyRelatedField(
+        many=True,
+        write_only=True,
+        queryset=Organisatie.objects.all(),
+        default=[],
+        source="organisaties",
+    )
+
+    contacten = ContactSerializer(many=True, read_only=True)
+    contact_ids = serializers.PrimaryKeyRelatedField(
+        many=True,
+        write_only=True,
+        queryset=Contact.objects.all(),
+        default=[],
+        source="contacten",
+    )
 
     vragen = NestedVraagSerializer(many=True, read_only=True)
     prijzen = NestedPrijsSerializer(many=True, read_only=True)
@@ -80,7 +80,11 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductType
         fields = "__all__"
-        validators = [DuplicateIdValidator(["thema_ids"])]
+        validators = [
+            DuplicateIdValidator(
+                ["thema_ids", "locatie_ids", "organisatie_ids", "contacten_ids"]
+            )
+        ]
 
     def validate_thema_ids(self, themas: list[Thema]) -> list[Thema]:
         if len(themas) == 0:
@@ -90,28 +94,40 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     @transaction.atomic()
     def create(self, validated_data):
         themas = validated_data.pop("themas")
-        # locaties = validated_data.pop("locaties")
-        # organisaties = validated_data.pop("organisaties")
-        # contacten = validated_data.pop("contacten")
+        locaties = validated_data.pop("locaties")
+        organisaties = validated_data.pop("organisaties")
+        contacten = validated_data.pop("contacten")
 
         product_type = ProductType.objects.create(**validated_data)
         product_type.themas.set(themas)
+        product_type.locaties.set(locaties)
+        product_type.organisaties.set(organisaties)
+        product_type.contacten.set(contacten)
 
         product_type.save()
-
+        product_type.add_contact_organisaties()
         return product_type
 
     @transaction.atomic()
     def update(self, instance, validated_data):
         themas = validated_data.pop("themas", None)
-        # locaties = validated_data.pop("locaties", None)
-        # organisaties = validated_data.pop("organisaties", None)
-        # contacten = validated_data.pop("contacten", None)
+        locaties = validated_data.pop("locaties", None)
+        organisaties = validated_data.pop("organisaties", None)
+        contacten = validated_data.pop("contacten", None)
+
         instance = super().update(instance, validated_data)
+
         if themas:
             instance.themas.set(themas)
-        instance.save()
+        if locaties:
+            instance.locaties.set(locaties)
+        if organisaties:
+            instance.organisaties.set(organisaties)
+        if contacten:
+            instance.contacten.set(contacten)
 
+        instance.save()
+        instance.add_contact_organisaties()
         return instance
 
 

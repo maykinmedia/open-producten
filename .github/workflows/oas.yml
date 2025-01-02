@@ -36,7 +36,6 @@ jobs:
           python-version: '3.11'
           optimize-postgres: 'no'
           setup-node: 'no'
-          apt-packages: 'gdal-bin'
           # apt-packages: 'gettext postgresql-client'  # the default
           # npm-ci-flags: '--legacy-peer-deps' -> preferably use a .npmrc file
 
