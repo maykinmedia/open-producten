@@ -9,24 +9,25 @@ class BaseLocatie(BaseModel):
     naam = models.CharField(
         verbose_name=_("naam"),
         max_length=100,
-        blank=True,
     )
     email = models.EmailField(
         verbose_name=_("email adres"),
+        null=True,
         blank=True,
     )
     telefoonnummer = models.CharField(
         verbose_name=_("telefoonnummer"),
         blank=True,
-        default="",
+        null=True,
         max_length=15,
         validators=[validate_phone_number],
     )
 
-    straat = models.CharField(_("straat"), blank=True, max_length=250)
+    straat = models.CharField(_("straat"), null=True, blank=True, max_length=250)
     huisnummer = models.CharField(
         _("huisnummer"),
         blank=True,
+        null=True,
         max_length=250,
     )
 
@@ -34,8 +35,15 @@ class BaseLocatie(BaseModel):
         _("postcode"),
         max_length=7,
         validators=[validate_postal_code],
+        blank=True,
+        null=True,
     )
-    stad = models.CharField(_("stad"), max_length=250)
+    stad = models.CharField(
+        _("stad"),
+        max_length=250,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         abstract = True

@@ -36,10 +36,7 @@ class TestOrganisatie(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "postcode": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
-                ],
-                "stad": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
             },
         )
 
