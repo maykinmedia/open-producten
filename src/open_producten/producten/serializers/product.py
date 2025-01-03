@@ -3,6 +3,7 @@ from rest_framework import serializers
 from open_producten.producten.models import Product
 from open_producten.producten.serializers.validators import (
     BsnOrKvkValidator,
+    DateValidator,
     StatusValidator,
 )
 from open_producten.producttypen.models import ProductType
@@ -18,4 +19,4 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
-        validators = [BsnOrKvkValidator(), StatusValidator()]
+        validators = [BsnOrKvkValidator(), StatusValidator(), DateValidator()]

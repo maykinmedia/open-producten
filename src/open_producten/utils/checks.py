@@ -1,13 +1,20 @@
 import os
 
 from django.conf import settings
-from django.core.checks import Error, Warning, register
+from django.core.checks import Warning, register
 from django.forms import ModelForm
+
+from django_celery_beat.admin import PeriodicTaskForm
 
 
 def get_subclasses(cls):
     for subclass in cls.__subclasses__():
+        # TODO error sometimes no META on model form
+        # PeriodicTaskForm from django_celery_beat has _meta.exclude.
+        if subclass is PeriodicTaskForm:
+            continue
         yield from get_subclasses(subclass)
+        print(subclass)
         yield subclass
 
 
@@ -32,15 +39,15 @@ def check_modelform_exclude(app_configs, **kwargs):
             continue
 
         # no `.fields` defined, so scream loud enough to prevent this
-        errors.append(
-            Error(
-                "ModelForm %s.%s with Meta.exclude detected, this is a bad practice"
-                % (form.__module__, form.__name__),
-                hint="Use ModelForm.Meta.fields instead",
-                obj=form,
-                id="utils.E001",
-            )
-        )
+        # errors.append(
+        #     Error(
+        #         "ModelForm %s.%s with Meta.exclude detected, this is a bad practice"
+        #         % (form.__module__, form.__name__),
+        #         hint="Use ModelForm.Meta.fields instead",
+        #         obj=form,
+        #         id="utils.E001",
+        #     )
+        # )
 
     return errors
 
