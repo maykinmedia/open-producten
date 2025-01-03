@@ -22,8 +22,6 @@ class TestProduct(BaseApiTestCase):
         self.data = {
             "product_type_id": self.product_type.id,
             "bsn": "111222333",
-            "start_datum": datetime.date(2024, 1, 2),
-            "eind_datum": datetime.date(2024, 12, 31),
             "data": [],
             "status": "initieel",
         }
@@ -46,12 +44,6 @@ class TestProduct(BaseApiTestCase):
                 "product_type_id": [
                     ErrorDetail(string="Dit veld is vereist.", code="required")
                 ],
-                "start_datum": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
-                ],
-                "eind_datum": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
-                ],
             },
         )
 
@@ -68,8 +60,8 @@ class TestProduct(BaseApiTestCase):
             "kvk": product.kvk,
             "status": product.status,
             "gepubliceerd": False,
-            "start_datum": str(product.start_datum),
-            "eind_datum": str(product.eind_datum),
+            "start_datum": None,
+            "eind_datum": None,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
             "product_type": {
@@ -128,9 +120,13 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(Product.objects.count(), 1)
 
     def test_update_product(self):
-        product = ProductFactory.create(bsn="111222333")
+        product_type = ProductTypeFactory.create(toegestane_statussen=["verlopen"])
+        product = ProductFactory.create(bsn="111222333", product_type=product_type)
 
-        data = self.data | {"eind_datum": datetime.date(2025, 12, 31)}
+        data = self.data | {
+            "eind_datum": datetime.date(2025, 12, 31),
+            "product_type_id": product_type.id,
+        }
         response = self.client.put(self.detail_path(product), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -175,7 +171,10 @@ class TestProduct(BaseApiTestCase):
         )
 
     def test_partial_update_product(self):
-        product = ProductFactory.create(bsn="111222333")
+        product = ProductFactory.create(
+            bsn="111222333",
+            product_type=ProductTypeFactory.create(toegestane_statussen=["verlopen"]),
+        )
 
         data = {"eind_datum": datetime.date(2025, 12, 31)}
         response = self.client.patch(self.detail_path(product), data)
@@ -203,8 +202,8 @@ class TestProduct(BaseApiTestCase):
                 "kvk": product1.kvk,
                 "status": product1.status,
                 "gepubliceerd": False,
-                "start_datum": str(product1.start_datum),
-                "eind_datum": str(product1.eind_datum),
+                "start_datum": None,
+                "eind_datum": None,
                 "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product1.update_datum.astimezone().isoformat(),
                 "product_type": {
@@ -227,8 +226,8 @@ class TestProduct(BaseApiTestCase):
                 "kvk": product2.kvk,
                 "status": product2.status,
                 "gepubliceerd": False,
-                "start_datum": str(product2.start_datum),
-                "eind_datum": str(product2.eind_datum),
+                "start_datum": None,
+                "eind_datum": None,
                 "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product2.update_datum.astimezone().isoformat(),
                 "product_type": {
@@ -260,8 +259,8 @@ class TestProduct(BaseApiTestCase):
             "kvk": product.kvk,
             "status": product.status,
             "gepubliceerd": False,
-            "start_datum": str(product.start_datum),
-            "eind_datum": str(product.eind_datum),
+            "start_datum": None,
+            "eind_datum": None,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
             "product_type": {
