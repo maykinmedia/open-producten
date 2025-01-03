@@ -1,3 +1,4 @@
+from celery.schedules import crontab
 from open_api_framework.conf.base import *
 from open_api_framework.conf.utils import config
 
@@ -17,9 +18,12 @@ INSTALLED_APPS += [
     # External applications.
     # Project applications.
     "rest_framework.authtoken",
+    "timeline_logger",
     "localflavor",
     "markdownx",
+    "django_celery_beat",
     "open_producten.accounts",
+    "open_producten.logging",
     "open_producten.utils",
     "open_producten.producttypen",
     "open_producten.producten",
@@ -34,6 +38,19 @@ DATABASES = {
         "PASSWORD": config("DB_PASSWORD", PROJECT_DIRNAME),
         "HOST": config("DB_HOST", "localhost"),
         "PORT": config("DB_PORT", 5432),
+    }
+}
+
+
+#
+# CELERY
+#
+CELERY_BROKER_URL = "redis://localhost:6379"  # Redis broker
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BEAT_SCHEDULE = {
+    "Update product statussen": {
+        "task": "open_producten.producten.tasks.set_product_states",
+        "schedule": crontab(minute="0", hour="0"),
     }
 }
 

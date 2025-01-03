@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 
+from open_producten.logging.api_tools import AuditTrailViewSetMixin
 from open_producten.producten.models import Product
 from open_producten.producten.serializers.product import ProductSerializer
 from open_producten.utils.views import OrderedModelViewSet
@@ -59,7 +60,7 @@ from open_producten.utils.views import OrderedModelViewSet
         summary="Verwijder een PRODUCT.",
     ),
 )
-class ProductViewSet(OrderedModelViewSet):
+class ProductViewSet(AuditTrailViewSetMixin, OrderedModelViewSet):
     queryset = Product.objects.all()
     lookup_url_field = "id"
     serializer_class = ProductSerializer

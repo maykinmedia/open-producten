@@ -17,7 +17,7 @@ from .upn import UniformeProductNaam
 class ProductStateChoices(models.TextChoices):
 
     INITIEEL = "initieel", _("Initieel")
-    GEREERD = "gereed", _("Gereed")
+    GEREED = "gereed", _("Gereed")
     ACTIEF = "actief", _("Actief")
     INGETROKKEN = "ingetrokken", _("Ingetrokken")
     GEWEIGERD = "geweigerd", _("Geweigerd")

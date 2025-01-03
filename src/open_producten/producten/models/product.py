@@ -1,11 +1,19 @@
-from django.core.validators import MinLengthValidator, RegexValidator, ValidationError
+from datetime import date
+
+from django.core.validators import (
+    MinLengthValidator,
+    MinValueValidator,
+    RegexValidator,
+    ValidationError,
+)
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.producttypen.models import ProductType
+from open_producten.producttypen.models.producttype import ProductStateChoices
 from open_producten.utils.models import BasePublishableModel
 
-from ...producttypen.models.producttype import ProductStateChoices
+from open_producten.logging.logevent import audit_automation_update
 from .validators import validate_bsn
 
 
@@ -20,13 +28,19 @@ class Product(BasePublishableModel):
 
     start_datum = models.DateField(
         _("start datum"),
-        help_text=_("De start datum van dit product."),
+        help_text=_(
+            "De start datum van dit product. Op deze datum zal de status van het product automatisch naar ACTIEF worden gezet"
+        ),
+        validators=[MinValueValidator(date.today)],
         null=True,
         blank=True,
     )
     eind_datum = models.DateField(
         _("eind datum"),
-        help_text=_("De einddatum van dit product."),
+        help_text=_(
+            "De einddatum van dit product. Op deze datum zal de status van het product automatisch naar VERLOPEN worden gezet"
+        ),
+        validators=[MinValueValidator(date.today)],
         null=True,
         blank=True,
     )
@@ -81,8 +95,41 @@ class Product(BasePublishableModel):
 
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
-        validate_dates(self.start_datum, self.eind_datum)
         validate_status(self.status, self.product_type)
+        validate_dates(self.start_datum, self.eind_datum, self.product_type)
+
+    def save(self, *args, **kwargs):
+        self.handle_start_datum()
+        self.handle_eind_datum()
+        super().save(*args, **kwargs)
+
+    def handle_start_datum(self):
+        if (
+            self.start_datum
+            and self.start_datum <= date.today()
+            and self.status
+            in (ProductStateChoices.INITIEEL, ProductStateChoices.GEREED)
+        ):
+            audit_automation_update(
+                self, _("Status gezet naar ACTIEF vanwege de start datum.")
+            )
+            self.status = ProductStateChoices.ACTIEF
+
+    def handle_eind_datum(self):
+        if (
+            self.eind_datum
+            and self.eind_datum <= date.today()
+            and self.status
+            in (
+                ProductStateChoices.INITIEEL,
+                ProductStateChoices.GEREED,
+                ProductStateChoices.ACTIEF,
+            )
+        ):
+            audit_automation_update(
+                self, _("Status gezet naar VERLOPEN vanwege de eind datum.")
+            )
+            self.status = ProductStateChoices.VERLOPEN
 
     def __str__(self):
         return f"{self.bsn if self.bsn else self.kvk} {self.product_type.naam}"
@@ -92,17 +139,6 @@ def validate_bsn_or_kvk(bsn, kvk):
     if not bsn and not kvk:
         raise ValidationError(
             _("Een product moet een bsn, kvk nummer of beiden hebben.")
-        )
-
-
-def validate_dates(start_datum, eind_datum):
-    if (start_datum == eind_datum) and start_datum is not None:
-        raise ValidationError(
-            {
-                _(
-                    "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen."
-                )
-            }
         )
 
 
@@ -118,6 +154,34 @@ def validate_status(status, product_type):
                 ).format(
                     ProductStateChoices(status).label,
                     product_type.naam,
+                )
+            }
+        )
+
+
+def validate_dates(start_datum, eind_datum, product_type):
+    if (
+        start_datum
+        and start_datum > date.today()
+        and ProductStateChoices.ACTIEF.value not in product_type.toegestane_statussen
+    ):
+        raise ValidationError(
+            {
+                "start_datum": _(
+                    "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
+                )
+            }
+        )
+
+    if (
+        eind_datum
+        and eind_datum > date.today()
+        and ProductStateChoices.VERLOPEN.value not in product_type.toegestane_statussen
+    ):
+        raise ValidationError(
+            {
+                "eind_datum": _(
+                    "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
                 )
             }
         )

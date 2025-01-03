@@ -1,0 +1,3 @@
+{% load i18n %}{% blocktrans trimmed with timestamp=log.timestamp|date:'DATETIME_FORMAT' user=log.extra_data.acting_user.display_name|default:_('Anonymous user') object=log.get_related_object_repr|default:_('(object not set)') event=log.extra_data.event %}
+{{ timestamp }} | {{ user }} | <code>{{ event }}</code>: {{ object }}.
+{% endblocktrans %}
