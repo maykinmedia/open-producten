@@ -4,7 +4,7 @@
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "open_producten",
         "USER": "open_producten",
         "PASSWORD": "open_producten",

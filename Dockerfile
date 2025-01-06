@@ -59,7 +59,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
         mime-support \
         postgresql-client \
         gettext \
-        libgdal32 \
         shared-mime-info \
         # lxml deps
         # libxslt \

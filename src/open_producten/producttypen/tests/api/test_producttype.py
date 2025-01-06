@@ -1,6 +1,3 @@
-# from unittest.mock import Mock, patch
-#
-# from django.contrib.gis.geos import Point
 import datetime
 
 from django.urls import reverse
@@ -10,11 +7,11 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-# from open_producten.locaties.tests.factories import (
-#     ContactFactory,
-#     LocatieFactory,
-#     OrganisatieFactory,
-# )
+from open_producten.locaties.tests.factories import (
+    ContactFactory,
+    LocatieFactory,
+    OrganisatieFactory,
+)
 from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
@@ -91,6 +88,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "prijzen": [],
             "links": [],
             "bestanden": [],
+            "locaties": [],
+            "organisaties": [],
+            "contacten": [],
             "gepubliceerd": False,
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
@@ -126,67 +126,56 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_create_product_type_with_location(self):
-    #     locatie = LocatieFactory.create()
-    #
-    #     data = self.data | {"locatie_ids": [locatie.id]}
-    #     response = self.post(data)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("locaties__naam", flat=True)),
-    #         [locatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_create_product_type_with_organisation(self):
-    #     organisatie = OrganisatieFactory.create()
-    #
-    #     data = self.data | {"organisatie_ids": [organisatie.id]}
-    #     response = self.post(data)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("organisaties__naam", flat=True)),
-    #         [organisatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_create_product_type_with_contact(self):
-    #     contact = ContactFactory.create()
-    #
-    #     data = self.data | {"contact_ids": [contact.id]}
-    #     response = self.post(data)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
-    #         [contact.voornaam],
-    #     )
-    #
-    #     # contact org is added in ProductType clean
-    #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
+    def test_create_product_type_with_location(self):
+        locatie = LocatieFactory.create()
+
+        data = self.data | {"locatie_ids": [locatie.id]}
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("locaties__naam", flat=True)),
+            [locatie.naam],
+        )
+
+    def test_create_product_type_with_organisatie(self):
+        organisatie = OrganisatieFactory.create()
+
+        data = self.data | {"organisatie_ids": [organisatie.id]}
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("organisaties__naam", flat=True)),
+            [organisatie.naam],
+        )
+
+    def test_create_product_type_with_contact(self):
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
+            [contact.voornaam],
+        )
+
+        # contact org is added in ProductType clean
+        self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):
         thema = ThemaFactory.create()
 
-        # TODO add location_ids
+        locatie = LocatieFactory.create()
 
         data = self.data | {
             "thema_ids": [thema.id, thema.id],
+            "locatie_ids": [locatie.id, locatie.id],
         }
 
         response = self.client.post(self.path, data)
@@ -201,8 +190,114 @@ class TestProducttypeViewSet(BaseApiTestCase):
                         code="invalid",
                     )
                 ],
+                "locatie_ids": [
+                    ErrorDetail(
+                        string=f"Dubbel id: {locatie.id} op index 1.",
+                        code="invalid",
+                    )
+                ],
             },
         )
+
+    def test_create_complete_product_type(self):
+        locatie = LocatieFactory.create()
+        organisatie = OrganisatieFactory.create()
+        contact = ContactFactory.create()
+
+        data = self.data | {
+            "locatie_ids": [locatie.id],
+            "organisatie_ids": [organisatie.id],
+            "contact_ids": [contact.id],
+        }
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductType.objects.count(), 1)
+
+        product_type = ProductType.objects.first()
+        thema = product_type.themas.first()
+
+        expected_data = {
+            "id": str(product_type.id),
+            "naam": product_type.naam,
+            "samenvatting": product_type.samenvatting,
+            "beschrijving": product_type.beschrijving,
+            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "vragen": [],
+            "prijzen": [],
+            "links": [],
+            "bestanden": [],
+            "locaties": [
+                {
+                    "id": str(locatie.id),
+                    "naam": locatie.naam,
+                    "email": locatie.email,
+                    "telefoonnummer": locatie.telefoonnummer,
+                    "straat": locatie.straat,
+                    "huisnummer": locatie.huisnummer,
+                    "postcode": locatie.postcode,
+                    "stad": locatie.stad,
+                }
+            ],
+            "organisaties": [
+                {
+                    "id": str(organisatie.id),
+                    "naam": organisatie.naam,
+                    "email": organisatie.email,
+                    "telefoonnummer": organisatie.telefoonnummer,
+                    "straat": organisatie.straat,
+                    "huisnummer": organisatie.huisnummer,
+                    "postcode": organisatie.postcode,
+                    "stad": organisatie.stad,
+                },
+                {
+                    "id": str(contact.organisatie.id),
+                    "naam": contact.organisatie.naam,
+                    "email": contact.organisatie.email,
+                    "telefoonnummer": contact.organisatie.telefoonnummer,
+                    "straat": contact.organisatie.straat,
+                    "huisnummer": contact.organisatie.huisnummer,
+                    "postcode": contact.organisatie.postcode,
+                    "stad": contact.organisatie.stad,
+                },
+            ],
+            "contacten": [
+                {
+                    "id": str(contact.id),
+                    "voornaam": contact.voornaam,
+                    "achternaam": contact.achternaam,
+                    "email": contact.email,
+                    "telefoonnummer": contact.telefoonnummer,
+                    "rol": contact.rol,
+                    "organisatie": {
+                        "id": str(contact.organisatie.id),
+                        "naam": contact.organisatie.naam,
+                        "email": contact.organisatie.email,
+                        "telefoonnummer": contact.organisatie.telefoonnummer,
+                        "straat": contact.organisatie.straat,
+                        "huisnummer": contact.organisatie.huisnummer,
+                        "postcode": contact.organisatie.postcode,
+                        "stad": contact.organisatie.stad,
+                    },
+                }
+            ],
+            "gepubliceerd": False,
+            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product_type.update_datum.astimezone().isoformat(),
+            "keywords": [],
+            "themas": [
+                {
+                    "id": str(thema.id),
+                    "naam": thema.naam,
+                    "gepubliceerd": True,
+                    "aanmaak_datum": thema.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": thema.update_datum.astimezone().isoformat(),
+                    "beschrijving": thema.beschrijving,
+                    "hoofd_thema": thema.hoofd_thema,
+                }
+            ],
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_update_minimal_product_type(self):
         product_type = ProductTypeFactory.create()
@@ -242,71 +337,59 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_update_product_type_with_location(self):
-    #     product_type = ProductTypeFactory.create()
-    #     locatie = LocatieFactory.create()
-    #
-    #     data = self.data | {"locatie_ids": [locatie.id]}
-    #     response = self.put(product_type.id, data)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("locaties__naam", flat=True)),
-    #         [locatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_update_product_type_with_organisation(self):
-    #     product_type = ProductTypeFactory.create()
-    #     organisatie = OrganisatieFactory.create()
-    #
-    #     data = self.data | {"organisation_ids": [organisatie.id]}
-    #     response = self.put(product_type.id, data)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("organisaties__naam", flat=True)),
-    #         [organisatie.naam],
-    #     )
-    #
-    # @patch(
-    #     "open_producten.locaties.models.locatie.geocode_address",
-    #     new=Mock(return_value=Point((4.84303667, 52.38559043))),
-    # )
-    # def test_update_product_type_with_contact(self):
-    #     product_type = ProductTypeFactory.create()
-    #     contact = ContactFactory.create()
-    #
-    #     data = self.data | {"contact_ids": [contact.id]}
-    #     response = self.put(product_type.id, data)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(ProductType.objects.count(), 1)
-    #     self.assertEqual(
-    #         list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
-    #         [contact.voornaam],
-    #     )
-    #
-    #     # contact org is added in ProductType clean
-    #     self.assertEqual(ProductType.objects.first().organisations.count(), 1)
+    def test_update_product_type_with_location(self):
+        product_type = ProductTypeFactory.create()
+        locatie = LocatieFactory.create()
+
+        data = self.data | {"locatie_ids": [locatie.id]}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("locaties__naam", flat=True)),
+            [locatie.naam],
+        )
+
+    def test_update_product_type_with_organisatie(self):
+        product_type = ProductTypeFactory.create()
+        organisatie = OrganisatieFactory.create()
+
+        data = self.data | {"organisatie_ids": [organisatie.id]}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("organisaties__naam", flat=True)),
+            [organisatie.naam],
+        )
+
+    def test_update_product_type_with_contact(self):
+        product_type = ProductTypeFactory.create()
+        contact = ContactFactory.create()
+
+        data = self.data | {"contact_ids": [contact.id]}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(
+            list(ProductType.objects.values_list("contacten__voornaam", flat=True)),
+            [contact.voornaam],
+        )
+
+        # contact org is added in ProductType clean
+        self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
         product_type = ProductTypeFactory.create()
         thema = ThemaFactory.create()
-
-        # TODO add location_ids
+        locatie = LocatieFactory.create()
 
         data = self.data | {
             "thema_ids": [thema.id, thema.id],
+            "locatie_ids": [locatie.id, locatie.id],
         }
 
         response = self.client.put(self.detail_path(product_type), data)
@@ -321,19 +404,28 @@ class TestProducttypeViewSet(BaseApiTestCase):
                         code="invalid",
                     )
                 ],
+                "locatie_ids": [
+                    ErrorDetail(
+                        string=f"Dubbel id: {locatie.id} op index 1.",
+                        code="invalid",
+                    )
+                ],
             },
         )
 
     def test_partial_update_product_type(self):
         product_type = ProductTypeFactory.create()
+        locatie = LocatieFactory.create()
 
-        # TODO add location_ids
+        product_type.locaties.add(locatie)
+        product_type.save()
 
         data = {"naam": "update"}
 
         response = self.client.patch(self.detail_path(product_type), data)
         product_type.refresh_from_db()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(product_type.locaties.count(), 1)
         self.assertEqual(product_type.naam, "update")
 
     def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
@@ -472,6 +564,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
+                "locaties": [],
+                "organisaties": [],
+                "contacten": [],
                 "gepubliceerd": True,
                 "aanmaak_datum": product_type1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type1.update_datum.astimezone().isoformat(),
@@ -498,6 +593,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
+                "locaties": [],
+                "organisaties": [],
+                "contacten": [],
                 "gepubliceerd": True,
                 "aanmaak_datum": product_type2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type2.update_datum.astimezone().isoformat(),
@@ -539,6 +637,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
             "keywords": [],
+            "locaties": [],
+            "organisaties": [],
+            "contacten": [],
             "themas": [
                 {
                     "id": str(self.thema.id),

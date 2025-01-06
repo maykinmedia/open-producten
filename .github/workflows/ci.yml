@@ -50,7 +50,7 @@ jobs:
 
     services:
       postgres:
-        image: postgis/postgis:15-3.4
+        image: postgres:15
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
@@ -75,7 +75,7 @@ jobs:
           optimize-postgres: 'yes'
           pg-service: 'postgres'
           setup-node: 'no'
-          apt-packages: 'gdal-bin gettext'
+          apt-packages: 'gettext'
 
       - name: Run tests
         run: |

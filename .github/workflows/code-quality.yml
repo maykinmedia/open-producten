@@ -80,7 +80,7 @@ jobs:
 
     services:
       postgres:
-        image: postgis/postgis:15-3.4
+        image: postgres:15
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
@@ -96,7 +96,6 @@ jobs:
         with:
           python-version: '3.11'
           setup-node: 'no'
-          apt-packages: 'gdal-bin'
       - name: Run makemigrations to check for missing migrations
         run: |
           src/manage.py makemigrations \
