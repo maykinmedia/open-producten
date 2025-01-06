@@ -199,6 +199,106 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
+    def test_create_complete_product_type(self):
+        locatie = LocatieFactory.create()
+        organisatie = OrganisatieFactory.create()
+        contact = ContactFactory.create()
+
+        data = self.data | {
+            "locatie_ids": [locatie.id],
+            "organisatie_ids": [organisatie.id],
+            "contact_ids": [contact.id],
+        }
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductType.objects.count(), 1)
+
+        product_type = ProductType.objects.first()
+        thema = product_type.themas.first()
+
+        expected_data = {
+            "id": str(product_type.id),
+            "naam": product_type.naam,
+            "samenvatting": product_type.samenvatting,
+            "beschrijving": product_type.beschrijving,
+            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "vragen": [],
+            "prijzen": [],
+            "links": [],
+            "bestanden": [],
+            "locaties": [
+                {
+                    "id": str(locatie.id),
+                    "naam": locatie.naam,
+                    "email": locatie.email,
+                    "telefoonnummer": locatie.telefoonnummer,
+                    "straat": locatie.straat,
+                    "huisnummer": locatie.huisnummer,
+                    "postcode": locatie.postcode,
+                    "stad": locatie.stad,
+                }
+            ],
+            "organisaties": [
+                {
+                    "id": str(organisatie.id),
+                    "naam": organisatie.naam,
+                    "email": organisatie.email,
+                    "telefoonnummer": organisatie.telefoonnummer,
+                    "straat": organisatie.straat,
+                    "huisnummer": organisatie.huisnummer,
+                    "postcode": organisatie.postcode,
+                    "stad": organisatie.stad,
+                },
+                {
+                    "id": str(contact.organisatie.id),
+                    "naam": contact.organisatie.naam,
+                    "email": contact.organisatie.email,
+                    "telefoonnummer": contact.organisatie.telefoonnummer,
+                    "straat": contact.organisatie.straat,
+                    "huisnummer": contact.organisatie.huisnummer,
+                    "postcode": contact.organisatie.postcode,
+                    "stad": contact.organisatie.stad,
+                },
+            ],
+            "contacten": [
+                {
+                    "id": str(contact.id),
+                    "voornaam": contact.voornaam,
+                    "achternaam": contact.achternaam,
+                    "email": contact.email,
+                    "telefoonnummer": contact.telefoonnummer,
+                    "rol": contact.rol,
+                    "organisatie": {
+                        "id": str(contact.organisatie.id),
+                        "naam": contact.organisatie.naam,
+                        "email": contact.organisatie.email,
+                        "telefoonnummer": contact.organisatie.telefoonnummer,
+                        "straat": contact.organisatie.straat,
+                        "huisnummer": contact.organisatie.huisnummer,
+                        "postcode": contact.organisatie.postcode,
+                        "stad": contact.organisatie.stad,
+                    },
+                }
+            ],
+            "gepubliceerd": False,
+            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product_type.update_datum.astimezone().isoformat(),
+            "keywords": [],
+            "themas": [
+                {
+                    "id": str(thema.id),
+                    "naam": thema.naam,
+                    "gepubliceerd": True,
+                    "aanmaak_datum": thema.aanmaak_datum.astimezone().isoformat(),
+                    "update_datum": thema.update_datum.astimezone().isoformat(),
+                    "beschrijving": thema.beschrijving,
+                    "hoofd_thema": thema.hoofd_thema,
+                }
+            ],
+        }
+        self.assertEqual(response.data, expected_data)
+
     def test_update_minimal_product_type(self):
         product_type = ProductTypeFactory.create()
         response = self.client.put(self.detail_path(product_type), self.data)

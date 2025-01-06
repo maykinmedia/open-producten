@@ -13,7 +13,7 @@ class ContactTestCase(TestCase):
         )
 
     def test_contact_str(self):
-        self.assertEqual(str(self.contact), "Test Org: Bob de Vries")
+        self.assertEqual(str(self.contact), "Bob de Vries (Test Org)")
 
         self.contact.organisatie = None
         self.contact.save()

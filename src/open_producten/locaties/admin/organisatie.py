@@ -8,8 +8,7 @@ from ..models import Organisatie
 class OrganisatieAdmin(admin.ModelAdmin):
     list_display = ("naam",)
     list_filter = ("stad",)
-    search_fields = ("naam",)
-    ordering = ("naam",)
+    search_fields = ("naam", "stad", "postcode", "straat")
 
     fieldsets = (
         (

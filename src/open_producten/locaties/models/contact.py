@@ -52,7 +52,7 @@ class Contact(BaseModel):
 
     def __str__(self):
         if self.organisatie:
-            return f"{self.organisatie.naam}: {self.voornaam} {self.achternaam}"
+            return f"{self.voornaam} {self.achternaam} ({self.organisatie.naam})"
         return f"{self.voornaam} {self.achternaam}"
 
     def get_email(self):

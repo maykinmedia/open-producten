@@ -7,4 +7,4 @@ from ..models import Locatie
 class LocatieAdmin(admin.ModelAdmin):
     list_display = ("naam", "stad", "postcode", "straat", "huisnummer")
     list_filter = ("stad",)
-    search_fields = ("naam", "stad")
+    search_fields = ("naam", "stad", "postcode", "straat")

@@ -36,9 +36,6 @@ class TestContact(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "organisatie_id": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
-                ],
                 "voornaam": [
                     ErrorDetail(string="Dit veld is vereist.", code="required")
                 ],

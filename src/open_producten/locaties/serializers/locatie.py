@@ -20,7 +20,10 @@ class OrganisatieSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     organisatie = OrganisatieSerializer(read_only=True)
     organisatie_id = serializers.PrimaryKeyRelatedField(
-        queryset=Organisatie.objects.all(), source="organisatie", write_only=True
+        queryset=Organisatie.objects.all(),
+        source="organisatie",
+        write_only=True,
+        required=False,
     )
 
     class Meta:

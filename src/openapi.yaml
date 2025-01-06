@@ -1364,7 +1364,6 @@ components:
           maxLength: 100
       required:
       - achternaam
-      - organisatie_id
       - voornaam
     Link:
       type: object
