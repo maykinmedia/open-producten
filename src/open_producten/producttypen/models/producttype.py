@@ -4,6 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from django_json_schema.models import JsonSchema
 from markdownx.models import MarkdownxField
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
@@ -18,6 +19,16 @@ class ProductType(BasePublishableModel):
         verbose_name=_("product type naam"),
         max_length=100,
         help_text=_("naam van het product type."),
+    )
+
+    verbruiksobject_schema = models.ForeignKey(
+        JsonSchema,
+        verbose_name=_("verbruiksobject schema"),
+        on_delete=models.PROTECT,
+        help_text=_("verbruiksobject schema van het product type."),
+        null=True,
+        blank=True,
+        related_name="product_typen",
     )
 
     samenvatting = models.TextField(
