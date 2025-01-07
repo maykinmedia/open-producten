@@ -3,6 +3,7 @@ from datetime import date
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from django_json_schema.models import JsonSchema
 from freezegun import freeze_time
 
 from open_producten.producttypen.tests.factories import ProductTypeFactory
@@ -106,6 +107,78 @@ class TestProduct(TestCase):
             "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type.",
         ):
             product.clean()
+
+    def test_verbruiksobject_is_valid(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": "test"},
+        )
+
+        product.clean()
+
+    def test_verbruiksobject_is_invalid(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": 1234},
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type.",
+        ):
+            product.clean()
+
+    def test_verbruiksobject_without_schema(self):
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": 1234},
+        )
+
+        product.clean()
+
+    def test_verbruiksobject_with_schema_without_object(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+        )
+
+        product.clean()
 
     def test_start_and_eind_datum_are_not_allowed_to_be_the_same(self):
         product = ProductFactory.build(
