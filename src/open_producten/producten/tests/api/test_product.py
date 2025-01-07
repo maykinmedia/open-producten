@@ -33,7 +33,7 @@ class TestProduct(BaseApiTestCase):
 
     def test_read_product_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_required_fields(self):
         response = self.client.post(self.path, {})
@@ -88,7 +88,7 @@ class TestProduct(BaseApiTestCase):
         data = self.data.copy()
         data.pop("bsn")
         response = self.client.post(self.path, data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -108,7 +108,7 @@ class TestProduct(BaseApiTestCase):
         data = self.data | {"eind_datum": datetime.date(2025, 12, 31)}
         response = self.client.put(self.detail_path(product), data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Product.objects.count(), 1)
         self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
 
@@ -118,7 +118,7 @@ class TestProduct(BaseApiTestCase):
         data = self.data | {"bsn": None}
         response = self.client.put(self.detail_path(product), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
@@ -137,7 +137,7 @@ class TestProduct(BaseApiTestCase):
         data = {"eind_datum": datetime.date(2025, 12, 31)}
         response = self.client.patch(self.detail_path(product), data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Product.objects.count(), 1)
         self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
 
@@ -151,7 +151,7 @@ class TestProduct(BaseApiTestCase):
 
         response = self.client.get(self.path)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
@@ -204,7 +204,7 @@ class TestProduct(BaseApiTestCase):
 
         response = self.client.get(self.detail_path(product))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(product.id),
             "bsn": product.bsn,
