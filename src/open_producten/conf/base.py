@@ -25,6 +25,7 @@ INSTALLED_APPS += [
     "parler",
     "markdownx",
     "django_celery_beat",
+    "django_json_schema",
     "open_producten.accounts",
     "open_producten.logging",
     "open_producten.utils",

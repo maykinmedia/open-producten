@@ -3,6 +3,7 @@ import datetime
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from django_json_schema.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -68,6 +69,7 @@ class TestProduct(BaseApiTestCase):
             "bsn": product.bsn,
             "kvk": product.kvk,
             "status": product.status,
+            "verbruiksobject": None,
             "gepubliceerd": False,
             "start_datum": None,
             "eind_datum": None,
@@ -87,6 +89,81 @@ class TestProduct(BaseApiTestCase):
             },
         }
         self.assertEqual(response.data, expected_data)
+
+    def test_create_product_with_verbruiksobject(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        data = self.data | {"verbruiksobject": {"naam": "Test"}}
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Product.objects.count(), 1)
+        product = Product.objects.first()
+        product_type = product.product_type
+        expected_data = {
+            "id": str(product.id),
+            "bsn": product.bsn,
+            "kvk": product.kvk,
+            "verbruiksobject": {"naam": "Test"},
+            "gepubliceerd": False,
+            "start_datum": str(product.start_datum),
+            "eind_datum": str(product.eind_datum),
+            "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": product.update_datum.astimezone().isoformat(),
+            "product_type": {
+                "id": str(product_type.id),
+                "naam": product_type.naam,
+                "samenvatting": product_type.samenvatting,
+                "beschrijving": product_type.beschrijving,
+                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "gepubliceerd": True,
+                "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": product_type.update_datum.astimezone().isoformat(),
+                "keywords": [],
+            },
+        }
+        self.assertEqual(response.data, expected_data)
+
+    def test_create_product_with_invalid_verbruiksobject(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        data = self.data | {"verbruiksobject": {"naam": 123}}
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "verbruiksobject": [
+                    ErrorDetail(
+                        string=_(
+                            "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+                        ),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
 
     def test_create_product_without_bsn_or_kvk_returns_error(self):
         data = self.data.copy()
@@ -217,6 +294,7 @@ class TestProduct(BaseApiTestCase):
                 "bsn": product1.bsn,
                 "kvk": product1.kvk,
                 "status": product1.status,
+                "verbruiksobject": None,
                 "gepubliceerd": False,
                 "start_datum": None,
                 "eind_datum": None,
@@ -240,6 +318,7 @@ class TestProduct(BaseApiTestCase):
                 "bsn": product2.bsn,
                 "kvk": product2.kvk,
                 "status": product2.status,
+                "verbruiksobject": None,
                 "gepubliceerd": False,
                 "start_datum": None,
                 "eind_datum": None,
@@ -274,6 +353,7 @@ class TestProduct(BaseApiTestCase):
             "bsn": "111222333",
             "kvk": None,
             "status": product.status,
+            "verbruiksobject": None,
             "gepubliceerd": False,
             "start_datum": None,
             "eind_datum": None,
