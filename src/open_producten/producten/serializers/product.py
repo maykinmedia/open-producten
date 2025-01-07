@@ -5,6 +5,7 @@ from open_producten.producten.serializers.validators import (
     BsnOrKvkValidator,
     DateValidator,
     StatusValidator,
+    VerbruiksObjectValidator,
 )
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.serializers.thema import NestedProductTypeSerializer
@@ -20,4 +21,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
-        validators = [BsnOrKvkValidator(), DateValidator(), StatusValidator()]
+        validators = [
+            BsnOrKvkValidator(),
+            DateValidator(),
+            StatusValidator(),
+            VerbruiksObjectValidator(),
+        ]

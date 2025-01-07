@@ -94,6 +94,15 @@ class Product(BasePublishableModel):
         help_text=_("De frequentie van betalingen."),
     )
 
+    verbruiksobject = models.JSONField(
+        _("verbruiksobject"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Verbruiksobject van dit product. Wordt gevalideerd met het `verbruiksobject_schema` uit het product type."
+        ),
+    )
+
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Producten")
@@ -101,6 +110,7 @@ class Product(BasePublishableModel):
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
         validate_dates(self.start_datum, self.eind_datum)
+        validate_verbruiksobject(self.verbruiksobject, self.product_type)
 
     def save(self, *args, **kwargs):
         self.handle_start_datum()
@@ -198,4 +208,21 @@ def validate_eind_datum(eind_datum, product_type):
                     "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
                 )
             }
+        )
+
+
+def validate_verbruiksobject(verbruiksobject, product_type):
+    try:
+        if (
+            verbruiksobject is not None
+            and product_type.verbruiksobject_schema is not None
+        ):
+            product_type.verbruiksobject_schema.validate(verbruiksobject)
+    except ValidationError:
+        raise ValidationError(
+            {
+                "verbruiksobject": _(
+                    "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+                )
+            },
         )
