@@ -93,6 +93,11 @@ class ProductTypeViewSet(OrderedModelViewSet):
         serializer = ProductTypeActuelePrijsSerializer(product_typen, many=True)
         return Response(serializer.data)
 
+    @extend_schema(
+        "actuele_prijs",
+        summary="De actuele PRIJS van een PRODUCTTYPE opvragen.",
+        description="Geeft de huidige prijzen van alle PRODUCTTYPEN terug.",
+    )
     @action(
         detail=True,
         serializer_class=ProductTypeActuelePrijsSerializer,
@@ -239,6 +244,42 @@ class VraagViewSet(OrderedModelViewSet):
     filterset_fields = ["product_type_id", "thema_id"]
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Alle BESTANDEN opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
+    ),
+    retrieve=extend_schema(
+        summary="Een specifiek BESTAND opvragen.",
+        description="Een specifieke BESTAND opvragen.",
+    ),
+    create=extend_schema(
+        summary="Maak een BESTAND aan.",
+        description="Maak een BESTAND aan.",
+        examples=[
+            OpenApiExample(
+                "Create bestand",
+                value={
+                    "bestand": "test.txt",
+                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                },
+                media_type="multipart/form-data",
+            ),
+        ],
+    ),
+    update=extend_schema(
+        summary="Werk een BESTAND in zijn geheel bij.",
+        description="Werk een BESTAND in zijn geheel bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Werk een BESTAND deels bij.",
+        description="Werk een BESTAND deels bij.",
+    ),
+    destroy=extend_schema(
+        summary="Verwijder een BESTAND.",
+        description="Verwijder een BESTAND.",
+    ),
+)
 class BestandViewSet(OrderedModelViewSet):
     queryset = Bestand.objects.all()
     parser_classes = [MultiPartParser]
