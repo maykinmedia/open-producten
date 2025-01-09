@@ -84,6 +84,10 @@ class ProductTypeViewSet(OrderedModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd"]
 
+    def get_queryset(self):
+        language = self.request.headers.get("Accept-Language") or "nl"
+        return ProductType.translatable_objects.language(language)
+
     @extend_schema(
         "actuele_prijzen",
         summary="Alle ACTUELE PRIJZEN opvragen.",

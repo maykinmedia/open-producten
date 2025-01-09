@@ -2,6 +2,8 @@ from datetime import date
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.db.models import CharField, F, Manager, OuterRef, Subquery, TextField
+from django.db.models.functions import Coalesce
 from django.utils.translation import gettext_lazy as _
 
 from django_json_schema.models import JsonSchema
@@ -9,7 +11,7 @@ from markdownx.models import MarkdownxField
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
 from open_producten.utils.fields import ChoiceArrayField
-from open_producten.utils.models import BasePublishableModel
+from open_producten.utils.models import BaseModel, BasePublishableModel
 
 from .thema import Thema
 from .upn import UniformeProductNaam
@@ -23,6 +25,57 @@ class ProductStateChoices(models.TextChoices):
     INGETROKKEN = "ingetrokken", _("Ingetrokken")
     GEWEIGERD = "geweigerd", _("Geweigerd")
     VERLOPEN = "verlopen", _("Verlopen")
+
+
+class ProductTypeVertaling(BaseModel):
+    naam = models.CharField(
+        verbose_name=_("product type naam"),
+        max_length=100,
+        help_text=_("naam van het product type."),
+    )
+
+    samenvatting = models.TextField(
+        verbose_name=_("samenvatting"),
+        default="",
+        max_length=300,
+        help_text=_("Korte beschrijving van het product type, maximaal 300 karakters."),
+    )
+
+    taalcode = models.CharField(
+        _("taalcode"),
+        max_length=2,
+        help_text=_("De taalcode van de product type vertaling"),
+    )
+    product_type = models.ForeignKey(
+        "ProductType",
+        verbose_name=_("label"),
+        on_delete=models.CASCADE,
+        help_text=_("Het product type van de vertaling"),
+        related_name="vertalingen",
+    )
+
+    class Meta:
+        verbose_name = _("product type vertaling")
+        verbose_name_plural = _("product type vertalingen")
+        unique_together = ("product_type", "taalcode")
+
+
+class ProductTypeTranslationManager(Manager):
+
+    def language(self, language_code):
+        vertaling = ProductTypeVertaling.objects.filter(
+            product_type=OuterRef("pk"), taalcode="en"
+        )
+
+        naam = vertaling.values("naam")
+        samenvatting = vertaling.values("samenvatting")
+
+        return self.annotate(
+            en_naam=Coalesce(Subquery(naam, output_field=CharField()), F("naam")),
+            en_samenvatting=Coalesce(
+                Subquery(samenvatting, output_field=TextField()), F("samenvatting")
+            ),
+        )
 
 
 class ProductType(BasePublishableModel):
@@ -149,3 +202,6 @@ class ProductType(BasePublishableModel):
         return (
             self.prijzen.filter(actief_vanaf__lte=now).order_by("actief_vanaf").last()
         )
+
+    objects = models.Manager()
+    translatable_objects = ProductTypeTranslationManager()

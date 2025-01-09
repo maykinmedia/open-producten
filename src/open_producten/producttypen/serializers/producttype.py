@@ -74,6 +74,9 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         source="contacten",
     )
 
+    en_naam = serializers.CharField(read_only=True)
+    en_samenvatting = serializers.CharField(read_only=True)
+
     vragen = NestedVraagSerializer(many=True, read_only=True)
     prijzen = NestedPrijsSerializer(many=True, read_only=True)
     links = NestedLinkSerializer(many=True, read_only=True)
