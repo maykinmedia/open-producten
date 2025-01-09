@@ -3,6 +3,7 @@ import datetime
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from django_json_schema.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -272,6 +273,14 @@ class TestProducttypeViewSet(BaseApiTestCase):
         locatie = LocatieFactory.create()
         organisatie = OrganisatieFactory.create()
         contact = ContactFactory.create()
+        schema = JsonSchema.objects.create(
+            name="test",
+            schema={
+                "type": "object",
+                "properties": {"uren": {"type": "number"}},
+                "required": ["uren"],
+            },
+        )
 
         data = self.data | {
             "locatie_ids": [locatie.id],
@@ -279,6 +288,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "contact_ids": [contact.id],
             "externe_codes": [{"naam": "ISO", "code": "123"}],
             "parameters": [{"naam": "doelgroep", "waarde": "inwoners"}],
+            "verbruiksobject_schema_id": schema.id,
         }
         response = self.client.post(self.path, data)
 
@@ -296,6 +306,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "interne_opmerkingen": product_type.interne_opmerkingen,
             "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.naam,
+            "verbruiksobject_schema": {
+                "id": schema.id,
+                "name": "test",
+                "schema": {
+                    "type": "object",
+                    "properties": {"uren": {"type": "number"}},
+                    "required": ["uren"],
+                },
+            },
             "toegestane_statussen": [],
             "prijzen": [],
             "links": [],
