@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -35,10 +36,12 @@ class ThemaSerializer(serializers.ModelSerializer):
     hoofd_thema = serializers.PrimaryKeyRelatedField(
         queryset=Thema.objects.all(),
         allow_null=True,
+        help_text=_("Het hoofd thema waaronder dit thema valt."),
     )
     product_typen = NestedProductTypeSerializer(many=True, read_only=True)
     vragen = NestedVraagSerializer(many=True, read_only=True)
 
+    # TODO: remove?
     product_type_ids = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=ProductType.objects.all(),

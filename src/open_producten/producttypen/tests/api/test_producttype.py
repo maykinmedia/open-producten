@@ -248,9 +248,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
+            "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
             "links": [],
@@ -270,6 +272,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "organisaties": [
                 {
                     "id": str(organisatie.id),
+                    "code": str(organisatie.code),
                     "naam": organisatie.naam,
                     "email": organisatie.email,
                     "telefoonnummer": organisatie.telefoonnummer,
@@ -280,6 +283,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 },
                 {
                     "id": str(contact.organisatie.id),
+                    "code": str(contact.organisatie.code),
                     "naam": contact.organisatie.naam,
                     "email": contact.organisatie.email,
                     "telefoonnummer": contact.organisatie.telefoonnummer,
@@ -299,6 +303,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     "rol": contact.rol,
                     "organisatie": {
                         "id": str(contact.organisatie.id),
+                        "code": str(contact.organisatie.code),
                         "naam": contact.organisatie.naam,
                         "email": contact.organisatie.email,
                         "telefoonnummer": contact.organisatie.telefoonnummer,
