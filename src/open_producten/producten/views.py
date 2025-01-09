@@ -25,6 +25,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                     "gepubliceerd": False,
                     "bsn": "111222333",
+                    "verbruiksobject": {"uren": 130},
                 },
                 request_only=True,
             )

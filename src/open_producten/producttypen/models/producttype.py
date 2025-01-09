@@ -25,7 +25,9 @@ class ProductType(BasePublishableModel):
         JsonSchema,
         verbose_name=_("verbruiksobject schema"),
         on_delete=models.PROTECT,
-        help_text=_("verbruiksobject schema van het product type."),
+        help_text=_(
+            "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
+        ),
         null=True,
         blank=True,
         related_name="product_typen",

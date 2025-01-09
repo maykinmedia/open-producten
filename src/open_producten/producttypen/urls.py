@@ -11,6 +11,7 @@ from rest_framework.routers import DefaultRouter
 from open_producten.locaties.urls import LocatieRouter
 from open_producten.producttypen.views import (
     BestandViewSet,
+    JsonSchemaViewSet,
     LinkViewSet,
     PrijsViewSet,
     ProductTypeViewSet,
@@ -30,6 +31,8 @@ ProductTypenRouter.register("vragen", VraagViewSet, basename="vraag")
 ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 
 ProductTypenRouter.register("bestanden", BestandViewSet, basename="bestand")
+
+ProductTypenRouter.register("schemas", JsonSchemaViewSet, basename="schema")
 
 description = """
 Een Api voor Product typen.
@@ -65,6 +68,7 @@ custom_settings = {
         {"name": "locaties"},
         {"name": "organisaties"},
         {"name": "contacten"},
+        {"name", "schemas"}
     ],
 }
 
