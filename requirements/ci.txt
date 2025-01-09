@@ -62,6 +62,7 @@ celery==5.4.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-celery-beat
     #   flower
     #   notifications-api-common
     #   open-api-framework
@@ -123,6 +124,11 @@ coreschema==0.0.4
     #   coreapi
 coverage==7.6.8
     # via -r requirements/test-tools.in
+cron-descriptor==1.4.5
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-celery-beat
 cryptography==44.0.0
     # via
     #   -c requirements/base.txt
@@ -144,6 +150,7 @@ django==4.2.17
     #   django-admin-index
     #   django-appconf
     #   django-axes
+    #   django-celery-beat
     #   django-cors-headers
     #   django-csp
     #   django-filter
@@ -164,6 +171,7 @@ django==4.2.17
     #   django-setup-configuration
     #   django-simple-certmanager
     #   django-solo
+    #   django-timezone-field
     #   django-two-factor-auth
     #   djangorestframework
     #   djangorestframework-inclusions
@@ -192,6 +200,10 @@ django-axes==7.0.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
+django-celery-beat==2.7.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 django-cors-headers==4.6.0
     # via
     #   -c requirements/base.txt
@@ -302,6 +314,11 @@ django-solo==2.4.0
     #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
+django-timezone-field==7.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-celery-beat
 django-two-factor-auth==1.17.0
     # via
     #   -c requirements/base.txt
@@ -602,6 +619,11 @@ python-creole==1.4.10
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
+python-crontab==3.2.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-celery-beat
 python-dateutil==2.9.0.post0
     # via
     #   -c requirements/base.txt
@@ -610,6 +632,7 @@ python-dateutil==2.9.0.post0
     #   django-relativedelta
     #   faker
     #   freezegun
+    #   python-crontab
 python-decouple==3.8
     # via
     #   -c requirements/base.txt
@@ -732,6 +755,7 @@ tzdata==2024.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   celery
+    #   django-celery-beat
     #   kombu
 uritemplate==4.1.1
     # via

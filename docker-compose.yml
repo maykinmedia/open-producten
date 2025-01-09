@@ -50,5 +50,15 @@ services:
     environment: *web_env
     command: /celery_beat.sh
     depends_on:
-      - db
+      - celery
+
+  celery-flower:
+    build: *web_build
+    image: maykinmedia/open-producten:latest
+    environment: *web_env
+    command: /celery_flower.sh
+    ports:
+      - "5555:5555"
+    depends_on:
       - redis
+      - celery
