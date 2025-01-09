@@ -127,7 +127,7 @@ paths:
   /bestanden/{id}/:
     get:
       operationId: bestanden_retrieve
-      description: Een specifieke BESTAND opvragen.
+      description: Een specifiek BESTAND opvragen.
       summary: Een specifiek BESTAND opvragen.
       parameters:
       - in: path
@@ -408,16 +408,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
-              examples:
-                CreateContact:
-                  value:
-                    organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
-                    voornaam: Bob
-                    achternaam: de Vries
-                    email: bob@example.com
-                    telefoonnummer: '0611223344'
-                    rol: medewerker
-                  summary: Create contact
           description: ''
         '400':
           content:
@@ -447,7 +437,7 @@ paths:
   /contacten/{id}/:
     get:
       operationId: contacten_retrieve
-      description: Een specifieke CONTACT opvragen.
+      description: Een specifiek CONTACT opvragen.
       summary: Een specifiek CONTACT opvragen.
       parameters:
       - in: path
@@ -731,13 +721,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
-              examples:
-                CreateLink:
-                  value:
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    naam: Open Producten
-                    url: https://github.com/maykinmedia/open-producten
-                  summary: Create link
           description: ''
         '400':
           content:
@@ -1049,17 +1032,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
-              examples:
-                CreateLocatie:
-                  value:
-                    naam: Maykin Media
-                    email: info@maykinmedia.nl
-                    telefoonnummer: +31 0 20 753 05 23
-                    straat: Kingsfortweg
-                    huisnummer: '151'
-                    postcode: 1043GR
-                    stad: Amsterdam
-                  summary: Create locatie
           description: ''
         '400':
           content:
@@ -1090,7 +1062,7 @@ paths:
     get:
       operationId: locaties_retrieve
       description: Een specifieke LOCATIE opvragen.
-      summary: Een specifiek LOCATIE opvragen.
+      summary: Een specifieke LOCATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -1372,18 +1344,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
-              examples:
-                CreateOrganisatie:
-                  value:
-                    naam: Maykin Media
-                    code: org-1234
-                    email: info@maykinmedia.nl
-                    telefoonnummer: +31 0 20 753 05 23
-                    straat: Kingsfortweg
-                    huisnummer: '151'
-                    postcode: 1043GR
-                    stad: Amsterdam
-                  summary: Create organisatie
           description: ''
         '400':
           content:
@@ -1414,7 +1374,7 @@ paths:
     get:
       operationId: organisaties_retrieve
       description: Een specifieke ORGANISATIE opvragen.
-      summary: Een specifiek ORGANISATIE opvragen.
+      summary: Een specifieke ORGANISATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -1703,19 +1663,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
-              examples:
-                CreatePrijs:
-                  value:
-                    prijsopties:
-                    - bedrag: 50,99
-                      beschrijving: normaal
-                    - bedrag: 70,99
-                      beschrijving: spoed
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    actief_vanaf: '2024-12-01'
-                  summary: Create prijs
-                  description: prijsOptie bedragen kunnen worden ingevuld als een
-                    getal of als string met een . of , voor de decimalen
           description: ''
         '400':
           content:
@@ -2035,6 +1982,7 @@ paths:
                   beschrijving: uitgebreide beschrijving...
                   keywords:
                   - wonen
+                  verbruiksobject_schema: 1
                 summary: Create product type
         required: true
       security:
@@ -2045,29 +1993,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
-              examples:
-                CreateProductType:
-                  value:
-                    uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
-                    thema_ids:
-                    - 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    locatie_ids:
-                    - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
-                    organisatie_ids:
-                    - 2c2694f1-f948-4960-8312-d51c3a0e540f
-                    contact_ids:
-                    - 6863d699-460d-4c1e-9297-16812d75d8ca
-                    gepubliceerd: false
-                    naam: Aanleunwoning
-                    code: PT-12345
-                    toegestane_statussen:
-                    - gereed
-                    - actief
-                    samenvatting: korte samenvatting...
-                    beschrijving: uitgebreide beschrijving...
-                    keywords:
-                    - wonen
-                  summary: Create product type
           description: ''
         '400':
           content:
@@ -2386,6 +2311,318 @@ paths:
               schema:
                 $ref: '#/components/schemas/DetailError'
           description: ''
+  /schemas/:
+    get:
+      operationId: schemas_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle SCHEMA'S opvragen.
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedJsonSchemaList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    post:
+      operationId: schemas_create
+      description: Maak een SCHEMA aan.
+      summary: Maak een SCHEMA aan.
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonSchemaRequest'
+            examples:
+              CreateSchema:
+                value:
+                  name: parkeervergunning-verbruiksobject
+                  schema:
+                    type: object
+                    properties:
+                      uren:
+                        type: number
+                    required:
+                    - uren
+                summary: Create schema
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /schemas/{id}/:
+    get:
+      operationId: schemas_retrieve
+      description: Een specifiek SCHEMA opvragen.
+      summary: Een specifiek SCHEMA opvragen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    put:
+      operationId: schemas_update
+      description: Werk een SCHEMA in zijn geheel bij.
+      summary: Werk een SCHEMA in zijn geheel bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonSchemaRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    patch:
+      operationId: schemas_partial_update
+      description: Werk een SCHEMA deels bij.
+      summary: Werk een SCHEMA deels bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonSchemaRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    delete:
+      operationId: schemas_destroy
+      description: Verwijder een SCHEMA.
+      summary: Verwijder een SCHEMA.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    prijsopties:
+                    - Er is minimaal één optie vereist.
+                    product_type_id:
+                    - ‘<uuid>’ is geen geldige UUID.
+                    actief_vanaf:
+                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
+                      DD-MM-YYYY.'
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld van het model Prijs.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /themas/:
     get:
       operationId: themas_list
@@ -2474,16 +2711,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Thema'
-              examples:
-                CreateThema:
-                  value:
-                    hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
-                    product_type_ids:
-                    - 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    gepubliceerd: true
-                    naam: Parkeren
-                    beschrijving: Parkeren in gemeente ABC
-                  summary: Create thema
           description: ''
         '400':
           content:
@@ -2513,7 +2740,7 @@ paths:
   /themas/{id}/:
     get:
       operationId: themas_retrieve
-      description: Een specifieke THEMA opvragen.
+      description: Een specifiek THEMA opvragen.
       summary: Een specifiek THEMA opvragen.
       parameters:
       - in: path
@@ -2807,13 +3034,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Vraag'
-              examples:
-                CreateVraag:
-                  value:
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    vraag: Kom ik in aanmerking voor dit product?
-                    antwoord: Ja
-                  summary: Create vraag
           description: ''
         '400':
           content:
@@ -3157,6 +3377,39 @@ components:
           type: string
       required:
       - veld
+    JsonSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        schema:
+          type: object
+          additionalProperties: {}
+        name:
+          type: string
+          title: Naam
+          description: Naam van het json schema.
+          maxLength: 200
+      required:
+      - id
+      - name
+      - schema
+    JsonSchemaRequest:
+      type: object
+      properties:
+        schema:
+          type: object
+          additionalProperties: {}
+        name:
+          type: string
+          minLength: 1
+          title: Naam
+          description: Naam van het json schema.
+          maxLength: 200
+      required:
+      - name
+      - schema
     Link:
       type: object
       properties:
@@ -3701,6 +3954,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
+    PaginatedJsonSchemaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/JsonSchema'
     PaginatedLinkList:
       type: object
       required:
@@ -3902,6 +4178,18 @@ components:
           type: string
           description: De rol/functie van het contact
           maxLength: 100
+    PatchedJsonSchemaRequest:
+      type: object
+      properties:
+        schema:
+          type: object
+          additionalProperties: {}
+        name:
+          type: string
+          minLength: 1
+          title: Naam
+          description: Naam van het json schema.
+          maxLength: 200
     PatchedLinkRequest:
       type: object
       properties:
@@ -4043,6 +4331,11 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        verbruiksobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om het verbruiksobject van een gerelateerd product
+            te valideren.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4254,6 +4547,10 @@ components:
           items:
             $ref: '#/components/schemas/NestedBestand'
           readOnly: true
+        verbruiksobject_schema:
+          allOf:
+          - $ref: '#/components/schemas/JsonSchema'
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4309,6 +4606,7 @@ components:
       - themas
       - uniforme_product_naam
       - update_datum
+      - verbruiksobject_schema
       - vragen
     ProductTypeActuelePrijs:
       type: object
@@ -4377,6 +4675,11 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        verbruiksobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om het verbruiksobject van een gerelateerd product
+            te valideren.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.

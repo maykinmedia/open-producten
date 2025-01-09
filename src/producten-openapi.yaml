@@ -110,6 +110,8 @@ paths:
                   gepubliceerd: false
                   bsn: '111222333'
                   status: gereed
+                  verbruiksobject:
+                    uren: 130
                 summary: Create product
         required: true
       security:
@@ -120,16 +122,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-              examples:
-                CreateProduct:
-                  value:
-                    start_datum: '2024-12-01'
-                    eind_datum: '2026-12-01'
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    gepubliceerd: false
-                    bsn: '111222333'
-                    status: gereed
-                  summary: Create product
           description: ''
         '400':
           content:
@@ -159,7 +151,7 @@ paths:
   /producten/{id}/:
     get:
       operationId: producten_retrieve
-      description: Een specifieke PRODUCT opvragen.
+      description: Een specifiek PRODUCT opvragen.
       summary: Een specifiek PRODUCT opvragen.
       parameters:
       - in: path
@@ -300,20 +292,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-              examples:
-                PatchProduct:
-                  value:
-                    gepubliceerd: true
-                    start_datum: '2019-08-24'
-                    eind_datum: '2019-08-24'
-                    bsn: string
-                    status: string
-                    kvk: ^$
-                  summary: Patch product
-                UpdateProductStatus:
-                  value:
-                    status: actief
-                  summary: Update product status
           description: ''
         '400':
           content:
@@ -580,6 +558,10 @@ components:
           pattern: ^[0-9]*$
           maxLength: 8
           minLength: 8
+        verbruiksobject:
+          nullable: true
+          description: Verbruiksobject van dit product. Wordt gevalideerd met het
+            `verbruiksobject_schema` uit het product type.
     Product:
       type: object
       properties:
@@ -645,6 +627,10 @@ components:
           pattern: ^[0-9]*$
           maxLength: 8
           minLength: 8
+        verbruiksobject:
+          nullable: true
+          description: Verbruiksobject van dit product. Wordt gevalideerd met het
+            `verbruiksobject_schema` uit het product type.
       required:
       - aanmaak_datum
       - id
@@ -701,6 +687,10 @@ components:
           pattern: ^[0-9]*$
           maxLength: 8
           minLength: 8
+        verbruiksobject:
+          nullable: true
+          description: Verbruiksobject van dit product. Wordt gevalideerd met het
+            `verbruiksobject_schema` uit het product type.
       required:
       - product_type_id
     StatusEnum:

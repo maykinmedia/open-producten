@@ -14,7 +14,7 @@ from open_producten.utils.views import OrderedModelViewSet
     ),
     retrieve=extend_schema(
         summary="Een specifiek PRODUCT opvragen.",
-        description="Een specifieke PRODUCT opvragen.",
+        description="Een specifiek PRODUCT opvragen.",
     ),
     create=extend_schema(
         summary="Maak een PRODUCT aan.",
@@ -29,7 +29,9 @@ from open_producten.utils.views import OrderedModelViewSet
                     "gepubliceerd": False,
                     "bsn": "111222333",
                     "status": "gereed",
+                    "verbruiksobject": {"uren": 130},
                 },
+                request_only=True,
             )
         ],
     ),
@@ -51,12 +53,14 @@ from open_producten.utils.views import OrderedModelViewSet
                     "status": "string",
                     "kvk": "^$",
                 },
+                request_only=True,
             ),
             OpenApiExample(
                 "Update product status",
                 value={
                     "status": "actief",
                 },
+                request_only=True,
             ),
         ],
     ),
