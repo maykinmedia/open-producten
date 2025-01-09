@@ -1,4 +1,5 @@
 from .bestand import BestandSerializer
+from .jsonschema import JsonSchemaSerializer
 from .externe_code import ExterneCodeSerializer
 from .link import LinkSerializer
 from .parameter import ParameterSerializer
@@ -16,4 +17,5 @@ __all__ = [
     "ProductTypeActuelePrijsSerializer",
     "ExterneCodeSerializer",
     "ParameterSerializer",
+    "JsonSchemaSerializer",
 ]
