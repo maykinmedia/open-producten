@@ -1355,6 +1355,7 @@ paths:
               CreateOrganisatie:
                 value:
                   naam: Maykin Media
+                  code: org-1234
                   email: info@maykinmedia.nl
                   telefoonnummer: +31 0 20 753 05 23
                   straat: Kingsfortweg
@@ -1375,6 +1376,7 @@ paths:
                 CreateOrganisatie:
                   value:
                     naam: Maykin Media
+                    code: org-1234
                     email: info@maykinmedia.nl
                     telefoonnummer: +31 0 20 753 05 23
                     straat: Kingsfortweg
@@ -2025,6 +2027,10 @@ paths:
                   - 6863d699-460d-4c1e-9297-16812d75d8ca
                   gepubliceerd: false
                   naam: Aanleunwoning
+                  code: PT-12345
+                  toegestane_statussen:
+                  - gereed
+                  - actief
                   samenvatting: korte samenvatting...
                   beschrijving: uitgebreide beschrijving...
                   keywords:
@@ -2053,6 +2059,10 @@ paths:
                     - 6863d699-460d-4c1e-9297-16812d75d8ca
                     gepubliceerd: false
                     naam: Aanleunwoning
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    - actief
                     samenvatting: korte samenvatting...
                     beschrijving: uitgebreide beschrijving...
                     keywords:
@@ -3373,6 +3383,10 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3390,6 +3404,11 @@ components:
           type: string
           format: uri
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -3397,17 +3416,16 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
       required:
       - aanmaak_datum
       - beschrijving
+      - code
       - id
       - naam
       - uniforme_product_naam
@@ -3420,6 +3438,11 @@ components:
           minLength: 1
           title: Product type naam
           description: naam van het product type.
+          maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
           maxLength: 100
         samenvatting:
           type: string
@@ -3441,11 +3464,17 @@ components:
           format: uri
           minLength: 1
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
       required:
       - beschrijving
+      - code
       - naam
       - uniforme_product_naam
     NestedThema:
@@ -3469,13 +3498,11 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         hoofd_thema:
           type: string
@@ -3578,7 +3605,12 @@ components:
           type: string
           nullable: true
           maxLength: 250
+        code:
+          type: string
+          description: code van de organisatie.
+          maxLength: 100
       required:
+      - code
       - id
       - naam
     OrganisatieRequest:
@@ -3615,7 +3647,13 @@ components:
           type: string
           nullable: true
           maxLength: 250
+        code:
+          type: string
+          minLength: 1
+          description: code van de organisatie.
+          maxLength: 100
       required:
+      - code
       - naam
     PaginatedBestandList:
       type: object
@@ -3949,6 +3987,11 @@ components:
           type: string
           nullable: true
           maxLength: 250
+        code:
+          type: string
+          minLength: 1
+          description: code van de organisatie.
+          maxLength: 100
     PatchedPrijsRequest:
       type: object
       properties:
@@ -4009,6 +4052,16 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           minLength: 1
@@ -4042,6 +4095,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          description: Het hoofd thema waaronder dit thema valt.
         product_type_ids:
           type: array
           items:
@@ -4207,19 +4261,26 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -4237,6 +4298,7 @@ components:
       - aanmaak_datum
       - beschrijving
       - bestanden
+      - code
       - contacten
       - id
       - links
@@ -4324,6 +4386,16 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           minLength: 1
@@ -4341,6 +4413,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
       required:
       - beschrijving
+      - code
       - naam
       - thema_ids
       - uniforme_product_naam
@@ -4370,18 +4443,17 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         hoofd_thema:
           type: string
           format: uuid
           nullable: true
+          description: Het hoofd thema waaronder dit thema valt.
         product_typen:
           type: array
           items:
@@ -4413,6 +4485,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          description: Het hoofd thema waaronder dit thema valt.
         product_type_ids:
           type: array
           items:
@@ -4424,6 +4497,20 @@ components:
       - hoofd_thema
       - naam
       - product_type_ids
+    ToegestaneStatussenEnum:
+      enum:
+      - gereed
+      - actief
+      - ingetrokken
+      - geweigerd
+      - verlopen
+      type: string
+      description: |-
+        * `gereed` - Gereed
+        * `actief` - Actief
+        * `ingetrokken` - Ingetrokken
+        * `geweigerd` - Geweigerd
+        * `verlopen` - Verlopen
     Vraag:
       type: object
       properties:
