@@ -15,7 +15,7 @@ from open_producten.utils.views import OrderedModelViewSet
         description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
-        summary="Een specifiek LOCATIE opvragen.",
+        summary="Een specifieke LOCATIE opvragen.",
         description="Een specifieke LOCATIE opvragen.",
     ),
     create=extend_schema(
@@ -62,7 +62,7 @@ class LocatieViewSet(OrderedModelViewSet):
     ),
     retrieve=extend_schema(
         summary="Een specifiek CONTACT opvragen.",
-        description="Een specifieke CONTACT opvragen.",
+        description="Een specifiek CONTACT opvragen.",
     ),
     create=extend_schema(
         summary="Maak een CONTACT aan.",
@@ -79,7 +79,7 @@ class LocatieViewSet(OrderedModelViewSet):
                     "rol": "medewerker",
                 },
                 request_only=True,
-            )
+            ),
         ],
     ),
     update=extend_schema(
@@ -106,7 +106,7 @@ class ContactViewSet(OrderedModelViewSet):
         description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
-        summary="Een specifiek ORGANISATIE opvragen.",
+        summary="Een specifieke ORGANISATIE opvragen.",
         description="Een specifieke ORGANISATIE opvragen.",
     ),
     create=extend_schema(
