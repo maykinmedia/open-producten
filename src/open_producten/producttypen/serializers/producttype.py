@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from django_json_schema.models import JsonSchema
 from rest_framework import serializers
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
@@ -12,6 +13,7 @@ from open_producten.locaties.serializers.locatie import (
 
 from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
+from . import JsonSchemaSerializer
 from .bestand import NestedBestandSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
@@ -76,6 +78,17 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     prijzen = NestedPrijsSerializer(many=True, read_only=True)
     links = NestedLinkSerializer(many=True, read_only=True)
     bestanden = NestedBestandSerializer(many=True, read_only=True)
+
+    verbruiksobject_schema = JsonSchemaSerializer(read_only=True)
+    verbruiksobject_schema_id = serializers.PrimaryKeyRelatedField(
+        source="verbruiksobject_schema",
+        queryset=JsonSchema.objects.all(),
+        write_only=True,
+        help_text=_(
+            "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
+        ),
+        required=False,
+    )
 
     class Meta:
         model = ProductType

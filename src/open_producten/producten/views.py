@@ -27,6 +27,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "gepubliceerd": False,
                     "bsn": "111222333",
                     "status": "gereed",
+                    "verbruiksobject": {"uren": 130},
                 },
                 request_only=True,
             )
