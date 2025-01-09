@@ -66,7 +66,6 @@ class LocatieViewSet(OrderedModelViewSet):
                 "Create contact",
                 value={
                     "organisatie_id": "73a745d4-7df0-4510-991e-abfb19f0d861",
-                    "code": "org-1234",
                     "voornaam": "Bob",
                     "achternaam": "de Vries",
                     "email": "bob@example.com",
@@ -108,6 +107,7 @@ class ContactViewSet(OrderedModelViewSet):
                 "Create organisatie",
                 value={
                     "naam": "Maykin Media",
+                    "code": "org-1234",
                     "email": "info@maykinmedia.nl",
                     "telefoonnummer": "+310207530523",
                     "straat": "Kingsfortweg",

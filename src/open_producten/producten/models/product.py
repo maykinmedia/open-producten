@@ -29,7 +29,7 @@ class Product(BasePublishableModel):
     start_datum = models.DateField(
         _("start datum"),
         help_text=_(
-            "De start datum van dit product. Op deze datum zal de status van het product automatisch naar ACTIEF worden gezet"
+            "De start datum van dit product. Op deze datum zal de status van het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan."
         ),
         validators=[MinValueValidator(date.today)],
         null=True,
@@ -38,7 +38,7 @@ class Product(BasePublishableModel):
     eind_datum = models.DateField(
         _("eind datum"),
         help_text=_(
-            "De einddatum van dit product. Op deze datum zal de status van het product automatisch naar VERLOPEN worden gezet"
+            "De einddatum van dit product. Op deze datum zal de status van het product automatisch naar VERLOPEN worden gezet. Op het moment dat de eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn toegestaan."
         ),
         validators=[MinValueValidator(date.today)],
         null=True,

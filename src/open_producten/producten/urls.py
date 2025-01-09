@@ -21,7 +21,16 @@ custom_settings = {
     "VERSION": settings.PRODUCTEN_API_VERSION,
     "DESCRIPTION": description,
     "SERVERS": [{"url": f"/producten/api/v{settings.PRODUCTEN_API_MAJOR_VERSION}"}],
-    "TAGS": [{"name": "producten"}],
+    "TAGS": [
+        {
+            "name": "producten",
+            "description": "Opvragen en bewerken van PRODUCTEN.\n\n"
+            "De status opties van een PRODUCT zijn afhankelijk van de 'toegestane_opties' van het product_type.\n\n"
+            "Via 'start_datum' & 'eind_datum' kan de status van een product automatisch op ACTIEF en VERLOPEN worden gezet."
+            "Op het moment dat deze velden worden gezet moeten deze statussen wel zijn toegestaan op het product_type.\n\n"
+            "De status zal via de start_datum alleen naar ACTIEF veranderen mits de status INITIEEL of GEREED is. Voor de eind_datum zijn dit INTIEEL, GEREED of ACTIEF.",
+        },
+    ],
 }
 
 
