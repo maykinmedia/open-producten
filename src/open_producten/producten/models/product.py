@@ -88,6 +88,7 @@ def validate_dates(start_datum, eind_datum):
             }
         )
 
+
 def validate_verbruiksobject(verbruiksobject, product_type):
     try:
         if (

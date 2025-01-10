@@ -148,7 +148,9 @@ class TestProduct(BaseApiTestCase):
             {
                 "verbruiksobject": [
                     ErrorDetail(
-                        string=_("Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."),
+                        string=_(
+                            "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+                        ),
                         code="invalid",
                     )
                 ]

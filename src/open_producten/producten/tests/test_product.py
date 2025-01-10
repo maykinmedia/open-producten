@@ -131,7 +131,9 @@ class TestProduct(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            _("Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."),
+            _(
+                "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+            ),
         ):
             product.clean()
 
