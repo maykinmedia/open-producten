@@ -55,6 +55,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
                 },
+                request_only=True,
             )
         ],
     ),
@@ -129,6 +130,7 @@ class ProductTypeViewSet(OrderedModelViewSet):
                     "naam": "Open Producten",
                     "url": "https://github.com/maykinmedia/open-producten",
                 },
+                request_only=True,
             )
         ],
     ),
@@ -171,12 +173,13 @@ class LinkViewSet(OrderedModelViewSet):
                 description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
                 value={
                     "prijsopties": [
-                        {"bedrag": "50,99", "beschrijving": "normaal"},
-                        {"bedrag": "70,99", "beschrijving": "spoed"},
+                        {"bedrag": "50.99", "beschrijving": "normaal"},  # TODO
+                        {"bedrag": "70.99", "beschrijving": "spoed"},
                     ],
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                     "actief_vanaf": "2024-12-01",
                 },
+                request_only=True,
             )
         ],
     ),
@@ -221,6 +224,7 @@ class PrijsViewSet(OrderedModelViewSet):
                     "vraag": "Kom ik in aanmerking voor dit product?",
                     "antwoord": "Ja",
                 },
+                request_only=True,
             )
         ],
     ),
@@ -264,6 +268,7 @@ class VraagViewSet(OrderedModelViewSet):
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                 },
                 media_type="multipart/form-data",
+                request_only=True,
             ),
         ],
     ),
@@ -311,6 +316,7 @@ class BestandViewSet(OrderedModelViewSet):
                     "naam": "Parkeren",
                     "beschrijving": "Parkeren in gemeente ABC",
                 },
+                request_only=True,
             )
         ],
     ),

@@ -55,16 +55,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -107,16 +104,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -156,16 +150,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -210,16 +201,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -263,16 +251,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -307,16 +292,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -361,16 +343,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -408,16 +387,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
-              examples:
-                CreateContact:
-                  value:
-                    organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
-                    voornaam: Bob
-                    achternaam: de Vries
-                    email: bob@example.com
-                    telefoonnummer: '0611223344'
-                    rol: medewerker
-                  summary: Create contact
           description: ''
         '400':
           content:
@@ -427,16 +396,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -476,16 +442,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -530,16 +493,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -583,16 +543,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -627,16 +584,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -687,16 +641,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -731,13 +682,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
-              examples:
-                CreateLink:
-                  value:
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    naam: Open Producten
-                    url: https://github.com/maykinmedia/open-producten
-                  summary: Create link
           description: ''
         '400':
           content:
@@ -747,16 +691,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -796,16 +737,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -850,16 +788,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -903,16 +838,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -947,16 +879,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1001,16 +930,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1034,7 +960,7 @@ paths:
                 value:
                   naam: Maykin Media
                   email: info@maykinmedia.nl
-                  telefoonnummer: +31 0 20 753 05 23
+                  telefoonnummer: '+310207530523'
                   straat: Kingsfortweg
                   huisnummer: '151'
                   postcode: 1043GR
@@ -1049,17 +975,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
-              examples:
-                CreateLocatie:
-                  value:
-                    naam: Maykin Media
-                    email: info@maykinmedia.nl
-                    telefoonnummer: +31 0 20 753 05 23
-                    straat: Kingsfortweg
-                    huisnummer: '151'
-                    postcode: 1043GR
-                    stad: Amsterdam
-                  summary: Create locatie
           description: ''
         '400':
           content:
@@ -1069,16 +984,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1118,16 +1030,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1172,16 +1081,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1225,16 +1131,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1269,16 +1172,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1323,16 +1223,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1356,7 +1253,7 @@ paths:
                 value:
                   naam: Maykin Media
                   email: info@maykinmedia.nl
-                  telefoonnummer: +31 0 20 753 05 23
+                  telefoonnummer: '+310207530523'
                   straat: Kingsfortweg
                   huisnummer: '151'
                   postcode: 1043GR
@@ -1371,17 +1268,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
-              examples:
-                CreateOrganisatie:
-                  value:
-                    naam: Maykin Media
-                    email: info@maykinmedia.nl
-                    telefoonnummer: +31 0 20 753 05 23
-                    straat: Kingsfortweg
-                    huisnummer: '151'
-                    postcode: 1043GR
-                    stad: Amsterdam
-                  summary: Create organisatie
           description: ''
         '400':
           content:
@@ -1391,16 +1277,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1440,16 +1323,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1494,16 +1374,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1547,16 +1424,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1591,16 +1465,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1651,16 +1522,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1683,9 +1551,9 @@ paths:
               CreatePrijs:
                 value:
                   prijsopties:
-                  - bedrag: 50,99
+                  - bedrag: '50.99'
                     beschrijving: normaal
-                  - bedrag: 70,99
+                  - bedrag: '70.99'
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
@@ -1701,19 +1569,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
-              examples:
-                CreatePrijs:
-                  value:
-                    prijsopties:
-                    - bedrag: 50,99
-                      beschrijving: normaal
-                    - bedrag: 70,99
-                      beschrijving: spoed
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    actief_vanaf: '2024-12-01'
-                  summary: Create prijs
-                  description: prijsOptie bedragen kunnen worden ingevuld als een
-                    getal of als string met een . of , voor de decimalen
           description: ''
         '400':
           content:
@@ -1723,16 +1578,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1772,16 +1624,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1826,16 +1675,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1881,16 +1727,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1925,16 +1768,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -1983,16 +1823,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2039,25 +1876,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
-              examples:
-                CreateProductType:
-                  value:
-                    uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
-                    thema_ids:
-                    - 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    locatie_ids:
-                    - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
-                    organisatie_ids:
-                    - 2c2694f1-f948-4960-8312-d51c3a0e540f
-                    contact_ids:
-                    - 6863d699-460d-4c1e-9297-16812d75d8ca
-                    gepubliceerd: false
-                    naam: Aanleunwoning
-                    samenvatting: korte samenvatting...
-                    beschrijving: uitgebreide beschrijving...
-                    keywords:
-                    - wonen
-                  summary: Create product type
           description: ''
         '400':
           content:
@@ -2067,16 +1885,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2116,16 +1931,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2170,16 +1982,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2225,16 +2034,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2269,16 +2075,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2318,16 +2121,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2359,16 +2159,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2417,16 +2214,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2464,16 +2258,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Thema'
-              examples:
-                CreateThema:
-                  value:
-                    hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
-                    product_type_ids:
-                    - 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    gepubliceerd: true
-                    naam: Parkeren
-                    beschrijving: Parkeren in gemeente ABC
-                  summary: Create thema
           description: ''
         '400':
           content:
@@ -2483,16 +2267,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2532,16 +2313,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2586,16 +2364,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2641,16 +2416,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2685,16 +2457,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2753,16 +2522,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2797,13 +2563,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Vraag'
-              examples:
-                CreateVraag:
-                  value:
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                    vraag: Kom ik in aanmerking voor dit product?
-                    antwoord: Ja
-                  summary: Create vraag
           description: ''
         '400':
           content:
@@ -2813,16 +2572,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2862,16 +2618,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2916,16 +2669,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -2969,16 +2719,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -3013,16 +2760,13 @@ paths:
               examples:
                 BadRequestExample:
                   value:
-                    prijsopties:
-                    - Er is minimaal één optie vereist.
-                    product_type_id:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
                     - ‘<uuid>’ is geen geldige UUID.
-                    actief_vanaf:
-                    - 'Date heeft het verkeerde formaat, gebruik 1 van deze formaten:
-                      DD-MM-YYYY.'
                   summary: Bad request example
                   description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld van het model Prijs.
+                    een voorbeeld.
           description: Validation error
         '403':
           content:
@@ -3143,10 +2887,17 @@ components:
     Error:
       type: object
       properties:
-        veld:
-          type: string
+        veld_a:
+          type: array
+          items:
+            type: string
+        veld_b:
+          type: array
+          items:
+            type: string
       required:
-      - veld
+      - veld_a
+      - veld_b
     Link:
       type: object
       properties:

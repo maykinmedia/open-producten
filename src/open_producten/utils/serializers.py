@@ -54,11 +54,12 @@ class DetailErrorSerializer(serializers.Serializer):
             "Bad request example",
             description="Errors worden per veld teruggegeven.",
             value={
-                "prijsopties": ["Er is minimaal één optie vereist."],
-                "product_type_id": ["‘<uuid>’ is geen geldige UUID."],
+                "veld_a": "Dit veld is vereist.",
+                "veld_b": "‘<uuid>’ is geen geldige UUID.",
             },
         ),
     ]
 )
 class ErrorSerializer(serializers.Serializer):
-    veld = serializers.CharField()
+    veld_a = serializers.ListField(child=serializers.CharField())
+    veld_b = serializers.ListField(child=serializers.CharField())
