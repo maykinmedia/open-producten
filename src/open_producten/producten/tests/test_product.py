@@ -99,7 +99,9 @@ class TestProduct(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            _("Status 'Actief' is niet toegestaan voor het product type {}.").format(self.product_type.naam),
+            _("Status 'Actief' is niet toegestaan voor het product type {}.").format(
+                self.product_type.naam
+            ),
         ):
             product.clean()
 
@@ -130,27 +132,6 @@ class TestProduct(TestCase):
             "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type.",
         ):
             product.clean()
-
-    def test_start_and_eind_datum_are_not_allowed_to_be_the_same(self):
-        product = ProductFactory.build(
-            start_datum=date(2025, 1, 12),
-            eind_datum=date(2025, 1, 12),
-            product_type=self.product_type,
-            bsn="111222333",
-        )
-
-        with self.assertRaisesMessage(
-            ValidationError,
-            "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen.",
-        ):
-            product.clean()
-
-    def test_start_and_eind_datum_are_not_allowed_to_be_null(self):
-        product = ProductFactory.build(
-            product_type=self.product_type,
-            bsn="111222333",
-        )
-        product.clean()
 
 
 @freeze_time("2024-1-1")

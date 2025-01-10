@@ -4,11 +4,11 @@ from django.core.validators import MinLengthValidator, RegexValidator, Validatio
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from open_producten.logging.logevent import audit_automation_update
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.models.producttype import ProductStateChoices
 from open_producten.utils.models import BasePublishableModel
 
-from open_producten.logging.logevent import audit_automation_update
 from .validators import validate_bsn
 
 

@@ -254,7 +254,7 @@ class TestProduct(BaseApiTestCase):
 
     @freeze_time("2025-12-31")
     def test_read_product(self):
-        product_type = ProductTypeFactory.create()
+        product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
         product = ProductFactory.create(bsn="111222333", product_type=product_type)
 
         response = self.client.get(self.detail_path(product))

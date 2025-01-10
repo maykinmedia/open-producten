@@ -4,7 +4,7 @@ from open_producten.producten.models import Product
 from open_producten.producten.serializers.validators import (
     BsnOrKvkValidator,
     DateValidator,
-    StatusValidator
+    StatusValidator,
 )
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.serializers.thema import NestedProductTypeSerializer

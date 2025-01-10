@@ -45,15 +45,16 @@ from open_producten.utils.views import OrderedModelViewSet
                     "start_datum": "2019-08-24",
                     "eind_datum": "2019-08-24",
                     "bsn": "string",
-                    "status": "string",
-                    "kvk": "^$",
+                    "status": "gereed",
                 },
+                request_only=True,
             ),
             OpenApiExample(
                 "Update product status",
                 value={
                     "status": "actief",
                 },
+                request_only=True,
             ),
         ],
     ),

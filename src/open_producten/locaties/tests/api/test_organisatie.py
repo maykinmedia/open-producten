@@ -41,7 +41,9 @@ class TestOrganisatie(BaseApiTestCase):
                 "naam": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "code": [ErrorDetail(string=_("This field is required."), code="required")],
+                "code": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
             },
         )
 
