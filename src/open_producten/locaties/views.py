@@ -27,12 +27,13 @@ from open_producten.utils.views import OrderedModelViewSet
                 value={
                     "naam": "Maykin Media",
                     "email": "info@maykinmedia.nl",
-                    "telefoonnummer": "+31 0 20 753 05 23",
+                    "telefoonnummer": "+310207530523",
                     "straat": "Kingsfortweg",
                     "huisnummer": "151",
                     "postcode": "1043GR",
                     "stad": "Amsterdam",
                 },
+                request_only=True,
             )
         ],
     ),
@@ -77,6 +78,7 @@ class LocatieViewSet(OrderedModelViewSet):
                     "telefoonnummer": "0611223344",
                     "rol": "medewerker",
                 },
+                request_only=True,
             )
         ],
     ),
@@ -116,12 +118,13 @@ class ContactViewSet(OrderedModelViewSet):
                 value={
                     "naam": "Maykin Media",
                     "email": "info@maykinmedia.nl",
-                    "telefoonnummer": "+31 0 20 753 05 23",
+                    "telefoonnummer": "+310207530523",
                     "straat": "Kingsfortweg",
                     "huisnummer": "151",
                     "postcode": "1043GR",
                     "stad": "Amsterdam",
                 },
+                request_only=True,
             )
         ],
     ),

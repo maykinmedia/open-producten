@@ -13,13 +13,10 @@ ERRORS = {
         examples=[
             OpenApiExample(
                 "Bad request example",
-                description="Errors worden per veld teruggegeven. Hieronder volgt een voorbeeld van het model Prijs.",
+                description="Errors worden per veld teruggegeven. Hieronder volgt een voorbeeld.",
                 value={
-                    "prijsopties": ["Er is minimaal één optie vereist."],
-                    "product_type_id": ["‘<uuid>’ is geen geldige UUID."],
-                    "actief_vanaf": [
-                        "Date heeft het verkeerde formaat, gebruik 1 van deze formaten: DD-MM-YYYY."
-                    ],
+                    "veld_a": ["Dit veld is vereist."],
+                    "veld_b": ["‘<uuid>’ is geen geldige UUID."],
                 },
             ),
         ],

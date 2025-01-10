@@ -28,6 +28,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "gepubliceerd": False,
                     "bsn": "111222333",
                 },
+                request_only=True,
             )
         ],
     ),
