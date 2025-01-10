@@ -198,6 +198,7 @@ django==4.2.17
     #   django-setup-configuration
     #   django-simple-certmanager
     #   django-solo
+    #   django-timeline-logger
     #   django-timezone-field
     #   django-two-factor-auth
     #   djangorestframework
@@ -222,6 +223,7 @@ django-appconf==1.0.6
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-log-outgoing-requests
+    #   django-timeline-logger
 django-axes==7.0.0
     # via
     #   -c requirements/ci.txt
@@ -345,6 +347,10 @@ django-solo==2.4.0
     #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
+django-timeline-logger==5.0.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-timezone-field==7.0
     # via
     #   -c requirements/ci.txt
