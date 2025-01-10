@@ -28,6 +28,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "bsn": "111222333",
                     "status": "gereed",
                     "verbruiksobject": {"uren": 130},
+                    "data": {"max_uren": 150},
                 },
                 request_only=True,
             )

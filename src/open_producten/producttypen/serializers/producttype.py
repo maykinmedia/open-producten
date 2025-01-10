@@ -90,6 +90,15 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         required=False,
     )
 
+    dataobject_schema = JsonSchemaSerializer(read_only=True)
+    dataobject_schema_id = serializers.PrimaryKeyRelatedField(
+        source="dataobject_schema",
+        queryset=JsonSchema.objects.all(),
+        write_only=True,
+        help_text=_("JSON schema om de data van een gerelateerd product te valideren."),
+        required=False,
+    )
+
     class Meta:
         model = ProductType
         fields = "__all__"

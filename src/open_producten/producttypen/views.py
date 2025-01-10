@@ -57,6 +57,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
                     "verbruiksobject_schema": 1,
+                    "dataobject_schema": 2,
                 },
                 request_only=True,
             )
