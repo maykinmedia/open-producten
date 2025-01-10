@@ -263,8 +263,7 @@ paths:
                   start_datum: '2019-08-24'
                   eind_datum: '2019-08-24'
                   bsn: string
-                  status: string
-                  kvk: ^$
+                  status: gereed
                 summary: Patch product
               UpdateProductStatus:
                 value:
@@ -278,20 +277,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-              examples:
-                PatchProduct:
-                  value:
-                    gepubliceerd: true
-                    start_datum: '2019-08-24'
-                    eind_datum: '2019-08-24'
-                    bsn: string
-                    status: string
-                    kvk: ^$
-                  summary: Patch product
-                UpdateProductStatus:
-                  value:
-                    status: actief
-                  summary: Update product status
           description: ''
         '400':
           content:
