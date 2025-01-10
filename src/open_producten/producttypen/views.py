@@ -31,6 +31,8 @@ class ProductTypeViewSet(OrderedModelViewSet):
     queryset = ProductType.objects.all()
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["gepubliceerd"]
 
     @action(
         detail=False,
@@ -90,6 +92,8 @@ class ThemaViewSet(OrderedModelViewSet):
     queryset = Thema.objects.all()
     serializer_class = ThemaSerializer
     lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["gepubliceerd"]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

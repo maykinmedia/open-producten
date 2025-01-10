@@ -22,7 +22,7 @@ INSTALLED_APPS += [
     "open_producten.accounts",
     "open_producten.utils",
     "open_producten.producttypen",
-    # "open_producten.products",
+    "open_producten.producten",
     "open_producten.locaties",
 ]
 
@@ -88,7 +88,7 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
     ],
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_PAGINATION_CLASS": "open_producten.utils.pagination.Pagination",
     "PAGE_SIZE": 100,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
