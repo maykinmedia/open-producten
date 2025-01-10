@@ -50,6 +50,23 @@ class TestProductTypeSchema(BaseApiTestCase):
         response.data.pop("id")
         self.assertEqual(response.data, self.data)
 
+    def test_create_invalid_schema(self):
+        data = self.data | {"schema": {"type": []}}
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "schema": [
+                    ErrorDetail(
+                        string="[] is not valid under any of the given schemas",
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
     def test_update_schema(self):
         data = self.data | {"name": "update"}
         response = self.client.put(self.detail_path, data)
