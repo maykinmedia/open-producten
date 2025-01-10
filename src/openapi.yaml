@@ -2423,10 +2423,12 @@ components:
         start_datum:
           type: string
           format: date
+          nullable: true
           description: De start datum van dit product.
         eind_datum:
           type: string
           format: date
+          nullable: true
           description: De einddatum van dit product.
         bsn:
           type: string
@@ -2655,10 +2657,12 @@ components:
         start_datum:
           type: string
           format: date
+          nullable: true
           description: De start datum van dit product.
         eind_datum:
           type: string
           format: date
+          nullable: true
           description: De einddatum van dit product.
         bsn:
           type: string
@@ -2675,10 +2679,8 @@ components:
           minLength: 8
       required:
       - aanmaak_datum
-      - eind_datum
       - id
       - product_type
-      - start_datum
       - update_datum
     ProductRequest:
       type: object
@@ -2693,10 +2695,12 @@ components:
         start_datum:
           type: string
           format: date
+          nullable: true
           description: De start datum van dit product.
         eind_datum:
           type: string
           format: date
+          nullable: true
           description: De einddatum van dit product.
         bsn:
           type: string
@@ -2712,9 +2716,7 @@ components:
           maxLength: 8
           minLength: 8
       required:
-      - eind_datum
       - product_type_id
-      - start_datum
     ProductType:
       type: object
       properties:

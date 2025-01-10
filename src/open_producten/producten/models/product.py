@@ -18,10 +18,16 @@ class Product(BasePublishableModel):
     )
 
     start_datum = models.DateField(
-        _("start datum"), help_text=_("De start datum van dit product.")
+        _("start datum"),
+        help_text=_("De start datum van dit product."),
+        null=True,
+        blank=True,
     )
     eind_datum = models.DateField(
-        _("eind datum"), help_text=_("De einddatum van dit product.")
+        _("eind datum"),
+        help_text=_("De einddatum van dit product."),
+        null=True,
+        blank=True,
     )
 
     bsn = models.CharField(
@@ -49,6 +55,7 @@ class Product(BasePublishableModel):
 
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
+        validate_dates(self.start_datum, self.eind_datum)
 
     def __str__(self):
         return f"{self.bsn if self.bsn else self.kvk} {self.product_type.naam}"
@@ -57,3 +64,14 @@ class Product(BasePublishableModel):
 def validate_bsn_or_kvk(bsn, kvk):
     if not bsn and not kvk:
         raise ValidationError("Een product moet een bsn, kvk nummer of beiden hebben.")
+
+
+def validate_dates(start_datum, eind_datum):
+    if (start_datum == eind_datum) and start_datum is not None:
+        raise ValidationError(
+            {
+                _(
+                    "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen."
+                )
+            }
+        )

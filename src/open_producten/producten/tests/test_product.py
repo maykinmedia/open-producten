@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
@@ -60,3 +62,24 @@ class TestProduct(TestCase):
         ProductFactory.build(
             kvk="11122233", product_type=self.product_type
         ).full_clean()
+
+    def test_start_and_eind_datum_are_not_allowed_to_be_the_same(self):
+        product = ProductFactory.build(
+            start_datum=date(2025, 1, 12),
+            eind_datum=date(2025, 1, 12),
+            product_type=self.product_type,
+            bsn="111222333",
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen.",
+        ):
+            product.clean()
+
+    def test_start_and_eind_datum_are_not_allowed_to_be_null(self):
+        product = ProductFactory.build(
+            product_type=self.product_type,
+            bsn="111222333",
+        )
+        product.clean()

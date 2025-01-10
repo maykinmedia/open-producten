@@ -45,12 +45,6 @@ class TestProduct(BaseApiTestCase):
                 "product_type_id": [
                     ErrorDetail(string="Dit veld is vereist.", code="required")
                 ],
-                "start_datum": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
-                ],
-                "eind_datum": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
-                ],
             },
         )
 
@@ -159,8 +153,8 @@ class TestProduct(BaseApiTestCase):
                 "bsn": product1.bsn,
                 "kvk": product1.kvk,
                 "gepubliceerd": False,
-                "start_datum": str(product1.start_datum),
-                "eind_datum": str(product1.eind_datum),
+                "start_datum": None,
+                "eind_datum": None,
                 "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product1.update_datum.astimezone().isoformat(),
                 "product_type": {
@@ -180,8 +174,8 @@ class TestProduct(BaseApiTestCase):
                 "bsn": product2.bsn,
                 "kvk": product2.kvk,
                 "gepubliceerd": False,
-                "start_datum": str(product2.start_datum),
-                "eind_datum": str(product2.eind_datum),
+                "start_datum": None,
+                "eind_datum": None,
                 "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product2.update_datum.astimezone().isoformat(),
                 "product_type": {
@@ -199,30 +193,32 @@ class TestProduct(BaseApiTestCase):
         ]
         self.assertCountEqual(response.data["results"], expected_data)
 
+    @freeze_time("2025-12-31")
     def test_read_product(self):
-        product = ProductFactory.create(bsn="111222333", product_type=self.product_type)
+        product_type = ProductTypeFactory.create()
+        product = ProductFactory.create(bsn="111222333", product_type=product_type)
 
         response = self.client.get(self.detail_path(product))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
             "id": str(product.id),
-            "bsn": product.bsn,
-            "kvk": product.kvk,
+            "bsn": "111222333",
+            "kvk": None,
             "gepubliceerd": False,
-            "start_datum": str(product.start_datum),
-            "eind_datum": str(product.eind_datum),
-            "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
-            "update_datum": product.update_datum.astimezone().isoformat(),
+            "start_datum": None,
+            "eind_datum": None,
+            "aanmaak_datum": "2025-12-31T01:00:00+01:00",
+            "update_datum": "2025-12-31T01:00:00+01:00",
             "product_type": {
-                "id": str(self.product_type.id),
-                "naam": self.product_type.naam,
-                "samenvatting": self.product_type.samenvatting,
-                "beschrijving": self.product_type.beschrijving,
-                "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                "id": str(product_type.id),
+                "naam": product_type.naam,
+                "samenvatting": product_type.samenvatting,
+                "beschrijving": product_type.beschrijving,
+                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
-                "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
-                "update_datum": self.product_type.update_datum.astimezone().isoformat(),
+                "aanmaak_datum": "2025-12-31T01:00:00+01:00",
+                "update_datum": "2025-12-31T01:00:00+01:00",
                 "keywords": [],
             },
         }
