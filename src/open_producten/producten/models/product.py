@@ -211,6 +211,7 @@ def validate_eind_datum(eind_datum, product_type):
         )
 
 
+
 def validate_verbruiksobject(verbruiksobject, product_type):
     try:
         if (
