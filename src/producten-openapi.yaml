@@ -106,6 +106,7 @@ paths:
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   gepubliceerd: false
                   bsn: '111222333'
+                  status: gereed
                 summary: Create product
         required: true
       security:
@@ -423,13 +424,11 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
       required:
       - aanmaak_datum
@@ -522,11 +521,19 @@ components:
         start_datum:
           type: string
           format: date
-          description: De start datum van dit product.
+          nullable: true
+          description: De start datum van dit product. Op deze datum zal de status
+            van het product automatisch naar ACTIEF worden gezet. Op het moment dat
+            de start_datum wordt ingevuld moet de status ACTIEF op het product type
+            zijn toegestaan.
         eind_datum:
           type: string
           format: date
-          description: De einddatum van dit product.
+          nullable: true
+          description: De einddatum van dit product. Op deze datum zal de status van
+            het product automatisch naar VERLOPEN worden gezet. Op het moment dat
+            de eind_datum wordt ingevuld moet de status VERLOPEN op het product type
+            zijn toegestaan.
         bsn:
           type: string
           nullable: true
@@ -570,22 +577,28 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         start_datum:
           type: string
           format: date
-          description: De start datum van dit product.
+          nullable: true
+          description: De start datum van dit product. Op deze datum zal de status
+            van het product automatisch naar ACTIEF worden gezet. Op het moment dat
+            de start_datum wordt ingevuld moet de status ACTIEF op het product type
+            zijn toegestaan.
         eind_datum:
           type: string
           format: date
-          description: De einddatum van dit product.
+          nullable: true
+          description: De einddatum van dit product. Op deze datum zal de status van
+            het product automatisch naar VERLOPEN worden gezet. Op het moment dat
+            de eind_datum wordt ingevuld moet de status VERLOPEN op het product type
+            zijn toegestaan.
         bsn:
           type: string
           nullable: true
@@ -613,10 +626,8 @@ components:
           minLength: 8
       required:
       - aanmaak_datum
-      - eind_datum
       - id
       - product_type
-      - start_datum
       - update_datum
     ProductRequest:
       type: object
@@ -631,11 +642,19 @@ components:
         start_datum:
           type: string
           format: date
-          description: De start datum van dit product.
+          nullable: true
+          description: De start datum van dit product. Op deze datum zal de status
+            van het product automatisch naar ACTIEF worden gezet. Op het moment dat
+            de start_datum wordt ingevuld moet de status ACTIEF op het product type
+            zijn toegestaan.
         eind_datum:
           type: string
           format: date
-          description: De einddatum van dit product.
+          nullable: true
+          description: De einddatum van dit product. Op deze datum zal de status van
+            het product automatisch naar VERLOPEN worden gezet. Op het moment dat
+            de eind_datum wordt ingevuld moet de status VERLOPEN op het product type
+            zijn toegestaan.
         bsn:
           type: string
           nullable: true
@@ -662,9 +681,7 @@ components:
           maxLength: 8
           minLength: 8
       required:
-      - eind_datum
       - product_type_id
-      - start_datum
     StatusEnum:
       enum:
       - initieel
