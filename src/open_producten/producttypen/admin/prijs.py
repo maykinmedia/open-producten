@@ -1,7 +1,8 @@
+from datetime import date
+
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
-from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
 from ..models import Prijs, PrijsOptie
@@ -39,6 +40,6 @@ class PrijsAdmin(admin.ModelAdmin):
         return super().get_queryset(request).select_related("product_type")
 
     def has_change_permission(self, request, obj=None):
-        if obj and obj.actief_vanaf < datetime.today().date():
+        if obj and obj.actief_vanaf < date.today():
             return False
         return super().has_change_permission(request, obj)

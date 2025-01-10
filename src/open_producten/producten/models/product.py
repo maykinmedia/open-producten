@@ -1,11 +1,6 @@
 from datetime import date
 
-from django.core.validators import (
-    MinLengthValidator,
-    MinValueValidator,
-    RegexValidator,
-    ValidationError,
-)
+from django.core.validators import MinLengthValidator, RegexValidator, ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -31,7 +26,6 @@ class Product(BasePublishableModel):
         help_text=_(
             "De start datum van dit product. Op deze datum zal de status van het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan."
         ),
-        validators=[MinValueValidator(date.today)],
         null=True,
         blank=True,
     )
@@ -40,7 +34,6 @@ class Product(BasePublishableModel):
         help_text=_(
             "De einddatum van dit product. Op deze datum zal de status van het product automatisch naar VERLOPEN worden gezet. Op het moment dat de eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn toegestaan."
         ),
-        validators=[MinValueValidator(date.today)],
         null=True,
         blank=True,
     )
@@ -160,9 +153,17 @@ def validate_status(status, product_type):
 
 
 def validate_dates(start_datum, eind_datum, product_type):
+    if (start_datum == eind_datum) and start_datum is not None:
+        raise ValidationError(
+            {
+                _(
+                    "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen."
+                )
+            }
+        )
+
     if (
         start_datum
-        and start_datum > date.today()
         and ProductStateChoices.ACTIEF.value not in product_type.toegestane_statussen
     ):
         raise ValidationError(
@@ -175,7 +176,6 @@ def validate_dates(start_datum, eind_datum, product_type):
 
     if (
         eind_datum
-        and eind_datum > date.today()
         and ProductStateChoices.VERLOPEN.value not in product_type.toegestane_statussen
     ):
         raise ValidationError(
