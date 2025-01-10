@@ -35,6 +35,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.data = {
             "naam": "test-product-type",
+            "code": "PT=12345",
             "samenvatting": "test",
             "beschrijving": "test test",
             "uniforme_product_naam": upn.uri,
@@ -67,6 +68,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "beschrijving": [
                     ErrorDetail(string="Dit veld is vereist.", code="required")
                 ],
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
             },
         )
 
@@ -81,9 +83,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
+            "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
             "links": [],
@@ -109,9 +113,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
         }
         self.assertEqual(response.data, expected_data)
 
-    def test_create_product_type_without_fields_returns_error(self):
+    def test_create_product_type_without_thema_returns_error(self):
         data = self.data.copy()
         data["thema_ids"] = []
+        data.pop("code")
         response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -122,7 +127,21 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     ErrorDetail(
                         string="Er is minimaal één thema vereist.", code="invalid"
                     )
-                ]
+                ],
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+            },
+        )
+
+    def test_create_product_type_without_code_returns_error(self):
+        data = self.data.copy()
+        data.pop("code")
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.data,
+            {
+                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
             },
         )
 
@@ -167,6 +186,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         # contact org is added in ProductType clean
         self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
+
+    def test_create_product_type_with_toegestane_statussen(self):
+        response = self.client.post(
+            self.path, self.data | {"toegestane_statussen": ["gereed"]}
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ProductType.objects.count(), 1)
+        self.assertEqual(response.data["toegestane_statussen"], ["gereed"])
 
     def test_create_product_type_with_duplicate_ids_returns_error(self):
         thema = ThemaFactory.create()
@@ -220,9 +248,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
+            "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
             "links": [],
@@ -242,6 +272,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "organisaties": [
                 {
                     "id": str(organisatie.id),
+                    "code": str(organisatie.code),
                     "naam": organisatie.naam,
                     "email": organisatie.email,
                     "telefoonnummer": organisatie.telefoonnummer,
@@ -252,6 +283,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 },
                 {
                     "id": str(contact.organisatie.id),
+                    "code": str(contact.organisatie.code),
                     "naam": contact.organisatie.naam,
                     "email": contact.organisatie.email,
                     "telefoonnummer": contact.organisatie.telefoonnummer,
@@ -271,6 +303,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     "rol": contact.rol,
                     "organisatie": {
                         "id": str(contact.organisatie.id),
+                        "code": str(contact.organisatie.code),
                         "naam": contact.organisatie.naam,
                         "email": contact.organisatie.email,
                         "telefoonnummer": contact.organisatie.telefoonnummer,
@@ -557,9 +590,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "id": str(product_type1.id),
                 "naam": product_type1.naam,
+                "code": product_type1.code,
                 "samenvatting": product_type1.samenvatting,
                 "beschrijving": product_type1.beschrijving,
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
+                "toegestane_statussen": [],
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
@@ -586,9 +621,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "id": str(product_type2.id),
                 "naam": product_type2.naam,
+                "code": product_type2.code,
                 "samenvatting": product_type2.samenvatting,
                 "beschrijving": product_type2.beschrijving,
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
+                "toegestane_statussen": [],
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
@@ -626,9 +663,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         expected_data = {
             "id": str(product_type.id),
             "naam": product_type.naam,
+            "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
             "links": [],

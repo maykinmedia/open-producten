@@ -4,17 +4,13 @@
     "fields": {
         "order": 0,
         "translations": {
-            "nl": "Producten"
+            "en": "Products"
         },
-        "name": "Products",
-        "slug": "products",
+        "name": "Producten",
+        "slug": "Producten",
         "models": [
             [
-                "products",
-                "data"
-            ],
-            [
-                "products",
+                "producten",
                 "product"
             ]
         ]
@@ -25,62 +21,38 @@
     "fields": {
         "order": 1,
         "translations": {
-            "nl": "Product typen"
+            "en": "Product types"
         },
-        "name": "Product types",
-        "slug": "product-types",
+        "name": "Product typen",
+        "slug": "product-typen",
         "models": [
             [
-                "producttypes",
-                "category"
+                "producttypen",
+                "bestand"
             ],
             [
-                "producttypes",
-                "categoryproducttype"
-            ],
-            [
-                "producttypes",
-                "condition"
-            ],
-            [
-                "producttypes",
-                "field"
-            ],
-            [
-                "producttypes",
-                "file"
-            ],
-            [
-                "producttypes",
+                "producttypen",
                 "link"
             ],
             [
-                "producttypes",
-                "price"
+                "producttypen",
+                "prijs"
             ],
             [
-                "producttypes",
-                "priceoption"
-            ],
-            [
-                "producttypes",
+                "producttypen",
                 "producttype"
             ],
             [
-                "producttypes",
-                "question"
+                "producttypen",
+                "thema"
             ],
             [
-                "producttypes",
-                "tag"
+                "producttypen",
+                "uniformeproductnaam"
             ],
             [
-                "producttypes",
-                "tagtype"
-            ],
-            [
-                "producttypes",
-                "uniformproductname"
+                "producttypen",
+                "vraag"
             ]
         ]
     }
@@ -149,8 +121,8 @@
                 "contenttypeproxy"
             ],
             [
-                "openformsclient",
-                "configuration"
+                "django_celery_beat",
+                "periodictask"
             ]
         ]
     }
@@ -262,30 +234,22 @@
     "fields": {
         "order": 2,
         "translations": {
-            "nl": "Locaties & Organisaties"
+            "en": "Locations & Organisations"
         },
-        "name": "Locations & Organisations",
-        "slug": "locations-organisations",
+        "name": "Locaties & Organisaties",
+        "slug": "locaties-organisaties",
         "models": [
             [
-                "locations",
+                "locaties",
                 "contact"
             ],
             [
-                "locations",
-                "location"
+                "locaties",
+                "locatie"
             ],
             [
-                "locations",
-                "neighbourhood"
-            ],
-            [
-                "locations",
-                "organisation"
-            ],
-            [
-                "locations",
-                "organisationtype"
+                "locaties",
+                "organisatie"
             ]
         ]
     }

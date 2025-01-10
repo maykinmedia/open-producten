@@ -1,0 +1,10 @@
+{% extends "admin/change_form_object_tools.html" %}
+
+{% block object-tools-items %}
+    {% if audit_log_url and audit_log_label %}
+        <li>
+            <a href="{{ audit_log_url }}" title="{{ audit_log_label }}">{{ audit_log_label }}</a>
+        </li>
+    {% endif %}
+    {#    {{ block.super }} default django history#}
+{% endblock %}

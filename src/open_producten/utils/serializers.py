@@ -3,6 +3,8 @@ from uuid import UUID
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
+from rest_framework import serializers
 from rest_framework.serializers import Serializer
 
 from .models import BaseModel
@@ -40,3 +42,24 @@ def model_to_dict_with_related_ids(model: BaseModel) -> dict:
             model_dict[f"{k}_id"] = model_dict.pop(k)
 
     return model_dict
+
+
+class DetailErrorSerializer(serializers.Serializer):
+    detail = serializers.CharField()
+
+
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Bad request example",
+            description="Errors worden per veld teruggegeven.",
+            value={
+                "veld_a": "Dit veld is vereist.",
+                "veld_b": "‘<uuid>’ is geen geldige UUID.",
+            },
+        ),
+    ]
+)
+class ErrorSerializer(serializers.Serializer):
+    veld_a = serializers.ListField(child=serializers.CharField())
+    veld_b = serializers.ListField(child=serializers.CharField())

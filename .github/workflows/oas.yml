@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: open_producten-oas
-          path: src/openapi.yaml
+          path: src/*-openapi.yaml
           retention-days: 1
 
   check-up-to-date:
@@ -54,6 +54,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - generate
+
+    strategy:
+      matrix:
+        base_endpoint: [ 'producten',  'producttypen' ]
 
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +67,7 @@ jobs:
           name: open_producten-oas
       - name: Check for OAS changes
         run: |
-          diff openapi.yaml src/openapi.yaml
+          diff ${{matrix.base_endpoint}}-openapi.yaml src/${{matrix.base_endpoint}}-openapi.yaml
       - name: Write failure markdown
         if: ${{ failure() }}
         run: |
@@ -78,6 +82,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check-up-to-date  # no point in linting something that's not up to date
+    strategy:
+      matrix:
+        base_endpoint: [ 'producten',  'producttypen' ]
+
 
     steps:
       - name: Download generated OAS
@@ -91,7 +99,8 @@ jobs:
       - name: Install spectral
         run: npm install -g @stoplight/spectral@5
       - name: Run linter
-        run: spectral lint openapi.yaml
+        run: |
+          spectral lint ${{matrix.base_endpoint}}-openapi.yaml
 
 
   postman-collection:
@@ -99,6 +108,11 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check-up-to-date  # no point in linting something that's not up to date
+    strategy:
+      matrix:
+        base_endpoint: [ 'producten',  'producttypen' ]
+
+
 
     steps:
       - name: Download generated OAS
@@ -116,7 +130,7 @@ jobs:
       - name: Generate Postman collection
         run: |
           openapi2postmanv2 \
-            -s openapi.yaml \
+            -s ${{matrix.base_endpoint}}-openapi.yaml \
             -o ./tests/postman/collection.json \
             --pretty
 
@@ -125,6 +139,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check-up-to-date  # no point in linting something that's not up to date
+    strategy:
+      matrix:
+        base_endpoint: [ 'producten',  'producttypen' ]
+
 
     steps:
       - name: Download generated OAS
@@ -141,13 +159,13 @@ jobs:
       - name: Validate schema
         run: |
           openapi-generator-cli \
-            validate -i openapi.yaml
+            validate -i ${{matrix.base_endpoint}}-openapi.yaml
 
       - name: Generate Java client
         run: |
           openapi-generator-cli \
             generate \
-            -i openapi.yaml \
+            -i ${{matrix.base_endpoint}}-openapi.yaml \
             --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
             -o ./sdks/java \
             -g java \
@@ -157,7 +175,7 @@ jobs:
         run: |
           openapi-generator-cli \
             generate \
-            -i openapi.yaml \
+            -i ${{matrix.base_endpoint}}-openapi.yaml \
             --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
             -o ./sdks/net \
             -g csharp \
@@ -167,7 +185,7 @@ jobs:
         run: |
           openapi-generator-cli \
             generate \
-            -i openapi.yaml \
+            -i ${{matrix.base_endpoint}}-openapi.yaml \
             --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
             -o ./sdks/python \
             -g python \
