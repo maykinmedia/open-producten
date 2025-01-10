@@ -75,6 +75,15 @@ class Product(BasePublishableModel):
         ),
     )
 
+    dataobject = models.JSONField(
+        _("data"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Dataobject van dit product. Wordt gevalideerd met het `dataobject_schema` uit het product type."
+        ),
+    )
+
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Producten")
@@ -100,6 +109,7 @@ class Product(BasePublishableModel):
         validate_status(self.status, self.product_type)
         validate_dates(self.start_datum, self.eind_datum, self.product_type)
         validate_verbruiksobject(self.verbruiksobject, self.product_type)
+        validate_dataobject(self.dataobject, self.product_type)
 
     def save(self, *args, **kwargs):
         self.handle_start_datum()
@@ -209,6 +219,20 @@ def validate_verbruiksobject(verbruiksobject, product_type):
             {
                 "verbruiksobject": _(
                     "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+                )
+            },
+        )
+
+
+def validate_dataobject(dataobject, product_type):
+    try:
+        if dataobject is not None and product_type.dataobject_schema is not None:
+            product_type.dataobject_schema.validate(dataobject)
+    except ValidationError:
+        raise ValidationError(
+            {
+                "dataobject": _(
+                    "Het dataobject komt niet overeen met het schema gedefinieerd op het product type."
                 )
             },
         )

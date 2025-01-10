@@ -1872,6 +1872,7 @@ paths:
                   keywords:
                   - wonen
                   verbruiksobject_schema: 1
+                  dataobject_schema: 2
                 summary: Create product type
         required: true
       security:
@@ -4157,6 +4158,10 @@ components:
           writeOnly: true
           description: JSON schema om het verbruiksobject van een gerelateerd product
             te valideren.
+        dataobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om de data van een gerelateerd product te valideren.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4372,6 +4377,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/JsonSchema'
           readOnly: true
+        dataobject_schema:
+          allOf:
+          - $ref: '#/components/schemas/JsonSchema'
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4418,6 +4427,7 @@ components:
       - bestanden
       - code
       - contacten
+      - dataobject_schema
       - id
       - links
       - locaties
@@ -4501,6 +4511,10 @@ components:
           writeOnly: true
           description: JSON schema om het verbruiksobject van een gerelateerd product
             te valideren.
+        dataobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om de data van een gerelateerd product te valideren.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.

@@ -62,7 +62,19 @@ class ProductType(BasePublishableModel):
         ),
         null=True,
         blank=True,
-        related_name="product_typen",
+        related_name="product_typen_verbruiksobject_schemas",
+    )
+
+    dataobject_schema = models.ForeignKey(
+        JsonSchema,
+        verbose_name=_("product data schema"),
+        on_delete=models.PROTECT,
+        help_text=_(
+            "JSON schema om het dataobject van een gerelateerd product te valideren."
+        ),
+        null=True,
+        blank=True,
+        related_name="product_typen_dataobject_schemas",
     )
 
     samenvatting = models.TextField(

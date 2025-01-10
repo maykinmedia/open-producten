@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from open_producten.producten.models.product import (
     validate_bsn_or_kvk,
+    validate_dataobject,
     validate_dates,
     validate_status,
     validate_verbruiksobject,
@@ -68,5 +69,21 @@ class VerbruiksObjectValidator:
         )
         try:
             validate_verbruiksobject(verbruiksobject, product_type)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
+
+
+class DataObjectValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        dataobject = get_from_serializer_data_or_instance(
+            "dataobject", value, serializer
+        )
+        product_type = get_from_serializer_data_or_instance(
+            "product_type", value, serializer
+        )
+        try:
+            validate_dataobject(dataobject, product_type)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)

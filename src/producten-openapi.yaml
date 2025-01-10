@@ -109,6 +109,8 @@ paths:
                   status: gereed
                   verbruiksobject:
                     uren: 130
+                  data:
+                    max_uren: 150
                 summary: Create product
         required: true
       security:
@@ -550,6 +552,11 @@ components:
           nullable: true
           description: Verbruiksobject van dit product. Wordt gevalideerd met het
             `verbruiksobject_schema` uit het product type.
+        dataobject:
+          nullable: true
+          title: Data
+          description: Dataobject van dit product. Wordt gevalideerd met het `dataobject_schema`
+            uit het product type.
     Product:
       type: object
       properties:
@@ -619,6 +626,11 @@ components:
           nullable: true
           description: Verbruiksobject van dit product. Wordt gevalideerd met het
             `verbruiksobject_schema` uit het product type.
+        dataobject:
+          nullable: true
+          title: Data
+          description: Dataobject van dit product. Wordt gevalideerd met het `dataobject_schema`
+            uit het product type.
       required:
       - aanmaak_datum
       - id
@@ -679,6 +691,11 @@ components:
           nullable: true
           description: Verbruiksobject van dit product. Wordt gevalideerd met het
             `verbruiksobject_schema` uit het product type.
+        dataobject:
+          nullable: true
+          title: Data
+          description: Dataobject van dit product. Wordt gevalideerd met het `dataobject_schema`
+            uit het product type.
       required:
       - product_type_id
     StatusEnum:

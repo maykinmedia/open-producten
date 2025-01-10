@@ -90,6 +90,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
+            "dataobject_schema": None,
             "vragen": [],
             "prijzen": [],
             "links": [],
@@ -247,6 +248,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "organisatie_ids": [organisatie.id],
             "contact_ids": [contact.id],
             "verbruiksobject_schema_id": schema.id,
+            "dataobject_schema_id": schema.id,
         }
         response = self.client.post(self.path, data)
 
@@ -265,6 +267,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": {
+                "id": schema.id,
+                "name": "test",
+                "schema": {
+                    "type": "object",
+                    "properties": {"uren": {"type": "number"}},
+                    "required": ["uren"],
+                },
+            },
+            "dataobject_schema": {
                 "id": schema.id,
                 "name": "test",
                 "schema": {
@@ -616,6 +627,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
+                "dataobject_schema": None,
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
@@ -648,6 +660,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
+                "dataobject_schema": None,
                 "vragen": [],
                 "prijzen": [],
                 "links": [],
@@ -691,6 +704,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
+            "dataobject_schema": None,
             "vragen": [],
             "prijzen": [],
             "links": [],
