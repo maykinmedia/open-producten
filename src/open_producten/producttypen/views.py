@@ -136,6 +136,7 @@ class ProductTypeFilterSet(FilterSet):
                         {"naam": "doelgroep", "waarde": "inwoners"},
                     ],
                     "verbruiksobject_schema_naam": "verbruik_schema",
+                    "dataobject_schema": "data_schema",
                 },
                 request_only=True,
             )

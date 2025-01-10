@@ -32,6 +32,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "prijs": "20.20",
                     "frequentie": "eenmalig",
                     "verbruiksobject": {"uren": 130},
+                    "data": {"max_uren": 150},
                 },
                 request_only=True,
             )

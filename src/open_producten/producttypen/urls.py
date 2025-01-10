@@ -87,7 +87,10 @@ custom_settings = {
             "name": "contentlabels",
             "description": "Opvragen van CONTENTLABELS.",
         },
-        {"name": "schemas", "description": "Opvragen en bewerken van SCHEMAS."},
+        {
+            "name": "schemas",
+            "description": "Opvragen en bewerken van JSON SCHEMA'S. (product_type.verbruiksobject_schema, product_type_dataobject_schema)",
+        },
     ],
 }
 

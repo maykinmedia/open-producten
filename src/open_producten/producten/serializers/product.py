@@ -3,6 +3,7 @@ from rest_framework import serializers
 from open_producten.producten.models import Product
 from open_producten.producten.serializers.validators import (
     BsnOrKvkValidator,
+    DataObjectValidator,
     DateValidator,
     StatusValidator,
     VerbruiksObjectValidator,
@@ -26,4 +27,5 @@ class ProductSerializer(serializers.ModelSerializer):
             DateValidator(),
             StatusValidator(),
             VerbruiksObjectValidator(),
+            DataObjectValidator(),
         ]
