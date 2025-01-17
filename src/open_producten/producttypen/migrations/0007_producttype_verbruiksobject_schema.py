@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("django_json_schema", "0001_initial"),
+        ("django_json_schema_model", "0001_initial"),
         ("producttypen", "0006_alter_producttype_aanmaak_datum_and_more"),
     ]
 
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name="product_typen",
-                to="django_json_schema.jsonschema",
+                to="django_json_schema_model.jsonschema",
                 verbose_name="verbruiksobject schema",
             ),
         ),
