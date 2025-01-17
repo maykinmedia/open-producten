@@ -24,6 +24,7 @@ INSTALLED_APPS += [
     "markdownx",
     "django_celery_beat",
     "django_json_schema",
+    "django_json_schema_model",
     "open_producten.accounts",
     "open_producten.logging",
     "open_producten.utils",

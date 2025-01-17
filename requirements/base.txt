@@ -84,6 +84,7 @@ django==4.2.17
     #   django-csp
     #   django-filter
     #   django-formtools
+    #   django-json-schema-model
     #   django-jsonform
     #   django-localflavor
     #   django-log-outgoing-requests
@@ -137,6 +138,8 @@ django-filter==24.3
     #   open-api-framework
 django-formtools==2.5.1
     # via django-two-factor-auth
+django-json-schema-model==0.1.0
+    # via -r requirements/base.in
 django-jsonform==2.23.1
     # via
     #   mozilla-django-oidc-db
@@ -251,7 +254,9 @@ jinja2==3.1.4
 josepy==1.14.0
     # via mozilla-django-oidc
 jsonschema==4.23.0
-    # via drf-spectacular
+    # via
+    #   django-json-schema-model
+    #   drf-spectacular
 jsonschema-specifications==2024.10.1
     # via jsonschema
 kombu==5.4.2

@@ -11,9 +11,9 @@ from rest_framework.routers import DefaultRouter
 from open_producten.locaties.urls import LocatieRouter
 from open_producten.producttypen.views import (
     BestandViewSet,
-    JsonSchemaViewSet,
     ContentElementViewSet,
     ContentLabelViewSet,
+    JsonSchemaViewSet,
     LinkViewSet,
     PrijsViewSet,
     ProductTypeViewSet,
@@ -87,10 +87,7 @@ custom_settings = {
             "name": "contentlabels",
             "description": "Opvragen van CONTENTLABELS.",
         },
-        {
-            "name": "schemas",
-            "description": "Opvragen en bewerken van SCHEMAS."
-        }
+        {"name": "schemas", "description": "Opvragen en bewerken van SCHEMAS."},
     ],
 }
 

@@ -4,7 +4,7 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -117,19 +117,21 @@ class TestProduct(BaseApiTestCase):
             "id": str(product.id),
             "bsn": product.bsn,
             "kvk": product.kvk,
+            "status": product.status,
             "verbruiksobject": {"naam": "Test"},
             "gepubliceerd": False,
-            "start_datum": str(product.start_datum),
-            "eind_datum": str(product.eind_datum),
+            "start_datum": None,
+            "eind_datum": None,
+            "prijs": str(product.prijs),
+            "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
             "product_type": {
                 "id": str(product_type.id),
-                "naam": product_type.naam,
-                "samenvatting": product_type.samenvatting,
-                "beschrijving": product_type.beschrijving,
+                "code": product_type.code,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
+                "toegestane_statussen": ["gereed"],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type.update_datum.astimezone().isoformat(),
                 "keywords": [],

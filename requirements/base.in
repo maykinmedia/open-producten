@@ -16,4 +16,6 @@ django-celery-beat
 flower
 django-timeline-logger
 
+django-json-schema-model
+
 commonground-api-common

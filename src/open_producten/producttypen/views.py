@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
+from django_json_schema_model.models import JsonSchema
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
     OpenApiExample,
@@ -11,7 +12,6 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
-from django_json_schema.models import JsonSchema
 from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError

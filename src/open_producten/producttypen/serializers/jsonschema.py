@@ -1,4 +1,4 @@
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 from rest_framework import serializers

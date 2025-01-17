@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
