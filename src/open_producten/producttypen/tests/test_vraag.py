@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils.translation import gettext as _
 
 from .factories import ProductTypeFactory, ThemaFactory, VraagFactory
 
@@ -15,7 +16,7 @@ class TestVraag(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Een vraag kan niet gelink zijn aan een thema en een product type.",
+            _("Een vraag kan niet gelink zijn aan een thema en een product type."),
         ):
             vraag.clean()
 
@@ -24,6 +25,6 @@ class TestVraag(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Een vraag moet gelinkt zijn aan een thema of een product type.",
+            _("Een vraag moet gelinkt zijn aan een thema of een product type."),
         ):
             vraag.clean()

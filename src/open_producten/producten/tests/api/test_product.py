@@ -1,6 +1,7 @@
 import datetime
 
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -43,7 +44,7 @@ class TestProduct(BaseApiTestCase):
             response.data,
             {
                 "product_type_id": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
         )
@@ -88,7 +89,9 @@ class TestProduct(BaseApiTestCase):
             {
                 "bsn_or_kvk": [
                     ErrorDetail(
-                        string="Een product moet een bsn, kvk nummer of beiden hebben.",
+                        string=_(
+                            "Een product moet een bsn, kvk nummer of beiden hebben."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -118,7 +121,9 @@ class TestProduct(BaseApiTestCase):
             {
                 "bsn_or_kvk": [
                     ErrorDetail(
-                        string="Een product moet een bsn, kvk nummer of beiden hebben.",
+                        string=_(
+                            "Een product moet een bsn, kvk nummer of beiden hebben."
+                        ),
                         code="invalid",
                     )
                 ]

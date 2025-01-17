@@ -71,7 +71,6 @@ paths:
           description: ''
     post:
       operationId: bestanden_create
-      description: Maak een BESTAND aan.
       summary: Maak een BESTAND aan.
       tags:
       - bestanden
@@ -121,7 +120,6 @@ paths:
   /bestanden/{id}/:
     get:
       operationId: bestanden_retrieve
-      description: Een specifieke BESTAND opvragen.
       summary: Een specifiek BESTAND opvragen.
       parameters:
       - in: path
@@ -166,7 +164,6 @@ paths:
           description: ''
     put:
       operationId: bestanden_update
-      description: Werk een BESTAND in zijn geheel bij.
       summary: Werk een BESTAND in zijn geheel bij.
       parameters:
       - in: path
@@ -217,7 +214,6 @@ paths:
           description: ''
     patch:
       operationId: bestanden_partial_update
-      description: Werk een BESTAND deels bij.
       summary: Werk een BESTAND deels bij.
       parameters:
       - in: path
@@ -267,7 +263,6 @@ paths:
           description: ''
     delete:
       operationId: bestanden_destroy
-      description: Verwijder een BESTAND.
       summary: Verwijder een BESTAND.
       parameters:
       - in: path
@@ -359,7 +354,6 @@ paths:
           description: ''
     post:
       operationId: contacten_create
-      description: Maak een CONTACT aan.
       summary: Maak een CONTACT aan.
       tags:
       - contacten
@@ -413,7 +407,6 @@ paths:
   /contacten/{id}/:
     get:
       operationId: contacten_retrieve
-      description: Een specifieke CONTACT opvragen.
       summary: Een specifiek CONTACT opvragen.
       parameters:
       - in: path
@@ -458,7 +451,6 @@ paths:
           description: ''
     put:
       operationId: contacten_update
-      description: Werk een CONTACT in zijn geheel bij.
       summary: Werk een CONTACT in zijn geheel bij.
       parameters:
       - in: path
@@ -559,7 +551,6 @@ paths:
           description: ''
     delete:
       operationId: contacten_destroy
-      description: Verwijder een CONTACT.
       summary: Verwijder een CONTACT.
       parameters:
       - in: path
@@ -657,7 +648,6 @@ paths:
           description: ''
     post:
       operationId: links_create
-      description: Maak een LINK aan.
       summary: Maak een LINK aan.
       tags:
       - links
@@ -708,7 +698,6 @@ paths:
   /links/{id}/:
     get:
       operationId: links_retrieve
-      description: Een specifieke LINK opvragen.
       summary: Een specifieke LINK opvragen.
       parameters:
       - in: path
@@ -753,7 +742,6 @@ paths:
           description: ''
     put:
       operationId: links_update
-      description: Werk een LINK in zijn geheel bij.
       summary: Werk een LINK in zijn geheel bij.
       parameters:
       - in: path
@@ -804,7 +792,6 @@ paths:
           description: ''
     patch:
       operationId: links_partial_update
-      description: Werk een LINK deels bij
       summary: Werk een LINK deels bij.
       parameters:
       - in: path
@@ -854,7 +841,6 @@ paths:
           description: ''
     delete:
       operationId: links_destroy
-      description: Verwijder een LINK.
       summary: Verwijder een LINK.
       parameters:
       - in: path
@@ -946,7 +932,6 @@ paths:
           description: ''
     post:
       operationId: locaties_create
-      description: Maak een LOCATIE aan.
       summary: Maak een LOCATIE aan.
       tags:
       - locaties
@@ -1001,7 +986,6 @@ paths:
   /locaties/{id}/:
     get:
       operationId: locaties_retrieve
-      description: Een specifieke LOCATIE opvragen.
       summary: Een specifiek LOCATIE opvragen.
       parameters:
       - in: path
@@ -1046,7 +1030,6 @@ paths:
           description: ''
     put:
       operationId: locaties_update
-      description: Werk een LOCATIE in zijn geheel bij.
       summary: Werk een LOCATIE in zijn geheel bij.
       parameters:
       - in: path
@@ -1097,7 +1080,6 @@ paths:
           description: ''
     patch:
       operationId: locaties_partial_update
-      description: Werk een LOCATIE deels bij.
       summary: Werk een LOCATIE deels bij.
       parameters:
       - in: path
@@ -1147,7 +1129,6 @@ paths:
           description: ''
     delete:
       operationId: locaties_destroy
-      description: Verwijder een LOCATIE.
       summary: Verwijder een LOCATIE.
       parameters:
       - in: path
@@ -1239,7 +1220,6 @@ paths:
           description: ''
     post:
       operationId: organisaties_create
-      description: Maak een ORGANISATIE aan.
       summary: Maak een ORGANISATIE aan.
       tags:
       - organisaties
@@ -1294,7 +1274,6 @@ paths:
   /organisaties/{id}/:
     get:
       operationId: organisaties_retrieve
-      description: Een specifieke ORGANISATIE opvragen.
       summary: Een specifiek ORGANISATIE opvragen.
       parameters:
       - in: path
@@ -1339,7 +1318,6 @@ paths:
           description: ''
     put:
       operationId: organisaties_update
-      description: Werk een ORGANISATIE in zijn geheel bij.
       summary: Werk een ORGANISATIE in zijn geheel bij.
       parameters:
       - in: path
@@ -1390,7 +1368,6 @@ paths:
           description: ''
     patch:
       operationId: organisaties_partial_update
-      description: Werk een ORGANISATIE deels bij.
       summary: Werk een ORGANISATIE deels bij.
       parameters:
       - in: path
@@ -1440,7 +1417,6 @@ paths:
           description: ''
     delete:
       operationId: organisaties_destroy
-      description: Verwijder een ORGANISATIE.
       summary: Verwijder een ORGANISATIE.
       parameters:
       - in: path
@@ -1538,7 +1514,6 @@ paths:
           description: ''
     post:
       operationId: prijzen_create
-      description: Maak een PRIJS aan.
       summary: Maak een PRIJS aan.
       tags:
       - prijzen
@@ -1595,7 +1570,6 @@ paths:
   /prijzen/{id}/:
     get:
       operationId: prijzen_retrieve
-      description: Een specifieke PRIJS opvragen.
       summary: Een specifieke PRIJS opvragen.
       parameters:
       - in: path
@@ -1640,7 +1614,6 @@ paths:
           description: ''
     put:
       operationId: prijzen_update
-      description: Werk een PRIJS in zijn geheel bij.
       summary: Werk een PRIJS in zijn geheel bij.
       parameters:
       - in: path
@@ -1691,9 +1664,8 @@ paths:
           description: ''
     patch:
       operationId: prijzen_partial_update
-      description: |-
-        Werk een PRIJS deels bij.
-        Als prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.
+      description: Als prijsopties in een patch request wordt meegegeven wordt deze
+        lijst geheel overschreven.
       summary: Werk een PRIJS deels bij.
       parameters:
       - in: path
@@ -1743,7 +1715,6 @@ paths:
           description: ''
     delete:
       operationId: prijzen_destroy
-      description: Verwijder een PRIJS.
       summary: Verwijder een PRIJS.
       parameters:
       - in: path
@@ -1839,7 +1810,6 @@ paths:
           description: ''
     post:
       operationId: producttypen_create
-      description: Maak een PRODUCTTYPE aan.
       summary: Maak een PRODUCTTYPE aan.
       tags:
       - producttypen
@@ -1902,7 +1872,6 @@ paths:
   /producttypen/{id}/:
     get:
       operationId: producttypen_retrieve
-      description: Een specifiek PRODUCTTYPE opvragen.
       summary: Een specifiek PRODUCTTYPE opvragen.
       parameters:
       - in: path
@@ -1947,7 +1916,6 @@ paths:
           description: ''
     put:
       operationId: producttypen_update
-      description: Werk een PRODUCTTYPE in zijn geheel bij.
       summary: Werk een PRODUCTTYPE in zijn geheel bij.
       parameters:
       - in: path
@@ -1998,9 +1966,8 @@ paths:
           description: ''
     patch:
       operationId: producttypen_partial_update
-      description: |-
-        Werk een PRODUCTTYPE deels bij
-        Als thema_ids, locatie_ids, organisatie_ids of contact_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.
+      description: Als thema_ids, locatie_ids, organisatie_ids of contact_ids in een
+        patch request wordt meegegeven wordt deze lijst geheel overschreven.
       summary: Werk een PRODUCTTYPE deels bij.
       parameters:
       - in: path
@@ -2050,7 +2017,6 @@ paths:
           description: ''
     delete:
       operationId: producttypen_destroy
-      description: Verwijder een PRODUCTTYPE.
       summary: Verwijder een PRODUCTTYPE.
       parameters:
       - in: path
@@ -2230,7 +2196,6 @@ paths:
           description: ''
     post:
       operationId: themas_create
-      description: Maak een THEMA aan.
       summary: Maak een THEMA aan.
       tags:
       - themas
@@ -2284,7 +2249,6 @@ paths:
   /themas/{id}/:
     get:
       operationId: themas_retrieve
-      description: Een specifieke THEMA opvragen.
       summary: Een specifiek THEMA opvragen.
       parameters:
       - in: path
@@ -2329,7 +2293,6 @@ paths:
           description: ''
     put:
       operationId: themas_update
-      description: Werk een THEMA in zijn geheel bij.
       summary: Werk een THEMA in zijn geheel bij.
       parameters:
       - in: path
@@ -2380,9 +2343,8 @@ paths:
           description: ''
     patch:
       operationId: themas_partial_update
-      description: |-
-        Werk een THEMA deels bij.
-        Als product_type_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.
+      description: Als product_type_ids in een patch request wordt meegegeven wordt
+        deze lijst geheel overschreven.
       summary: Werk een THEMA deels bij.
       parameters:
       - in: path
@@ -2432,7 +2394,6 @@ paths:
           description: ''
     delete:
       operationId: themas_destroy
-      description: Verwijder een THEMA.
       summary: Verwijder een THEMA.
       parameters:
       - in: path
@@ -2538,7 +2499,6 @@ paths:
           description: ''
     post:
       operationId: vragen_create
-      description: Maak een VRAAG aan.
       summary: Maak een VRAAG aan.
       tags:
       - vragen
@@ -2589,7 +2549,6 @@ paths:
   /vragen/{id}/:
     get:
       operationId: vragen_retrieve
-      description: Een specifieke VRAAG opvragen.
       summary: Een specifieke VRAAG opvragen.
       parameters:
       - in: path
@@ -2634,7 +2593,6 @@ paths:
           description: ''
     put:
       operationId: vragen_update
-      description: Werk een VRAAG in zijn geheel bij.
       summary: Werk een VRAAG in zijn geheel bij.
       parameters:
       - in: path
@@ -2685,7 +2643,6 @@ paths:
           description: ''
     patch:
       operationId: vragen_partial_update
-      description: Werk een VRAAG deels bij.
       summary: Werk een VRAAG deels bij.
       parameters:
       - in: path
@@ -2735,7 +2692,6 @@ paths:
           description: ''
     delete:
       operationId: vragen_destroy
-      description: Verwijder een VRAAG.
       summary: Verwijder een VRAAG.
       parameters:
       - in: path

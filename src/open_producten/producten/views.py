@@ -13,11 +13,9 @@ from open_producten.utils.views import OrderedModelViewSet
     ),
     retrieve=extend_schema(
         summary="Een specifiek PRODUCT opvragen.",
-        description="Een specifieke PRODUCT opvragen.",
     ),
     create=extend_schema(
         summary="Maak een PRODUCT aan.",
-        description="Maak een PRODUCT aan.",
         examples=[
             OpenApiExample(
                 "Create product",
@@ -34,14 +32,10 @@ from open_producten.utils.views import OrderedModelViewSet
     ),
     update=extend_schema(
         summary="Werk een PRODUCT in zijn geheel bij.",
-        description="Werk een PRODUCT in zijn geheel bij.",
     ),
-    partial_update=extend_schema(
-        summary="Werk een PRODUCT deels bij.", description="Werk een PRODUCT deels bij."
-    ),
+    partial_update=extend_schema(summary="Werk een PRODUCT deels bij."),
     destroy=extend_schema(
         summary="Verwijder een PRODUCT.",
-        description="Verwijder een PRODUCT.",
     ),
 )
 class ProductViewSet(OrderedModelViewSet):

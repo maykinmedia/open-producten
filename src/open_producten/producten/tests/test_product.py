@@ -2,6 +2,7 @@ from datetime import date
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils.translation import gettext as _
 
 from open_producten.producttypen.tests.factories import ProductTypeFactory
 
@@ -54,7 +55,7 @@ class TestProduct(TestCase):
         product = ProductFactory.build(product_type=self.product_type)
 
         with self.assertRaisesMessage(
-            ValidationError, "Een product moet een bsn, kvk nummer of beiden hebben."
+            ValidationError, _("Een product moet een bsn, kvk nummer of beiden hebben.")
         ):
             product.clean()
 
@@ -75,7 +76,9 @@ class TestProduct(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen.",
+            _(
+                "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen."
+            ),
         ):
             product.clean()
 

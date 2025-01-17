@@ -3,6 +3,7 @@ import tempfile
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -46,11 +47,11 @@ class TestProductTypeBestand(BaseApiTestCase):
             {
                 "bestand": [
                     ErrorDetail(
-                        string="Er is geen bestand opgestuurd.", code="required"
+                        string=_("Er is geen bestand opgestuurd."), code="required"
                     )
                 ],
                 "product_type_id": [
-                    ErrorDetail("Dit veld is vereist.", code="required")
+                    ErrorDetail(_("This field is required."), code="required")
                 ],
             },
         )

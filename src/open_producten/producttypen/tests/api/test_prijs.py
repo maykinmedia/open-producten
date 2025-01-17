@@ -3,6 +3,7 @@ import uuid
 from decimal import Decimal
 
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -47,11 +48,13 @@ class TestProductTypePrijs(BaseApiTestCase):
             response.data,
             {
                 "actief_vanaf": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "prijsopties": [ErrorDetail("Dit veld is vereist.", code="required")],
+                "prijsopties": [
+                    ErrorDetail(_("This field is required."), code="required")
+                ],
                 "product_type_id": [
-                    ErrorDetail("Dit veld is vereist.", code="required")
+                    ErrorDetail(_("This field is required."), code="required")
                 ],
             },
         )
@@ -65,7 +68,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string="Er is minimaal één optie vereist.",
+                        string=_("Er is minimaal één optie vereist."),
                         code="invalid",
                     )
                 ]
@@ -81,7 +84,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string="Dit veld is vereist.",
+                        string=_("This field is required."),
                         code="required",
                     )
                 ]
@@ -123,7 +126,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string="Er is minimaal één optie vereist.",
+                        string=_("Er is minimaal één optie vereist."),
                         code="invalid",
                     )
                 ]
@@ -191,7 +194,9 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string=f"Prijs optie id {optie.id} op index 0 is niet onderdeel van het prijs object.",
+                        string=_(
+                            "Prijs optie id {} op index 0 is niet onderdeel van het prijs object."
+                        ).format(optie.id),
                         code="invalid",
                     )
                 ]
@@ -218,7 +223,9 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string=f"Prijs optie id {non_existing_id} op index 0 bestaat niet.",
+                        string=_("Prijs optie id {} op index 0 bestaat niet.").format(
+                            non_existing_id
+                        ),
                         code="invalid",
                     )
                 ]
@@ -246,7 +253,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string=f"Dubbel id: {optie.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(optie.id),
                         code="invalid",
                     )
                 ]
@@ -339,15 +346,19 @@ class TestProductTypePrijs(BaseApiTestCase):
             {
                 "prijsopties": [
                     ErrorDetail(
-                        string=f"Dubbel id: {optie.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(optie.id),
                         code="invalid",
                     ),
                     ErrorDetail(
-                        string=f"Prijs optie id {optie_of_other_prijs.id} op index 2 is niet onderdeel van het prijs object.",
+                        string=_(
+                            "Prijs optie id {} op index 2 is niet onderdeel van het prijs object."
+                        ).format(optie_of_other_prijs.id),
                         code="invalid",
                     ),
                     ErrorDetail(
-                        string=f"Prijs optie id {non_existing_optie} op index 3 bestaat niet.",
+                        string=_("Prijs optie id {} op index 3 bestaat niet.").format(
+                            non_existing_optie
+                        ),
                         code="invalid",
                     ),
                 ]

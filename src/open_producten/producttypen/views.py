@@ -35,11 +35,9 @@ from open_producten.utils.views import OrderedModelViewSet
     ),
     retrieve=extend_schema(
         summary="Een specifiek PRODUCTTYPE opvragen.",
-        description="Een specifiek PRODUCTTYPE opvragen.",
     ),
     create=extend_schema(
         summary="Maak een PRODUCTTYPE aan.",
-        description="Maak een PRODUCTTYPE aan.",
         examples=[
             OpenApiExample(
                 "Create product type",
@@ -61,15 +59,13 @@ from open_producten.utils.views import OrderedModelViewSet
     ),
     update=extend_schema(
         summary="Werk een PRODUCTTYPE in zijn geheel bij.",
-        description="Werk een PRODUCTTYPE in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een PRODUCTTYPE deels bij.",
-        description="Werk een PRODUCTTYPE deels bij\nAls thema_ids, locatie_ids, organisatie_ids of contact_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
+        description="Als thema_ids, locatie_ids, organisatie_ids of contact_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
     ),
     destroy=extend_schema(
         summary="Verwijder een PRODUCTTYPE.",
-        description="Verwijder een PRODUCTTYPE.",
     ),
 )
 class ProductTypeViewSet(OrderedModelViewSet):
@@ -117,11 +113,9 @@ class ProductTypeViewSet(OrderedModelViewSet):
     ),
     retrieve=extend_schema(
         summary="Een specifieke LINK opvragen.",
-        description="Een specifieke LINK opvragen.",
     ),
     create=extend_schema(
         summary="Maak een LINK aan.",
-        description="Maak een LINK aan.",
         examples=[
             OpenApiExample(
                 "Create link",
@@ -136,15 +130,12 @@ class ProductTypeViewSet(OrderedModelViewSet):
     ),
     update=extend_schema(
         summary="Werk een LINK in zijn geheel bij.",
-        description="Werk een LINK in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een LINK deels bij.",
-        description="Werk een LINK deels bij",
     ),
     destroy=extend_schema(
         summary="Verwijder een LINK.",
-        description="Verwijder een LINK.",
     ),
 )
 class LinkViewSet(OrderedModelViewSet):
@@ -162,18 +153,16 @@ class LinkViewSet(OrderedModelViewSet):
     ),
     retrieve=extend_schema(
         summary="Een specifieke PRIJS opvragen.",
-        description="Een specifieke PRIJS opvragen.",
     ),
     create=extend_schema(
         summary="Maak een PRIJS aan.",
-        description="Maak een PRIJS aan.",
         examples=[
             OpenApiExample(
                 "Create prijs",
                 description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
                 value={
                     "prijsopties": [
-                        {"bedrag": "50.99", "beschrijving": "normaal"},  # TODO
+                        {"bedrag": "50.99", "beschrijving": "normaal"},
                         {"bedrag": "70.99", "beschrijving": "spoed"},
                     ],
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
@@ -185,15 +174,13 @@ class LinkViewSet(OrderedModelViewSet):
     ),
     update=extend_schema(
         summary="Werk een PRIJS in zijn geheel bij.",
-        description="Werk een PRIJS in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een PRIJS deels bij.",
-        description="Werk een PRIJS deels bij.\nAls prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
+        description="Als prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
     ),
     destroy=extend_schema(
         summary="Verwijder een PRIJS.",
-        description="Verwijder een PRIJS.",
     ),
 )
 class PrijsViewSet(OrderedModelViewSet):
@@ -211,11 +198,9 @@ class PrijsViewSet(OrderedModelViewSet):
     ),
     retrieve=extend_schema(
         summary="Een specifieke VRAAG opvragen.",
-        description="Een specifieke VRAAG opvragen.",
     ),
     create=extend_schema(
         summary="Maak een VRAAG aan.",
-        description="Maak een VRAAG aan.",
         examples=[
             OpenApiExample(
                 "Create vraag",
@@ -230,14 +215,10 @@ class PrijsViewSet(OrderedModelViewSet):
     ),
     update=extend_schema(
         summary="Werk een VRAAG in zijn geheel bij.",
-        description="Werk een VRAAG in zijn geheel bij.",
     ),
-    partial_update=extend_schema(
-        summary="Werk een VRAAG deels bij.", description="Werk een VRAAG deels bij."
-    ),
+    partial_update=extend_schema(summary="Werk een VRAAG deels bij."),
     destroy=extend_schema(
         summary="Verwijder een VRAAG.",
-        description="Verwijder een VRAAG.",
     ),
 )
 class VraagViewSet(OrderedModelViewSet):
@@ -255,11 +236,9 @@ class VraagViewSet(OrderedModelViewSet):
     ),
     retrieve=extend_schema(
         summary="Een specifiek BESTAND opvragen.",
-        description="Een specifieke BESTAND opvragen.",
     ),
     create=extend_schema(
         summary="Maak een BESTAND aan.",
-        description="Maak een BESTAND aan.",
         examples=[
             OpenApiExample(
                 "Create bestand",
@@ -274,15 +253,12 @@ class VraagViewSet(OrderedModelViewSet):
     ),
     update=extend_schema(
         summary="Werk een BESTAND in zijn geheel bij.",
-        description="Werk een BESTAND in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een BESTAND deels bij.",
-        description="Werk een BESTAND deels bij.",
     ),
     destroy=extend_schema(
         summary="Verwijder een BESTAND.",
-        description="Verwijder een BESTAND.",
     ),
 )
 class BestandViewSet(OrderedModelViewSet):
@@ -301,11 +277,9 @@ class BestandViewSet(OrderedModelViewSet):
     ),
     retrieve=extend_schema(
         summary="Een specifiek THEMA opvragen.",
-        description="Een specifieke THEMA opvragen.",
     ),
     create=extend_schema(
         summary="Maak een THEMA aan.",
-        description="Maak een THEMA aan.",
         examples=[
             OpenApiExample(
                 "Create thema",
@@ -322,15 +296,13 @@ class BestandViewSet(OrderedModelViewSet):
     ),
     update=extend_schema(
         summary="Werk een THEMA in zijn geheel bij.",
-        description="Werk een THEMA in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een THEMA deels bij.",
-        description="Werk een THEMA deels bij.\nAls product_type_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
+        description="Als product_type_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
     ),
     destroy=extend_schema(
         summary="Verwijder een THEMA.",
-        description="Verwijder een THEMA.",
     ),
 )
 class ThemaViewSet(OrderedModelViewSet):

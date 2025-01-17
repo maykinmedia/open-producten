@@ -1,6 +1,7 @@
 import datetime
 
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -58,14 +59,16 @@ class TestProducttypeViewSet(BaseApiTestCase):
             response.data,
             {
                 "uniforme_product_naam": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "naam": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
                 "thema_ids": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
                 "beschrijving": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
         )
@@ -120,7 +123,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "thema_ids": [
                     ErrorDetail(
-                        string="Er is minimaal één thema vereist.", code="invalid"
+                        string=_("Er is minimaal één thema vereist."), code="invalid"
                     )
                 ]
             },
@@ -186,13 +189,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "thema_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {thema.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(thema.id),
                         code="invalid",
                     )
                 ],
                 "locatie_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {locatie.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(locatie.id),
                         code="invalid",
                     )
                 ],
@@ -331,7 +334,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "thema_ids": [
                     ErrorDetail(
-                        string="Er is minimaal één thema vereist.", code="invalid"
+                        string=_("Er is minimaal één thema vereist."), code="invalid"
                     )
                 ]
             },
@@ -400,13 +403,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "thema_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {thema.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(thema.id),
                         code="invalid",
                     )
                 ],
                 "locatie_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {locatie.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(locatie.id),
                         code="invalid",
                     )
                 ],
@@ -444,7 +447,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "thema_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {thema.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(thema.id),
                         code="invalid",
                     )
                 ],
@@ -462,7 +465,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "thema_ids": [
                     ErrorDetail(
-                        string="Er is minimaal één thema vereist.", code="invalid"
+                        string=_("Er is minimaal één thema vereist."), code="invalid"
                     )
                 ]
             },
