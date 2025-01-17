@@ -3,7 +3,7 @@ import datetime
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -93,6 +93,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
+            "verbruiksobject_schema": None,
             "prijzen": [],
             "links": [],
             "bestanden": [],
