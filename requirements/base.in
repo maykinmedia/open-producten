@@ -10,5 +10,7 @@ open-api-framework
 django-markdownx
 django-localflavor
 
+django-json-schema-model
+
 # waiting for > 2.0.1
 commonground-api-common==1.13.4

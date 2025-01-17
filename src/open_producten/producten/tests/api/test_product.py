@@ -3,7 +3,7 @@ import datetime
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -63,8 +63,8 @@ class TestProduct(BaseApiTestCase):
             "kvk": product.kvk,
             "verbruiksobject": None,
             "gepubliceerd": False,
-            "start_datum": None,
-            "eind_datum": None,
+            "start_datum": str(product.start_datum),
+            "eind_datum": str(product.eind_datum),
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
             "product_type": {
@@ -74,7 +74,6 @@ class TestProduct(BaseApiTestCase):
                 "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
-                "toegestane_statussen": ["gereed"],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type.update_datum.astimezone().isoformat(),
                 "keywords": [],

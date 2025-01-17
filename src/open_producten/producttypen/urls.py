@@ -68,7 +68,7 @@ custom_settings = {
         {"name": "locaties"},
         {"name": "organisaties"},
         {"name": "contacten"},
-        {"name", "schemas"}
+        {"name", "schemas"},
     ],
 }
 

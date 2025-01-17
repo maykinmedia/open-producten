@@ -2,7 +2,7 @@ from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.decorators import action

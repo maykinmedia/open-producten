@@ -19,7 +19,7 @@ INSTALLED_APPS += [
     "rest_framework.authtoken",
     "localflavor",
     "markdownx",
-    "django_json_schema",
+    "django_json_schema_model",
     "open_producten.accounts",
     "open_producten.utils",
     "open_producten.producttypen",
