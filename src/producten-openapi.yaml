@@ -1,0 +1,565 @@
+openapi: 3.0.3
+info:
+  title: Open Producten API
+  version: 0.0.0
+  description: |2
+
+    Open Producten is an API to manage product types and products.
+  contact:
+    email: support@maykinmedia.nl
+    url: https://www.maykinmedia.nl
+  license:
+    name: EUPL 1.2
+    url: https://opensource.org/licenses/EUPL-1.2
+paths:
+  /producten/:
+    get:
+      operationId: producten_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle PRODUCTEN opvragen.
+      parameters:
+      - in: query
+        name: gepubliceerd
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    post:
+      operationId: producten_create
+      summary: Maak een PRODUCT aan.
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+            examples:
+              CreateProduct:
+                value:
+                  start_datum: '2024-12-01'
+                  eind_datum: '2026-12-01'
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  gepubliceerd: false
+                  bsn: '111222333'
+                summary: Create product
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /producten/{id}/:
+    get:
+      operationId: producten_retrieve
+      summary: Een specifiek PRODUCT opvragen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    put:
+      operationId: producten_update
+      summary: Werk een PRODUCT in zijn geheel bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    patch:
+      operationId: producten_partial_update
+      summary: Werk een PRODUCT deels bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    delete:
+      operationId: producten_destroy
+      summary: Verwijder een PRODUCT.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+components:
+  schemas:
+    DetailError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        veld_a:
+          type: array
+          items:
+            type: string
+        veld_b:
+          type: array
+          items:
+            type: string
+      required:
+      - veld_a
+      - veld_b
+    NestedProductType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          title: Product type naam
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          description: Product type beschrijving, ondersteund markdown format.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        uniforme_product_naam:
+          type: string
+          format: uri
+          description: Uri naar de UPN definitie.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+      required:
+      - aanmaak_datum
+      - beschrijving
+      - id
+      - naam
+      - uniforme_product_naam
+      - update_datum
+    NestedProductTypeRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          title: Product type naam
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          minLength: 1
+          description: Korte beschrijving van het product type, maximaal 300 karakters.
+          maxLength: 300
+        beschrijving:
+          type: string
+          minLength: 1
+          description: Product type beschrijving, ondersteund markdown format.
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Lijst van keywords waarop kan worden gezocht.
+        uniforme_product_naam:
+          type: string
+          format: uri
+          minLength: 1
+          description: Uri naar de UPN definitie.
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+      required:
+      - beschrijving
+      - naam
+      - uniforme_product_naam
+    PaginatedProductList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    PatchedProductRequest:
+      type: object
+      properties:
+        product_type_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        start_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De start datum van dit product.
+        eind_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De einddatum van dit product.
+        bsn:
+          type: string
+          nullable: true
+          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk:
+          type: string
+          nullable: true
+          title: KVK nummer
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_type:
+          allOf:
+          - $ref: '#/components/schemas/NestedProductType'
+          readOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        aanmaak_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Created on
+          description: De datum waarop het object is aangemaakt.
+        update_datum:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Updated on
+          description: De datum waarop het object voor het laatst is gewijzigd.
+        start_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De start datum van dit product.
+        eind_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De einddatum van dit product.
+        bsn:
+          type: string
+          nullable: true
+          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk:
+          type: string
+          nullable: true
+          title: KVK nummer
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+      required:
+      - aanmaak_datum
+      - id
+      - product_type
+      - update_datum
+    ProductRequest:
+      type: object
+      properties:
+        product_type_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        gepubliceerd:
+          type: boolean
+          description: Geeft aan of het object getoond kan worden.
+        start_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De start datum van dit product.
+        eind_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De einddatum van dit product.
+        bsn:
+          type: string
+          nullable: true
+          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk:
+          type: string
+          nullable: true
+          title: KVK nummer
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+      required:
+      - product_type_id
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

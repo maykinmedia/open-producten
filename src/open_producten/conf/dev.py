@@ -93,6 +93,8 @@ warnings.filterwarnings(
     r"django\.db\.models\.fields",
 )
 
+LANGUAGE_CODE = "en-us"
+
 # MIDDLEWARE = ["django.middleware.locale.LocaleMiddleware"] + MIDDLEWARE
 
 # Override settings with local settings.

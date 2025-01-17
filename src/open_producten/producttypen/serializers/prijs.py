@@ -16,7 +16,7 @@ class PrijsOptieSerializer(serializers.ModelSerializer):
 
 
 class PrijsSerializer(serializers.ModelSerializer):
-    prijsopties = PrijsOptieSerializer(many=True, default=[])
+    prijsopties = PrijsOptieSerializer(many=True)
     product_type_id = serializers.PrimaryKeyRelatedField(
         source="product_type", queryset=ProductType.objects.all()
     )

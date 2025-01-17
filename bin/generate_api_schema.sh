@@ -4,18 +4,20 @@
 #
 # Run this script from the root of the repository:
 #
-#   ./bin/generate_api_schema.sh [outfile]
+#   ./bin/generate_api_schema.sh
 #
-# 'outfile' defaults to `src/openapi.yml`
-#
-# For multiple-major version support, take a look at the objects-api and tweak
-# accordingly.
-#
-
-OUTFILE=${1:-src/openapi.yaml}
 
 src/manage.py spectacular \
     --validate \
     --fail-on-warn \
     --lang=nl \
-    --file "$OUTFILE"
+    --urlconf open_producten.producttypen.urls \
+    --file src/producttypen-openapi.yaml
+
+src/manage.py spectacular \
+    --validate \
+    --fail-on-warn \
+    --lang=nl \
+    --urlconf open_producten.producten.urls \
+    --file src/producten-openapi.yaml
+

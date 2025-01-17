@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -36,10 +37,14 @@ class TestProductTypeLink(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
-                "url": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "naam": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
+                "url": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
                 "product_type_id": [
-                    ErrorDetail("Dit veld is vereist.", code="required")
+                    ErrorDetail(_("This field is required."), code="required")
                 ],
             },
         )

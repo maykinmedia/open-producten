@@ -63,7 +63,9 @@ class Product(BasePublishableModel):
 
 def validate_bsn_or_kvk(bsn, kvk):
     if not bsn and not kvk:
-        raise ValidationError("Een product moet een bsn, kvk nummer of beiden hebben.")
+        raise ValidationError(
+            _("Een product moet een bsn, kvk nummer of beiden hebben.")
+        )
 
 
 def validate_dates(start_datum, eind_datum):

@@ -1,14 +1,22 @@
 openapi: 3.0.3
 info:
   title: Open Producten API
-  version: 0.0.1
+  version: 0.0.0
   description: |2
 
     Open Producten is an API to manage product types and products.
+  contact:
+    email: support@maykinmedia.nl
+    url: https://www.maykinmedia.nl
+  license:
+    name: EUPL 1.2
+    url: https://opensource.org/licenses/EUPL-1.2
 paths:
-  /api/v1/bestanden/:
+  /bestanden/:
     get:
       operationId: bestanden_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle BESTANDEN opvragen.
       parameters:
       - name: page
         required: false
@@ -39,8 +47,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedBestandList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: bestanden_create
+      summary: Maak een BESTAND aan.
       tags:
       - bestanden
       requestBody:
@@ -48,6 +79,12 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/BestandRequest'
+            examples:
+              CreateBestand:
+                value:
+                  bestand: test.txt
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                summary: Create bestand
         required: true
       security:
       - tokenAuth: []
@@ -58,9 +95,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bestand'
           description: ''
-  /api/v1/bestanden/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /bestanden/{id}/:
     get:
       operationId: bestanden_retrieve
+      summary: Een specifiek BESTAND opvragen.
       parameters:
       - in: path
         name: id
@@ -80,8 +140,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bestand'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: bestanden_update
+      summary: Werk een BESTAND in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -107,8 +190,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bestand'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: bestanden_partial_update
+      summary: Werk een BESTAND deels bij.
       parameters:
       - in: path
         name: id
@@ -133,8 +239,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bestand'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: bestanden_destroy
+      summary: Verwijder een BESTAND.
       parameters:
       - in: path
         name: id
@@ -150,9 +279,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/contacten/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /contacten/:
     get:
       operationId: contacten_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle CONTACTEN opvragen.
       parameters:
       - name: page
         required: false
@@ -177,8 +330,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedContactList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: contacten_create
+      summary: Maak een CONTACT aan.
       tags:
       - contacten
       requestBody:
@@ -186,6 +362,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ContactRequest'
+            examples:
+              CreateContact:
+                value:
+                  organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                  voornaam: Bob
+                  achternaam: de Vries
+                  email: bob@example.com
+                  telefoonnummer: '0611223344'
+                  rol: medewerker
+                summary: Create contact
         required: true
       security:
       - tokenAuth: []
@@ -196,9 +382,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
           description: ''
-  /api/v1/contacten/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /contacten/{id}/:
     get:
       operationId: contacten_retrieve
+      summary: Een specifiek CONTACT opvragen.
       parameters:
       - in: path
         name: id
@@ -218,8 +427,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: contacten_update
+      summary: Werk een CONTACT in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -245,8 +477,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: contacten_partial_update
+      description: Werk een CONTACT deels bij.
+      summary: Werk een CONTACT deels bij.
       parameters:
       - in: path
         name: id
@@ -271,8 +527,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: contacten_destroy
+      summary: Verwijder een CONTACT.
       parameters:
       - in: path
         name: id
@@ -288,9 +567,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/links/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /links/:
     get:
       operationId: links_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle LINKS opvragen.
       parameters:
       - name: page
         required: false
@@ -321,8 +624,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedLinkList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: links_create
+      summary: Maak een LINK aan.
       tags:
       - links
       requestBody:
@@ -330,6 +656,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LinkRequest'
+            examples:
+              CreateLink:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Open Producten
+                  url: https://github.com/maykinmedia/open-producten
+                summary: Create link
         required: true
       security:
       - tokenAuth: []
@@ -340,9 +673,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
-  /api/v1/links/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /links/{id}/:
     get:
       operationId: links_retrieve
+      summary: Een specifieke LINK opvragen.
       parameters:
       - in: path
         name: id
@@ -362,8 +718,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: links_update
+      summary: Werk een LINK in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -389,8 +768,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: links_partial_update
+      summary: Werk een LINK deels bij.
       parameters:
       - in: path
         name: id
@@ -415,8 +817,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Link'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: links_destroy
+      summary: Verwijder een LINK.
       parameters:
       - in: path
         name: id
@@ -432,9 +857,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/locaties/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /locaties/:
     get:
       operationId: locaties_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle LOCATIES opvragen.
       parameters:
       - name: page
         required: false
@@ -459,8 +908,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedLocatieList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: locaties_create
+      summary: Maak een LOCATIE aan.
       tags:
       - locaties
       requestBody:
@@ -468,6 +940,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LocatieRequest'
+            examples:
+              CreateLocatie:
+                value:
+                  naam: Maykin Media
+                  email: info@maykinmedia.nl
+                  telefoonnummer: '+310207530523'
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043GR
+                  stad: Amsterdam
+                summary: Create locatie
         required: true
       security:
       - tokenAuth: []
@@ -478,9 +961,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
-  /api/v1/locaties/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /locaties/{id}/:
     get:
       operationId: locaties_retrieve
+      summary: Een specifiek LOCATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -500,8 +1006,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: locaties_update
+      summary: Werk een LOCATIE in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -527,8 +1056,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: locaties_partial_update
+      summary: Werk een LOCATIE deels bij.
       parameters:
       - in: path
         name: id
@@ -553,8 +1105,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: locaties_destroy
+      summary: Verwijder een LOCATIE.
       parameters:
       - in: path
         name: id
@@ -570,9 +1145,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/organisaties/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /organisaties/:
     get:
       operationId: organisaties_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle ORGANISATIES opvragen.
       parameters:
       - name: page
         required: false
@@ -597,8 +1196,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedOrganisatieList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: organisaties_create
+      summary: Maak een ORGANISATIE aan.
       tags:
       - organisaties
       requestBody:
@@ -606,6 +1228,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/OrganisatieRequest'
+            examples:
+              CreateOrganisatie:
+                value:
+                  naam: Maykin Media
+                  email: info@maykinmedia.nl
+                  telefoonnummer: '+310207530523'
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043GR
+                  stad: Amsterdam
+                summary: Create organisatie
         required: true
       security:
       - tokenAuth: []
@@ -616,9 +1249,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisatie'
           description: ''
-  /api/v1/organisaties/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /organisaties/{id}/:
     get:
       operationId: organisaties_retrieve
+      summary: Een specifiek ORGANISATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -638,8 +1294,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: organisaties_update
+      summary: Werk een ORGANISATIE in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -665,8 +1344,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: organisaties_partial_update
+      summary: Werk een ORGANISATIE deels bij.
       parameters:
       - in: path
         name: id
@@ -691,8 +1393,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisatie'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: organisaties_destroy
+      summary: Verwijder een ORGANISATIE.
       parameters:
       - in: path
         name: id
@@ -708,9 +1433,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/prijzen/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /prijzen/:
     get:
       operationId: prijzen_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle PRIJZEN opvragen.
       parameters:
       - name: page
         required: false
@@ -741,8 +1490,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedPrijsList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: prijzen_create
+      summary: Maak een PRIJS aan.
       tags:
       - prijzen
       requestBody:
@@ -750,6 +1522,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PrijsRequest'
+            examples:
+              CreatePrijs:
+                value:
+                  prijsopties:
+                  - bedrag: '50.99'
+                    beschrijving: normaal
+                  - bedrag: '70.99'
+                    beschrijving: spoed
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: Create prijs
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
         required: true
       security:
       - tokenAuth: []
@@ -760,9 +1545,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
-  /api/v1/prijzen/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /prijzen/{id}/:
     get:
       operationId: prijzen_retrieve
+      summary: Een specifieke PRIJS opvragen.
       parameters:
       - in: path
         name: id
@@ -782,8 +1590,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: prijzen_update
+      summary: Werk een PRIJS in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -809,8 +1640,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: prijzen_partial_update
+      description: Als prijsopties in een patch request wordt meegegeven wordt deze
+        lijst geheel overschreven.
+      summary: Werk een PRIJS deels bij.
       parameters:
       - in: path
         name: id
@@ -835,8 +1691,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: prijzen_destroy
+      summary: Verwijder een PRIJS.
       parameters:
       - in: path
         name: id
@@ -852,151 +1731,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producten/:
-    get:
-      operationId: producten_list
-      parameters:
-      - in: query
-        name: gepubliceerd
-        schema:
-          type: boolean
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
-      tags:
-      - producten
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
+        '400':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedProductList'
-          description: ''
-    post:
-      operationId: producten_create
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductRequest'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/DetailError'
           description: ''
-  /api/v1/producten/{id}/:
-    get:
-      operationId: producten_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Product.
-        required: true
-      tags:
-      - producten
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: ''
-    put:
-      operationId: producten_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Product.
-        required: true
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductRequest'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: ''
-    patch:
-      operationId: producten_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Product.
-        required: true
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedProductRequest'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: ''
-    delete:
-      operationId: producten_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Product.
-        required: true
-      tags:
-      - producten
-      security:
-      - tokenAuth: []
-      responses:
-        '204':
-          description: No response body
-  /api/v1/producttypen/:
+  /producttypen/:
     get:
       operationId: producttypen_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
         name: gepubliceerd
@@ -1025,8 +1786,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductTypeList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: producttypen_create
+      summary: Maak een PRODUCTTYPE aan.
       tags:
       - producttypen
       requestBody:
@@ -1034,6 +1818,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
+            examples:
+              CreateProductType:
+                value:
+                  uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
+                  thema_ids:
+                  - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  locatie_ids:
+                  - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
+                  organisatie_ids:
+                  - 2c2694f1-f948-4960-8312-d51c3a0e540f
+                  contact_ids:
+                  - 6863d699-460d-4c1e-9297-16812d75d8ca
+                  gepubliceerd: false
+                  naam: Aanleunwoning
+                  samenvatting: korte samenvatting...
+                  beschrijving: uitgebreide beschrijving...
+                  keywords:
+                  - wonen
+                summary: Create product type
         required: true
       security:
       - tokenAuth: []
@@ -1044,9 +1847,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
-  /api/v1/producttypen/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /producttypen/{id}/:
     get:
       operationId: producttypen_retrieve
+      summary: Een specifiek PRODUCTTYPE opvragen.
       parameters:
       - in: path
         name: id
@@ -1066,8 +1892,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: producttypen_update
+      summary: Werk een PRODUCTTYPE in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -1093,8 +1942,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: producttypen_partial_update
+      description: Als thema_ids, locatie_ids, organisatie_ids of contact_ids in een
+        patch request wordt meegegeven wordt deze lijst geheel overschreven.
+      summary: Werk een PRODUCTTYPE deels bij.
       parameters:
       - in: path
         name: id
@@ -1119,8 +1993,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: producttypen_destroy
+      summary: Verwijder een PRODUCTTYPE.
       parameters:
       - in: path
         name: id
@@ -1136,9 +2033,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/producttypen/{id}/actuele-prijs/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /producttypen/{id}/actuele-prijs/:
     get:
-      operationId: producttypen_actuele_prijs_retrieve
+      operationId: actuele_prijs
+      description: Geeft de huidige prijzen van alle PRODUCTTYPEN terug.
+      summary: De actuele PRIJS van een PRODUCTTYPE opvragen.
       parameters:
       - in: path
         name: id
@@ -1158,9 +2079,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
           description: ''
-  /api/v1/producttypen/actuele-prijzen/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /producttypen/actuele-prijzen/:
     get:
-      operationId: producttypen_actuele_prijzen_retrieve
+      operationId: actuele_prijzen
+      description: Geeft de huidige prijzen van alle PRODUCTTYPEN terug.
+      summary: Alle ACTUELE PRIJZEN opvragen.
       tags:
       - producttypen
       security:
@@ -1172,9 +2117,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
           description: ''
-  /api/v1/themas/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /themas/:
     get:
       operationId: themas_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle THEMA'S opvragen.
       parameters:
       - in: query
         name: gepubliceerd
@@ -1203,8 +2172,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedThemaList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: themas_create
+      summary: Maak een THEMA aan.
       tags:
       - themas
       requestBody:
@@ -1212,6 +2204,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ThemaRequest'
+            examples:
+              CreateThema:
+                value:
+                  hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  product_type_ids:
+                  - 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  gepubliceerd: true
+                  naam: Parkeren
+                  beschrijving: Parkeren in gemeente ABC
+                summary: Create thema
         required: true
       security:
       - tokenAuth: []
@@ -1222,9 +2224,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Thema'
           description: ''
-  /api/v1/themas/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /themas/{id}/:
     get:
       operationId: themas_retrieve
+      summary: Een specifiek THEMA opvragen.
       parameters:
       - in: path
         name: id
@@ -1244,8 +2269,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Thema'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: themas_update
+      summary: Werk een THEMA in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -1271,8 +2319,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/Thema'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: themas_partial_update
+      description: Als product_type_ids in een patch request wordt meegegeven wordt
+        deze lijst geheel overschreven.
+      summary: Werk een THEMA deels bij.
       parameters:
       - in: path
         name: id
@@ -1297,8 +2370,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Thema'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: themas_destroy
+      summary: Verwijder een THEMA.
       parameters:
       - in: path
         name: id
@@ -1314,9 +2410,33 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/vragen/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /vragen/:
     get:
       operationId: vragen_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle VRAGEN opvragen.
       parameters:
       - name: page
         required: false
@@ -1355,8 +2475,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedVraagList'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     post:
       operationId: vragen_create
+      summary: Maak een VRAAG aan.
       tags:
       - vragen
       requestBody:
@@ -1364,6 +2507,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VraagRequest'
+            examples:
+              CreateVraag:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  vraag: Kom ik in aanmerking voor dit product?
+                  antwoord: Ja
+                summary: Create vraag
         required: true
       security:
       - tokenAuth: []
@@ -1374,9 +2524,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
-  /api/v1/vragen/{id}/:
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /vragen/{id}/:
     get:
       operationId: vragen_retrieve
+      summary: Een specifieke VRAAG opvragen.
       parameters:
       - in: path
         name: id
@@ -1396,8 +2569,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     put:
       operationId: vragen_update
+      summary: Werk een VRAAG in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -1423,8 +2619,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     patch:
       operationId: vragen_partial_update
+      summary: Werk een VRAAG deels bij.
       parameters:
       - in: path
         name: id
@@ -1449,8 +2668,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vraag'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: vragen_destroy
+      summary: Verwijder een VRAAG.
       parameters:
       - in: path
         name: id
@@ -1466,6 +2708,28 @@ paths:
       responses:
         '204':
           description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
 components:
   schemas:
     Bestand:
@@ -1569,6 +2833,27 @@ components:
       required:
       - achternaam
       - voornaam
+    DetailError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        veld_a:
+          type: array
+          items:
+            type: string
+        veld_b:
+          type: array
+          items:
+            type: string
+      required:
+      - veld_a
+      - veld_b
     Link:
       type: object
       properties:
@@ -1759,7 +3044,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
-          default: []
         actief_vanaf:
           type: string
           format: date
@@ -1768,6 +3052,7 @@ components:
       required:
       - actief_vanaf
       - id
+      - prijsopties
     NestedPrijsRequest:
       type: object
       properties:
@@ -1775,7 +3060,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
-          default: []
         actief_vanaf:
           type: string
           format: date
@@ -1783,6 +3067,7 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
+      - prijsopties
     NestedProductType:
       type: object
       properties:
@@ -2177,29 +3462,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Prijs'
-    PaginatedProductList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
     PaginatedProductTypeList:
       type: object
       required:
@@ -2404,45 +3666,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
-          default: []
         actief_vanaf:
           type: string
           format: date
           title: Start datum
           description: De datum vanaf wanneer de prijs actief is.
-    PatchedProductRequest:
-      type: object
-      properties:
-        product_type_id:
-          type: string
-          format: uuid
-          writeOnly: true
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        start_datum:
-          type: string
-          format: date
-          nullable: true
-          description: De start datum van dit product.
-        eind_datum:
-          type: string
-          format: date
-          nullable: true
-          description: De einddatum van dit product.
-        bsn:
-          type: string
-          nullable: true
-          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
-            een extra 0 beginnen.
-        kvk:
-          type: string
-          nullable: true
-          title: KVK nummer
-          description: Het kvk nummer van de product eigenaar
-          pattern: ^[0-9]*$
-          maxLength: 8
-          minLength: 8
     PatchedProductTypeRequest:
       type: object
       properties:
@@ -2562,7 +3790,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
-          default: []
         actief_vanaf:
           type: string
           format: date
@@ -2571,6 +3798,7 @@ components:
       required:
       - actief_vanaf
       - id
+      - prijsopties
       - product_type_id
     PrijsOptie:
       type: object
@@ -2619,7 +3847,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
-          default: []
         actief_vanaf:
           type: string
           format: date
@@ -2627,95 +3854,7 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
-      - product_type_id
-    Product:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        product_type:
-          allOf:
-          - $ref: '#/components/schemas/NestedProductType'
-          readOnly: true
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        aanmaak_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Created on
-          description: De datum waarop het object is aangemaakt.
-        update_datum:
-          type: string
-          format: date-time
-          readOnly: true
-          title: Updated on
-          description: De datum waarop het object voor het laatst is gewijzigd.
-        start_datum:
-          type: string
-          format: date
-          nullable: true
-          description: De start datum van dit product.
-        eind_datum:
-          type: string
-          format: date
-          nullable: true
-          description: De einddatum van dit product.
-        bsn:
-          type: string
-          nullable: true
-          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
-            een extra 0 beginnen.
-        kvk:
-          type: string
-          nullable: true
-          title: KVK nummer
-          description: Het kvk nummer van de product eigenaar
-          pattern: ^[0-9]*$
-          maxLength: 8
-          minLength: 8
-      required:
-      - aanmaak_datum
-      - id
-      - product_type
-      - update_datum
-    ProductRequest:
-      type: object
-      properties:
-        product_type_id:
-          type: string
-          format: uuid
-          writeOnly: true
-        gepubliceerd:
-          type: boolean
-          description: Geeft aan of het object getoond kan worden.
-        start_datum:
-          type: string
-          format: date
-          nullable: true
-          description: De start datum van dit product.
-        eind_datum:
-          type: string
-          format: date
-          nullable: true
-          description: De einddatum van dit product.
-        bsn:
-          type: string
-          nullable: true
-          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
-            een extra 0 beginnen.
-        kvk:
-          type: string
-          nullable: true
-          title: KVK nummer
-          description: Het kvk nummer van de product eigenaar
-          pattern: ^[0-9]*$
-          maxLength: 8
-          minLength: 8
-      required:
+      - prijsopties
       - product_type_id
     ProductType:
       type: object

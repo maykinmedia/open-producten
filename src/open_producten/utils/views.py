@@ -2,6 +2,7 @@ from django import http
 from django.template import TemplateDoesNotExist, loader
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.defaults import ERROR_500_TEMPLATE_NAME
+from django.views.generic import TemplateView
 
 from rest_framework.viewsets import ModelViewSet
 
@@ -30,3 +31,14 @@ def server_error(request, template_name=ERROR_500_TEMPLATE_NAME):
 class OrderedModelViewSet(ModelViewSet):
     def get_queryset(self):
         return self.queryset.order_by("id")
+
+
+class IndexView(TemplateView):
+    template_name = "index.html"
+    # custom context
+    component = ""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({"component": self.component})
+        return context

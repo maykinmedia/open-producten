@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -21,6 +22,7 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.thema = ThemaFactory.create()
         self.data = {"vraag": "18?", "antwoord": "in aanmerking"}
         self.vraag = VraagFactory.create(product_type=self.product_type)
+
         self.path = reverse("vraag-list")
         self.detail_path = reverse("vraag-detail", args=[self.vraag.id])
 
@@ -35,9 +37,11 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "vraag": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "vraag": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
                 "antwoord": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
         )
@@ -78,9 +82,11 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
+                        string=_(
+                            "Een vraag kan niet gelink zijn aan een thema en een product type."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -94,9 +100,11 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
-                        string="Een vraag moet gelinkt zijn aan een thema of een product type.",
+                        string=_(
+                            "Een vraag moet gelinkt zijn aan een thema of een product type."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -119,9 +127,11 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
+                        string=_(
+                            "Een vraag kan niet gelink zijn aan een thema en een product type."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -140,9 +150,11 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
+                        string=_(
+                            "Een vraag kan niet gelink zijn aan een thema en een product type."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -177,9 +189,11 @@ class TestProductTypeVraag(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "product_type_thema": [
+                "product_type_or_thema": [
                     ErrorDetail(
-                        string="Een vraag kan niet gelink zijn aan een thema en een product type.",
+                        string=_(
+                            "Een vraag kan niet gelink zijn aan een thema en een product type."
+                        ),
                         code="invalid",
                     )
                 ]

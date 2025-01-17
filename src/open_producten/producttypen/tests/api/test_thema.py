@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -38,12 +39,14 @@ class TestThemaViewSet(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "naam": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "naam": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
                 "product_type_ids": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
                 "hoofd_thema": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
         )
@@ -116,7 +119,7 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {product_type.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(product_type.id),
                         code="invalid",
                     )
                 ]
@@ -138,7 +141,9 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "hoofd_thema": [
                     ErrorDetail(
-                        string="Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd.",
+                        string=_(
+                            "Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -198,7 +203,7 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {product_type.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(product_type.id),
                         code="invalid",
                     )
                 ]
@@ -221,7 +226,9 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "hoofd_thema": [
                     ErrorDetail(
-                        string="Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd.",
+                        string=_(
+                            "Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -246,7 +253,9 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "hoofd_thema": [
                     ErrorDetail(
-                        string="Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben.",
+                        string=_(
+                            "Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -309,7 +318,7 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "product_type_ids": [
                     ErrorDetail(
-                        string=f"Dubbel id: {product_type.id} op index 1.",
+                        string=_("Dubbel id: {} op index 1.").format(product_type.id),
                         code="invalid",
                     )
                 ]
@@ -332,7 +341,9 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "hoofd_thema": [
                     ErrorDetail(
-                        string="Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd.",
+                        string=_(
+                            "Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -357,7 +368,9 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "hoofd_thema": [
                     ErrorDetail(
-                        string="Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben.",
+                        string=_(
+                            "Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben."
+                        ),
                         code="invalid",
                     )
                 ]

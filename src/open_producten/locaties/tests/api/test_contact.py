@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -37,10 +38,10 @@ class TestContact(BaseApiTestCase):
             response.data,
             {
                 "voornaam": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
                 "achternaam": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
         )

@@ -20,7 +20,7 @@ class ProductTypeOrThemaValidator:
         try:
             validate_thema_or_product_type(thema, product_type)
         except ValidationError as e:
-            raise serializers.ValidationError({"product_type_thema": e.message})
+            raise serializers.ValidationError({"product_type_or_thema": e.message})
 
 
 class ThemaGepubliceerdStateValidator:

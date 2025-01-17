@@ -2,41 +2,57 @@
 
 {% block content %}
 
-  <div class="title">
-    <h1 class="title__header">{{ settings.PROJECT_NAME }} API</h1>
-    <p class="title__description">{{ settings.SITE_TITLE }}</p>
+  <div class="header">
+    <h1 class="header__title">{{ settings.PROJECT_NAME }} startpunt</h1>
+    <p class="header__description">{{ settings.SITE_TITLE }}</p>
   </div>
 
   <div class="container container--center">
-    <nav class="nav">
-      <ul class="nav__list">
-        <li class="nav__item" data-id="nl">Nederlands</li>
-        <li class="nav__item" data-id="en">English</li>
-      </ul>
 
-      <div class="nav__content">
-        <div class="nav__pane" id="nl">
-          WIP TEKST
-        </div>
-        <div class="nav__pane" id="en">
-          WIP TEXT
-        </div>
-      </div>
-    </nav>
+    {% block docs %}
+      <h2>{{ component|capfirst }}</h2>
 
-    <p>
-      <b>Licensed under the <a class="link" href="https://github.com/maykinmedia/open-producten/blob/main/LICENSE.md">
-        European Union Public License (EUPL) 1.2</a></b>
-    </p>
+      <div class="cardlist">
 
-    <p>
-      <a href="{% url "schema" version=version %}" class="button"><i class="fas fa-file-alt"></i> Open API specification</a>
-      <a href="{% url "api-root" version=version %}" class="button"><i class="fas fa-wifi"></i> API root</a>
-    </p>
+        {% block docs_oas %}
+          <div class="cardlist__item">
+            <div class="card">
+              <h5 class="card__title"><i class="fas fa-wifi"></i> API specificatie</h5>
+              <p>Technische API documentatie in de vorm van een Open API Specificatie (OAS).</p>
+              <a href="{% url "schema-redoc-"|add:component %}" class="button button--primary">API specificaties</a>
+            </div>
+          </div>
+        {% endblock %}
 
-    <p>
-      <a href="{% url 'admin:index' %}" class="button button--alert"><i class="fas fa-lock"></i> Administration</a>
-    </p>
+{#        {% block docs_scopes %}#}
+{#          <div class="cardlist__item">#}
+{#            <div class="card">#}
+{#              <h5 class="card__title"><i class="fas fa-shield-alt"></i> API scopes</h5>#}
+{#              <p>Alle scopes binnen deze API voor gebruik in JWT's t.b.v. autorisaties.</p>#}
+{#              <a href="{% url 'vng_api_common:scopes' %}" class="button button--primary">API scopes</a>#}
+{#            </div>#}
+{#          </div>#}
+{#        {% endblock %}#}
+
+{#        {% block extra_docs %}#}
+{#          <div class="cardlist__item">#}
+{#            <div class="card">#}
+{#              <h5 class="card__title"><i class="fas fa-bullhorn"></i> Notificaties</h5>#}
+{#              <p>Gebeurtenissen waarover dit component notificaties verstuurt.</p>#}
+{#              <a href="https://github.com/VNG-Realisatie/{{ component }}-api/blob/{{ github_ref }}/src/notificaties.md" class="button button--primary">Notificaties</a>#}
+{#            </div>#}
+{#          </div>#}
+{#        {% endblock %}#}
+
+     </div>
+
+    {% endblock %}
+
+    {% block admin_link %}
+      <p>
+        <a href="{% url 'admin:index' %}" class="button button--alert"><i class="fas fa-lock"></i> Beheer</a>
+      </p>
+    {% endblock %}
 
   </div>
 

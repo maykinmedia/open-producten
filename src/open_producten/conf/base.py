@@ -40,7 +40,8 @@ DATABASES = {
 #
 # Custom settings
 #
-PROJECT_NAME = "open_producten"
+SITE_TITLE = "API dashboard"
+PROJECT_NAME = "Open Producten"
 SHOW_ALERT = True
 ENABLE_ADMIN_NAV_SIDEBAR = config("ENABLE_ADMIN_NAV_SIDEBAR", default=False)
 
@@ -83,7 +84,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "open_producten.utils.schema.AutoSchema",
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
     ],
@@ -91,7 +92,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "open_producten.utils.pagination.Pagination",
     "PAGE_SIZE": 100,
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "NON_FIELD_ERRORS_KEY": "model_errors",
+    "DEFAULT_FILTER_BACKENDS": ["open_producten.utils.filters.FilterBackend"],
 }
+
+PRODUCTEN_API_VERSION = "0.0.1"
+PRODUCTTYPEN_API_VERSION = "0.0.1"
+
+PRODUCTEN_API_MAJOR_VERSION = PRODUCTEN_API_VERSION.split(".")[0]
+PRODUCTTYPEN_API_MAJOR_VERSION = PRODUCTTYPEN_API_VERSION.split(".")[0]
 
 #
 # SPECTACULAR - OpenAPI schema generation
@@ -101,17 +110,22 @@ _DESCRIPTION = """
 Open Producten is an API to manage product types and products.
 """
 
-API_VERSION = "0.0.1"
+OPEN_PRODUCTEN_API_CONTACT_EMAIL = "support@maykinmedia.nl"
+OPEN_PRODUCTEN_API_CONTACT_URL = "https://www.maykinmedia.nl"
 
 SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "SCHEMA_PATH_PREFIX": "/api/v1",
     "TITLE": "Open Producten API",
     "DESCRIPTION": _DESCRIPTION,
-    "TOS": None,
-    "VERSION": API_VERSION,
+    "LICENSE": {"name": "EUPL 1.2", "url": "https://opensource.org/licenses/EUPL-1.2"},
+    "CONTACT": {
+        "email": OPEN_PRODUCTEN_API_CONTACT_EMAIL,
+        "url": OPEN_PRODUCTEN_API_CONTACT_URL,
+    },
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "SERVE_INCLUDE_SCHEMA": False,
     "POSTPROCESSING_HOOKS": (
         "drf_spectacular.hooks.postprocess_schema_enums",
         "open_producten.utils.spectacular_hooks.custom_postprocessing_hook",

@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils.translation import gettext as _
 
 from .factories import ThemaFactory
 
@@ -12,7 +13,9 @@ class TestVraag(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd.",
+            _(
+                "Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd."
+            ),
         ):
             sub_thema.clean()
 
@@ -29,7 +32,9 @@ class TestVraag(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben.",
+            _(
+                "Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben."
+            ),
         ):
             hoofd_thema.clean()
 
@@ -38,6 +43,6 @@ class TestVraag(TestCase):
         thema.hoofd_thema = thema
 
         with self.assertRaisesMessage(
-            ValidationError, "Een thema kan niet zijn eigen hoofd thema zijn."
+            ValidationError, _("Een thema kan niet zijn eigen hoofd thema zijn.")
         ):
             thema.clean()
