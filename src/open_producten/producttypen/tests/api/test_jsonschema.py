@@ -1,6 +1,7 @@
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
@@ -36,8 +37,12 @@ class TestProductTypeSchema(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "name": [ErrorDetail(string="Dit veld is vereist.", code="required")],
-                "schema": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "name": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
+                "schema": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
             },
         )
 
@@ -60,7 +65,7 @@ class TestProductTypeSchema(BaseApiTestCase):
             {
                 "schema": [
                     ErrorDetail(
-                        string="[] is not valid under any of the given schemas",
+                        string=_("[] is not valid under any of the given schemas"),
                         code="invalid",
                     )
                 ]

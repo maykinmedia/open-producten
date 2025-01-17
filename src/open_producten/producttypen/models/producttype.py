@@ -4,7 +4,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from markdownx.models import MarkdownxField
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie

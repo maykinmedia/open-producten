@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from rest_framework import serializers
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie

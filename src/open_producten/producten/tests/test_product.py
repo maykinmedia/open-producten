@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.translation import gettext as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 
 from open_producten.producttypen.tests.factories import ProductTypeFactory
@@ -151,7 +151,9 @@ class TestProduct(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            _("Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."),
+            _(
+                "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+            ),
         ):
             product.clean()
 
@@ -182,6 +184,7 @@ class TestProduct(TestCase):
         )
 
         product.clean()
+
 
 @freeze_time("2024-1-1")
 class TestProductStateTask(TestCase):
