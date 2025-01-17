@@ -45,14 +45,24 @@ DATABASES = {
 #
 # CELERY
 #
+
+# amount of days to keep when the 'Prune timeline logs' task is called.
+PRUNE_LOGS_TASK_KEEP_DAYS = 30
+
 CELERY_BROKER_URL = "redis://localhost:6379"  # Redis broker
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
     "Update product statussen": {
         "task": "open_producten.producten.tasks.set_product_states",
         "schedule": crontab(minute="0", hour="0"),
-    }
+    },
+    "Prune timeline logs": {
+        "task": "open_producten.logging.tasks.prune_logs",
+        "schedule": crontab(minute="0", hour="0", day_of_month="1"),
+        "args": (PRUNE_LOGS_TASK_KEEP_DAYS,),
+    },
 }
+
 
 #
 # Custom settings
