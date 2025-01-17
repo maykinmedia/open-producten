@@ -182,6 +182,7 @@ django==4.2.17
     #   django-extensions
     #   django-filter
     #   django-formtools
+    #   django-json-schema-model
     #   django-jsonform
     #   django-localflavor
     #   django-log-outgoing-requests
@@ -259,6 +260,10 @@ django-formtools==2.5.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-two-factor-auth
+django-json-schema-model==0.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-jsonform==2.23.1
     # via
     #   -c requirements/ci.txt
@@ -532,6 +537,7 @@ jsonschema==4.23.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-json-schema-model
     #   drf-spectacular
 jsonschema-specifications==2024.10.1
     # via

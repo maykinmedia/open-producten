@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.translation import gettext as _
 
-from django_json_schema.models import JsonSchema
+from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 
 from open_producten.producttypen.tests.factories import ProductTypeFactory
@@ -160,7 +160,9 @@ class TestProduct(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            _("Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."),
+            _(
+                "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+            ),
         ):
             product.clean()
 
@@ -202,7 +204,9 @@ class TestProduct(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            _("De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."),
+            _(
+                "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
+            ),
         ):
             product.clean()
 
