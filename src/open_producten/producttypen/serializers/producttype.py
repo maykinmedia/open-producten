@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
@@ -32,7 +33,7 @@ class NestedThemaSerializer(serializers.ModelSerializer):
         )
 
 
-class ProductTypeSerializer(serializers.ModelSerializer):
+class ProductTypeSerializer(TranslatableModelSerializer):
     uniforme_product_naam = serializers.SlugRelatedField(
         slug_field="uri", queryset=UniformeProductNaam.objects.all()
     )
@@ -77,6 +78,15 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     links = NestedLinkSerializer(many=True, read_only=True)
     bestanden = NestedBestandSerializer(many=True, read_only=True)
 
+    naam = serializers.CharField(
+        required=True, max_length=100, help_text=_("naam van het product type.")
+    )
+    samenvatting = serializers.CharField(
+        required=True,
+        max_length=300,
+        help_text=_("Korte beschrijving van het product type."),
+    )
+
     class Meta:
         model = ProductType
         fields = "__all__"
@@ -97,12 +107,18 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         locaties = validated_data.pop("locaties")
         organisaties = validated_data.pop("organisaties")
         contacten = validated_data.pop("contacten")
+        naam = validated_data.pop("naam")
+        samenvatting = validated_data.pop("samenvatting")
 
         product_type = ProductType.objects.create(**validated_data)
         product_type.themas.set(themas)
         product_type.locaties.set(locaties)
         product_type.organisaties.set(organisaties)
         product_type.contacten.set(contacten)
+
+        product_type.set_current_language("nl")
+        product_type.naam = naam
+        product_type.samenvatting = samenvatting
 
         product_type.save()
         product_type.add_contact_organisaties()
@@ -115,6 +131,9 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         organisaties = validated_data.pop("organisaties", None)
         contacten = validated_data.pop("contacten", None)
 
+        naam = validated_data.pop("naam", None)
+        samenvatting = validated_data.pop("samenvatting", None)
+
         instance = super().update(instance, validated_data)
 
         if themas:
@@ -125,6 +144,12 @@ class ProductTypeSerializer(serializers.ModelSerializer):
             instance.organisaties.set(organisaties)
         if contacten:
             instance.contacten.set(contacten)
+
+        instance.set_current_language("nl")
+        if naam:
+            instance.naam = naam
+        if samenvatting:
+            instance.samenvatting = samenvatting
 
         instance.save()
         instance.add_contact_organisaties()
@@ -138,4 +163,24 @@ class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductType
-        fields = ("id", "naam", "upl_naam", "upl_uri", "actuele_prijs")
+        fields = ("id", "code", "upl_naam", "upl_uri", "actuele_prijs")
+
+
+class ProductTypeTranslationSerializer(serializers.ModelSerializer):
+
+    naam = serializers.CharField(
+        required=True, max_length=100, help_text=_("naam van het product type.")
+    )
+    samenvatting = serializers.CharField(
+        required=True,
+        max_length=300,
+        help_text=_("Korte beschrijving van het product type."),
+    )
+
+    class Meta:
+        model = ProductType
+        fields = (
+            "id",
+            "naam",
+            "samenvatting",
+        )

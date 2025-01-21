@@ -38,7 +38,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": "test-product-type",
             "code": "PT=12345",
             "samenvatting": "test",
-            "beschrijving": "test test",
             "uniforme_product_naam": upn.uri,
             "thema_ids": [self.thema.id],
         }
@@ -68,7 +67,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "thema_ids": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "beschrijving": [
+                "samenvatting": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
                 "code": [
@@ -90,7 +89,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
-            "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "vragen": [],
@@ -240,7 +238,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
-            "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "vragen": [],
@@ -582,7 +579,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "naam": product_type1.naam,
                 "code": product_type1.code,
                 "samenvatting": product_type1.samenvatting,
-                "beschrijving": product_type1.beschrijving,
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "vragen": [],
@@ -613,7 +609,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "naam": product_type2.naam,
                 "code": product_type2.code,
                 "samenvatting": product_type2.samenvatting,
-                "beschrijving": product_type2.beschrijving,
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "vragen": [],
@@ -655,7 +650,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
-            "beschrijving": product_type.beschrijving,
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "vragen": [],
@@ -684,6 +678,39 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.data, expected_data)
 
+    def test_read_product_type_in_other_language(self):
+        product_type = ProductTypeFactory.create()
+        product_type.themas.add(self.thema)
+        product_type.set_current_language("en")
+        product_type.naam = "product type EN"
+        product_type.samenvatting = "summary"
+        product_type.save()
+
+        response = self.client.get(
+            self.detail_path(product_type), headers={"Accept-Language": "en"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["naam"], "product type EN")
+        self.assertEqual(response.data["samenvatting"], "summary")
+        # self.assertEqual(response.headers["Content-Language"], "en") # TODO
+
+    def test_read_product_type_in_fallback_language(self):
+        product_type = ProductTypeFactory.create(
+            naam="product type NL", samenvatting="samenvatting"
+        )
+        product_type.themas.add(self.thema)
+        product_type.save()
+
+        response = self.client.get(
+            self.detail_path(product_type), headers={"Accept-Language": "de"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["naam"], "product type NL")
+        self.assertEqual(response.data["samenvatting"], "samenvatting")
+        # self.assertEqual(response.headers["Content-Language"], "nl") TODO
+
     def test_delete_product_type(self):
         product_type = ProductTypeFactory.create()
 
@@ -709,7 +736,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
         self.expected_data = {
             "id": str(self.product_type.id),
-            "naam": self.product_type.naam,
+            "code": self.product_type.code,
             "upl_naam": self.product_type.uniforme_product_naam.naam,
             "upl_uri": self.product_type.uniforme_product_naam.uri,
             "actuele_prijs": None,
@@ -809,3 +836,45 @@ class TestProductTypeActions(BaseApiTestCase):
                 },
             },
         )
+
+    def test_put_vertaling(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        data = {"naam": "name EN", "samenvatting": "summary EN"}
+        response = self.client.put(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data,
+            {
+                "id": str(self.product_type.id),
+                "naam": "name EN",
+                "samenvatting": "summary EN",
+            },
+        )
+        self.product_type.set_current_language("en")
+        self.assertEqual(self.product_type.naam, "name EN")
+
+        self.product_type.set_current_language("nl")
+        self.assertNotEqual(self.product_type.naam, "name EN")
+
+    def test_delete_nonexistent_vertaling(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        response = self.client.delete(path)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_vertaling(self):
+        self.product_type.set_current_language("en")
+        self.product_type.naam = "name EN"
+        self.product_type.samenvatting = "summary EN"
+        self.product_type.save()
+
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        response = self.client.delete(path)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.product_type.refresh_from_db()
+        self.assertFalse(self.product_type.has_translation("en"))

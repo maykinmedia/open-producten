@@ -406,10 +406,7 @@ class TestThemaViewSet(BaseApiTestCase):
         expected_data = [
             {
                 "id": str(product_type.id),
-                "naam": product_type.naam,
                 "code": product_type.code,
-                "samenvatting": product_type.samenvatting,
-                "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
                 "toegestane_statussen": [],

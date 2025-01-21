@@ -18,7 +18,7 @@ class VraagAdmin(OrderedModelAdmin, MarkdownxModelAdmin):
         "vraag",
         "antwoord",
         "thema__naam",
-        "product_type__naam",
+        "product_type__translations__naam",
     )
 
     def get_queryset(self, request):

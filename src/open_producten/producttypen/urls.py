@@ -11,6 +11,7 @@ from rest_framework.routers import DefaultRouter
 from open_producten.locaties.urls import LocatieRouter
 from open_producten.producttypen.views import (
     BestandViewSet,
+    ContentElementViewSet,
     LinkViewSet,
     PrijsViewSet,
     ProductTypeViewSet,
@@ -30,6 +31,8 @@ ProductTypenRouter.register("vragen", VraagViewSet, basename="vraag")
 ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 
 ProductTypenRouter.register("bestanden", BestandViewSet, basename="bestand")
+
+ProductTypenRouter.register("content", ContentElementViewSet, basename="content")
 
 description = """
 Een Api voor Product typen.

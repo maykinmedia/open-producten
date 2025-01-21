@@ -77,10 +77,7 @@ class TestProduct(BaseApiTestCase):
             "update_datum": product.update_datum.astimezone().isoformat(),
             "product_type": {
                 "id": str(product_type.id),
-                "naam": product_type.naam,
                 "code": product_type.code,
-                "samenvatting": product_type.samenvatting,
-                "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
                 "toegestane_statussen": ["gereed"],
@@ -229,10 +226,7 @@ class TestProduct(BaseApiTestCase):
                 "update_datum": product1.update_datum.astimezone().isoformat(),
                 "product_type": {
                     "id": str(self.product_type.id),
-                    "naam": self.product_type.naam,
                     "code": self.product_type.code,
-                    "samenvatting": self.product_type.samenvatting,
-                    "beschrijving": self.product_type.beschrijving,
                     "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
                     "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
@@ -255,10 +249,7 @@ class TestProduct(BaseApiTestCase):
                 "update_datum": product2.update_datum.astimezone().isoformat(),
                 "product_type": {
                     "id": str(self.product_type.id),
-                    "naam": self.product_type.naam,
                     "code": self.product_type.code,
-                    "samenvatting": self.product_type.samenvatting,
-                    "beschrijving": self.product_type.beschrijving,
                     "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
                     "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
@@ -292,10 +283,7 @@ class TestProduct(BaseApiTestCase):
             "update_datum": "2025-12-31T01:00:00+01:00",
             "product_type": {
                 "id": str(product_type.id),
-                "naam": product_type.naam,
                 "code": product_type.code,
-                "samenvatting": product_type.samenvatting,
-                "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "toegestane_statussen": ["gereed"],
                 "gepubliceerd": True,

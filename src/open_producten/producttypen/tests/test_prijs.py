@@ -29,8 +29,11 @@ class TestPrijs(TestCase):
             duplicate.full_clean()
 
     def test_min_date_validation(self):
+        product_type = ProductTypeFactory.create()
         with self.assertRaises(ValidationError):
-            prijs = PrijsFactory.build(actief_vanaf=date(2020, 1, 1))
+            prijs = PrijsFactory.build(
+                product_type=product_type, actief_vanaf=date(2020, 1, 1)
+            )
             prijs.full_clean()
 
     @freeze_time("2024-01-02")

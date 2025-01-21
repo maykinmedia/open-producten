@@ -1,4 +1,5 @@
 from .bestand import BestandAdmin
+from .content import ContentLabelAdmin
 from .link import LinkAdmin
 from .prijs import PrijsAdmin
 from .producttype import ProductTypeAdmin
@@ -14,4 +15,5 @@ __all__ = [
     "UniformeProductNaamAdmin",
     "PrijsAdmin",
     "ThemaAdmin",
+    "ContentLabelAdmin",
 ]
