@@ -23,7 +23,6 @@ from open_producten.producttypen.tests.factories import (
     ProductTypeFactory,
     ThemaFactory,
     UniformeProductNaamFactory,
-    VraagFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
 
@@ -93,7 +92,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
-            "vragen": [],
             "prijzen": [],
             "links": [],
             "bestanden": [],
@@ -260,7 +258,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     "required": ["uren"],
                 },
             },
-            "vragen": [],
             "prijzen": [],
             "links": [],
             "bestanden": [],
@@ -525,23 +522,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.data["links"], expected_data)
 
-    def test_read_product_type_vraag(self):
-        product_type = ProductTypeFactory.create()
-        vraag = VraagFactory.create(product_type=product_type)
-
-        response = self.client.get(self.detail_path(product_type))
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected_data = [
-            {
-                "id": str(vraag.id),
-                "vraag": vraag.vraag,
-                "antwoord": vraag.antwoord,
-            }
-        ]
-
-        self.assertEqual(response.data["vragen"], expected_data)
-
     def test_read_product_type_bestand(self):
         product_type = ProductTypeFactory.create()
         bestand = BestandFactory.create(product_type=product_type)
@@ -602,7 +582,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
-                "vragen": [],
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
@@ -633,7 +612,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
-                "vragen": [],
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
@@ -675,7 +653,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
-            "vragen": [],
             "prijzen": [],
             "links": [],
             "bestanden": [],

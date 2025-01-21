@@ -18,7 +18,6 @@ from . import JsonSchemaSerializer
 from .bestand import NestedBestandSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
-from .vraag import NestedVraagSerializer
 
 
 class NestedThemaSerializer(serializers.ModelSerializer):
@@ -75,7 +74,6 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         source="contacten",
     )
 
-    vragen = NestedVraagSerializer(many=True, read_only=True)
     prijzen = NestedPrijsSerializer(many=True, read_only=True)
     links = NestedLinkSerializer(many=True, read_only=True)
     bestanden = NestedBestandSerializer(many=True, read_only=True)

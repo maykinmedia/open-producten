@@ -883,7 +883,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TranslatedContentElementRequest'
+              $ref: '#/components/schemas/ContentElementTranslationRequest'
         required: true
       security:
       - tokenAuth: []
@@ -892,7 +892,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TranslatedContentElement'
+                $ref: '#/components/schemas/ContentElementTranslation'
           description: ''
         '400':
           content:
@@ -2548,7 +2548,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TranslatedProductTypeRequest'
+              $ref: '#/components/schemas/ProductTypeTranslationRequest'
         required: true
       security:
       - tokenAuth: []
@@ -2557,7 +2557,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TranslatedProductType'
+                $ref: '#/components/schemas/ProductTypeTranslation'
           description: ''
         '400':
           content:
@@ -3247,304 +3247,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/DetailError'
           description: ''
-  /vragen/:
-    get:
-      operationId: vragen_list
-      description: Deze lijst kan gefilterd wordt met query-string parameters.
-      summary: Alle VRAGEN opvragen.
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
-      - in: query
-        name: product_type_id
-        schema:
-          type: string
-          format: uuid
-          nullable: true
-        description: Het product type waarbij deze vraag hoort.
-      - in: query
-        name: thema_id
-        schema:
-          type: string
-          format: uuid
-          nullable: true
-        description: Het thema waarbij deze vraag hoort.
-      tags:
-      - vragen
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedVraagList'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
-    post:
-      operationId: vragen_create
-      summary: Maak een VRAAG aan.
-      tags:
-      - vragen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VraagRequest'
-            examples:
-              CreateVraag:
-                value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                  vraag: Kom ik in aanmerking voor dit product?
-                  antwoord: Ja
-                summary: Create vraag
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vraag'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
-  /vragen/{id}/:
-    get:
-      operationId: vragen_retrieve
-      summary: Een specifieke VRAAG opvragen.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Vraag.
-        required: true
-      tags:
-      - vragen
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vraag'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
-    put:
-      operationId: vragen_update
-      summary: Werk een VRAAG in zijn geheel bij.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Vraag.
-        required: true
-      tags:
-      - vragen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VraagRequest'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vraag'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
-    patch:
-      operationId: vragen_partial_update
-      summary: Werk een VRAAG deels bij.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Vraag.
-        required: true
-      tags:
-      - vragen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedVraagRequest'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Vraag'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
-    delete:
-      operationId: vragen_destroy
-      summary: Verwijder een VRAAG.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this Vraag.
-        required: true
-      tags:
-      - vragen
-      security:
-      - tokenAuth: []
-      responses:
-        '204':
-          description: No response body
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
 components:
   schemas:
     Bestand:
@@ -3691,6 +3393,30 @@ components:
       required:
       - content
       - product_type_id
+    ContentElementTranslation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        content:
+          type: string
+          description: De content van dit content element.
+          maxLength: 100
+      required:
+      - content
+      - id
+    ContentElementTranslationRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          description: De content van dit content element.
+          maxLength: 100
+      required:
+      - content
     DetailError:
       type: object
       properties:
@@ -4111,39 +3837,6 @@ components:
           description: Het hoofd thema van het thema.
       required:
       - naam
-    NestedVraag:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        vraag:
-          type: string
-          description: De vraag die wordt beantwoord.
-          maxLength: 250
-        antwoord:
-          type: string
-          description: Het antwoord op de vraag, ondersteund markdown format.
-      required:
-      - antwoord
-      - id
-      - vraag
-    NestedVraagRequest:
-      type: object
-      properties:
-        vraag:
-          type: string
-          minLength: 1
-          description: De vraag die wordt beantwoord.
-          maxLength: 250
-        antwoord:
-          type: string
-          minLength: 1
-          description: Het antwoord op de vraag, ondersteund markdown format.
-      required:
-      - antwoord
-      - vraag
     Organisatie:
       type: object
       properties:
@@ -4461,29 +4154,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Thema'
-    PaginatedVraagList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vraag'
     PatchedBestandRequest:
       type: object
       properties:
@@ -4755,26 +4425,6 @@ components:
             format: uuid
             writeOnly: true
           writeOnly: true
-    PatchedVraagRequest:
-      type: object
-      properties:
-        product_type_id:
-          type: string
-          format: uuid
-          nullable: true
-        thema_id:
-          type: string
-          format: uuid
-          nullable: true
-        vraag:
-          type: string
-          minLength: 1
-          description: De vraag die wordt beantwoord.
-          maxLength: 250
-        antwoord:
-          type: string
-          minLength: 1
-          description: Het antwoord op de vraag, ondersteund markdown format.
     Prijs:
       type: object
       properties:
@@ -4887,11 +4537,6 @@ components:
           items:
             $ref: '#/components/schemas/Contact'
           readOnly: true
-        vragen:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedVraag'
-          readOnly: true
         prijzen:
           type: array
           items:
@@ -4963,7 +4608,6 @@ components:
       - uniforme_product_naam
       - update_datum
       - verbruiksobject_schema
-      - vragen
     ProductTypeActuelePrijs:
       type: object
       properties:
@@ -4971,6 +4615,10 @@ components:
           type: string
           format: uuid
           readOnly: true
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
         upl_naam:
           type: string
           description: Uniforme product naam
@@ -4986,6 +4634,7 @@ components:
           nullable: true
       required:
       - actuele_prijs
+      - code
       - id
       - upl_naam
       - upl_uri
@@ -5066,6 +4715,41 @@ components:
       - samenvatting
       - thema_ids
       - uniforme_product_naam
+    ProductTypeTranslation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          description: Korte beschrijving van het product type.
+          maxLength: 300
+      required:
+      - id
+      - naam
+      - samenvatting
+    ProductTypeTranslationRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: naam van het product type.
+          maxLength: 100
+        samenvatting:
+          type: string
+          minLength: 1
+          description: Korte beschrijving van het product type.
+          maxLength: 300
+      required:
+      - naam
+      - samenvatting
     Thema:
       type: object
       properties:
@@ -5080,11 +4764,6 @@ components:
         beschrijving:
           type: string
           description: Beschrijving van het thema, ondersteund markdown format.
-        vragen:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedVraag'
-          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -5115,7 +4794,6 @@ components:
       - naam
       - product_typen
       - update_datum
-      - vragen
     ThemaRequest:
       type: object
       properties:
@@ -5160,114 +4838,6 @@ components:
         * `ingetrokken` - Ingetrokken
         * `geweigerd` - Geweigerd
         * `verlopen` - Verlopen
-    TranslatedContentElement:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        content:
-          type: string
-          description: De content van dit content element.
-          maxLength: 100
-      required:
-      - content
-      - id
-    TranslatedContentElementRequest:
-      type: object
-      properties:
-        content:
-          type: string
-          minLength: 1
-          description: De content van dit content element.
-          maxLength: 100
-      required:
-      - content
-    TranslatedProductType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        naam:
-          type: string
-          description: naam van het product type.
-          maxLength: 100
-        samenvatting:
-          type: string
-          description: Korte beschrijving van het product type.
-          maxLength: 300
-      required:
-      - id
-      - naam
-      - samenvatting
-    TranslatedProductTypeRequest:
-      type: object
-      properties:
-        naam:
-          type: string
-          minLength: 1
-          description: naam van het product type.
-          maxLength: 100
-        samenvatting:
-          type: string
-          minLength: 1
-          description: Korte beschrijving van het product type.
-          maxLength: 300
-      required:
-      - naam
-      - samenvatting
-    Vraag:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        product_type_id:
-          type: string
-          format: uuid
-          nullable: true
-        thema_id:
-          type: string
-          format: uuid
-          nullable: true
-        vraag:
-          type: string
-          description: De vraag die wordt beantwoord.
-          maxLength: 250
-        antwoord:
-          type: string
-          description: Het antwoord op de vraag, ondersteund markdown format.
-      required:
-      - antwoord
-      - id
-      - vraag
-    VraagRequest:
-      type: object
-      properties:
-        product_type_id:
-          type: string
-          format: uuid
-          nullable: true
-        thema_id:
-          type: string
-          format: uuid
-          nullable: true
-        vraag:
-          type: string
-          minLength: 1
-          description: De vraag die wordt beantwoord.
-          maxLength: 250
-        antwoord:
-          type: string
-          minLength: 1
-          description: Het antwoord op de vraag, ondersteund markdown format.
-      required:
-      - antwoord
-      - vraag
   securitySchemes:
     tokenAuth:
       type: apiKey

@@ -5,7 +5,6 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from ..models import ProductType, Thema
-from .vraag import VraagInline
 
 
 class ProductTypeInline(admin.TabularInline):
@@ -27,10 +26,7 @@ class ProductTypeInline(admin.TabularInline):
 
 @admin.register(Thema)
 class ThemaAdmin(admin.ModelAdmin):
-    inlines = (
-        VraagInline,
-        ProductTypeInline,
-    )
+    inlines = (ProductTypeInline,)
     search_fields = ("naam", "hoofd_thema__naam")
     list_display = ("naam", "hoofd_thema", "gepubliceerd", "product_typen_count")
 

@@ -6,21 +6,6 @@ from rest_framework import serializers
 from ...utils.serializers import get_from_serializer_data_or_instance
 from ..models import PrijsOptie
 from ..models.thema import disallow_self_reference, validate_gepubliceerd_state
-from ..models.vraag import validate_thema_or_product_type
-
-
-class ProductTypeOrThemaValidator:
-    requires_context = True
-
-    def __call__(self, value, serializer):
-        thema = get_from_serializer_data_or_instance("thema", value, serializer)
-        product_type = get_from_serializer_data_or_instance(
-            "product_type", value, serializer
-        )
-        try:
-            validate_thema_or_product_type(thema, product_type)
-        except ValidationError as e:
-            raise serializers.ValidationError({"product_type_or_thema": e.message})
 
 
 class ThemaGepubliceerdStateValidator:

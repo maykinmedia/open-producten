@@ -23,7 +23,6 @@ from open_producten.producttypen.models import (
     Prijs,
     ProductType,
     Thema,
-    Vraag,
 )
 from open_producten.producttypen.serializers import (
     BestandSerializer,
@@ -33,7 +32,6 @@ from open_producten.producttypen.serializers import (
     ProductTypeActuelePrijsSerializer,
     ProductTypeSerializer,
     ThemaSerializer,
-    VraagSerializer,
 )
 from open_producten.producttypen.serializers.content import (
     ContentElementSerializer,
@@ -313,44 +311,6 @@ class PrijsViewSet(OrderedModelViewSet):
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["product_type_id"]
-
-
-@extend_schema_view(
-    list=extend_schema(
-        summary="Alle VRAGEN opvragen.",
-        description="Deze lijst kan gefilterd wordt met query-string parameters.",
-    ),
-    retrieve=extend_schema(
-        summary="Een specifieke VRAAG opvragen.",
-    ),
-    create=extend_schema(
-        summary="Maak een VRAAG aan.",
-        examples=[
-            OpenApiExample(
-                "Create vraag",
-                value={
-                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
-                    "vraag": "Kom ik in aanmerking voor dit product?",
-                    "antwoord": "Ja",
-                },
-                request_only=True,
-            )
-        ],
-    ),
-    update=extend_schema(
-        summary="Werk een VRAAG in zijn geheel bij.",
-    ),
-    partial_update=extend_schema(summary="Werk een VRAAG deels bij."),
-    destroy=extend_schema(
-        summary="Verwijder een VRAAG.",
-    ),
-)
-class VraagViewSet(OrderedModelViewSet):
-    queryset = Vraag.objects.all()
-    serializer_class = VraagSerializer
-    lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product_type_id", "thema_id"]
 
 
 @extend_schema_view(
