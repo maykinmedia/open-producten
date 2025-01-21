@@ -4,15 +4,19 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.translation import gettext as _
 
+from django_json_schema_model.models import JsonSchema
+from freezegun import freeze_time
+
 from open_producten.producttypen.tests.factories import ProductTypeFactory
 
+from ...producttypen.models.producttype import ProductStateChoices
 from .factories import ProductFactory
 
 
 class TestProduct(TestCase):
 
     def setUp(self):
-        self.product_type = ProductTypeFactory.create()
+        self.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
 
     def test_bsn_validation_raises_on_invalid_value(self):
         invalid_values = [
@@ -88,3 +92,295 @@ class TestProduct(TestCase):
             bsn="111222333",
         )
         product.clean()
+
+    def test_status_part_of_product_type(self):
+        product = ProductFactory.build(
+            product_type=self.product_type, status="actief", bsn="111222333"
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _("Status 'Actief' is niet toegestaan voor het product type {}.").format(
+                self.product_type.naam
+            ),
+        ):
+            product.clean()
+
+    def test_start_datum_is_not_allowed_when_actief_is_not_allowed(self):
+
+        product = ProductFactory.build(
+            start_datum=date(2025, 1, 12),
+            product_type=self.product_type,
+            bsn="111222333",
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type.",
+        ):
+            product.clean()
+
+    def test_verbruiksobject_is_valid(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": "test"},
+        )
+
+        product.clean()
+
+    def test_verbruiksobject_is_invalid(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": 1234},
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _(
+                "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+            ),
+        ):
+            product.clean()
+
+    def test_verbruiksobject_without_schema(self):
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": 1234},
+        )
+
+        product.clean()
+
+    def test_verbruiksobject_with_schema_without_object(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+        )
+
+        product.clean()
+
+    def test_dataobject_is_valid(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.dataobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            dataobject={"naam": "test"},
+        )
+
+        product.clean()
+
+    def test_dataobject_is_invalid(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.dataobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            dataobject={"naam": 1234},
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Het dataobject komt niet overeen met het schema gedefinieerd op het product type.",
+        ):
+            product.clean()
+
+    def test_dataobject_without_schema(self):
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            dataobject={"naam": 1234},
+        )
+
+        product.clean()
+
+    def test_dataobject_with_schema_without_object(self):
+        json_schema = JsonSchema.objects.create(
+            name="json-schema",
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.dataobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+        )
+
+        product.clean()
+
+    def test_eind_datum_is_not_allowed_when_verlopen_is_not_allowed(self):
+
+        product = ProductFactory.build(
+            start_datum=date(2025, 1, 12),
+            product_type=self.product_type,
+            bsn="111222333",
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _(
+                "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
+            ),
+        ):
+            product.clean()
+
+
+@freeze_time("2024-1-1")
+class TestProductStateTask(TestCase):
+    def setUp(self):
+        self.product_type = ProductTypeFactory.create(toegestane_statussen=["actief"])
+
+    def test_product_status_is_set_to_active_on_start_datum(self):
+        product = ProductFactory.create(
+            status="initieel",
+            product_type=self.product_type,
+            start_datum=date(2024, 1, 1),
+        )
+
+        product.handle_start_datum()
+
+        self.assertEqual(product.status, "actief")
+
+    def test_product_status_is_set_to_active_on_earlier_date(self):
+        product = ProductFactory.create(
+            status="initieel",
+            product_type=self.product_type,
+            start_datum=date(2023, 12, 31),
+        )
+
+        product.handle_start_datum()
+
+        self.assertEqual(product.status, "actief")
+
+    def test_product_status_is_not_set_to_active_on_later_date(self):
+        product = ProductFactory.create(
+            status="initieel",
+            product_type=self.product_type,
+            start_datum=date(2024, 10, 1),
+        )
+
+        product.handle_start_datum()
+
+        self.assertEqual(product.status, "initieel")
+
+    def test_product_status_is_not_set_to_active_on_later_states(self):
+
+        for state in [
+            ProductStateChoices.ACTIEF,
+            ProductStateChoices.VERLOPEN,
+            ProductStateChoices.GEWEIGERD,
+            ProductStateChoices.INGETROKKEN,
+        ]:
+            with self.subTest():
+                product = ProductFactory.create(
+                    status=state.value,
+                    product_type=self.product_type,
+                    start_datum=date(2024, 1, 1),
+                )
+                product.handle_start_datum()
+                self.assertEqual(product.status, state.value)
+
+    def test_product_status_is_set_to_verlopen_on_eind_datum(self):
+        product = ProductFactory.create(
+            status="actief", product_type=self.product_type, eind_datum=date(2024, 1, 1)
+        )
+
+        product.handle_eind_datum()
+
+        self.assertEqual(product.status, "verlopen")
+
+    def test_product_status_is_set_to_verlopen_on_earlier_date(self):
+        product = ProductFactory.create(
+            status="actief",
+            product_type=self.product_type,
+            eind_datum=date(2023, 12, 31),
+        )
+
+        product.handle_eind_datum()
+
+        self.assertEqual(product.status, "verlopen")
+
+    def test_product_status_is_not_set_to_verlopen_on_later_date(self):
+        product = ProductFactory.create(
+            status="actief",
+            product_type=self.product_type,
+            eind_datum=date(2024, 10, 1),
+        )
+
+        product.handle_eind_datum()
+
+        self.assertEqual(product.status, "actief")
+
+    def test_product_status_is_not_set_to_verlopen_on_later_states(self):
+
+        for state in [
+            ProductStateChoices.VERLOPEN,
+            ProductStateChoices.GEWEIGERD,
+            ProductStateChoices.INGETROKKEN,
+        ]:
+            with self.subTest():
+                product = ProductFactory.create(
+                    status=state.value,
+                    product_type=self.product_type,
+                    eind_datum=date(2024, 1, 1),
+                )
+                product.handle_eind_datum()
+                self.assertEqual(product.status, state.value)

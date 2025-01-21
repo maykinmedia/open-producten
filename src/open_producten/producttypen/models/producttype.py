@@ -4,13 +4,25 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from django_json_schema_model.models import JsonSchema
 from markdownx.models import MarkdownxField
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
+from open_producten.utils.fields import ChoiceArrayField
 from open_producten.utils.models import BasePublishableModel
 
 from .thema import Thema
 from .upn import UniformeProductNaam
+
+
+class ProductStateChoices(models.TextChoices):
+
+    INITIEEL = "initieel", _("Initieel")
+    GEREED = "gereed", _("Gereed")
+    ACTIEF = "actief", _("Actief")
+    INGETROKKEN = "ingetrokken", _("Ingetrokken")
+    GEWEIGERD = "geweigerd", _("Geweigerd")
+    VERLOPEN = "verlopen", _("Verlopen")
 
 
 class ProductType(BasePublishableModel):
@@ -18,6 +30,51 @@ class ProductType(BasePublishableModel):
         verbose_name=_("product type naam"),
         max_length=100,
         help_text=_("naam van het product type."),
+    )
+
+    code = models.CharField(
+        verbose_name=_("code"),
+        max_length=100,
+        help_text=_("code van het product type."),
+        unique=True,
+    )
+
+    toegestane_statussen = ChoiceArrayField(
+        models.CharField(
+            choices=[
+                choice
+                for choice in ProductStateChoices.choices
+                if choice[0] != ProductStateChoices.INITIEEL.value
+            ]
+        ),
+        verbose_name=_("toegestane statussen"),
+        default=list,
+        blank=True,
+        help_text=_("toegestane statussen voor producten van dit type."),
+    )
+
+    verbruiksobject_schema = models.ForeignKey(
+        JsonSchema,
+        verbose_name=_("verbruiksobject schema"),
+        on_delete=models.PROTECT,
+        help_text=_(
+            "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
+        ),
+        null=True,
+        blank=True,
+        related_name="product_typen_verbruiksobject_schemas",
+    )
+
+    dataobject_schema = models.ForeignKey(
+        JsonSchema,
+        verbose_name=_("product data schema"),
+        on_delete=models.PROTECT,
+        help_text=_(
+            "JSON schema om het dataobject van een gerelateerd product te valideren."
+        ),
+        null=True,
+        blank=True,
+        related_name="product_typen_dataobject_schemas",
     )
 
     samenvatting = models.TextField(

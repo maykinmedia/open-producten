@@ -1,253 +1,257 @@
 [
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 0,
-            "translations": {
-                "en": "Products"
-            },
-            "name": "Producten",
-            "slug": "Producten",
-            "models": [
-                [
-                    "producten",
-                    "product"
-                ]
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 0,
+        "translations": {
+            "en": "Products"
+        },
+        "name": "Producten",
+        "slug": "Producten",
+        "models": [
+            [
+                "producten",
+                "product"
             ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 1,
-            "translations": {
-                "en": "Product types"
-            },
-            "name": "Product typen",
-            "slug": "product-typen",
-            "models": [
-                [
-                    "producttypen",
-                    "thema"
-                ],
-                [
-                    "producttypen",
-                    "bestand"
-                ],
-                [
-                    "producttypen",
-                    "link"
-                ],
-                [
-                    "producttypen",
-                    "prijs"
-                ],
-                [
-                    "producttypen",
-                    "producttype"
-                ],
-                [
-                    "producttypen",
-                    "vraag"
-                ],
-                [
-                    "producttypen",
-                    "uniformeproductnaam"
-                ]
-            ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 3,
-            "translations": {
-                "nl": "Gebruikers"
-            },
-            "name": "Users",
-            "slug": "users",
-            "models": [
-                [
-                    "accounts",
-                    "user"
-                ],
-                [
-                    "auth",
-                    "group"
-                ],
-                [
-                    "auth",
-                    "permission"
-                ],
-                [
-                    "authtoken",
-                    "tokenproxy"
-                ],
-                [
-                    "otp_static",
-                    "staticdevice"
-                ],
-                [
-                    "otp_static",
-                    "statictoken"
-                ],
-                [
-                    "otp_totp",
-                    "totpdevice"
-                ]
-            ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 4,
-            "translations": {
-                "nl": "Configuratie"
-            },
-            "name": "Config",
-            "slug": "config",
-            "models": [
-                [
-                    "admin_index",
-                    "appgroup"
-                ],
-                [
-                    "admin_index",
-                    "applink"
-                ],
-                [
-                    "admin_index",
-                    "contenttypeproxy"
-                ]
-            ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 6,
-            "translations": {
-                "nl": "Misc"
-            },
-            "name": "Misc",
-            "slug": "all",
-            "models": [
-                [
-                    "contenttypes",
-                    "contenttype"
-                ],
-                [
-                    "log_outgoing_requests",
-                    "outgoingrequestslog"
-                ],
-                [
-                    "log_outgoing_requests",
-                    "outgoingrequestslogconfig"
-                ],
-                [
-                    "mozilla_django_oidc_db",
-                    "openidconnectconfig"
-                ],
-                [
-                    "notifications_api_common",
-                    "notificationsconfig"
-                ],
-                [
-                    "notifications_api_common",
-                    "subscription"
-                ],
-                [
-                    "sessions",
-                    "session"
-                ],
-                [
-                    "simple_certmanager",
-                    "certificate"
-                ],
-                [
-                    "sites",
-                    "site"
-                ],
-                [
-                    "two_factor_webauthn",
-                    "webauthndevice"
-                ],
-                [
-                    "vng_api_common",
-                    "apicredential"
-                ],
-                [
-                    "vng_api_common",
-                    "jwtsecret"
-                ],
-                [
-                    "zgw_consumers",
-                    "certificate"
-                ],
-                [
-                    "zgw_consumers",
-                    "nlxconfig"
-                ],
-                [
-                    "zgw_consumers",
-                    "service"
-                ]
-            ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 5,
-            "translations": {
-                "nl": "logs"
-            },
-            "name": "Logs",
-            "slug": "logs",
-            "models": [
-                [
-                    "admin",
-                    "logentry"
-                ],
-                [
-                    "axes",
-                    "accessattempt"
-                ],
-                [
-                    "axes",
-                    "accessfailurelog"
-                ],
-                [
-                    "axes",
-                    "accesslog"
-                ]
-            ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 2,
-            "translations": {
-                "en": "Locations & Organisations"
-            },
-            "name": "Locaties & Organisaties",
-            "slug": "locaties-organisaties",
-            "models": [
-                [
-                    "locaties",
-                    "contact"
-                ],
-                [
-                    "locaties",
-                    "locatie"
-                ],
-                [
-                    "locaties",
-                    "organisatie"
-                ]
-            ]
-        }
+        ]
     }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 1,
+        "translations": {
+            "en": "Product types"
+        },
+        "name": "Product typen",
+        "slug": "product-typen",
+        "models": [
+            [
+                "producttypen",
+                "bestand"
+            ],
+            [
+                "producttypen",
+                "link"
+            ],
+            [
+                "producttypen",
+                "prijs"
+            ],
+            [
+                "producttypen",
+                "producttype"
+            ],
+            [
+                "producttypen",
+                "thema"
+            ],
+            [
+                "producttypen",
+                "uniformeproductnaam"
+            ],
+            [
+                "producttypen",
+                "vraag"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 3,
+        "translations": {
+            "nl": "Gebruikers"
+        },
+        "name": "Users",
+        "slug": "users",
+        "models": [
+            [
+                "accounts",
+                "user"
+            ],
+            [
+                "auth",
+                "group"
+            ],
+            [
+                "auth",
+                "permission"
+            ],
+            [
+                "authtoken",
+                "tokenproxy"
+            ],
+            [
+                "otp_static",
+                "staticdevice"
+            ],
+            [
+                "otp_static",
+                "statictoken"
+            ],
+            [
+                "otp_totp",
+                "totpdevice"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 4,
+        "translations": {
+            "nl": "Configuratie"
+        },
+        "name": "Config",
+        "slug": "config",
+        "models": [
+            [
+                "admin_index",
+                "appgroup"
+            ],
+            [
+                "admin_index",
+                "applink"
+            ],
+            [
+                "admin_index",
+                "contenttypeproxy"
+            ],
+            [
+                "django_celery_beat",
+                "periodictask"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 6,
+        "translations": {
+            "nl": "Misc"
+        },
+        "name": "Misc",
+        "slug": "all",
+        "models": [
+            [
+                "contenttypes",
+                "contenttype"
+            ],
+            [
+                "log_outgoing_requests",
+                "outgoingrequestslog"
+            ],
+            [
+                "log_outgoing_requests",
+                "outgoingrequestslogconfig"
+            ],
+            [
+                "mozilla_django_oidc_db",
+                "openidconnectconfig"
+            ],
+            [
+                "notifications_api_common",
+                "notificationsconfig"
+            ],
+            [
+                "notifications_api_common",
+                "subscription"
+            ],
+            [
+                "sessions",
+                "session"
+            ],
+            [
+                "simple_certmanager",
+                "certificate"
+            ],
+            [
+                "sites",
+                "site"
+            ],
+            [
+                "two_factor_webauthn",
+                "webauthndevice"
+            ],
+            [
+                "vng_api_common",
+                "apicredential"
+            ],
+            [
+                "vng_api_common",
+                "jwtsecret"
+            ],
+            [
+                "zgw_consumers",
+                "certificate"
+            ],
+            [
+                "zgw_consumers",
+                "nlxconfig"
+            ],
+            [
+                "zgw_consumers",
+                "service"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 5,
+        "translations": {
+            "nl": "logs"
+        },
+        "name": "Logs",
+        "slug": "logs",
+        "models": [
+            [
+                "admin",
+                "logentry"
+            ],
+            [
+                "axes",
+                "accessattempt"
+            ],
+            [
+                "axes",
+                "accessfailurelog"
+            ],
+            [
+                "axes",
+                "accesslog"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 2,
+        "translations": {
+            "en": "Locations & Organisations"
+        },
+        "name": "Locaties & Organisaties",
+        "slug": "locaties-organisaties",
+        "models": [
+            [
+                "locaties",
+                "contact"
+            ],
+            [
+                "locaties",
+                "locatie"
+            ],
+            [
+                "locaties",
+                "organisatie"
+            ]
+        ]
+    }
+}
 ]

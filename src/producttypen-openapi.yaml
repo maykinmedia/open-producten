@@ -986,7 +986,7 @@ paths:
   /locaties/{id}/:
     get:
       operationId: locaties_retrieve
-      summary: Een specifiek LOCATIE opvragen.
+      summary: Een specifieke LOCATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -1232,6 +1232,7 @@ paths:
               CreateOrganisatie:
                 value:
                   naam: Maykin Media
+                  code: org-1234
                   email: info@maykinmedia.nl
                   telefoonnummer: '+310207530523'
                   straat: Kingsfortweg
@@ -1274,7 +1275,7 @@ paths:
   /organisaties/{id}/:
     get:
       operationId: organisaties_retrieve
-      summary: Een specifiek ORGANISATIE opvragen.
+      summary: Een specifieke ORGANISATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -1832,10 +1833,16 @@ paths:
                   - 6863d699-460d-4c1e-9297-16812d75d8ca
                   gepubliceerd: false
                   naam: Aanleunwoning
+                  code: PT-12345
+                  toegestane_statussen:
+                  - gereed
+                  - actief
                   samenvatting: korte samenvatting...
                   beschrijving: uitgebreide beschrijving...
                   keywords:
                   - wonen
+                  verbruiksobject_schema: 1
+                  dataobject_schema: 2
                 summary: Create product type
         required: true
       security:
@@ -2117,6 +2124,295 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /schemas/:
+    get:
+      operationId: schemas_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle SCHEMA'S opvragen.
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedJsonSchemaList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    post:
+      operationId: schemas_create
+      summary: Maak een SCHEMA aan.
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonSchemaRequest'
+            examples:
+              CreateSchema:
+                value:
+                  name: parkeervergunning-verbruiksobject
+                  schema:
+                    type: object
+                    properties:
+                      uren:
+                        type: number
+                    required:
+                    - uren
+                summary: Create schema
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /schemas/{id}/:
+    get:
+      operationId: schemas_retrieve
+      summary: Een specifiek SCHEMA opvragen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    put:
+      operationId: schemas_update
+      summary: Werk een SCHEMA in zijn geheel bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonSchemaRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    patch:
+      operationId: schemas_partial_update
+      summary: Werk een SCHEMA deels bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonSchemaRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    delete:
+      operationId: schemas_destroy
+      summary: Verwijder een SCHEMA.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
         '400':
           content:
             application/json:
@@ -2854,6 +3150,39 @@ components:
       required:
       - veld_a
       - veld_b
+    JsonSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        schema:
+          type: object
+          additionalProperties: {}
+        name:
+          type: string
+          title: Naam
+          description: Name of the json schema.
+          maxLength: 200
+      required:
+      - id
+      - name
+      - schema
+    JsonSchemaRequest:
+      type: object
+      properties:
+        schema:
+          type: object
+          additionalProperties: {}
+        name:
+          type: string
+          minLength: 1
+          title: Naam
+          description: Name of the json schema.
+          maxLength: 200
+      required:
+      - name
+      - schema
     Link:
       type: object
       properties:
@@ -3080,6 +3409,10 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3097,6 +3430,11 @@ components:
           type: string
           format: uri
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -3104,17 +3442,16 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
       required:
       - aanmaak_datum
       - beschrijving
+      - code
       - id
       - naam
       - uniforme_product_naam
@@ -3127,6 +3464,11 @@ components:
           minLength: 1
           title: Product type naam
           description: naam van het product type.
+          maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
           maxLength: 100
         samenvatting:
           type: string
@@ -3148,11 +3490,17 @@ components:
           format: uri
           minLength: 1
           description: Uri naar de UPN definitie.
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
       required:
       - beschrijving
+      - code
       - naam
       - uniforme_product_naam
     NestedThema:
@@ -3176,13 +3524,11 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         hoofd_thema:
           type: string
@@ -3285,7 +3631,12 @@ components:
           type: string
           nullable: true
           maxLength: 250
+        code:
+          type: string
+          description: code van de organisatie.
+          maxLength: 100
       required:
+      - code
       - id
       - naam
     OrganisatieRequest:
@@ -3322,7 +3673,13 @@ components:
           type: string
           nullable: true
           maxLength: 250
+        code:
+          type: string
+          minLength: 1
+          description: code van de organisatie.
+          maxLength: 100
       required:
+      - code
       - naam
     PaginatedBestandList:
       type: object
@@ -3370,6 +3727,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
+    PaginatedJsonSchemaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/JsonSchema'
     PaginatedLinkList:
       type: object
       required:
@@ -3571,6 +3951,18 @@ components:
           type: string
           description: De rol/functie van het contact
           maxLength: 100
+    PatchedJsonSchemaRequest:
+      type: object
+      properties:
+        schema:
+          type: object
+          additionalProperties: {}
+        name:
+          type: string
+          minLength: 1
+          title: Naam
+          description: Name of the json schema.
+          maxLength: 200
     PatchedLinkRequest:
       type: object
       properties:
@@ -3656,6 +4048,11 @@ components:
           type: string
           nullable: true
           maxLength: 250
+        code:
+          type: string
+          minLength: 1
+          description: code van de organisatie.
+          maxLength: 100
     PatchedPrijsRequest:
       type: object
       properties:
@@ -3707,6 +4104,15 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        verbruiksobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om het verbruiksobject van een gerelateerd product
+            te valideren.
+        dataobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om de data van een gerelateerd product te valideren.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -3716,6 +4122,16 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           minLength: 1
@@ -3749,6 +4165,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          description: Het hoofd thema waaronder dit thema valt.
         product_type_ids:
           type: array
           items:
@@ -3907,6 +4324,14 @@ components:
           items:
             $ref: '#/components/schemas/NestedBestand'
           readOnly: true
+        verbruiksobject_schema:
+          allOf:
+          - $ref: '#/components/schemas/JsonSchema'
+          readOnly: true
+        dataobject_schema:
+          allOf:
+          - $ref: '#/components/schemas/JsonSchema'
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -3914,19 +4339,26 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         naam:
           type: string
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           description: Korte beschrijving van het product type, maximaal 300 karakters.
@@ -3944,7 +4376,9 @@ components:
       - aanmaak_datum
       - beschrijving
       - bestanden
+      - code
       - contacten
+      - dataobject_schema
       - id
       - links
       - locaties
@@ -3954,6 +4388,7 @@ components:
       - themas
       - uniforme_product_naam
       - update_datum
+      - verbruiksobject_schema
       - vragen
     ProductTypeActuelePrijs:
       type: object
@@ -4022,6 +4457,15 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        verbruiksobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om het verbruiksobject van een gerelateerd product
+            te valideren.
+        dataobject_schema_id:
+          type: integer
+          writeOnly: true
+          description: JSON schema om de data van een gerelateerd product te valideren.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4031,6 +4475,16 @@ components:
           title: Product type naam
           description: naam van het product type.
           maxLength: 100
+        code:
+          type: string
+          minLength: 1
+          description: code van het product type.
+          maxLength: 100
+        toegestane_statussen:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToegestaneStatussenEnum'
+          description: toegestane statussen voor producten van dit type.
         samenvatting:
           type: string
           minLength: 1
@@ -4048,6 +4502,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
       required:
       - beschrijving
+      - code
       - naam
       - thema_ids
       - uniforme_product_naam
@@ -4077,18 +4532,17 @@ components:
           type: string
           format: date-time
           readOnly: true
-          title: Created on
           description: De datum waarop het object is aangemaakt.
         update_datum:
           type: string
           format: date-time
           readOnly: true
-          title: Updated on
           description: De datum waarop het object voor het laatst is gewijzigd.
         hoofd_thema:
           type: string
           format: uuid
           nullable: true
+          description: Het hoofd thema waaronder dit thema valt.
         product_typen:
           type: array
           items:
@@ -4120,6 +4574,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          description: Het hoofd thema waaronder dit thema valt.
         product_type_ids:
           type: array
           items:
@@ -4131,6 +4586,20 @@ components:
       - hoofd_thema
       - naam
       - product_type_ids
+    ToegestaneStatussenEnum:
+      enum:
+      - gereed
+      - actief
+      - ingetrokken
+      - geweigerd
+      - verlopen
+      type: string
+      description: |-
+        * `gereed` - Gereed
+        * `actief` - Actief
+        * `ingetrokken` - Ingetrokken
+        * `geweigerd` - Geweigerd
+        * `verlopen` - Verlopen
     Vraag:
       type: object
       properties:

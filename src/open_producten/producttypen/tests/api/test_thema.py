@@ -407,10 +407,12 @@ class TestThemaViewSet(BaseApiTestCase):
             {
                 "id": str(product_type.id),
                 "naam": product_type.naam,
+                "code": product_type.code,
                 "samenvatting": product_type.samenvatting,
                 "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
+                "toegestane_statussen": [],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type.update_datum.astimezone().isoformat(),
                 "keywords": [],
