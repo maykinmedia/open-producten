@@ -19,10 +19,7 @@ class NestedProductTypeSerializer(serializers.ModelSerializer):
         model = ProductType
         fields = (
             "id",
-            "naam",
             "code",
-            "samenvatting",
-            "beschrijving",
             "keywords",
             "uniforme_product_naam",
             "toegestane_statussen",

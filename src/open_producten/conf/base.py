@@ -20,6 +20,7 @@ INSTALLED_APPS += [
     "rest_framework.authtoken",
     "timeline_logger",
     "localflavor",
+    "parler",
     "markdownx",
     "django_celery_beat",
     "django_json_schema_model",
@@ -166,3 +167,19 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
 SUBPATH = config("SUBPATH", None)
 if SUBPATH:
     SUBPATH = f"/{SUBPATH.strip('/')}"
+
+
+PARLER_LANGUAGES = {
+    1: (
+        {
+            "code": "nl",
+        },
+        {
+            "code": "en",
+        },
+    ),
+    "default": {
+        "fallbacks": ["nl"],
+        "hide_untranslated": False,
+    },
+}
