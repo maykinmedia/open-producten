@@ -10,7 +10,6 @@ from ..models import (
     ProductType,
     Thema,
     UniformeProductNaam,
-    Vraag,
 )
 
 fake = Faker()
@@ -52,14 +51,6 @@ class ThemaFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Thema
-
-
-class VraagFactory(factory.django.DjangoModelFactory):
-    vraag = factory.Faker("sentence")
-    antwoord = factory.Faker("text")
-
-    class Meta:
-        model = Vraag
 
 
 class PrijsFactory(factory.django.DjangoModelFactory):

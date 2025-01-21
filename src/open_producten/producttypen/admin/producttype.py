@@ -11,7 +11,6 @@ from ..models import ProductType, Thema
 from .bestand import BestandInline
 from .content import ContentElementInline
 from .link import LinkInline
-from .vraag import VraagInline
 
 
 class ProductTypeAdminForm(TranslatableModelForm):
@@ -54,7 +53,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
     search_fields = ("naam", "uniforme_product_naam__naam", "keywords")
     save_on_top = True
     form = ProductTypeAdminForm
-    inlines = (BestandInline, LinkInline, VraagInline, ContentElementInline)
+    inlines = (BestandInline, LinkInline, ContentElementInline)
     fields = (
         "naam",
         "gepubliceerd",

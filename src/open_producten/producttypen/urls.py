@@ -16,7 +16,6 @@ from open_producten.producttypen.views import (
     PrijsViewSet,
     ProductTypeViewSet,
     ThemaViewSet,
-    VraagViewSet,
 )
 
 ProductTypenRouter = DefaultRouter()
@@ -25,8 +24,6 @@ ProductTypenRouter.register("producttypen", ProductTypeViewSet)
 ProductTypenRouter.register("links", LinkViewSet, basename="link")
 
 ProductTypenRouter.register("prijzen", PrijsViewSet, basename="prijs")
-
-ProductTypenRouter.register("vragen", VraagViewSet, basename="vraag")
 
 ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 
@@ -48,7 +45,6 @@ Een product type kan worden gelinkt één of meerdere locaties, organisaties en/
 Daarnaast kunnen de volgende modellen per product worden aangemaakt:
 - prijzen
 - links
-- vragen
 
 Een aantal velden verwachten een lijst/array van bijvoorbeeld product_type_ids. Let op dat als dit veld in een PATCH request wordt meegestuurd de gehele lijst/array zal worden overschreven.
 
@@ -69,16 +65,16 @@ custom_settings = {
         },
         {"name": "prijzen", "description": "Opvragen en bewerken van PRIJZEN."},
         {"name": "links", "description": "Opvragen en bewerken van LINKS."},
-        {
-            "name": "vragen",
-            "description": "Opvragen en bewerken van VRAGEN. Een vraag kan gelinkt zijn aan een PRODUCTTYPE OF THEMA.",
-        },
         {"name": "locaties", "description": "Opvragen en bewerken van LOCATIES."},
         {
             "name": "organisaties",
             "description": "Opvragen en bewerken van ORGANISATIES.",
         },
         {"name": "contacten", "description": "Opvragen en bewerken van CONTACTEN."},
+        {
+            "name": "content",
+            "description": "Opvragen en bewerken van PRODUCTTYPE CONTENT.",
+        },
     ],
 }
 

@@ -7,7 +7,6 @@ from open_producten.producttypen.models import ProductType, Thema, UniformeProdu
 
 from ...utils.drf_validators import DuplicateIdValidator
 from .validators import ThemaGepubliceerdStateValidator, ThemaSelfReferenceValidator
-from .vraag import NestedVraagSerializer
 
 
 class NestedProductTypeSerializer(serializers.ModelSerializer):
@@ -36,7 +35,6 @@ class ThemaSerializer(serializers.ModelSerializer):
         help_text=_("Het hoofd thema waaronder dit thema valt."),
     )
     product_typen = NestedProductTypeSerializer(many=True, read_only=True)
-    vragen = NestedVraagSerializer(many=True, read_only=True)
 
     # TODO: remove?
     product_type_ids = serializers.PrimaryKeyRelatedField(
@@ -52,7 +50,6 @@ class ThemaSerializer(serializers.ModelSerializer):
             "id",
             "naam",
             "beschrijving",
-            "vragen",
             "gepubliceerd",
             "aanmaak_datum",
             "update_datum",
