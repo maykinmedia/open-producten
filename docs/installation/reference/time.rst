@@ -16,7 +16,7 @@ possible, both client and server should use the *same* services so that their cl
 in sync.
 
 Where Open Producten deals with time-aspects
-=======================================
+============================================
 
 Open Producten deals with time-based validations in a number of places, of which you can
 configure how Open Producten deals with them for a subset of these places.

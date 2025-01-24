@@ -42,7 +42,7 @@ For documentation on how to set up a project in Sentry, please refer to the offi
 documentation (make sure to follow the instructions for the platform Python > Django).
 
 After setting up the project, you will receive a **DSN**, which is the URL to which
-exceptions will be sent (e.g. https://e95a42137e6042c59d19376e566f027a@sentry.openproducten.nl/104).
+exceptions will be sent.
 
 The created Sentry project can be linked to Open Producten by setting the environment
 variable ``SENTRY_DSN`` equal to this DSN.

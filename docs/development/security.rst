@@ -1,5 +1,5 @@
 Security measures in Open Producten
-==============================
+===================================
 
 The following is a non-exhaustive list of configurations in Open Producten to enhance
 security.
@@ -24,7 +24,7 @@ are set in the virtual host:
     there's no need for these :-)
 
 Open Producten settings
-------------------
+-----------------------
 
 ``X-Frame-Options`` is set to ``DENY``
     no (i)frames are allowed at all

@@ -157,6 +157,7 @@ The file ``includes/local.py`` overwrites settings from the base configuration,
 and is only loaded for the dev settings.
 
 .. TODO: remove Celery part below? No references for usage found in project
+
 Running background tasks
 =====================================
 
