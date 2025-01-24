@@ -1,9 +1,13 @@
 from django import http
 from django.template import TemplateDoesNotExist, loader
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.defaults import ERROR_500_TEMPLATE_NAME
 from django.views.generic import TemplateView
 
+from rest_framework import status
+from rest_framework.exceptions import NotFound, ParseError
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -42,3 +46,43 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({"component": self.component})
         return context
+
+
+class TranslatableViewSetMixin:
+    def get_requested_language(self):
+        accept_language = self.request.headers.get("Accept-Language")
+        if accept_language and "," in accept_language:
+            raise ParseError(
+                _("Only a single language in Accept-Language is supported.")
+            )
+
+        return accept_language or "nl"
+
+    def get_queryset(self):
+        language = self.get_requested_language()
+        return super().get_queryset().language(language)
+
+    def update_vertaling(self, request, taal, **kwargs):
+        instance = self.get_object()
+
+        if taal.lower() == "nl":
+            raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
+
+        instance.set_current_language(taal)
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def delete_vertaling(self, request, taal, **kwargs):
+        instance = self.get_object()
+
+        if taal.lower() == "nl":
+            raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
+
+        if not instance.has_translation(taal):
+            raise NotFound(_("{} vertaling bestaat niet.").format(taal))
+
+        instance.delete_translation(taal)
+        return Response(status=status.HTTP_204_NO_CONTENT)

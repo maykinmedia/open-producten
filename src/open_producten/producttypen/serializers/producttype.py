@@ -87,7 +87,9 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         help_text=_("Korte beschrijving van het product type."),
     )
 
-    taal = serializers.SerializerMethodField(read_only=True)
+    taal = serializers.SerializerMethodField(
+        read_only=True, help_text=_("De huidige taal van het product type.")
+    )
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_taal(self, obj):

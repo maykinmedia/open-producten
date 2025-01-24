@@ -11,7 +11,6 @@ from drf_spectacular.utils import (
 )
 from rest_framework import mixins, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -40,7 +39,7 @@ from open_producten.producttypen.serializers.content import (
 from open_producten.producttypen.serializers.producttype import (
     ProductTypeTranslationSerializer,
 )
-from open_producten.utils.views import OrderedModelViewSet
+from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
 
 
 @extend_schema_view(
@@ -85,25 +84,12 @@ from open_producten.utils.views import OrderedModelViewSet
         summary="Verwijder een PRODUCTTYPE.",
     ),
 )
-class ProductTypeViewSet(OrderedModelViewSet):
+class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     queryset = ProductType.objects.all()
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd"]
-
-    def get_requested_language(self):
-        accept_language = self.request.headers.get("Accept-Language")
-        if accept_language and "," in accept_language:
-            raise ParseError(
-                _("Only a single language in Accept-Language is supported.")
-            )
-
-        return accept_language or "nl"
-
-    def get_queryset(self):
-        language = self.get_requested_language()
-        return ProductType.objects.language(language)
 
     @extend_schema(
         summary="De vertaling van een producttype aanpassen.",
@@ -120,21 +106,11 @@ class ProductTypeViewSet(OrderedModelViewSet):
     @action(
         detail=True,
         methods=["put"],
-        serializer_class=ProductTypeTranslationSerializer,  # TODO change serializer.
+        serializer_class=ProductTypeTranslationSerializer,
         url_path="vertaling/(?P<taal>[^/.]+)",
     )
     def vertaling(self, request, taal, **kwargs):
-        product_type = self.get_object()
-
-        if taal.lower() == "nl":
-            raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
-
-        product_type.set_current_language(taal)
-        serializer = self.get_serializer(product_type, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response(serializer.data)
+        return super().update_vertaling(request, taal, **kwargs)
 
     @extend_schema(
         summary="De vertaling van een producttype verwijderen.",
@@ -150,16 +126,7 @@ class ProductTypeViewSet(OrderedModelViewSet):
     )
     @vertaling.mapping.delete
     def delete_vertaling(self, request, taal, **kwargs):
-        content_element = self.get_object()
-
-        if taal.lower() == "nl":
-            raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
-
-        if not content_element.has_translation(taal):
-            raise NotFound(_("{} vertaling bestaat niet.").format(taal))
-
-        content_element.delete_translation(taal)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return super().delete_vertaling(request, taal, **kwargs)
 
     @extend_schema(
         "actuele_prijzen",
@@ -410,19 +377,6 @@ class ContentElementViewSet(OrderedModelViewSet):
     serializer_class = ContentElementSerializer
     lookup_url_kwarg = "id"
 
-    def get_requested_language(self):
-        accept_language = self.request.headers.get("Accept-Language")
-        if accept_language and "," in accept_language:
-            raise ParseError(
-                _("Only a single language in Accept-Language is supported.")
-            )
-
-        return accept_language or "nl"
-
-    def get_queryset(self):
-        language = self.get_requested_language()
-        return ContentElement.objects.language(language)
-
     @extend_schema(
         summary="De vertaling van een content element aanpassen.",
         description="nl kan worden aangepast via het model.",
@@ -442,17 +396,7 @@ class ContentElementViewSet(OrderedModelViewSet):
         url_path="vertaling/(?P<taal>[^/.]+)",
     )
     def vertaling(self, request, taal, **kwargs):
-        content_element = self.get_object()
-
-        if taal.lower() == "nl":
-            raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
-
-        content_element.set_current_language(taal)
-        serializer = self.get_serializer(content_element, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response(serializer.data)
+        return super().update_vertaling(request, taal, **kwargs)
 
     @extend_schema(
         summary="De vertaling van een content element verwijderen.",
@@ -468,13 +412,4 @@ class ContentElementViewSet(OrderedModelViewSet):
     )
     @vertaling.mapping.delete
     def delete_vertaling(self, request, taal, **kwargs):
-        content_element = self.get_object()
-
-        if taal.lower() == "nl":
-            raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
-
-        if not content_element.has_translation(taal):
-            raise NotFound(_("{} vertaling bestaat niet.").format(taal))
-
-        content_element.delete_translation(taal)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return super().delete_vertaling(request, taal, **kwargs)

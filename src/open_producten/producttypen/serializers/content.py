@@ -26,7 +26,9 @@ class ContentElementSerializer(TranslatableModelSerializer):
         source="product_type", queryset=ProductType.objects.all()
     )
 
-    taal = serializers.SerializerMethodField(read_only=True)
+    taal = serializers.SerializerMethodField(
+        read_only=True, help_text=_("De huidige taal van het content element.")
+    )
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_taal(self, obj):
