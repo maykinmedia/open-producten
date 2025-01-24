@@ -1,6 +1,8 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers
 
@@ -85,6 +87,13 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         help_text=_("Korte beschrijving van het product type."),
     )
 
+    taal = serializers.SerializerMethodField(read_only=True)
+
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_taal(self, obj):
+        requested_language = self.context["view"].get_requested_language()
+        return requested_language if obj.has_translation(requested_language) else "nl"
+
     class Meta:
         model = ProductType
         fields = "__all__"
@@ -118,7 +127,6 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         product_type.naam = naam
         product_type.samenvatting = samenvatting
 
-        product_type.save()
         product_type.add_contact_organisaties()
         return product_type
 
@@ -149,7 +157,6 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         if samenvatting:
             instance.samenvatting = samenvatting
 
-        instance.save()
         instance.add_contact_organisaties()
         return instance
 

@@ -60,7 +60,13 @@ class TestContentElement(BaseApiTestCase):
         self.assertEqual(ContentElement.objects.count(), 2)
 
         response.data.pop("id")
-        self.assertEqual(response.data, self.data)
+        expected_data = {
+            "labels": [self.label.naam],
+            "content": "Voorwaarden",
+            "product_type_id": self.product_type.id,
+            "taal": "nl",
+        }
+        self.assertEqual(response.data, expected_data)
 
     def test_update_content_element(self):
         data = self.data | {"content": "update"}
@@ -90,6 +96,7 @@ class TestContentElement(BaseApiTestCase):
                 self.label.naam,
             ],
             "product_type_id": self.product_type.id,
+            "taal": "nl",
         }
         self.assertEqual(response.data, expected_data)
 
@@ -105,6 +112,7 @@ class TestContentElement(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["content"], "content element EN")
+        self.assertEqual(response.data["taal"], "en")
 
     def test_read_content_element_in_fallback_language(self):
         content_element = ContentElementFactory.create(content="content element NL")
@@ -114,6 +122,7 @@ class TestContentElement(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["content"], "content element NL")
+        self.assertEqual(response.data["taal"], "nl")
 
     def test_delete_content_element(self):
         response = self.client.delete(self.detail_path)

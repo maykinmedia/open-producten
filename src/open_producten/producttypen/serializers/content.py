@@ -1,5 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers
 
@@ -24,14 +26,16 @@ class ContentElementSerializer(TranslatableModelSerializer):
         source="product_type", queryset=ProductType.objects.all()
     )
 
+    taal = serializers.SerializerMethodField(read_only=True)
+
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_taal(self, obj):
+        requested_language = self.context["view"].get_requested_language()
+        return requested_language if obj.has_translation(requested_language) else "nl"
+
     class Meta:
         model = ContentElement
-        fields = (
-            "id",
-            "content",
-            "labels",
-            "product_type_id",
-        )
+        fields = ("id", "content", "labels", "product_type_id", "taal")
 
     def create(self, validated_data):
         content = validated_data.pop("content")

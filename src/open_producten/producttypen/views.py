@@ -9,11 +9,12 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
-from rest_framework import status
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from open_producten.producttypen.models import (
     Bestand,
@@ -99,25 +100,6 @@ class ProductTypeViewSet(OrderedModelViewSet):
             )
 
         return accept_language or "nl"
-
-    # TODO this or add to json?
-    # def list(self, request, *args, **kwargs):
-    #     response = super().list(request, *args, **kwargs)
-    #
-    #     response["Content-Language"] = self.get_requested_language()
-    #     return response
-    #
-    # def retrieve(self, request, *args, **kwargs):
-    #     response = super().retrieve(request, *args, **kwargs)
-    #
-    #     requested_language = self.get_requested_language()
-    #     content_language = (
-    #         requested_language
-    #         if self.get_object().has_translation(requested_language)
-    #         else "nl"
-    #     )
-    #     response["Content-Language"] = content_language
-    #     return response
 
     def get_queryset(self):
         language = self.get_requested_language()
@@ -427,8 +409,6 @@ class ContentElementViewSet(OrderedModelViewSet):
     queryset = ContentElement.objects.all()
     serializer_class = ContentElementSerializer
     lookup_url_kwarg = "id"
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ["labels"] # TODO
 
     def get_requested_language(self):
         accept_language = self.request.headers.get("Accept-Language")
