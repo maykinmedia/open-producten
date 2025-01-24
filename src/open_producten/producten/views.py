@@ -27,6 +27,8 @@ from open_producten.utils.views import OrderedModelViewSet
                     "gepubliceerd": False,
                     "bsn": "111222333",
                     "status": "gereed",
+                    "prijs": "20.20",
+                    "frequentie": "eenmalig",
                 },
                 request_only=True,
             )
@@ -67,4 +69,4 @@ class ProductViewSet(AuditTrailViewSetMixin, OrderedModelViewSet):
     lookup_url_field = "id"
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd", "status"]
+    filterset_fields = ["gepubliceerd", "status", "frequentie"]
