@@ -278,6 +278,8 @@ oyaml==1.0
     # via commonground-api-common
 packaging==24.2
     # via drf-yasg
+parler==1.0.1
+    # via -r requirements/base.in
 phonenumberslite==8.13.50
     # via django-two-factor-auth
 pillow==11.0.0
@@ -349,6 +351,7 @@ requests==2.32.3
     #   gemma-zds-client
     #   mozilla-django-oidc
     #   open-api-framework
+    #   parler
     #   zgw-consumers
 rpds-py==0.21.0
     # via

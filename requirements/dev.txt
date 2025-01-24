@@ -616,6 +616,10 @@ packaging==24.2
     #   black
     #   drf-yasg
     #   sphinx
+parler==1.0.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 pathspec==0.12.1
     # via
     #   -c requirements/ci.txt
@@ -779,6 +783,7 @@ requests==2.32.3
     #   gemma-zds-client
     #   mozilla-django-oidc
     #   open-api-framework
+    #   parler
     #   requests-mock
     #   sphinx
     #   zgw-consumers
