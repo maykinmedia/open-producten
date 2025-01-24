@@ -202,7 +202,7 @@ djangorestframework-gis==1.1
     # via open-api-framework
 djangorestframework-inclusions==1.2.0
     # via open-api-framework
-docutils==0.21.2
+docutils==0.17.1
     # via
     #   django-markup
     #   python-creole
@@ -254,7 +254,7 @@ jsonschema-specifications==2024.10.1
     # via jsonschema
 kombu==5.4.2
     # via celery
-markdown==3.7
+markdown==3.3.6
     # via
     #   django-markdownx
     #   django-markup
