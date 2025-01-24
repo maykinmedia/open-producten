@@ -92,23 +92,22 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  # docs:
-  #   name: Build and check documentation
-  #   runs-on: ubuntu-latest
+  docs:
+    name: Build and check documentation
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: maykinmedia/setup-django-backend@v1.3
-  #       with:
-  #         python-version: '3.11'
-  #         setup-node: 'no'
-  #         # apt-packages: 'gettext postgresql-client'  # the default
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maykinmedia/setup-django-backend@v1.3
+        with:
+          python-version: '3.11'
+          setup-node: 'no'
 
-  #     - name: Build and test docs
-  #       run: |
-  #         export OPENSSL_CONF=$(pwd)/openssl.conf
-  #         pytest check_sphinx.py -v --tb=auto
-  #       working-directory: docs
+      - name: Build and test docs
+        run: |
+          export OPENSSL_CONF=$(pwd)/openssl.conf
+          pytest check_sphinx.py -v --tb=auto
+        working-directory: docs
 
   docker_build:
     name: Build Docker image
