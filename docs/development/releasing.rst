@@ -65,3 +65,5 @@ Once the PR is merged to main, check out the ``master`` branch and tag it:
     git tag 1.0.0
 
 Tagging will ensure that a Docker image ``maykinmedia/open-producten:1.0.0`` is published.
+
+. _`Maykin`: https://github.com/maykinmedia

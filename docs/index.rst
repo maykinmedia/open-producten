@@ -1,5 +1,5 @@
 Open Producten Documentation
-=======================
+============================
 
 **Open Producten** is an application where product types and products can be
 managed in a single place. Other applications like `Open Inwoner`_ and `Open

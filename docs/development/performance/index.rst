@@ -6,7 +6,7 @@ Performance
 .. TODO: include performance benchmarks
 
 The performance for Open Producten can be measured in several ways. See
-:ref:`Profiling <_development_performance_profiling>` for options about measuring
+:ref:`Profiling<development_performance_profiling>` for options about measuring
 several aspects of Open Producten.
 
 .. toctree::

@@ -1,8 +1,8 @@
 .. _installation_configuration:
 
-===============================
+====================================
 Open Producten configuration (admin)
-===============================
+====================================
 
 Before you can work with Open Producten after installation, a few settings need to be
 configured first.
@@ -29,7 +29,7 @@ Create an API token
 ===================
 
 Open Producten
----------
+--------------
 By creating an API token, we can perform an API test call to verify the successful
 installation.
 
@@ -47,7 +47,7 @@ Making an API call
 ==================
 
 Open Producten
----------
+--------------
 We can now make an HTTP request to one of the APIs of Open Producten. For this
 example, we have used `curl`_ to make the request.
 

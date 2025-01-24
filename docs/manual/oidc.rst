@@ -39,7 +39,7 @@ Aan het eind van dit proces moet je de volgende gegevens hebben (on premise):
 * Client secret, bijvoorbeeld ``97d663a9-3624-4930-90c7-2b90635bd990``
 
 Configureren van OIDC in Open Producten
-==================================
+=======================================
 
 Zorg dat je de volgende :ref:`gegevens <manual_oidc_appgroup>` hebt:
 

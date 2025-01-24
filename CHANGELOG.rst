@@ -1,7 +1,7 @@
 
 0.0.x (TBD)
 -----------
-* Documentation on https://open-producten.readthedocs.io/
+* Added Read the Docs documentation
 
 0.0.2 (17-01-2025)
 ------------------
