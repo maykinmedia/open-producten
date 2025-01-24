@@ -590,54 +590,6 @@ paths:
                 $ref: '#/components/schemas/DetailError'
           description: ''
   /content/:
-    get:
-      operationId: content_list
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
-      tags:
-      - content
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedContentElementList'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                BadRequestExample:
-                  value:
-                    veld_a:
-                    - Dit veld is vereist.
-                    veld_b:
-                    - ‘<uuid>’ is geen geldige UUID.
-                  summary: Bad request example
-                  description: Errors worden per veld teruggegeven. Hieronder volgt
-                    een voorbeeld.
-          description: Validation error
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DetailError'
-          description: ''
     post:
       operationId: content_create
       tags:
@@ -3369,10 +3321,14 @@ components:
         product_type_id:
           type: string
           format: uuid
+        taal:
+          type: string
+          readOnly: true
       required:
       - content
       - id
       - product_type_id
+      - taal
     ContentElementRequest:
       type: object
       description: Serializer that saves :class:`TranslatedFieldsField` automatically.
@@ -3970,29 +3926,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
-    PaginatedContentElementList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContentElement'
     PaginatedJsonSchemaList:
       type: object
       required:
@@ -4564,6 +4497,9 @@ components:
           type: string
           description: Korte beschrijving van het product type.
           maxLength: 300
+        taal:
+          type: string
+          readOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4604,6 +4540,7 @@ components:
       - organisaties
       - prijzen
       - samenvatting
+      - taal
       - themas
       - uniforme_product_naam
       - update_datum

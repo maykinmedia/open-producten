@@ -69,7 +69,6 @@ class ThemaSerializer(serializers.ModelSerializer):
 
         thema = Thema.objects.create(**validated_data)
         thema.product_typen.set(product_typen)
-        thema.save()
 
         return thema
 
@@ -87,5 +86,5 @@ class ThemaSerializer(serializers.ModelSerializer):
 
         if product_typen:
             instance.product_typen.set(product_typen)
-        instance.save()
+
         return instance

@@ -89,6 +89,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
+            "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
@@ -247,6 +248,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
+            "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": {
@@ -579,6 +581,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "naam": product_type1.naam,
                 "code": product_type1.code,
                 "samenvatting": product_type1.samenvatting,
+                "taal": "nl",
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
@@ -609,6 +612,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "naam": product_type2.naam,
                 "code": product_type2.code,
                 "samenvatting": product_type2.samenvatting,
+                "taal": "nl",
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
@@ -650,6 +654,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
+            "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
@@ -693,7 +698,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["naam"], "product type EN")
         self.assertEqual(response.data["samenvatting"], "summary")
-        # self.assertEqual(response.headers["Content-Language"], "en") # TODO
+        self.assertEqual(response.data["taal"], "en")
 
     def test_read_product_type_in_fallback_language(self):
         product_type = ProductTypeFactory.create(
@@ -709,7 +714,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["naam"], "product type NL")
         self.assertEqual(response.data["samenvatting"], "samenvatting")
-        # self.assertEqual(response.headers["Content-Language"], "nl") TODO
+        self.assertEqual(response.data["taal"], "nl")
 
     def test_delete_product_type(self):
         product_type = ProductTypeFactory.create()
