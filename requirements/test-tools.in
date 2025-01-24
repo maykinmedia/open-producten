@@ -17,6 +17,7 @@ black
 isort
 
 # Documentation
+pytest
 recommonmark
 sphinx==4.4.0
 sphinx-markdown-tables==0.0.15

@@ -512,6 +512,11 @@ inflection==0.5.1
     #   -r requirements/ci.txt
     #   drf-spectacular
     #   drf-yasg
+iniconfig==2.0.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest
 iso-639==0.4.5
     # via
     #   -c requirements/ci.txt
@@ -632,6 +637,7 @@ packaging==24.2
     #   -r requirements/ci.txt
     #   black
     #   drf-yasg
+    #   pytest
     #   sphinx
 pathspec==0.12.1
     # via
@@ -654,6 +660,11 @@ platformdirs==4.3.6
     #   -r requirements/ci.txt
     #   black
     #   pylint
+pluggy==1.5.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest
 prometheus-client==0.21.0
     # via
     #   -c requirements/ci.txt
@@ -714,6 +725,10 @@ pypng==0.20220715.0
     #   -r requirements/ci.txt
     #   qrcode
 pyquery==2.0.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+pytest==8.3.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
