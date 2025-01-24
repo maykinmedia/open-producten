@@ -3324,6 +3324,7 @@ components:
         taal:
           type: string
           readOnly: true
+          description: De huidige taal van het content element.
       required:
       - content
       - id
@@ -4500,6 +4501,7 @@ components:
         taal:
           type: string
           readOnly: true
+          description: De huidige taal van het product type.
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
