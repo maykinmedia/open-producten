@@ -393,3 +393,69 @@ class TestProduct(BaseApiTestCase):
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
             self.assertEqual(response.data, test["error"])
+
+    @freeze_time("2025-11-30")
+    def test_update_state_and_dates_are_checked_when_changed(self):
+        product_type = ProductTypeFactory.create(toegestane_statussen=[])
+        tests = [
+            {
+                "field": {"status": "gereed"},
+                "error": {
+                    "status": [
+                        ErrorDetail(
+                            string=_(
+                                "Status 'Gereed' is niet toegestaan voor het product type {}."
+                            ).format(product_type.naam),
+                            code="invalid",
+                        )
+                    ]
+                },
+            },
+            {
+                "field": {"start_datum": datetime.date(2025, 12, 31)},
+                "error": {
+                    "start_datum": [
+                        ErrorDetail(
+                            string=_(
+                                "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
+                            ),
+                            code="invalid",
+                        )
+                    ]
+                },
+            },
+            {
+                "field": {"eind_datum": datetime.date(2026, 12, 31)},
+                "error": {
+                    "eind_datum": [
+                        ErrorDetail(
+                            string=_(
+                                "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
+                            ),
+                            code="invalid",
+                        )
+                    ]
+                },
+            },
+        ]
+
+        for test in tests:
+            with self.subTest(
+                f"Test {test['field']} is checked when product type is changed."
+            ):
+
+                data = {
+                    "product_type_id": product_type.id,
+                    "bsn": "111222333",
+                    "status": "initieel",
+                }
+
+                product = ProductFactory.create(**data)
+
+                response = self.client.put(
+                    self.detail_path(product),
+                    data | test["field"],
+                )
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+            self.assertEqual(response.data, test["error"])

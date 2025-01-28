@@ -10,6 +10,33 @@ from open_producten.producten.models.product import (
     validate_start_datum,
     validate_status,
 )
+from open_producten.producttypen.models.producttype import (
+    ProductStateChoices,
+    ProductType,
+)
+
+
+def get_status_choices(product_type_id, instance):
+
+    if instance:
+        return [
+            choice
+            for choice in ProductStateChoices.choices
+            if choice[0] in instance.product_type.toegestane_statussen
+            or choice[0] == ProductStateChoices.INITIEEL.value
+            or choice[0] == instance.status  # keep exising status of product
+        ]
+
+    if product_type_id:
+        return [
+            choice
+            for choice in ProductStateChoices.choices
+            if choice[0]
+            in ProductType.objects.get(id=product_type_id).toegestane_statussen
+            or choice[0] == ProductStateChoices.INITIEEL.value
+        ]
+
+    return ProductStateChoices.choices
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -23,7 +50,9 @@ class ProductAdminForm(forms.ModelForm):
 
         self.fields["status"] = forms.TypedChoiceField(
             label=_("status"),
-            choices=self.instance.status_choices,
+            choices=get_status_choices(
+                args[0].get("product_type") if args else None, kwargs.get("instance")
+            ),
             widget=forms.Select,
         )
 
@@ -33,6 +62,9 @@ class ProductAdminForm(forms.ModelForm):
         This means that the status & dates should only be validated when they (or the product type is changed) otherwise it will raise an exception.
         """
         super().clean()
+
+        if self.errors:
+            return
 
         product_type_changed = "product_type" in self.changed_data
 

@@ -5,7 +5,8 @@ from django.test import TestCase
 
 from open_producten.producttypen.tests.factories import ProductTypeFactory
 
-from ..admin.product import ProductAdminForm
+from ...producttypen.models.producttype import ProductStateChoices
+from ..admin.product import ProductAdminForm, get_status_choices
 from .factories import ProductFactory
 
 
@@ -76,3 +77,24 @@ class TestProductAdminForm(TestCase):
         mock_validate_status.assert_called_once()
         mock_validate_start_datum.assert_called_once()
         mock_validate_eind_datum.assert_called_once()
+
+    def test_get_status_choices_with_instance(self):
+        product_type = ProductTypeFactory.create(toegestane_statussen=["actief"])
+        product = ProductFactory(product_type=product_type, status="gereed")
+        choices = get_status_choices(None, product)
+
+        self.assertCountEqual(
+            choices,
+            [("actief", "Actief"), ("initieel", "Initieel"), ("gereed", "Gereed")],
+        )
+
+    def test_get_status_choices_with_product_type_id(self):
+        product_type = ProductTypeFactory.create(toegestane_statussen=["actief"])
+        choices = get_status_choices(product_type.id, None)
+
+        self.assertCountEqual(choices, [("actief", "Actief"), ("initieel", "Initieel")])
+
+    def test_get_status_choices_with_on_create(self):
+        choices = get_status_choices(None, None)
+
+        self.assertEqual(choices, ProductStateChoices.choices)

@@ -70,27 +70,6 @@ class Product(BasePublishableModel):
         verbose_name = _("Product")
         verbose_name_plural = _("Producten")
 
-    # TODO move to product admin & try to update based on changed_data?
-    @property
-    def status_choices(self):
-        """
-        Returns all ProductStateChoices that are enabled on the product type.
-        """
-        choices = [
-            (ProductStateChoices.INITIEEL.value, ProductStateChoices.INITIEEL.label)
-        ]
-        if not hasattr(self, "product_type"):
-            return choices
-        return set(
-            choices
-            + [
-                choice
-                for choice in ProductStateChoices.choices
-                if choice[0] in self.product_type.toegestane_statussen
-                or choice[0] == self.status
-            ]
-        )
-
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
         validate_dates(self.start_datum, self.eind_datum)
