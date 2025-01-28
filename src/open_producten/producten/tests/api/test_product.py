@@ -23,7 +23,6 @@ class TestProduct(BaseApiTestCase):
         self.data = {
             "product_type_id": self.product_type.id,
             "bsn": "111222333",
-            "data": [],
             "status": "initieel",
         }
         self.path = reverse("product-list")
@@ -43,7 +42,7 @@ class TestProduct(BaseApiTestCase):
             response.data,
             {
                 "product_type_id": [
-                    ErrorDetail(string="Dit veld is vereist.", code="required")
+                    ErrorDetail(string=_("This field is required."), code="required")
                 ],
             },
         )
@@ -103,13 +102,15 @@ class TestProduct(BaseApiTestCase):
 
     def test_create_product_with_not_allowed_state(self):
         response = self.client.post(self.path, self.data | {"status": "actief"})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
                 "status": [
                     ErrorDetail(
-                        string=f"Status 'Actief' is niet toegestaan voor het product type {self.product_type.naam}.",
+                        string=_(
+                            "Status 'Actief' is niet toegestaan voor het product type {}."
+                        ).format(self.product_type.naam),
                         code="invalid",
                     )
                 ]
@@ -119,7 +120,7 @@ class TestProduct(BaseApiTestCase):
     def test_create_product_with_allowed_state(self):
         response = self.client.post(self.path, self.data | {"status": "gereed"})
 
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 1)
 
     def test_update_product(self):
@@ -162,13 +163,15 @@ class TestProduct(BaseApiTestCase):
         data = self.data.copy() | {"status": "actief"}
         response = self.client.put(self.detail_path(product), data)
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
             {
                 "status": [
                     ErrorDetail(
-                        string=f"Status 'Actief' is niet toegestaan voor het product type {self.product_type.naam}.",
+                        string=_(
+                            "Status 'Actief' is niet toegestaan voor het product type {}."
+                        ).format(self.product_type.naam),
                         code="invalid",
                     )
                 ]
@@ -292,3 +295,101 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Product.objects.count(), 0)
+
+    @freeze_time("2025-11-30")
+    def test_update_state_and_dates_are_not_checked_when_not_changed(self):
+        data = {
+            "product_type_id": ProductTypeFactory.create(toegestane_statussen=[]).id,
+            "status": "gereed",
+            "bsn": "111222333",
+            "start_datum": datetime.date(2025, 12, 31),
+            "eind_datum": datetime.date(2026, 12, 31),
+        }
+
+        product = ProductFactory.create(**data)
+
+        response = self.client.put(self.detail_path(product), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @freeze_time("2025-11-30")
+    def test_partial_update_state_and_dates_are_not_checked_when_not_changed(self):
+        data = {
+            "product_type_id": ProductTypeFactory.create(toegestane_statussen=[]).id,
+            "status": "gereed",
+            "bsn": "111222333",
+            "start_datum": datetime.date(2025, 12, 31),
+            "eind_datum": datetime.date(2026, 12, 31),
+        }
+
+        product = ProductFactory.create(**data)
+
+        response = self.client.patch(self.detail_path(product), {"kvk": "12345678"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @freeze_time("2025-11-30")
+    def test_update_state_and_dates_are_checked_when_product_type_is_changed(self):
+        new_product_type = ProductTypeFactory.create(toegestane_statussen=[])
+
+        tests = [
+            {
+                "field": {"status": "gereed"},
+                "error": {
+                    "status": [
+                        ErrorDetail(
+                            string=_(
+                                "Status 'Gereed' is niet toegestaan voor het product type {}."
+                            ).format(new_product_type.naam),
+                            code="invalid",
+                        )
+                    ]
+                },
+            },
+            {
+                "field": {"start_datum": datetime.date(2025, 12, 31)},
+                "error": {
+                    "start_datum": [
+                        ErrorDetail(
+                            string=_(
+                                "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
+                            ),
+                            code="invalid",
+                        )
+                    ]
+                },
+            },
+            {
+                "field": {"eind_datum": datetime.date(2026, 12, 31)},
+                "error": {
+                    "eind_datum": [
+                        ErrorDetail(
+                            string=_(
+                                "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
+                            ),
+                            code="invalid",
+                        )
+                    ]
+                },
+            },
+        ]
+
+        for test in tests:
+            with self.subTest(
+                f"Test {test['field']} is checked when product type is changed."
+            ):
+
+                data = {
+                    "product_type_id": ProductTypeFactory.create(
+                        toegestane_statussen=[]
+                    ).id,
+                    "bsn": "111222333",
+                } | test["field"]
+
+                product = ProductFactory.create(**data)
+
+                response = self.client.put(
+                    self.detail_path(product),
+                    data | {"product_type_id": new_product_type.id},
+                )
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+            self.assertEqual(response.data, test["error"])

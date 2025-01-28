@@ -54,7 +54,7 @@ class Product(BasePublishableModel):
         help_text=_(
             "De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type."
         ),
-        default=ProductStateChoices.INITIEEL.value,
+        default=ProductStateChoices.INITIEEL,
     )
 
     kvk = models.CharField(
@@ -70,6 +70,7 @@ class Product(BasePublishableModel):
         verbose_name = _("Product")
         verbose_name_plural = _("Producten")
 
+    # TODO move to product admin & try to update based on changed_data?
     @property
     def status_choices(self):
         """
@@ -80,16 +81,19 @@ class Product(BasePublishableModel):
         ]
         if not hasattr(self, "product_type"):
             return choices
-        return choices + [
-            choice
-            for choice in ProductStateChoices.choices
-            if choice[0] in self.product_type.toegestane_statussen
-        ]
+        return set(
+            choices
+            + [
+                choice
+                for choice in ProductStateChoices.choices
+                if choice[0] in self.product_type.toegestane_statussen
+                or choice[0] == self.status
+            ]
+        )
 
     def clean(self):
         validate_bsn_or_kvk(self.bsn, self.kvk)
-        validate_status(self.status, self.product_type)
-        validate_dates(self.start_datum, self.eind_datum, self.product_type)
+        validate_dates(self.start_datum, self.eind_datum)
 
     def save(self, *args, **kwargs):
         self.handle_start_datum()
@@ -137,7 +141,7 @@ def validate_bsn_or_kvk(bsn, kvk):
 
 def validate_status(status, product_type):
     if (
-        status != ProductStateChoices.INITIEEL.value
+        status != ProductStateChoices.INITIEEL
         and status not in product_type.toegestane_statussen
     ):
         raise ValidationError(
@@ -152,19 +156,20 @@ def validate_status(status, product_type):
         )
 
 
-def validate_dates(start_datum, eind_datum, product_type):
-    if (start_datum == eind_datum) and start_datum is not None:
+def validate_dates(start_datum, eind_datum):
+    if start_datum and eind_datum and (start_datum >= eind_datum):
         raise ValidationError(
-            {
-                _(
-                    "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen."
-                )
-            }
+            _(
+                "De eind datum van een product mag niet op een eerdere of dezelfde dag vallen als de start datum."
+            )
         )
+
+
+def validate_start_datum(start_datum, product_type):
 
     if (
         start_datum
-        and ProductStateChoices.ACTIEF.value not in product_type.toegestane_statussen
+        and ProductStateChoices.ACTIEF not in product_type.toegestane_statussen
     ):
         raise ValidationError(
             {
@@ -174,9 +179,11 @@ def validate_dates(start_datum, eind_datum, product_type):
             }
         )
 
+
+def validate_eind_datum(eind_datum, product_type):
     if (
         eind_datum
-        and ProductStateChoices.VERLOPEN.value not in product_type.toegestane_statussen
+        and ProductStateChoices.VERLOPEN not in product_type.toegestane_statussen
     ):
         raise ValidationError(
             {

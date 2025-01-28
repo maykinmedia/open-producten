@@ -5,6 +5,11 @@ from django.utils.translation import gettext_lazy as _
 
 from open_producten.logging.service import AdminAuditLogMixin, get_logs_link
 from open_producten.producten.models import Product
+from open_producten.producten.models.product import (
+    validate_eind_datum,
+    validate_start_datum,
+    validate_status,
+)
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -21,6 +26,30 @@ class ProductAdminForm(forms.ModelForm):
             choices=self.instance.status_choices,
             widget=forms.Select,
         )
+
+    def clean(self):
+        """
+        The toegestane_statussen on the product type should be changeable without it affecting existing products.
+        This means that the status & dates should only be validated when they (or the product type is changed) otherwise it will raise an exception.
+        """
+        super().clean()
+
+        product_type_changed = "product_type" in self.changed_data
+
+        if "status" in self.changed_data or product_type_changed:
+            validate_status(
+                self.cleaned_data["status"], self.cleaned_data["product_type"]
+            )
+
+        if "start_datum" in self.changed_data or product_type_changed:
+            validate_start_datum(
+                self.cleaned_data["start_datum"], self.cleaned_data["product_type"]
+            )
+
+        if "eind_datum" in self.changed_data or product_type_changed:
+            validate_eind_datum(
+                self.cleaned_data["eind_datum"], self.cleaned_data["product_type"]
+            )
 
 
 @admin.register(Product)
@@ -51,7 +80,7 @@ class ProductAdmin(AdminAuditLogMixin, admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("product_type")
 
-    @admin.display(description=_("actions"))
+    @admin.display(description=_("acties"))
     def show_actions(self, obj: Product) -> str:
         actions = [
             get_logs_link(obj),

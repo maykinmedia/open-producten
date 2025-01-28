@@ -1,4 +1,5 @@
 from datetime import date
+from unittest.mock import patch
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -9,6 +10,7 @@ from freezegun import freeze_time
 from open_producten.producttypen.tests.factories import ProductTypeFactory
 
 from ...producttypen.models.producttype import ProductStateChoices
+from ..models.product import validate_eind_datum, validate_start_datum, validate_status
 from .factories import ProductFactory
 
 
@@ -80,58 +82,33 @@ class TestProduct(TestCase):
         with self.assertRaisesMessage(
             ValidationError,
             _(
-                "De start datum en eind_datum van een product mogen niet op dezelfde dag vallen."
+                "De eind datum van een product mag niet op een eerdere of dezelfde dag vallen als de start datum."
             ),
         ):
             product.clean()
 
-    def test_start_and_eind_datum_are_not_allowed_to_be_null(self):
+    def test_eind_datum_is_not_allowed_to_be_before_start_datum(self):
+        product = ProductFactory.build(
+            start_datum=date(2025, 1, 12),
+            eind_datum=date(2024, 1, 12),
+            product_type=self.product_type,
+            bsn="111222333",
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _(
+                "De eind datum van een product mag niet op een eerdere of dezelfde dag vallen als de start datum."
+            ),
+        ):
+            product.clean()
+
+    def test_start_and_eind_datum_are_allowed_to_be_null(self):
         product = ProductFactory.build(
             product_type=self.product_type,
             bsn="111222333",
         )
         product.clean()
-
-    def test_status_part_of_product_type(self):
-        product = ProductFactory.build(
-            product_type=self.product_type, status="actief", bsn="111222333"
-        )
-
-        with self.assertRaisesMessage(
-            ValidationError,
-            _("Status 'Actief' is niet toegestaan voor het product type {}.").format(
-                self.product_type.naam
-            ),
-        ):
-            product.clean()
-
-    def test_start_datum_is_not_allowed_when_actief_is_not_allowed(self):
-
-        product = ProductFactory.build(
-            start_datum=date(2025, 1, 12),
-            product_type=self.product_type,
-            bsn="111222333",
-        )
-
-        with self.assertRaisesMessage(
-            ValidationError,
-            "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type.",
-        ):
-            product.clean()
-
-    def test_eind_datum_is_not_allowed_when_verlopen_is_not_allowed(self):
-
-        product = ProductFactory.build(
-            start_datum=date(2025, 1, 12),
-            product_type=self.product_type,
-            bsn="111222333",
-        )
-
-        with self.assertRaisesMessage(
-            ValidationError,
-            "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type.",
-        ):
-            product.clean()
 
 
 @freeze_time("2024-1-1")
@@ -172,7 +149,10 @@ class TestProductStateTask(TestCase):
 
         self.assertEqual(product.status, "initieel")
 
-    def test_product_status_is_not_set_to_active_on_later_states(self):
+    @patch("open_producten.producten.models.product.audit_automation_update")
+    def test_product_status_is_not_set_to_active_on_later_states(
+        self, mock_audit_automation_update
+    ):
 
         for state in [
             ProductStateChoices.ACTIEF,
@@ -188,6 +168,7 @@ class TestProductStateTask(TestCase):
                 )
                 product.handle_start_datum()
                 self.assertEqual(product.status, state.value)
+                mock_audit_automation_update.assert_not_called()
 
     def test_product_status_is_set_to_verlopen_on_eind_datum(self):
         product = ProductFactory.create(
@@ -220,7 +201,10 @@ class TestProductStateTask(TestCase):
 
         self.assertEqual(product.status, "actief")
 
-    def test_product_status_is_not_set_to_verlopen_on_later_states(self):
+    @patch("open_producten.producten.models.product.audit_automation_update")
+    def test_product_status_is_not_set_to_verlopen_on_later_states(
+        self, mock_audit_automation_update
+    ):
 
         for state in [
             ProductStateChoices.VERLOPEN,
@@ -235,3 +219,48 @@ class TestProductStateTask(TestCase):
                 )
                 product.handle_eind_datum()
                 self.assertEqual(product.status, state.value)
+                mock_audit_automation_update.assert_not_called()
+
+
+class TestProductValidateMethods(TestCase):
+    def test_validate_start_datum_raises_when_start_datum_is_set_and_actief_not_in_toegestane_statussen(
+        self,
+    ):
+        product_type = ProductTypeFactory.create(toegestane_statussen=[])
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _(
+                "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
+            ),
+        ):
+            validate_start_datum(date(2024, 1, 1), product_type)
+
+    def test_validate_eind_datum_raises_when_eind_datum_is_set_and_verlopen_not_in_toegestane_statussen(
+        self,
+    ):
+        product_type = ProductTypeFactory.create(toegestane_statussen=[])
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _(
+                "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
+            ),
+        ):
+            validate_eind_datum(date(2024, 1, 1), product_type)
+
+    def test_validate_status_raises_when_given_status_not_in_toegestane_statussen(self):
+        product_type = ProductTypeFactory.create(toegestane_statussen=[])
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _("Status 'Gereed' is niet toegestaan voor het product type {}.").format(
+                product_type.naam
+            ),
+        ):
+            validate_status("gereed", product_type)
+
+    def test_validate_status_does_not_raise_error_on_status_initieel(self):
+        product_type = ProductTypeFactory.create(toegestane_statussen=[])
+
+        validate_status("initieel", product_type)

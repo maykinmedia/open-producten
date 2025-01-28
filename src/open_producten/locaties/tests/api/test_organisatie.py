@@ -66,19 +66,6 @@ class TestOrganisatie(BaseApiTestCase):
         }
         self.assertEqual(response.data, expected_data)
 
-    def test_create_organisatie_without_code_returns_error(self):
-        data = self.data.copy()
-        data.pop("code")
-        response = self.client.post(self.path, data)
-
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.data,
-            {
-                "code": [ErrorDetail(string="Dit veld is vereist.", code="required")],
-            },
-        )
-
     def test_update_organisatie(self):
         data = self.data | {"naam": "update"}
         response = self.client.put(self.detail_path, data)

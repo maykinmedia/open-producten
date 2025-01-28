@@ -43,7 +43,7 @@ class ProductType(BasePublishableModel):
             choices=[
                 choice
                 for choice in ProductStateChoices.choices
-                if choice[0] != ProductStateChoices.INITIEEL.value
+                if choice[0] != ProductStateChoices.INITIEEL
             ]
         ),
         verbose_name=_("toegestane statussen"),
