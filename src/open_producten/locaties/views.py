@@ -107,6 +107,7 @@ class ContactViewSet(OrderedModelViewSet):
                 "Create organisatie",
                 value={
                     "naam": "Maykin Media",
+                    "code": "org-1234",
                     "email": "info@maykinmedia.nl",
                     "telefoonnummer": "+310207530523",
                     "straat": "Kingsfortweg",

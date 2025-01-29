@@ -4,6 +4,8 @@ from django.conf import settings
 from django.core.checks import Error, Warning, register
 from django.forms import ModelForm
 
+from django_celery_beat.admin import PeriodicTaskForm
+
 
 def get_subclasses(cls):
     for subclass in cls.__subclasses__():
@@ -27,6 +29,9 @@ def check_modelform_exclude(app_configs, **kwargs):
     errors = []
 
     for form in get_subclasses(ModelForm):
+        # PeriodicTaskForm.Meta from django_celery_beat has no fields attribute.
+        if form is PeriodicTaskForm:
+            continue
         # ok, fields is defined
         if form._meta.fields or getattr(form.Meta, "fields", None):
             continue

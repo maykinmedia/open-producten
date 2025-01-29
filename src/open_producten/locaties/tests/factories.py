@@ -5,6 +5,7 @@ from ..models import Contact, Locatie, Organisatie
 
 class OrganisatieFactory(factory.django.DjangoModelFactory):
     naam = factory.Sequence(lambda n: f"organisatie {n}")
+    code = factory.Sequence(lambda n: f"organisatie code {n}")
     straat = factory.Faker("street_name", locale="nl_NL")
     postcode = factory.Faker("postcode", locale="nl_NL")
     email = factory.Faker("email")

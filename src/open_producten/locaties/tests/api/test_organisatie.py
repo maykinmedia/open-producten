@@ -18,6 +18,7 @@ class TestOrganisatie(BaseApiTestCase):
 
         self.data = {
             "naam": "locatie",
+            "code": "ORG-123",
             "postcode": "1111 AA",
             "stad": "Amsterdam",
         }
@@ -40,6 +41,9 @@ class TestOrganisatie(BaseApiTestCase):
                 "naam": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
+                "code": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
             },
         )
 
@@ -52,6 +56,7 @@ class TestOrganisatie(BaseApiTestCase):
         expected_data = {
             "id": str(organisatie.id),
             "naam": organisatie.naam,
+            "code": organisatie.code,
             "email": organisatie.email,
             "telefoonnummer": organisatie.telefoonnummer,
             "straat": organisatie.straat,
@@ -87,6 +92,7 @@ class TestOrganisatie(BaseApiTestCase):
             {
                 "id": str(self.organisatie.id),
                 "naam": self.organisatie.naam,
+                "code": self.organisatie.code,
                 "email": self.organisatie.email,
                 "telefoonnummer": self.organisatie.telefoonnummer,
                 "straat": self.organisatie.straat,
@@ -97,6 +103,7 @@ class TestOrganisatie(BaseApiTestCase):
             {
                 "id": str(organisatie.id),
                 "naam": organisatie.naam,
+                "code": organisatie.code,
                 "email": organisatie.email,
                 "telefoonnummer": organisatie.telefoonnummer,
                 "straat": organisatie.straat,
@@ -114,6 +121,7 @@ class TestOrganisatie(BaseApiTestCase):
         expected_data = {
             "id": str(self.organisatie.id),
             "naam": self.organisatie.naam,
+            "code": self.organisatie.code,
             "email": self.organisatie.email,
             "telefoonnummer": self.organisatie.telefoonnummer,
             "straat": self.organisatie.straat,

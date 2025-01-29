@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 
+from open_producten.logging.api_tools import AuditTrailViewSetMixin
 from open_producten.producten.models import Product
 from open_producten.producten.serializers.product import ProductSerializer
 from open_producten.utils.views import OrderedModelViewSet
@@ -25,6 +26,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                     "gepubliceerd": False,
                     "bsn": "111222333",
+                    "status": "gereed",
                 },
                 request_only=True,
             )
@@ -33,14 +35,36 @@ from open_producten.utils.views import OrderedModelViewSet
     update=extend_schema(
         summary="Werk een PRODUCT in zijn geheel bij.",
     ),
-    partial_update=extend_schema(summary="Werk een PRODUCT deels bij."),
+    partial_update=extend_schema(
+        summary="Werk een PRODUCT deels bij.",
+        examples=[
+            OpenApiExample(
+                "Patch product",
+                value={
+                    "gepubliceerd": True,
+                    "start_datum": "2019-08-24",
+                    "eind_datum": "2019-08-24",
+                    "bsn": "string",
+                    "status": "gereed",
+                },
+                request_only=True,
+            ),
+            OpenApiExample(
+                "Update product status",
+                value={
+                    "status": "actief",
+                },
+                request_only=True,
+            ),
+        ],
+    ),
     destroy=extend_schema(
         summary="Verwijder een PRODUCT.",
     ),
 )
-class ProductViewSet(OrderedModelViewSet):
+class ProductViewSet(AuditTrailViewSetMixin, OrderedModelViewSet):
     queryset = Product.objects.all()
     lookup_url_field = "id"
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd"]
+    filterset_fields = ["gepubliceerd", "status"]

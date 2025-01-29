@@ -1,6 +1,3 @@
-# Inspired by https://docs.docker.com/compose/django/
-version: '3'
-
 services:
   db:
     # NOTE: No persistance storage configured.
@@ -12,10 +9,14 @@ services:
     volumes:
       - ./docker-init-db.sql:/docker-entrypoint-initdb.d/init_db.sql
 
+  redis:
+    image: redis
+
   web:
-    build: .
+    build: &web_build
+      context: .
     image: maykinmedia/open-producten:latest
-    environment:
+    environment: &web_env
       - DJANGO_SETTINGS_MODULE=open_producten.conf.docker
       - SECRET_KEY=${SECRET_KEY:-django-insecure-@4wj9(+*bu7*v&%on7+e_8!d1ckl%r=6+sz#d2!pw^@lb0+=}
       - DB_NAME=open_producten
@@ -27,3 +28,37 @@ services:
       - 8000:8000
     depends_on:
       - db
+
+  celery:
+    build: *web_build
+    image: maykinmedia/open-producten:latest
+    environment: *web_env
+    command: /celery_worker.sh
+    healthcheck:
+      test: [ "CMD", "python", "/app/bin/check_celery_worker_liveness.py" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - db
+      - redis
+
+  celery-beat:
+    build: *web_build
+    image: maykinmedia/open-producten:latest
+    environment: *web_env
+    command: /celery_beat.sh
+    depends_on:
+      - celery
+
+  celery-flower:
+    build: *web_build
+    image: maykinmedia/open-producten:latest
+    environment: *web_env
+    command: /celery_flower.sh
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery

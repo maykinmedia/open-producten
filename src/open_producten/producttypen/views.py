@@ -49,6 +49,8 @@ from open_producten.utils.views import OrderedModelViewSet
                     "contact_ids": ["6863d699-460d-4c1e-9297-16812d75d8ca"],
                     "gepubliceerd": False,
                     "naam": "Aanleunwoning",
+                    "code": "PT-12345",
+                    "toegestane_statussen": ["gereed", "actief"],
                     "samenvatting": "korte samenvatting...",
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
