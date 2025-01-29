@@ -89,7 +89,7 @@ development machine.
 
 
 **Note:** If you are making local, machine specific, changes, add them to
-``src/openzaak/conf/includes/local.py``. You can also set certain common
+``src/open_producten/conf/local.py``. You can also set certain common
 variables in a local ``.env`` file. You can base these files on the
 example files included in the same directory.
 
@@ -133,7 +133,7 @@ Configuration via environment variables
 
 A number of common settings/configurations can be modified by setting
 environment variables, add them to your ``.env`` file or persist them in
-``src/open_producten/conf/includes/local.py``.
+``src/open_producten/conf/local.py``.
 
 * ``SECRET_KEY``: the secret key to use. A default is set in ``dev.py``
 
@@ -151,9 +151,8 @@ environment variables, add them to your ``.env`` file or persist them in
 Settings
 ========
 
-All settings for the project can be found in
-``src/open_producten/conf``.
-The file ``includes/local.py`` overwrites settings from the base configuration,
+All settings for the project can be found in `src/open_producten/conf``.
+The file ``local.py`` overwrites settings from the base configuration,
 and is only loaded for the dev settings.
 
 .. TODO: remove Celery part below? No references for usage found in project
