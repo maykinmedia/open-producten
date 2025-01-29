@@ -32,8 +32,7 @@ of having apps within the project.
       - production
       - docker
 
-  Settings must always be defined in the ``open_producten.conf.includes.base`` or
-  ``open_producten.conf.includes.api`` with sane defaults.
+  Settings must always be defined in the ``open_producten.conf.base`` with sane defaults.
 
 - Global runtime Open Producten configuration (database backed) should go in the
   ``open_producten.config`` app.
