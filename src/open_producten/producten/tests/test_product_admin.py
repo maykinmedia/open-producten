@@ -41,6 +41,8 @@ class TestProductAdminForm(TestCase):
             "bsn": "111222333",
             "start_datum": datetime.date(2025, 12, 31),
             "eind_datum": datetime.date(2026, 12, 31),
+            "prijs": "10",
+            "frequentie": "eenmalig",
         }
 
         product = ProductFactory.create(**data)
@@ -67,6 +69,8 @@ class TestProductAdminForm(TestCase):
             "bsn": "111222333",
             "start_datum": datetime.date(2025, 12, 31),
             "eind_datum": datetime.date(2026, 12, 31),
+            "prijs": "10",
+            "frequentie": "eenmalig",
         }
 
         product = ProductFactory.create(**data)

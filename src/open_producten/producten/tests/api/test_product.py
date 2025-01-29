@@ -24,6 +24,9 @@ class TestProduct(BaseApiTestCase):
             "product_type_id": self.product_type.id,
             "bsn": "111222333",
             "status": "initieel",
+            "prijs": "20.20",
+            "frequentie": "eenmalig",
+            "data": [],
         }
         self.path = reverse("product-list")
 
@@ -44,6 +47,12 @@ class TestProduct(BaseApiTestCase):
                 "product_type_id": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
+                "prijs": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
+                "frequentie": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
             },
         )
 
@@ -62,6 +71,8 @@ class TestProduct(BaseApiTestCase):
             "gepubliceerd": False,
             "start_datum": None,
             "eind_datum": None,
+            "prijs": str(product.prijs),
+            "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
             "product_type": {
@@ -212,6 +223,8 @@ class TestProduct(BaseApiTestCase):
                 "gepubliceerd": False,
                 "start_datum": None,
                 "eind_datum": None,
+                "prijs": str(product1.prijs),
+                "frequentie": product1.frequentie,
                 "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product1.update_datum.astimezone().isoformat(),
                 "product_type": {
@@ -236,6 +249,8 @@ class TestProduct(BaseApiTestCase):
                 "gepubliceerd": False,
                 "start_datum": None,
                 "eind_datum": None,
+                "prijs": str(product2.prijs),
+                "frequentie": product2.frequentie,
                 "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product2.update_datum.astimezone().isoformat(),
                 "product_type": {
@@ -271,6 +286,8 @@ class TestProduct(BaseApiTestCase):
             "gepubliceerd": False,
             "start_datum": None,
             "eind_datum": None,
+            "prijs": str(product.prijs),
+            "frequentie": product.frequentie,
             "aanmaak_datum": "2025-12-31T01:00:00+01:00",
             "update_datum": "2025-12-31T01:00:00+01:00",
             "product_type": {
@@ -304,6 +321,8 @@ class TestProduct(BaseApiTestCase):
             "bsn": "111222333",
             "start_datum": datetime.date(2025, 12, 31),
             "eind_datum": datetime.date(2026, 12, 31),
+            "prijs": "10",
+            "frequentie": "eenmalig",
         }
 
         product = ProductFactory.create(**data)
@@ -382,6 +401,8 @@ class TestProduct(BaseApiTestCase):
                         toegestane_statussen=[]
                     ).id,
                     "bsn": "111222333",
+                    "prijs": "10",
+                    "frequentie": "eenmalig",
                 } | test["field"]
 
                 product = ProductFactory.create(**data)
@@ -448,6 +469,8 @@ class TestProduct(BaseApiTestCase):
                     "product_type_id": product_type.id,
                     "bsn": "111222333",
                     "status": "initieel",
+                    "prijs": "10",
+                    "frequentie": "eenmalig",
                 }
 
                 product = ProductFactory.create(**data)
