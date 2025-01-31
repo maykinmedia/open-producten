@@ -9,7 +9,7 @@ open-api-framework
 # django-extra-fields
 django-markdownx
 django-localflavor
-parler
+django-parler
 
 django-celery-beat
 flower
