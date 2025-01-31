@@ -25,27 +25,27 @@ COPY ./requirements /app/requirements
 RUN pip install -r requirements/production.txt
 
 
-# Stage 2 - Install frontend deps and build assets
-#FROM node:20-bookworm-slim AS frontend-build
-#
-#RUN apt-get update && apt-get install -y --no-install-recommends \
-#        git \
-#    && rm -rf /var/lib/apt/lists/*
-#
-#WORKDIR /app
-#
-## copy configuration/build files
-#COPY ./build /app/build/
-#COPY ./*.json ./*.js ./.babelrc /app/
-#
-## install WITH dev tooling
-#RUN npm ci
-#
-## copy source code
-#COPY ./src /app/src
-#
-## build frontend
-#RUN npm run build
+ Stage 2 - Install frontend deps and build assets
+FROM node:20-bookworm-slim AS frontend-build
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# copy configuration/build files
+COPY ./build /app/build/
+COPY ./*.json ./*.js ./.babelrc /app/
+
+# install WITH dev tooling
+RUN npm ci
+
+# copy source code
+COPY ./src /app/src
+
+# build frontend
+RUN npm run build
 
 
 # Stage 3 - Build docker image suitable for production
@@ -80,7 +80,7 @@ COPY --from=backend-build /usr/local/bin/celery /usr/local/bin/celery
 COPY --from=backend-build /app/src/ /app/src/
 
 # copy frontend build statics
-# COPY --from=frontend-build /app/src/open_producten/static /app/src/open_producten/static
+COPY --from=frontend-build /app/src/open_producten/static /app/src/open_producten/static
 
 # copy source code
 COPY ./src /app/src
