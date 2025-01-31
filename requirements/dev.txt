@@ -189,6 +189,7 @@ django==4.2.17
     #   django-markup
     #   django-otp
     #   django-parler
+    #   django-parler-rest
     #   django-phonenumber-field
     #   django-privates
     #   django-redis
@@ -298,6 +299,11 @@ django-parler==2.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-parler-rest
+django-parler-rest==2.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-phonenumber-field==8.0.0
     # via
     #   -c requirements/ci.txt
@@ -375,6 +381,7 @@ djangorestframework==3.15.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   commonground-api-common
+    #   django-parler-rest
     #   djangorestframework-gis
     #   djangorestframework-inclusions
     #   drf-nested-routers
