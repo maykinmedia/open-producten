@@ -188,6 +188,7 @@ django==4.2.17
     #   django-markdownx
     #   django-markup
     #   django-otp
+    #   django-parler
     #   django-phonenumber-field
     #   django-privates
     #   django-redis
@@ -293,6 +294,10 @@ django-otp==1.5.4
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-two-factor-auth
+django-parler==2.3
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-phonenumber-field==8.0.0
     # via
     #   -c requirements/ci.txt
@@ -616,10 +621,6 @@ packaging==24.2
     #   black
     #   drf-yasg
     #   sphinx
-parler==1.0.1
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
 pathspec==0.12.1
     # via
     #   -c requirements/ci.txt
@@ -783,7 +784,6 @@ requests==2.32.3
     #   gemma-zds-client
     #   mozilla-django-oidc
     #   open-api-framework
-    #   parler
     #   requests-mock
     #   sphinx
     #   zgw-consumers
