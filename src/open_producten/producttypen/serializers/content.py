@@ -16,9 +16,9 @@ class ContentElementSerializer(TranslatableModelSerializer):
         required=False,
     )
 
-    content = serializers.CharField(
+    content = serializers.CharField(  # TODO CHARFIELD?????
         required=True,
-        max_length=100,
+        max_length=255,
         help_text=_("De content van dit content element."),
     )
 
@@ -68,7 +68,6 @@ class NestedContentElementSerializer(serializers.ModelSerializer):
 
     content = serializers.CharField(
         required=True,
-        max_length=100,
         help_text=_("De content van dit content element."),
     )
 
@@ -84,7 +83,6 @@ class NestedContentElementSerializer(serializers.ModelSerializer):
 class ContentElementTranslationSerializer(serializers.ModelSerializer):
     content = serializers.CharField(
         required=True,
-        max_length=100,
         help_text=_("De content van dit content element."),
     )
 

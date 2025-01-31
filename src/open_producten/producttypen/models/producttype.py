@@ -28,7 +28,7 @@ class ProductType(BasePublishableModel, TranslatableModel):
 
     code = models.CharField(
         verbose_name=_("code"),
-        max_length=100,
+        max_length=255,
         help_text=_("code van het product type."),
         unique=True,
     )
@@ -106,14 +106,11 @@ class ProductType(BasePublishableModel, TranslatableModel):
         samenvatting=models.TextField(
             verbose_name=_("samenvatting"),
             default="",
-            max_length=300,
-            help_text=_(
-                "Korte beschrijving van het product type, maximaal 300 karakters."
-            ),
+            help_text=_("Korte samenvatting van het product type."),
         ),
         naam=models.CharField(
             verbose_name=_("product type naam"),
-            max_length=100,
+            max_length=255,
             help_text=_("naam van het product type."),
         ),
     )
