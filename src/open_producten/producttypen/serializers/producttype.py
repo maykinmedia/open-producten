@@ -92,11 +92,10 @@ class ProductTypeSerializer(TranslatableModelSerializer):
     )
 
     naam = serializers.CharField(
-        required=True, max_length=100, help_text=_("naam van het product type.")
+        required=True, max_length=255, help_text=_("naam van het product type.")
     )
     samenvatting = serializers.CharField(
         required=True,
-        max_length=300,
         help_text=_("Korte beschrijving van het product type."),
     )
 
@@ -189,11 +188,10 @@ class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
 class ProductTypeTranslationSerializer(serializers.ModelSerializer):
 
     naam = serializers.CharField(
-        required=True, max_length=100, help_text=_("naam van het product type.")
+        required=True, max_length=255, help_text=_("naam van het product type.")
     )
     samenvatting = serializers.CharField(
         required=True,
-        max_length=300,
         help_text=_("Korte beschrijving van het product type."),
     )
 

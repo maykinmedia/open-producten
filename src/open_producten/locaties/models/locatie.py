@@ -8,7 +8,7 @@ from open_producten.utils.validators import validate_phone_number, validate_post
 class BaseLocatie(BaseModel):
     naam = models.CharField(
         verbose_name=_("naam"),
-        max_length=100,
+        max_length=255,
     )
     email = models.EmailField(
         verbose_name=_("email adres"),
@@ -23,12 +23,12 @@ class BaseLocatie(BaseModel):
         validators=[validate_phone_number],
     )
 
-    straat = models.CharField(_("straat"), null=True, blank=True, max_length=250)
+    straat = models.CharField(_("straat"), null=True, blank=True, max_length=255)
     huisnummer = models.CharField(
         _("huisnummer"),
         blank=True,
         null=True,
-        max_length=250,
+        max_length=10,
     )
 
     postcode = models.CharField(
@@ -40,7 +40,7 @@ class BaseLocatie(BaseModel):
     )
     stad = models.CharField(
         _("stad"),
-        max_length=250,
+        max_length=255,
         blank=True,
         null=True,
     )

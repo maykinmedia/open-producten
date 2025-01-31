@@ -11,7 +11,7 @@ class Organisatie(BaseLocatie):
 
     code = models.CharField(
         verbose_name=_("code"),
-        max_length=100,
+        max_length=255,
         help_text=_("code van de organisatie."),
         unique=True,
     )
