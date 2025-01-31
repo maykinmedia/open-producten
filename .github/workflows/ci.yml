@@ -74,7 +74,7 @@ jobs:
           python-version: '3.11'
           optimize-postgres: 'yes'
           pg-service: 'postgres'
-          setup-node: 'no'
+          setup-node: 'yes'
           apt-packages: 'gettext'
 
       - name: Run tests

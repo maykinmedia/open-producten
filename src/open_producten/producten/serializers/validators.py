@@ -9,6 +9,7 @@ from open_producten.producten.models.product import (
     validate_eind_datum,
     validate_start_datum,
     validate_status,
+    validate_verbruiksobject,
 )
 from open_producten.utils.serializers import get_from_serializer_data_or_instance
 
@@ -81,5 +82,21 @@ class DateValidator:
             if eind_datum_changed or product_type_changed:
                 validate_eind_datum(eind_datum, product_type)
             validate_dates(start_datum, eind_datum)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
+
+
+class VerbruiksObjectValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        verbruiksobject = get_from_serializer_data_or_instance(
+            "verbruiksobject", value, serializer
+        )
+        product_type = get_from_serializer_data_or_instance(
+            "product_type", value, serializer
+        )
+        try:
+            validate_verbruiksobject(verbruiksobject, product_type)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)

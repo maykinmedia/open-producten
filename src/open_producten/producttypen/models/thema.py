@@ -2,15 +2,13 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from markdownx.models import MarkdownxField
-
 from open_producten.utils.models import BasePublishableModel
 
 
 class Thema(BasePublishableModel):
 
     naam = models.CharField(
-        verbose_name=_("naam"), max_length=100, help_text=_("Naam van het thema.")
+        verbose_name=_("naam"), max_length=255, help_text=_("Naam van het thema.")
     )
 
     hoofd_thema = models.ForeignKey(
@@ -23,7 +21,7 @@ class Thema(BasePublishableModel):
         on_delete=models.PROTECT,
     )
 
-    beschrijving = MarkdownxField(
+    beschrijving = models.TextField(
         verbose_name=_("beschrijving"),
         blank=True,
         default="",

@@ -3,6 +3,7 @@ import datetime
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -22,7 +23,6 @@ from open_producten.producttypen.tests.factories import (
     ProductTypeFactory,
     ThemaFactory,
     UniformeProductNaamFactory,
-    VraagFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
 
@@ -38,7 +38,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": "test-product-type",
             "code": "PT=12345",
             "samenvatting": "test",
-            "beschrijving": "test test",
             "uniforme_product_naam": upn.uri,
             "thema_ids": [self.thema.id],
         }
@@ -68,7 +67,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "thema_ids": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "beschrijving": [
+                "samenvatting": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
                 "code": [
@@ -90,10 +89,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
-            "beschrijving": product_type.beschrijving,
+            "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
-            "vragen": [],
+            "verbruiksobject_schema": None,
             "prijzen": [],
             "links": [],
             "bestanden": [],
@@ -221,11 +220,20 @@ class TestProducttypeViewSet(BaseApiTestCase):
         locatie = LocatieFactory.create()
         organisatie = OrganisatieFactory.create()
         contact = ContactFactory.create()
+        schema = JsonSchema.objects.create(
+            name="test",
+            schema={
+                "type": "object",
+                "properties": {"uren": {"type": "number"}},
+                "required": ["uren"],
+            },
+        )
 
         data = self.data | {
             "locatie_ids": [locatie.id],
             "organisatie_ids": [organisatie.id],
             "contact_ids": [contact.id],
+            "verbruiksobject_schema_id": schema.id,
         }
         response = self.client.post(self.path, data)
 
@@ -240,10 +248,18 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
-            "beschrijving": product_type.beschrijving,
+            "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
-            "vragen": [],
+            "verbruiksobject_schema": {
+                "id": schema.id,
+                "name": "test",
+                "schema": {
+                    "type": "object",
+                    "properties": {"uren": {"type": "number"}},
+                    "required": ["uren"],
+                },
+            },
             "prijzen": [],
             "links": [],
             "bestanden": [],
@@ -508,23 +524,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.data["links"], expected_data)
 
-    def test_read_product_type_vraag(self):
-        product_type = ProductTypeFactory.create()
-        vraag = VraagFactory.create(product_type=product_type)
-
-        response = self.client.get(self.detail_path(product_type))
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected_data = [
-            {
-                "id": str(vraag.id),
-                "vraag": vraag.vraag,
-                "antwoord": vraag.antwoord,
-            }
-        ]
-
-        self.assertEqual(response.data["vragen"], expected_data)
-
     def test_read_product_type_bestand(self):
         product_type = ProductTypeFactory.create()
         bestand = BestandFactory.create(product_type=product_type)
@@ -582,10 +581,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "naam": product_type1.naam,
                 "code": product_type1.code,
                 "samenvatting": product_type1.samenvatting,
-                "beschrijving": product_type1.beschrijving,
+                "taal": "nl",
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
-                "vragen": [],
+                "verbruiksobject_schema": None,
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
@@ -613,10 +612,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "naam": product_type2.naam,
                 "code": product_type2.code,
                 "samenvatting": product_type2.samenvatting,
-                "beschrijving": product_type2.beschrijving,
+                "taal": "nl",
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
-                "vragen": [],
+                "verbruiksobject_schema": None,
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
@@ -655,10 +654,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "naam": product_type.naam,
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
-            "beschrijving": product_type.beschrijving,
+            "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
-            "vragen": [],
+            "verbruiksobject_schema": None,
             "prijzen": [],
             "links": [],
             "bestanden": [],
@@ -683,6 +682,39 @@ class TestProducttypeViewSet(BaseApiTestCase):
         }
 
         self.assertEqual(response.data, expected_data)
+
+    def test_read_product_type_in_other_language(self):
+        product_type = ProductTypeFactory.create()
+        product_type.themas.add(self.thema)
+        product_type.set_current_language("en")
+        product_type.naam = "product type EN"
+        product_type.samenvatting = "summary"
+        product_type.save()
+
+        response = self.client.get(
+            self.detail_path(product_type), headers={"Accept-Language": "en"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["naam"], "product type EN")
+        self.assertEqual(response.data["samenvatting"], "summary")
+        self.assertEqual(response.data["taal"], "en")
+
+    def test_read_product_type_in_fallback_language(self):
+        product_type = ProductTypeFactory.create(
+            naam="product type NL", samenvatting="samenvatting"
+        )
+        product_type.themas.add(self.thema)
+        product_type.save()
+
+        response = self.client.get(
+            self.detail_path(product_type), headers={"Accept-Language": "de"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["naam"], "product type NL")
+        self.assertEqual(response.data["samenvatting"], "samenvatting")
+        self.assertEqual(response.data["taal"], "nl")
 
     def test_delete_product_type(self):
         product_type = ProductTypeFactory.create()
@@ -709,7 +741,7 @@ class TestProductTypeActions(BaseApiTestCase):
 
         self.expected_data = {
             "id": str(self.product_type.id),
-            "naam": self.product_type.naam,
+            "code": self.product_type.code,
             "upl_naam": self.product_type.uniforme_product_naam.naam,
             "upl_uri": self.product_type.uniforme_product_naam.uri,
             "actuele_prijs": None,
@@ -809,3 +841,45 @@ class TestProductTypeActions(BaseApiTestCase):
                 },
             },
         )
+
+    def test_put_vertaling(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        data = {"naam": "name EN", "samenvatting": "summary EN"}
+        response = self.client.put(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data,
+            {
+                "id": str(self.product_type.id),
+                "naam": "name EN",
+                "samenvatting": "summary EN",
+            },
+        )
+        self.product_type.set_current_language("en")
+        self.assertEqual(self.product_type.naam, "name EN")
+
+        self.product_type.set_current_language("nl")
+        self.assertNotEqual(self.product_type.naam, "name EN")
+
+    def test_delete_nonexistent_vertaling(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        response = self.client.delete(path)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_vertaling(self):
+        self.product_type.set_current_language("en")
+        self.product_type.naam = "name EN"
+        self.product_type.samenvatting = "summary EN"
+        self.product_type.save()
+
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        response = self.client.delete(path)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.product_type.refresh_from_db()
+        self.assertFalse(self.product_type.has_translation("en"))

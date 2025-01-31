@@ -85,12 +85,15 @@ django==4.2.17
     #   django-csp
     #   django-filter
     #   django-formtools
+    #   django-json-schema-model
     #   django-jsonform
     #   django-localflavor
     #   django-log-outgoing-requests
     #   django-markdownx
     #   django-markup
     #   django-otp
+    #   django-parler
+    #   django-parler-rest
     #   django-phonenumber-field
     #   django-privates
     #   django-redis
@@ -137,6 +140,8 @@ django-filter==24.3
     #   open-api-framework
 django-formtools==2.5.1
     # via django-two-factor-auth
+django-json-schema-model==0.1.0
+    # via -r requirements/base.in
 django-jsonform==2.23.1
     # via
     #   mozilla-django-oidc-db
@@ -153,6 +158,12 @@ django-ordered-model==3.7.4
     # via django-admin-index
 django-otp==1.5.4
     # via django-two-factor-auth
+django-parler==2.3
+    # via
+    #   -r requirements/base.in
+    #   django-parler-rest
+django-parler-rest==2.2
+    # via -r requirements/base.in
 django-phonenumber-field==8.0.0
     # via django-two-factor-auth
 django-privates==2.0.0.post1
@@ -187,6 +198,7 @@ django-two-factor-auth==1.17.0
 djangorestframework==3.15.2
     # via
     #   commonground-api-common
+    #   django-parler-rest
     #   djangorestframework-gis
     #   djangorestframework-inclusions
     #   drf-nested-routers
@@ -249,7 +261,9 @@ jinja2==3.1.4
 josepy==1.14.0
     # via mozilla-django-oidc
 jsonschema==4.23.0
-    # via drf-spectacular
+    # via
+    #   django-json-schema-model
+    #   drf-spectacular
 jsonschema-specifications==2024.10.1
     # via jsonschema
 kombu==5.4.2

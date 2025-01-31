@@ -5,12 +5,8 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-from open_producten.producttypen.models import Thema, Vraag
-from open_producten.producttypen.tests.factories import (
-    ProductTypeFactory,
-    ThemaFactory,
-    VraagFactory,
-)
+from open_producten.producttypen.models import Thema
+from open_producten.producttypen.tests.factories import ProductTypeFactory, ThemaFactory
 from open_producten.utils.tests.cases import BaseApiTestCase
 
 
@@ -61,7 +57,6 @@ class TestThemaViewSet(BaseApiTestCase):
             "id": str(thema.id),
             "naam": thema.naam,
             "beschrijving": thema.beschrijving,
-            "vragen": [],
             "gepubliceerd": False,
             "hoofd_thema": None,
             "product_typen": [],
@@ -85,7 +80,6 @@ class TestThemaViewSet(BaseApiTestCase):
             "id": str(thema.id),
             "naam": thema.naam,
             "beschrijving": thema.beschrijving,
-            "vragen": [],
             "gepubliceerd": False,
             "hoofd_thema": thema.hoofd_thema.id,
             "product_typen": [],
@@ -377,23 +371,6 @@ class TestThemaViewSet(BaseApiTestCase):
             },
         )
 
-    def test_read_vraag(self):
-        thema = ThemaFactory.create()
-        vraag = VraagFactory.create(thema=thema)
-
-        response = self.client.get(self.detail_path(thema))
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected_data = [
-            {
-                "id": str(vraag.id),
-                "vraag": vraag.vraag,
-                "antwoord": vraag.antwoord,
-            }
-        ]
-
-        self.assertEqual(response.data["vragen"], expected_data)
-
     def test_read_product_type(self):
         thema = ThemaFactory.create()
         product_type = ProductTypeFactory.create()
@@ -406,10 +383,7 @@ class TestThemaViewSet(BaseApiTestCase):
         expected_data = [
             {
                 "id": str(product_type.id),
-                "naam": product_type.naam,
                 "code": product_type.code,
-                "samenvatting": product_type.samenvatting,
-                "beschrijving": product_type.beschrijving,
                 "uniforme_product_naam": product_type.uniforme_product_naam.uri,
                 "gepubliceerd": True,
                 "toegestane_statussen": [],
@@ -434,7 +408,6 @@ class TestThemaViewSet(BaseApiTestCase):
                 "id": str(thema1.id),
                 "naam": thema1.naam,
                 "beschrijving": thema1.beschrijving,
-                "vragen": [],
                 "gepubliceerd": True,
                 "hoofd_thema": None,
                 "product_typen": [],
@@ -445,7 +418,6 @@ class TestThemaViewSet(BaseApiTestCase):
                 "id": str(thema2.id),
                 "naam": thema2.naam,
                 "beschrijving": thema2.beschrijving,
-                "vragen": [],
                 "gepubliceerd": True,
                 "hoofd_thema": None,
                 "product_typen": [],
@@ -465,7 +437,6 @@ class TestThemaViewSet(BaseApiTestCase):
             "id": str(thema.id),
             "naam": thema.naam,
             "beschrijving": thema.beschrijving,
-            "vragen": [],
             "gepubliceerd": True,
             "hoofd_thema": None,
             "product_typen": [],
@@ -476,13 +447,11 @@ class TestThemaViewSet(BaseApiTestCase):
 
     def test_delete_thema(self):
         thema = ThemaFactory.create()
-        VraagFactory.create(thema=thema)
 
         response = self.client.delete(self.detail_path(thema))
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Thema.objects.count(), 0)
-        self.assertEqual(Vraag.objects.count(), 0)
 
     def test_delete_thema_when_linked_product_type_has_one_thema(self):
         thema = ThemaFactory.create()

@@ -7,7 +7,7 @@ from open_producten.utils.models import BaseModel
 class UniformeProductNaam(BaseModel):
     naam = models.CharField(
         verbose_name=_("naam"),
-        max_length=100,
+        max_length=255,
         help_text=_("Uniforme product naam"),
         unique=True,
     )

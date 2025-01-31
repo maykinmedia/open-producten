@@ -4,7 +4,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from markdownx.models import MarkdownxField
+from django_json_schema_model.models import JsonSchema
+from parler.models import TranslatableModel, TranslatedFields
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
 from open_producten.utils.fields import ChoiceArrayField
@@ -24,16 +25,11 @@ class ProductStateChoices(models.TextChoices):
     VERLOPEN = "verlopen", _("Verlopen")
 
 
-class ProductType(BasePublishableModel):
-    naam = models.CharField(
-        verbose_name=_("product type naam"),
-        max_length=100,
-        help_text=_("naam van het product type."),
-    )
+class ProductType(BasePublishableModel, TranslatableModel):
 
     code = models.CharField(
         verbose_name=_("code"),
-        max_length=100,
+        max_length=255,
         help_text=_("code van het product type."),
         unique=True,
     )
@@ -52,16 +48,16 @@ class ProductType(BasePublishableModel):
         help_text=_("toegestane statussen voor producten van dit type."),
     )
 
-    samenvatting = models.TextField(
-        verbose_name=_("samenvatting"),
-        default="",
-        max_length=300,
-        help_text=_("Korte beschrijving van het product type, maximaal 300 karakters."),
-    )
-
-    beschrijving = MarkdownxField(
-        verbose_name=_("beschrijving"),
-        help_text=_("Product type beschrijving, ondersteund markdown format."),
+    verbruiksobject_schema = models.ForeignKey(
+        JsonSchema,
+        verbose_name=_("verbruiksobject schema"),
+        on_delete=models.PROTECT,
+        help_text=_(
+            "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
+        ),
+        null=True,
+        blank=True,
+        related_name="product_typen",
     )
 
     keywords = ArrayField(
@@ -110,6 +106,19 @@ class ProductType(BasePublishableModel):
         related_name="product_typen",
         blank=True,
         help_text=_("De locaties waar het product beschikbaar is."),
+    )
+
+    translations = TranslatedFields(
+        samenvatting=models.TextField(
+            verbose_name=_("samenvatting"),
+            default="",
+            help_text=_("Korte samenvatting van het product type."),
+        ),
+        naam=models.CharField(
+            verbose_name=_("product type naam"),
+            max_length=255,
+            help_text=_("naam van het product type."),
+        ),
     )
 
     class Meta:
