@@ -3313,7 +3313,7 @@ components:
         content:
           type: string
           description: De content van dit content element.
-          maxLength: 100
+          maxLength: 255
         labels:
           type: array
           items:
@@ -3338,7 +3338,7 @@ components:
           type: string
           minLength: 1
           description: De content van dit content element.
-          maxLength: 100
+          maxLength: 255
         labels:
           type: array
           items:
@@ -3360,7 +3360,6 @@ components:
         content:
           type: string
           description: De content van dit content element.
-          maxLength: 100
       required:
       - content
       - id
@@ -3371,7 +3370,6 @@ components:
           type: string
           minLength: 1
           description: De content van dit content element.
-          maxLength: 100
       required:
       - content
     DetailError:
@@ -3438,7 +3436,7 @@ components:
         naam:
           type: string
           description: Naam van de link.
-          maxLength: 100
+          maxLength: 255
         url:
           type: string
           format: uri
@@ -3459,7 +3457,7 @@ components:
           type: string
           minLength: 1
           description: Naam van de link.
-          maxLength: 100
+          maxLength: 255
         url:
           type: string
           format: uri
@@ -3482,7 +3480,7 @@ components:
           readOnly: true
         naam:
           type: string
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
@@ -3496,11 +3494,11 @@ components:
         straat:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         huisnummer:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 10
         postcode:
           type: string
           nullable: true
@@ -3509,7 +3507,7 @@ components:
         stad:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
       required:
       - id
       - naam
@@ -3519,7 +3517,7 @@ components:
         naam:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
@@ -3533,11 +3531,11 @@ components:
         straat:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         huisnummer:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 10
         postcode:
           type: string
           nullable: true
@@ -3546,7 +3544,7 @@ components:
         stad:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
       required:
       - naam
     NestedBestand:
@@ -3580,7 +3578,6 @@ components:
         content:
           type: string
           description: De content van dit content element.
-          maxLength: 100
         labels:
           type: array
           items:
@@ -3599,7 +3596,7 @@ components:
         naam:
           type: string
           description: Naam van de link.
-          maxLength: 100
+          maxLength: 255
         url:
           type: string
           format: uri
@@ -3616,7 +3613,7 @@ components:
           type: string
           minLength: 1
           description: Naam van de link.
-          maxLength: 100
+          maxLength: 255
         url:
           type: string
           format: uri
@@ -3671,7 +3668,7 @@ components:
         code:
           type: string
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         keywords:
           type: array
           items:
@@ -3713,7 +3710,7 @@ components:
           type: string
           minLength: 1
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         keywords:
           type: array
           items:
@@ -3746,7 +3743,7 @@ components:
         naam:
           type: string
           description: Naam van het thema.
-          maxLength: 100
+          maxLength: 255
         beschrijving:
           type: string
           description: Beschrijving van het thema, ondersteund markdown format.
@@ -3780,7 +3777,7 @@ components:
           type: string
           minLength: 1
           description: Naam van het thema.
-          maxLength: 100
+          maxLength: 255
         beschrijving:
           type: string
           description: Beschrijving van het thema, ondersteund markdown format.
@@ -3803,7 +3800,7 @@ components:
           readOnly: true
         naam:
           type: string
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
@@ -3817,11 +3814,11 @@ components:
         straat:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         huisnummer:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 10
         postcode:
           type: string
           nullable: true
@@ -3830,11 +3827,11 @@ components:
         stad:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         code:
           type: string
           description: code van de organisatie.
-          maxLength: 100
+          maxLength: 255
       required:
       - code
       - id
@@ -3845,7 +3842,7 @@ components:
         naam:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
@@ -3859,11 +3856,11 @@ components:
         straat:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         huisnummer:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 10
         postcode:
           type: string
           nullable: true
@@ -3872,12 +3869,12 @@ components:
         stad:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         code:
           type: string
           minLength: 1
           description: code van de organisatie.
-          maxLength: 100
+          maxLength: 255
       required:
       - code
       - naam
@@ -4136,7 +4133,7 @@ components:
           type: string
           minLength: 1
           description: De content van dit content element.
-          maxLength: 100
+          maxLength: 255
         labels:
           type: array
           items:
@@ -4164,7 +4161,7 @@ components:
           type: string
           minLength: 1
           description: Naam van de link.
-          maxLength: 100
+          maxLength: 255
         url:
           type: string
           format: uri
@@ -4180,7 +4177,7 @@ components:
         naam:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
@@ -4194,11 +4191,11 @@ components:
         straat:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         huisnummer:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 10
         postcode:
           type: string
           nullable: true
@@ -4207,14 +4204,14 @@ components:
         stad:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
     PatchedOrganisatieRequest:
       type: object
       properties:
         naam:
           type: string
           minLength: 1
-          maxLength: 100
+          maxLength: 255
         email:
           type: string
           format: email
@@ -4228,11 +4225,11 @@ components:
         straat:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         huisnummer:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 10
         postcode:
           type: string
           nullable: true
@@ -4241,12 +4238,12 @@ components:
         stad:
           type: string
           nullable: true
-          maxLength: 250
+          maxLength: 255
         code:
           type: string
           minLength: 1
           description: code van de organisatie.
-          maxLength: 100
+          maxLength: 255
     PatchedPrijsRequest:
       type: object
       properties:
@@ -4308,12 +4305,11 @@ components:
           type: string
           minLength: 1
           description: naam van het product type.
-          maxLength: 100
+          maxLength: 255
         samenvatting:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
-          maxLength: 300
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4321,7 +4317,7 @@ components:
           type: string
           minLength: 1
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         toegestane_statussen:
           type: array
           items:
@@ -4340,7 +4336,7 @@ components:
           type: string
           minLength: 1
           description: Naam van het thema.
-          maxLength: 100
+          maxLength: 255
         beschrijving:
           type: string
           description: Beschrijving van het thema, ondersteund markdown format.
@@ -4397,7 +4393,7 @@ components:
         beschrijving:
           type: string
           description: Korte beschrijving van de optie.
-          maxLength: 100
+          maxLength: 255
       required:
       - bedrag
       - beschrijving
@@ -4416,7 +4412,7 @@ components:
           type: string
           minLength: 1
           description: Korte beschrijving van de optie.
-          maxLength: 100
+          maxLength: 255
       required:
       - bedrag
       - beschrijving
@@ -4493,11 +4489,10 @@ components:
         naam:
           type: string
           description: naam van het product type.
-          maxLength: 100
+          maxLength: 255
         samenvatting:
           type: string
           description: Korte beschrijving van het product type.
-          maxLength: 300
         taal:
           type: string
           readOnly: true
@@ -4518,7 +4513,7 @@ components:
         code:
           type: string
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         toegestane_statussen:
           type: array
           items:
@@ -4557,7 +4552,7 @@ components:
         code:
           type: string
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         upl_naam:
           type: string
           description: Uniforme product naam
@@ -4623,12 +4618,11 @@ components:
           type: string
           minLength: 1
           description: naam van het product type.
-          maxLength: 100
+          maxLength: 255
         samenvatting:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
-          maxLength: 300
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4636,7 +4630,7 @@ components:
           type: string
           minLength: 1
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         toegestane_statussen:
           type: array
           items:
@@ -4664,11 +4658,10 @@ components:
         naam:
           type: string
           description: naam van het product type.
-          maxLength: 100
+          maxLength: 255
         samenvatting:
           type: string
           description: Korte beschrijving van het product type.
-          maxLength: 300
       required:
       - id
       - naam
@@ -4680,12 +4673,11 @@ components:
           type: string
           minLength: 1
           description: naam van het product type.
-          maxLength: 100
+          maxLength: 255
         samenvatting:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
-          maxLength: 300
       required:
       - naam
       - samenvatting
@@ -4699,7 +4691,7 @@ components:
         naam:
           type: string
           description: Naam van het thema.
-          maxLength: 100
+          maxLength: 255
         beschrijving:
           type: string
           description: Beschrijving van het thema, ondersteund markdown format.
@@ -4740,7 +4732,7 @@ components:
           type: string
           minLength: 1
           description: Naam van het thema.
-          maxLength: 100
+          maxLength: 255
         beschrijving:
           type: string
           description: Beschrijving van het thema, ondersteund markdown format.
