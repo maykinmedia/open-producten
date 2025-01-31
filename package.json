@@ -1,0 +1,38 @@
+{
+    "name": "open_producten",
+    "version": "0.0.1",
+    "description": "open-producten project",
+    "main": "src/static/open-producten/js/open-producten.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "build": "npm run collect && npm run bundle",
+        "bundle": "webpack",
+        "collect": "cp node_modules/wysimark-standalone/dist/javascript/index.cjs.js src/open_producten/static/wysimark/wysimark.js",
+        "test": "karma start",
+        "watch": "webpack -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/maykinmedia/open-producten.git"
+    },
+    "author": "Maykin",
+    "license": "UNLICENSED",
+    "homepage": "https://maykinmedia.nl",
+    "dependencies": {
+        "@wysimark/standalone": "^3.0.20",
+        "wysimark-standalone": "^1.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "latest",
+        "@babel/preset-env": "^7.26.7",
+        "babel-loader": "latest",
+        "copy-webpack-plugin": "^12.0.2",
+        "webpack": "^5.97.1",
+        "webpack-cli": "^6.0.1",
+        "webpack-dev-server": "latest",
+        "webpack-stream": "latest",
+        "yargs": "latest"
+    }
+}

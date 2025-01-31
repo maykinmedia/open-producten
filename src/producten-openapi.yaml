@@ -416,7 +416,7 @@ components:
         code:
           type: string
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         keywords:
           type: array
           items:
@@ -458,7 +458,7 @@ components:
           type: string
           minLength: 1
           description: code van het product type.
-          maxLength: 100
+          maxLength: 255
         keywords:
           type: array
           items:

@@ -7,6 +7,7 @@ from ordered_model.admin import OrderedInlineModelAdminMixin
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 
+from ...utils.widgets import WysimarkWidget
 from ..models import ProductType, Thema
 from .bestand import BestandInline
 from .content import ContentElementInline
@@ -17,6 +18,7 @@ class ProductTypeAdminForm(TranslatableModelForm):
     class Meta:
         model = ProductType
         fields = "__all__"
+        widgets = {"samenvatting": WysimarkWidget()}
 
     themas = forms.ModelMultipleChoiceField(
         label=_("thema's"),
