@@ -18,12 +18,17 @@ Introductie
 Open Producten is een applicatie waarin product typen en producten op een enkele plek kunnen worden beheerd.
 Andere applicaties zoals Open Inwoner en Open Formulieren kunnen met Open Producten via een REST API integreren om bijvoorbeeld product typen informatie te tonen, producten aan te maken of om de actuele prijs van een product type op te halen.
 
-Dit project is op dit moment een proof of concept.
-
-Het data model van het Open Producten PoC is gebaseerd op dat van Open Inwoner met een aantal wijzigingen voor integraties met Open Inwoner en Open Formulieren.
+Dit project zit op dit moment in de ontwikkelingsfase.
 
 In Open Producten worden product typen en producten opgeslagen. Een product type is bijvoorbeeld een parkeervergunning en bevat alle relevante informatie zoals wat de regels zijn, hoe verschillende zones werken enz.
 Een product is in dit voorbeeld een parkeervergunning van een persoon en bevat in dit geval het kenteken en de persoonsgegevens.
+
+Informatiemodel
+===============
+
+.. image:: docs/open-producten-informatiemodel-diagram.png
+    :alt: Open Producten informatiemodel
+
 
 
 API specificatie
