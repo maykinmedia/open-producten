@@ -47,13 +47,6 @@ class ProductType(BasePublishableModel, TranslatableModel):
         help_text=_("toegestane statussen voor producten van dit type."),
     )
 
-    samenvatting = models.TextField(
-        verbose_name=_("samenvatting"),
-        default="",
-        max_length=300,
-        help_text=_("Korte beschrijving van het product type, maximaal 300 karakters."),
-    )
-
     keywords = ArrayField(
         models.CharField(max_length=100, blank=True),
         verbose_name=_("Keywords"),

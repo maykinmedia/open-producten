@@ -8,7 +8,7 @@
     },
     "scripts": {
         "build": "npm run collect",
-        "collect": "cp node_modules/wysimark-standalone/dist/javascript/index.cjs.js src/open_producten/static/wysimark/wysimark.js"
+        "collect": "cp node_modules/wysimark-standalone/dist/javascript/index.cjs.js src/open_producten/static/wysimark/wysimark.js && cp node_modules/wysimark-standalone/dist/javascript/index.cjs.js.map src/open_producten/static/wysimark/index.cjs.js.map"
     },
     "repository": {
         "type": "git",

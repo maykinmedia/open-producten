@@ -372,7 +372,14 @@ class ThemaViewSet(OrderedModelViewSet):
             )
 
 
-class ContentElementViewSet(OrderedModelViewSet):
+class ContentElementViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    TranslatableViewSetMixin,
+    GenericViewSet,
+):
     queryset = ContentElement.objects.all()
     serializer_class = ContentElementSerializer
     lookup_url_kwarg = "id"
