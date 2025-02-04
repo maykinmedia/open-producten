@@ -63,7 +63,6 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         "uniforme_product_naam",
         "toegestane_statussen",
         "samenvatting",
-        "verbruiksobject_schema",
         "themas",
         "keywords",
         "organisaties",
