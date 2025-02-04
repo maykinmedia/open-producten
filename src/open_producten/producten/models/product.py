@@ -1,6 +1,12 @@
 from datetime import date
+from decimal import Decimal
 
-from django.core.validators import MinLengthValidator, RegexValidator, ValidationError
+from django.core.validators import (
+    MinLengthValidator,
+    MinValueValidator,
+    RegexValidator,
+    ValidationError,
+)
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -10,6 +16,13 @@ from open_producten.producttypen.models.producttype import ProductStateChoices
 from open_producten.utils.models import BasePublishableModel
 
 from .validators import validate_bsn
+
+
+class PrijsFrequentieChoices(models.TextChoices):
+
+    EENMALIG = "eenmalig", _("Eenmalig")
+    MAANDELIJKS = "maandelijks", _("Maandelijks")
+    JAARLIJKS = "jaarlijks", _("Jaarlijks")
 
 
 class Product(BasePublishableModel):
@@ -64,6 +77,21 @@ class Product(BasePublishableModel):
         validators=[MinLengthValidator(8), RegexValidator("^[0-9]*$")],
         null=True,
         blank=True,
+    )
+
+    prijs = models.DecimalField(
+        verbose_name=_("bedrag"),
+        decimal_places=2,
+        max_digits=8,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        help_text=_("De prijs van het product."),
+    )
+
+    frequentie = models.CharField(
+        _("Prijs frequentie"),
+        max_length=30,
+        choices=PrijsFrequentieChoices.choices,
+        help_text=_("De frequentie van betalingen."),
     )
 
     class Meta:
