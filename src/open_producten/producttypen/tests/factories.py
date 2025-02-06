@@ -5,6 +5,7 @@ from ..models import (
     Link,
     Prijs,
     PrijsOptie,
+    PrijsRegel,
     ProductType,
     Thema,
     UniformeProductNaam,
@@ -63,6 +64,14 @@ class PrijsOptieFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PrijsOptie
+
+
+class PrijsRegelFactory(factory.django.DjangoModelFactory):
+    beschrijving = factory.Faker("sentence")
+    dmn_url = factory.Faker("url")
+
+    class Meta:
+        model = PrijsRegel
 
 
 class BestandFactory(factory.django.DjangoModelFactory):

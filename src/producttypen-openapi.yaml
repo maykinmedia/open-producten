@@ -3057,7 +3057,6 @@ components:
       required:
       - actief_vanaf
       - id
-      - prijsopties
     NestedPrijsRequest:
       type: object
       properties:
@@ -3072,7 +3071,6 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
-      - prijsopties
     NestedProductType:
       type: object
       properties:
@@ -3704,6 +3702,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
+        prijsregels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsRegelRequest'
         actief_vanaf:
           type: string
           format: date
@@ -3839,6 +3841,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
+        prijsregels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsRegel'
         actief_vanaf:
           type: string
           format: date
@@ -3847,7 +3853,6 @@ components:
       required:
       - actief_vanaf
       - id
-      - prijsopties
       - product_type_id
     PrijsOptie:
       type: object
@@ -3886,6 +3891,44 @@ components:
       required:
       - bedrag
       - beschrijving
+    PrijsRegel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dmn_url:
+          type: string
+          format: uri
+          description: Url om de dmn tabel te evalueren
+          maxLength: 200
+        beschrijving:
+          type: string
+          description: Korte beschrijving van de prijs regel en dmn tabel.
+          maxLength: 255
+      required:
+      - beschrijving
+      - dmn_url
+    PrijsRegelRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dmn_url:
+          type: string
+          format: uri
+          minLength: 1
+          description: Url om de dmn tabel te evalueren
+          maxLength: 200
+        beschrijving:
+          type: string
+          minLength: 1
+          description: Korte beschrijving van de prijs regel en dmn tabel.
+          maxLength: 255
+      required:
+      - beschrijving
+      - dmn_url
     PrijsRequest:
       type: object
       properties:
@@ -3896,6 +3939,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
+        prijsregels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsRegelRequest'
         actief_vanaf:
           type: string
           format: date
@@ -3903,7 +3950,6 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
-      - prijsopties
       - product_type_id
     ProductType:
       type: object
@@ -4035,7 +4081,7 @@ components:
           readOnly: true
         actuele_prijs:
           allOf:
-          - $ref: '#/components/schemas/Prijs'
+          - $ref: '#/components/schemas/NestedPrijs'
           nullable: true
       required:
       - actuele_prijs

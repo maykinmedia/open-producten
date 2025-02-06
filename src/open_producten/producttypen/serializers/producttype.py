@@ -14,7 +14,7 @@ from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
 from .link import NestedLinkSerializer
-from .prijs import NestedPrijsSerializer, PrijsSerializer
+from .prijs import NestedPrijsSerializer
 from .vraag import NestedVraagSerializer
 
 
@@ -134,7 +134,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
     upl_uri = serializers.ReadOnlyField(source="uniforme_product_naam.uri")
     upl_naam = serializers.ReadOnlyField(source="uniforme_product_naam.naam")
-    actuele_prijs = PrijsSerializer(allow_null=True)
+    actuele_prijs = NestedPrijsSerializer(allow_null=True)
 
     class Meta:
         model = ProductType
