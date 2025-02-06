@@ -3,6 +3,7 @@ import factory.fuzzy
 from ..models import (
     Bestand,
     Eigenschap,
+    ExterneCode,
     Link,
     Prijs,
     PrijsOptie,
@@ -90,3 +91,12 @@ class EigenschapFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Eigenschap
+
+
+class ExterneCodeFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    systeem = factory.Faker("word")
+    code = factory.Faker("word")
+
+    class Meta:
+        model = ExterneCode
