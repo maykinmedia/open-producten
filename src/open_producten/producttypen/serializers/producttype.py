@@ -428,7 +428,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
     upl_uri = serializers.ReadOnlyField(source="uniforme_product_naam.uri")
     upl_naam = serializers.ReadOnlyField(source="uniforme_product_naam.naam")
-    actuele_prijs = PrijsSerializer(allow_null=True)
+    actuele_prijs = NestedPrijsSerializer(allow_null=True)
 
     class Meta:
         model = ProductType
