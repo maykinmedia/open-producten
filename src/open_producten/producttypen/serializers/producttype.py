@@ -14,6 +14,7 @@ from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
 from .eigenschap import EigenschapSerializer
+from .externe_code import ExterneCodeSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 from .vraag import NestedVraagSerializer
@@ -79,6 +80,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     bestanden = NestedBestandSerializer(many=True, read_only=True)
 
     eigenschappen = EigenschapSerializer(many=True, required=False)
+    externe_codes = ExterneCodeSerializer(many=True, required=False)
 
     def validate_eigenschappen(self, eigenschappen: list[dict]):
         keys = set()
@@ -94,6 +96,21 @@ class ProductTypeSerializer(serializers.ModelSerializer):
                 keys.add(eigenschap["key"])
 
         return eigenschappen
+
+    def validate_externe_codes(self, externe_codes: list[dict]):
+        systemen = set()
+
+        for externe_code in externe_codes:
+            if externe_code["systeem"] in systemen:
+                raise serializers.ValidationError(
+                    _(
+                        "De externe codes van een product type moeten een uniek systeem hebben."
+                    )
+                )
+            else:
+                systemen.add(externe_code["systeem"])
+
+        return externe_codes
 
     class Meta:
         model = ProductType
@@ -116,6 +133,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         organisaties = validated_data.pop("organisaties")
         contacten = validated_data.pop("contacten")
         eigenschappen = validated_data.pop("eigenschappen", [])
+        externe_codes = validated_data.pop("externe_codes", [])
 
         product_type = ProductType.objects.create(**validated_data)
         product_type.themas.set(themas)
@@ -125,6 +143,11 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
         for eigenschap in eigenschappen:
             EigenschapSerializer().create(eigenschap | {"product_type": product_type})
+
+        for externe_code in externe_codes:
+            ExterneCodeSerializer().create(
+                externe_code | {"product_type": product_type}
+            )
 
         product_type.save()
         product_type.add_contact_organisaties()
@@ -137,6 +160,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         organisaties = validated_data.pop("organisaties", None)
         contacten = validated_data.pop("contacten", None)
         eigenschappen = validated_data.pop("eigenschappen", None)
+        externe_codes = validated_data.pop("externe_codes", None)
 
         instance = super().update(instance, validated_data)
 
@@ -157,9 +181,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
             for eigenschap in eigenschappen:
                 key = eigenschap.pop("key")
                 if key in current_eigenschappen:
-                    existing_eigenschap = instance.eigenschappen.get(
-                        key=key, product_type=instance
-                    )
+                    existing_eigenschap = instance.eigenschappen.get(key=key)
                     EigenschapSerializer().update(existing_eigenschap, eigenschap)
                     seen_eigenschappen.add(key)
                 else:
@@ -168,6 +190,25 @@ class ProductTypeSerializer(serializers.ModelSerializer):
                     )
             instance.eigenschappen.filter(
                 key__in=(current_eigenschappen - seen_eigenschappen)
+            ).delete()
+
+        if externe_codes is not None:
+            current_externe_codes = set(
+                instance.externe_codes.values_list("systeem", flat=True)
+            )
+            seen_externe_codes = set()
+            for externe_code in externe_codes:
+                systeem = externe_code.pop("systeem")
+                if systeem in current_externe_codes:
+                    existing_externe_code = instance.externe_codes.get(systeem=systeem)
+                    ExterneCodeSerializer().update(existing_externe_code, externe_code)
+                    seen_externe_codes.add(systeem)
+                else:
+                    ExterneCodeSerializer().create(
+                        externe_code | {"product_type": instance, "systeem": systeem}
+                    )
+            instance.externe_codes.filter(
+                systeem__in=(current_externe_codes - seen_externe_codes)
             ).delete()
 
         instance.save()

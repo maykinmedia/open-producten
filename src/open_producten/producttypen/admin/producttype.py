@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from ..models import ProductType, Thema
 from .bestand import BestandInline
 from .eigenschap import EigenschapInline
+from .externe_code import ExterneCodeInline
 from .link import LinkInline
 from .vraag import VraagInline
 
@@ -46,12 +47,19 @@ class ProductTypeAdmin(admin.ModelAdmin):
         "organisaties",
         "contacten",
         "locaties",
+        "uniforme_product_naam",
     )
     search_fields = ("naam", "uniforme_product_naam__naam", "keywords")
     ordering = ("naam",)
     save_on_top = True
     form = ProductTypeAdminForm
-    inlines = (BestandInline, LinkInline, VraagInline, EigenschapInline)
+    inlines = (
+        BestandInline,
+        LinkInline,
+        VraagInline,
+        EigenschapInline,
+        ExterneCodeInline,
+    )
 
     def get_queryset(self, request):
         return (
