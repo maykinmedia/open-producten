@@ -1,10 +1,11 @@
 from django.db import transaction
-from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from ...utils.drf_validators import NestedObjectsValidator
 from ..models import Prijs, PrijsOptie, ProductType
-from .validators import PrijsOptieValidator
+from ..models.prijs import PrijsRegel
+from .validators import PrijsOptieRegelValidator
 
 
 class PrijsOptieSerializer(serializers.ModelSerializer):
@@ -15,25 +16,34 @@ class PrijsOptieSerializer(serializers.ModelSerializer):
         fields = ("id", "bedrag", "beschrijving")
 
 
+class PrijsRegelSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(required=False)
+
+    class Meta:
+        model = PrijsRegel
+        fields = ("id", "dmn_url", "beschrijving")
+
+
 class PrijsSerializer(serializers.ModelSerializer):
-    prijsopties = PrijsOptieSerializer(many=True)
+    prijsopties = PrijsOptieSerializer(many=True, required=False)
+    prijsregels = PrijsRegelSerializer(many=True, required=False)
     product_type_id = serializers.PrimaryKeyRelatedField(
         source="product_type", queryset=ProductType.objects.all()
     )
 
     class Meta:
         model = Prijs
-        fields = ("id", "product_type_id", "prijsopties", "actief_vanaf")
-        validators = [PrijsOptieValidator()]
-
-    def validate_prijsopties(self, opties: list[PrijsOptie]) -> list[PrijsOptie]:
-        if len(opties) == 0:
-            raise serializers.ValidationError(_("Er is minimaal één optie vereist."))
-        return opties
+        fields = ("id", "product_type_id", "prijsopties", "prijsregels", "actief_vanaf")
+        validators = [
+            PrijsOptieRegelValidator(),
+            NestedObjectsValidator("prijsopties", PrijsOptie),
+            NestedObjectsValidator("prijsregels", PrijsRegel),
+        ]
 
     @transaction.atomic()
     def create(self, validated_data):
-        prijsopties = validated_data.pop("prijsopties")
+        prijsopties = validated_data.pop("prijsopties", [])
+        prijsregels = validated_data.pop("prijsregels", [])
         product_type = validated_data.pop("product_type")
 
         prijs = Prijs.objects.create(**validated_data, product_type=product_type)
@@ -41,11 +51,15 @@ class PrijsSerializer(serializers.ModelSerializer):
         for optie in prijsopties:
             PrijsOptie.objects.create(prijs=prijs, **optie)
 
+        for regel in prijsregels:
+            PrijsRegel.objects.create(prijs=prijs, **regel)
+
         return prijs
 
     @transaction.atomic()
     def update(self, instance, validated_data):
         opties = validated_data.pop("prijsopties", None)
+        regels = validated_data.pop("prijsregels", None)
         prijs = super().update(instance, validated_data)
 
         if opties is not None:
@@ -64,9 +78,32 @@ class PrijsSerializer(serializers.ModelSerializer):
                     existing_optie.bedrag = optie["bedrag"]
                     existing_optie.beschrijving = optie["beschrijving"]
                     existing_optie.save()
+                    seen_optie_ids.add(optie_id)
 
             PrijsOptie.objects.filter(
                 id__in=(current_optie_ids - seen_optie_ids)
+            ).delete()
+
+        if regels is not None:
+            current_regel_ids = set(
+                prijs.prijsregels.values_list("id", flat=True).distinct()
+            )
+            seen_regel_ids = set()
+
+            for regel in regels:
+                regel_id = regel.pop("id", None)
+                if regel_id is None:
+                    PrijsRegel.objects.create(prijs=prijs, **regel)
+
+                else:
+                    existing_regel = PrijsRegel.objects.get(id=regel_id)
+                    existing_regel.dmn_url = regel["dmn_url"]
+                    existing_regel.beschrijving = regel["beschrijving"]
+                    existing_regel.save()
+                    seen_regel_ids.add(regel_id)
+
+            PrijsRegel.objects.filter(
+                id__in=(current_regel_ids - seen_regel_ids)
             ).delete()
 
         return prijs
