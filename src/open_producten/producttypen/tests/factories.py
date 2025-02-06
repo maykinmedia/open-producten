@@ -2,6 +2,7 @@ import factory.fuzzy
 
 from ..models import (
     Bestand,
+    Eigenschap,
     Link,
     Prijs,
     PrijsOptie,
@@ -80,3 +81,12 @@ class LinkFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Link
+
+
+class EigenschapFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    key = factory.Faker("word")
+    waarde = factory.Faker("word")
+
+    class Meta:
+        model = Eigenschap

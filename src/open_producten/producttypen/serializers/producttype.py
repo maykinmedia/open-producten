@@ -13,6 +13,7 @@ from open_producten.locaties.serializers.locatie import (
 from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
+from .eigenschap import EigenschapSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 from .vraag import NestedVraagSerializer
@@ -77,6 +78,23 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     links = NestedLinkSerializer(many=True, read_only=True)
     bestanden = NestedBestandSerializer(many=True, read_only=True)
 
+    eigenschappen = EigenschapSerializer(many=True, required=False)
+
+    def validate_eigenschappen(self, eigenschappen: list[dict]):
+        keys = set()
+
+        for eigenschap in eigenschappen:
+            if eigenschap["key"] in keys:
+                raise serializers.ValidationError(
+                    _(
+                        "De eigenschappen van een product type moeten unieke keys hebben."
+                    )
+                )
+            else:
+                keys.add(eigenschap["key"])
+
+        return eigenschappen
+
     class Meta:
         model = ProductType
         fields = "__all__"
@@ -97,12 +115,16 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         locaties = validated_data.pop("locaties")
         organisaties = validated_data.pop("organisaties")
         contacten = validated_data.pop("contacten")
+        eigenschappen = validated_data.pop("eigenschappen", [])
 
         product_type = ProductType.objects.create(**validated_data)
         product_type.themas.set(themas)
         product_type.locaties.set(locaties)
         product_type.organisaties.set(organisaties)
         product_type.contacten.set(contacten)
+
+        for eigenschap in eigenschappen:
+            EigenschapSerializer().create(eigenschap | {"product_type": product_type})
 
         product_type.save()
         product_type.add_contact_organisaties()
@@ -114,6 +136,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         locaties = validated_data.pop("locaties", None)
         organisaties = validated_data.pop("organisaties", None)
         contacten = validated_data.pop("contacten", None)
+        eigenschappen = validated_data.pop("eigenschappen", None)
 
         instance = super().update(instance, validated_data)
 
@@ -125,6 +148,27 @@ class ProductTypeSerializer(serializers.ModelSerializer):
             instance.organisaties.set(organisaties)
         if contacten:
             instance.contacten.set(contacten)
+
+        if eigenschappen is not None:
+            current_eigenschappen = set(
+                instance.eigenschappen.values_list("key", flat=True)
+            )
+            seen_eigenschappen = set()
+            for eigenschap in eigenschappen:
+                key = eigenschap.pop("key")
+                if key in current_eigenschappen:
+                    existing_eigenschap = instance.eigenschappen.get(
+                        key=key, product_type=instance
+                    )
+                    EigenschapSerializer().update(existing_eigenschap, eigenschap)
+                    seen_eigenschappen.add(key)
+                else:
+                    EigenschapSerializer().create(
+                        eigenschap | {"product_type": instance, "key": key}
+                    )
+            instance.eigenschappen.filter(
+                key__in=(current_eigenschappen - seen_eigenschappen)
+            ).delete()
 
         instance.save()
         instance.add_contact_organisaties()

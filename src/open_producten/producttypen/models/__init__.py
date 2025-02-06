@@ -1,4 +1,5 @@
 from .bestand import Bestand
+from .eigenschap import Eigenschap
 from .link import Link
 from .prijs import Prijs, PrijsOptie
 from .producttype import ProductType
@@ -15,4 +16,5 @@ __all__ = [
     "PrijsOptie",
     "ProductType",
     "Bestand",
+    "Eigenschap",
 ]

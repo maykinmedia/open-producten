@@ -2845,6 +2845,36 @@ components:
           type: string
       required:
       - detail
+    Eigenschap:
+      type: object
+      properties:
+        key:
+          type: string
+          description: De sleutel van de eigenschap
+          maxLength: 255
+        waarde:
+          type: string
+          description: De waarde van de eigenschap
+          maxLength: 255
+      required:
+      - key
+      - waarde
+    EigenschapRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          minLength: 1
+          description: De sleutel van de eigenschap
+          maxLength: 255
+        waarde:
+          type: string
+          minLength: 1
+          description: De waarde van de eigenschap
+          maxLength: 255
+      required:
+      - key
+      - waarde
     Error:
       type: object
       properties:
@@ -3745,6 +3775,10 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/EigenschapRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -3956,6 +3990,10 @@ components:
           items:
             $ref: '#/components/schemas/NestedBestand'
           readOnly: true
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Eigenschap'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4079,6 +4117,10 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/EigenschapRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
