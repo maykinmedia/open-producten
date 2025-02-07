@@ -54,6 +54,13 @@ from open_producten.utils.views import OrderedModelViewSet
                     "samenvatting": "korte samenvatting...",
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
+                    "eigenschappen": [
+                        {"key": "doelgroep", "waarde": "inwoners"},
+                    ],
+                    "externe_codes": [
+                        {"systeem": "ISO", "code": "123"},
+                        {"systeem": "CBS", "code": "456"},
+                    ],
                 },
                 request_only=True,
             )

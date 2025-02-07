@@ -1841,6 +1841,14 @@ paths:
                   beschrijving: uitgebreide beschrijving...
                   keywords:
                   - wonen
+                  eigenschappen:
+                  - key: doelgroep
+                    waarde: inwoners
+                  externe_codes:
+                  - systeem: ISO
+                    code: '123'
+                  - systeem: CBS
+                    code: '456'
                 summary: Create product type
         required: true
       security:
