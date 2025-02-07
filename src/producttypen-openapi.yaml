@@ -1822,7 +1822,7 @@ paths:
             examples:
               CreateProductType:
                 value:
-                  uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
+                  uniforme_product_naam: aanleunwoning
                   thema_ids:
                   - 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   locatie_ids:
@@ -3782,9 +3782,8 @@ components:
       properties:
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         thema_ids:
           type: array
           items:
@@ -3990,8 +3989,7 @@ components:
           readOnly: true
         uniforme_product_naam:
           type: string
-          format: uri
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         themas:
           type: array
           items:
@@ -4132,9 +4130,8 @@ components:
       properties:
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         thema_ids:
           type: array
           items:

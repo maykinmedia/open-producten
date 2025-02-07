@@ -86,7 +86,7 @@ class LinkFactory(factory.django.DjangoModelFactory):
 
 class EigenschapFactory(factory.django.DjangoModelFactory):
     product_type = factory.SubFactory(ProductTypeFactory)
-    key = factory.Faker("word")
+    naam = factory.Sequence(lambda n: f"key {n}")
     waarde = factory.Faker("word")
 
     class Meta:
@@ -95,7 +95,7 @@ class EigenschapFactory(factory.django.DjangoModelFactory):
 
 class ExterneCodeFactory(factory.django.DjangoModelFactory):
     product_type = factory.SubFactory(ProductTypeFactory)
-    systeem = factory.Faker("word")
+    naam = factory.Sequence(lambda n: f"systeem {n}")
     code = factory.Faker("word")
 
     class Meta:

@@ -46,7 +46,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "code": "PT=12345",
             "samenvatting": "test",
             "beschrijving": "test test",
-            "uniforme_product_naam": upn.uri,
+            "uniforme_product_naam": upn.naam,
             "thema_ids": [self.thema.id],
         }
 
@@ -98,7 +98,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
-            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "uniforme_product_naam": product_type.uniforme_product_naam.naam,
             "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
@@ -195,11 +195,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(response.data["toegestane_statussen"], ["gereed"])
 
-    def test_create_product_type_with_duplicate_eigenschap_keys_returns_error(self):
+    def test_create_product_type_with_duplicate_eigenschap_naams_returns_error(self):
         data = self.data | {
             "eigenschappen": [
-                {"key": "doelgroep", "waarde": "inwoners"},
-                {"key": "doelgroep", "waarde": "inwoners"},
+                {"naam": "doelgroep", "waarde": "inwoners"},
+                {"naam": "doelgroep", "waarde": "inwoners"},
             ],
         }
         response = self.client.post(self.path, data)
@@ -211,7 +211,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "eigenschappen": [
                     ErrorDetail(
                         string=_(
-                            "De eigenschappen van een product type moeten unieke keys hebben."
+                            "De eigenschappen van een product type moeten een unieke naam hebben."
                         ),
                         code="invalid",
                     )
@@ -224,8 +224,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
     ):
         data = self.data | {
             "externe_codes": [
-                {"systeem": "ISO", "code": "123"},
-                {"systeem": "ISO", "code": "123"},
+                {"naam": "ISO", "code": "123"},
+                {"naam": "ISO", "code": "123"},
             ],
         }
         response = self.client.post(self.path, data)
@@ -237,7 +237,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "externe_codes": [
                     ErrorDetail(
                         string=_(
-                            "De externe codes van een product type moeten een uniek systeem hebben."
+                            "De externe codes van een product type moeten een unieke naam hebben."
                         ),
                         code="invalid",
                     )
@@ -285,8 +285,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "locatie_ids": [locatie.id],
             "organisatie_ids": [organisatie.id],
             "contact_ids": [contact.id],
-            "eigenschappen": [{"key": "doelgroep", "waarde": "inwoner"}],
-            "externe_codes": [{"systeem": "ISO", "code": "123"}],
+            "eigenschappen": [{"naam": "doelgroep", "waarde": "inwoner"}],
+            "externe_codes": [{"naam": "ISO", "code": "123"}],
         }
         response = self.client.post(self.path, data)
 
@@ -302,7 +302,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
-            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "uniforme_product_naam": product_type.uniforme_product_naam.naam,
             "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],
@@ -365,8 +365,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
                     },
                 }
             ],
-            "eigenschappen": [{"key": "doelgroep", "waarde": "inwoner"}],
-            "externe_codes": [{"systeem": "ISO", "code": "123"}],
+            "eigenschappen": [{"naam": "doelgroep", "waarde": "inwoner"}],
+            "externe_codes": [{"naam": "ISO", "code": "123"}],
             "gepubliceerd": False,
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
@@ -502,7 +502,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_update_product_type_with_eigenschap(self):
         product_type = ProductTypeFactory.create()
 
-        eigenschappen = [{"key": "doelgroep", "waarde": "inwoners"}]
+        eigenschappen = [{"naam": "doelgroep", "waarde": "inwoners"}]
         data = self.data | {"eigenschappen": eigenschappen}
         response = self.client.put(self.detail_path(product_type), data)
 
@@ -514,7 +514,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         product_type = ProductTypeFactory.create()
         eigenschap = EigenschapFactory.create(product_type=product_type)
 
-        eigenschappen = [{"key": eigenschap.key, "waarde": "inwoners"}]
+        eigenschappen = [{"naam": eigenschap.naam, "waarde": "inwoners"}]
         data = self.data | {"eigenschappen": eigenschappen}
         response = self.client.put(self.detail_path(product_type), data)
 
@@ -531,8 +531,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
         EigenschapFactory.create(product_type=product_type)
 
         eigenschappen = [
-            {"key": "doelgroep", "waarde": "inwoners"},
-            {"key": "test", "waarde": "123"},
+            {"naam": "doelgroep", "waarde": "inwoners"},
+            {"naam": "test", "waarde": "123"},
         ]
         data = self.data | {"eigenschappen": eigenschappen}
         response = self.client.put(self.detail_path(product_type), data)
@@ -557,7 +557,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_update_product_type_with_externe_code(self):
         product_type = ProductTypeFactory.create()
 
-        externe_codes = [{"systeem": "ISO", "code": "123"}]
+        externe_codes = [{"naam": "ISO", "code": "123"}]
         data = self.data | {"externe_codes": externe_codes}
         response = self.client.put(self.detail_path(product_type), data)
 
@@ -569,7 +569,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         product_type = ProductTypeFactory.create()
         externe_code = ExterneCodeFactory.create(product_type=product_type)
 
-        externe_codes = [{"systeem": externe_code.systeem, "code": "456"}]
+        externe_codes = [{"naam": externe_code.naam, "code": "456"}]
         data = self.data | {"externe_codes": externe_codes}
         response = self.client.put(self.detail_path(product_type), data)
 
@@ -586,8 +586,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
         ExterneCodeFactory.create(product_type=product_type)
 
         externe_codes = [
-            {"systeem": "ISO", "code": "123"},
-            {"systeem": "CBS", "code": "1234"},
+            {"naam": "ISO", "code": "123"},
+            {"naam": "CBS", "code": "1234"},
         ]
         data = self.data | {"externe_codes": externe_codes}
         response = self.client.put(self.detail_path(product_type), data)
@@ -664,7 +664,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_partial_update_eigenschappen_and_externe_codes_are_kept_when_key_not_passed(
+    def test_partial_update_eigenschappen_and_externe_codes_are_kept_when_naam_not_passed(
         self,
     ):
         product_type = ProductTypeFactory.create()
@@ -681,7 +681,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_partial_update_product_type_with_eigenschap(self):
         product_type = ProductTypeFactory.create()
 
-        eigenschappen = [{"key": "doelgroep", "waarde": "inwoners"}]
+        eigenschappen = [{"naam": "doelgroep", "waarde": "inwoners"}]
         data = {"eigenschappen": eigenschappen}
         response = self.client.patch(self.detail_path(product_type), data)
 
@@ -693,7 +693,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         product_type = ProductTypeFactory.create()
         eigenschap = EigenschapFactory.create(product_type=product_type)
 
-        eigenschappen = [{"key": eigenschap.key, "waarde": "inwoners"}]
+        eigenschappen = [{"naam": eigenschap.naam, "waarde": "inwoners"}]
         data = {"eigenschappen": eigenschappen}
         response = self.client.patch(self.detail_path(product_type), data)
 
@@ -710,8 +710,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
         EigenschapFactory.create(product_type=product_type)
 
         eigenschappen = [
-            {"key": "doelgroep", "waarde": "inwoners"},
-            {"key": "test", "waarde": "123"},
+            {"naam": "doelgroep", "waarde": "inwoners"},
+            {"naam": "test", "waarde": "123"},
         ]
         data = {"eigenschappen": eigenschappen}
         response = self.client.patch(self.detail_path(product_type), data)
@@ -736,7 +736,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
     def test_partial_update_product_type_with_externe_code(self):
         product_type = ProductTypeFactory.create()
 
-        externe_codes = [{"systeem": "ISO", "code": "123"}]
+        externe_codes = [{"naam": "ISO", "code": "123"}]
         data = {"externe_codes": externe_codes}
         response = self.client.patch(self.detail_path(product_type), data)
 
@@ -748,7 +748,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         product_type = ProductTypeFactory.create()
         externe_code = ExterneCodeFactory.create(product_type=product_type)
 
-        externe_codes = [{"systeem": externe_code.systeem, "code": "456"}]
+        externe_codes = [{"naam": externe_code.naam, "code": "456"}]
         data = {"externe_codes": externe_codes}
         response = self.client.patch(self.detail_path(product_type), data)
 
@@ -765,8 +765,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
         ExterneCodeFactory.create(product_type=product_type)
 
         externe_codes = [
-            {"systeem": "ISO", "code": "123"},
-            {"systeem": "CBS", "code": "1234"},
+            {"naam": "ISO", "code": "123"},
+            {"naam": "CBS", "code": "1234"},
         ]
         data = {"externe_codes": externe_codes}
         response = self.client.patch(self.detail_path(product_type), data)
@@ -880,7 +880,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "code": product_type1.code,
                 "samenvatting": product_type1.samenvatting,
                 "beschrijving": product_type1.beschrijving,
-                "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type1.uniforme_product_naam.naam,
                 "toegestane_statussen": [],
                 "vragen": [],
                 "prijzen": [],
@@ -913,7 +913,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "code": product_type2.code,
                 "samenvatting": product_type2.samenvatting,
                 "beschrijving": product_type2.beschrijving,
-                "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type2.uniforme_product_naam.naam,
                 "toegestane_statussen": [],
                 "vragen": [],
                 "prijzen": [],
@@ -957,7 +957,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "code": product_type.code,
             "samenvatting": product_type.samenvatting,
             "beschrijving": product_type.beschrijving,
-            "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "uniforme_product_naam": product_type.uniforme_product_naam.naam,
             "toegestane_statussen": [],
             "vragen": [],
             "prijzen": [],

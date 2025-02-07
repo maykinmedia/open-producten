@@ -6,10 +6,10 @@ from open_producten.utils.models import BaseModel
 
 class Eigenschap(BaseModel):
 
-    key = models.CharField(
-        verbose_name=_("key"),
+    naam = models.CharField(
+        verbose_name=_("naam"),
         max_length=255,
-        help_text=_("De sleutel van de eigenschap"),
+        help_text=_("De naam van de eigenschap"),
     )
 
     waarde = models.CharField(
@@ -29,4 +29,4 @@ class Eigenschap(BaseModel):
     class Meta:
         verbose_name = _("eigenschap")
         verbose_name_plural = _("eigenschappen")
-        unique_together = (("product_type", "key"),)
+        unique_together = (("product_type", "naam"),)

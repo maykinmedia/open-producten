@@ -6,16 +6,16 @@ from open_producten.utils.models import BaseModel
 
 class ExterneCode(BaseModel):
 
-    systeem = models.CharField(
-        verbose_name=_("systeem"),
+    naam = models.CharField(
+        verbose_name=_("naam"),
         max_length=255,
-        help_text=_("De systeem van de externe product code"),
+        help_text=_("De naam van het systeem van de externe product code."),
     )
 
     code = models.CharField(
         verbose_name=_("code"),
         max_length=255,
-        help_text=_("De code van de van het product type in het systeem"),
+        help_text=_("De code van de van het product type in het externe systeem."),
     )
 
     product_type = models.ForeignKey(
@@ -29,4 +29,4 @@ class ExterneCode(BaseModel):
     class Meta:
         verbose_name = _("externe product type code")
         verbose_name_plural = _("externe product type codes")
-        unique_together = (("product_type", "systeem"),)
+        unique_together = (("product_type", "naam"),)
