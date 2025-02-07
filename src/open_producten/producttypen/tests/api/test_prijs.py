@@ -310,6 +310,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
 
     def test_update_prijs_updating_and_removing_regels(self):
 
@@ -334,6 +335,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.first().dmn_url, "https://maykinmedia.nl")
+        self.assertEqual(PrijsRegel.objects.first().id, regel_to_be_updated.id)
 
     def test_update_prijs_creating_and_deleting_opties(self):
 
@@ -622,6 +624,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
 
     def test_partial_update_prijs_updating_and_removing_regels(self):
 
@@ -645,6 +648,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.first().dmn_url, "https://maykinmedia.nl")
+        self.assertEqual(PrijsRegel.objects.first().id, regel_to_be_updated.id)
 
     def test_partial_update_prijs_creating_and_deleting_opties(self):
 
