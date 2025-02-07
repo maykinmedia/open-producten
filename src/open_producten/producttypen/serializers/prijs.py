@@ -49,10 +49,10 @@ class PrijsSerializer(serializers.ModelSerializer):
         prijs = Prijs.objects.create(**validated_data, product_type=product_type)
 
         for optie in prijsopties:
-            PrijsOptie.objects.create(prijs=prijs, **optie)
+            PrijsOptieSerializer().create(optie | {"prijs": prijs})
 
         for regel in prijsregels:
-            PrijsRegel.objects.create(prijs=prijs, **regel)
+            PrijsRegelSerializer().create(regel | {"prijs": prijs})
 
         return prijs
 
@@ -63,24 +63,20 @@ class PrijsSerializer(serializers.ModelSerializer):
         prijs = super().update(instance, validated_data)
 
         if opties is not None:
-            current_optie_ids = set(
-                prijs.prijsopties.values_list("id", flat=True).distinct()
-            )
+            current_optie_ids = set(prijs.prijsopties.values_list("id", flat=True))
             seen_optie_ids = set()
 
             for optie in opties:
                 optie_id = optie.pop("id", None)
                 if optie_id is None:
-                    PrijsOptie.objects.create(prijs=prijs, **optie)
+                    PrijsOptieSerializer().create(optie | {"prijs": prijs})
 
                 else:
                     existing_optie = PrijsOptie.objects.get(id=optie_id)
-                    existing_optie.bedrag = optie["bedrag"]
-                    existing_optie.beschrijving = optie["beschrijving"]
-                    existing_optie.save()
+                    PrijsOptieSerializer().update(existing_optie, optie)
                     seen_optie_ids.add(optie_id)
 
-            PrijsOptie.objects.filter(
+            prijs.prijsopties.filter(
                 id__in=(current_optie_ids - seen_optie_ids)
             ).delete()
 
@@ -93,16 +89,14 @@ class PrijsSerializer(serializers.ModelSerializer):
             for regel in regels:
                 regel_id = regel.pop("id", None)
                 if regel_id is None:
-                    PrijsRegel.objects.create(prijs=prijs, **regel)
+                    PrijsRegelSerializer().create(regel | {"prijs": prijs})
 
                 else:
                     existing_regel = PrijsRegel.objects.get(id=regel_id)
-                    existing_regel.dmn_url = regel["dmn_url"]
-                    existing_regel.beschrijving = regel["beschrijving"]
-                    existing_regel.save()
+                    PrijsRegelSerializer().update(existing_regel, regel)
                     seen_regel_ids.add(regel_id)
 
-            PrijsRegel.objects.filter(
+            prijs.prijsregels.filter(
                 id__in=(current_regel_ids - seen_regel_ids)
             ).delete()
 
