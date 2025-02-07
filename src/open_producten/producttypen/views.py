@@ -96,7 +96,7 @@ class ProductTypeFilterSet(django_filters.FilterSet):
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
                     "eigenschappen": [
-                        {"key": "doelgroep", "waarde": "inwoners"},
+                        {"naam": "doelgroep", "waarde": "inwoners"},
                     ],
                     "externe_codes": [
                         {"naam": "ISO", "code": "123"},

@@ -1854,7 +1854,7 @@ paths:
                   keywords:
                   - wonen
                   eigenschappen:
-                  - key: doelgroep
+                  - naam: doelgroep
                     waarde: inwoners
                   externe_codes:
                   - naam: ISO
@@ -2871,10 +2871,12 @@ components:
         naam:
           type: string
           description: De naam van de eigenschap
+          pattern: ^[^:\[\]]+$
           maxLength: 255
         waarde:
           type: string
           description: De waarde van de eigenschap
+          pattern: ^[^:\[\]]+$
           maxLength: 255
       required:
       - naam
@@ -2886,11 +2888,13 @@ components:
           type: string
           minLength: 1
           description: De naam van de eigenschap
+          pattern: ^[^:\[\]]+$
           maxLength: 255
         waarde:
           type: string
           minLength: 1
           description: De waarde van de eigenschap
+          pattern: ^[^:\[\]]+$
           maxLength: 255
       required:
       - naam
