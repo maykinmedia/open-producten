@@ -1,6 +1,8 @@
+from django.core.validators import RegexValidator
 from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
+import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 from rest_framework import status
@@ -28,6 +30,45 @@ from open_producten.producttypen.serializers import (
 from open_producten.utils.views import OrderedModelViewSet
 
 
+class ProductTypeFilterSet(django_filters.FilterSet):
+    regex = r"^\[([^:\[\]]+):([^:\[\]]+)\]$"  # [key:value] where the key and value cannot contain `[`, `]` or `:`
+
+    eigenschap = django_filters.CharFilter(
+        method="filter_by_eigenschap", validators=[RegexValidator(regex)]
+    )
+    externe_code = django_filters.CharFilter(
+        method="filter_by_externe_code", validators=[RegexValidator(regex)]
+    )
+
+    uniforme_product_naam = django_filters.CharFilter(
+        field_name="uniforme_product_naam__naam"
+    )
+
+    def filter_by_eigenschap(self, queryset, name, value):
+        value_list = value.strip("[]").split(":")
+
+        if len(value_list) != 2:
+            return queryset
+
+        naam = value_list[0]
+        waarde = value_list[1]
+        return queryset.filter(eigenschappen__naam=naam, eigenschappen__waarde=waarde)
+
+    def filter_by_externe_code(self, queryset, name, value):
+        value_list = value.strip("[]").split(":")
+
+        if len(value_list) != 2:
+            return queryset
+
+        naam = value_list[0]
+        code = value_list[1]
+        return queryset.filter(externe_codes__naam=naam, externe_codes__code=code)
+
+    class Meta:
+        model = ProductType
+        fields = ["gepubliceerd", "uniforme_product_naam"]
+
+
 @extend_schema_view(
     list=extend_schema(
         summary="Alle PRODUCTTYPEN opvragen.",
@@ -42,7 +83,7 @@ from open_producten.utils.views import OrderedModelViewSet
             OpenApiExample(
                 "Create product type",
                 value={
-                    "uniforme_product_naam": "http://standaarden.overheid.nl/owms/terms/aanleunwoning",
+                    "uniforme_product_naam": "aanleunwoning",
                     "thema_ids": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],
                     "locatie_ids": ["235de068-a9c5-4eda-b61d-92fd7f09e9dc"],
                     "organisatie_ids": ["2c2694f1-f948-4960-8312-d51c3a0e540f"],
@@ -58,8 +99,8 @@ from open_producten.utils.views import OrderedModelViewSet
                         {"key": "doelgroep", "waarde": "inwoners"},
                     ],
                     "externe_codes": [
-                        {"systeem": "ISO", "code": "123"},
-                        {"systeem": "CBS", "code": "456"},
+                        {"naam": "ISO", "code": "123"},
+                        {"naam": "CBS", "code": "456"},
                     ],
                 },
                 request_only=True,
@@ -82,7 +123,7 @@ class ProductTypeViewSet(OrderedModelViewSet):
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd"]
+    filterset_class = ProductTypeFilterSet
 
     @extend_schema(
         "actuele_prijzen",

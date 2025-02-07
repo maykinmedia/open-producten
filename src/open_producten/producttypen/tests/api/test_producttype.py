@@ -1112,3 +1112,92 @@ class TestProductTypeActions(BaseApiTestCase):
                 },
             },
         )
+
+
+class TestProductTypeFilterSet(BaseApiTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.path = reverse("producttype-list")
+
+    def test_gepubliceerd_filter(self):
+        ProductTypeFactory.create(gepubliceerd=True)
+        ProductTypeFactory.create(gepubliceerd=False)
+
+        response = self.client.get(self.path + "?gepubliceerd=true")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_uniforme_product_naam_filter(self):
+        ProductTypeFactory.create(
+            uniforme_product_naam=UniformeProductNaamFactory(naam="parkeervergunning")
+        )
+        ProductTypeFactory.create(
+            uniforme_product_naam=UniformeProductNaamFactory(naam="aanleunwoning")
+        )
+
+        response = self.client.get(
+            self.path + "?uniforme_product_naam=parkeervergunning"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_eigenschap_filter(self):
+        product_type_1 = ProductTypeFactory.create()
+        EigenschapFactory(
+            naam="doelgroep", waarde="inwoner", product_type=product_type_1
+        )
+
+        product_type_2 = ProductTypeFactory.create()
+        EigenschapFactory(
+            naam="doelgroep", waarde="verenigingen", product_type=product_type_2
+        )
+
+        response = self.client.get(self.path + "?eigenschap=[doelgroep:inwoner]")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_eigenschap_filter_without_brackets(self):
+        response = self.client.get(self.path + "?eigenschap=abc")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_eigenschap_filter_without_key_value(self):
+        response = self.client.get(self.path + "?eigenschap=[:]")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_eigenschap_filter_with_invalid_charakters(self):
+        response = self.client.get(self.path + "?eigenschap=[a[b:[b:a]]")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_externe_code_filter(self):
+        product_type_1 = ProductTypeFactory.create()
+        ExterneCodeFactory(naam="ISO", code="12345", product_type=product_type_1)
+
+        product_type_2 = ProductTypeFactory.create()
+        EigenschapFactory(naam="ISO", waarde="9837549857", product_type=product_type_2)
+
+        response = self.client.get(self.path + "?externe_code=[ISO:12345]")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_externe_code_filter_without_brackets(self):
+        response = self.client.get(self.path + "?externe_code=abc")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_externe_code_filter_without_key_value(self):
+        response = self.client.get(self.path + "?externe_code=[:]")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_externe_code_filter_with_invalid_charakters(self):
+        response = self.client.get(self.path + "?externe_code=[a[b:[b:a]]")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

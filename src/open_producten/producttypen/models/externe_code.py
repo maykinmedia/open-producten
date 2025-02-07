@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -10,12 +11,14 @@ class ExterneCode(BaseModel):
         verbose_name=_("naam"),
         max_length=255,
         help_text=_("De naam van het systeem van de externe product code."),
+        validators=[RegexValidator(r"^[^:\[\]]+$")],
     )
 
     code = models.CharField(
         verbose_name=_("code"),
         max_length=255,
         help_text=_("De code van de van het product type in het externe systeem."),
+        validators=[RegexValidator(r"^[^:\[\]]+$")],
     )
 
     product_type = models.ForeignKey(

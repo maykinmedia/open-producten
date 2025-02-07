@@ -1761,6 +1761,14 @@ paths:
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
+        name: eigenschap
+        schema:
+          type: string
+      - in: query
+        name: externe_code
+        schema:
+          type: string
+      - in: query
         name: gepubliceerd
         schema:
           type: boolean
@@ -1776,6 +1784,10 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
       tags:
       - producttypen
       security:
@@ -1845,9 +1857,9 @@ paths:
                   - key: doelgroep
                     waarde: inwoners
                   externe_codes:
-                  - systeem: ISO
+                  - naam: ISO
                     code: '123'
-                  - systeem: CBS
+                  - naam: CBS
                     code: '456'
                 summary: Create product type
         required: true
@@ -2856,24 +2868,24 @@ components:
     Eigenschap:
       type: object
       properties:
-        key:
+        naam:
           type: string
-          description: De sleutel van de eigenschap
+          description: De naam van de eigenschap
           maxLength: 255
         waarde:
           type: string
           description: De waarde van de eigenschap
           maxLength: 255
       required:
-      - key
+      - naam
       - waarde
     EigenschapRequest:
       type: object
       properties:
-        key:
+        naam:
           type: string
           minLength: 1
-          description: De sleutel van de eigenschap
+          description: De naam van de eigenschap
           maxLength: 255
         waarde:
           type: string
@@ -2881,7 +2893,7 @@ components:
           description: De waarde van de eigenschap
           maxLength: 255
       required:
-      - key
+      - naam
       - waarde
     Error:
       type: object
@@ -2900,33 +2912,37 @@ components:
     ExterneCode:
       type: object
       properties:
-        systeem:
+        naam:
           type: string
-          description: De systeem van de externe product code
+          description: De naam van het systeem van de externe product code.
+          pattern: ^[^:\[\]]+$
           maxLength: 255
         code:
           type: string
-          description: De code van de van het product type in het systeem
+          description: De code van de van het product type in het externe systeem.
+          pattern: ^[^:\[\]]+$
           maxLength: 255
       required:
       - code
-      - systeem
+      - naam
     ExterneCodeRequest:
       type: object
       properties:
-        systeem:
+        naam:
           type: string
           minLength: 1
-          description: De systeem van de externe product code
+          description: De naam van het systeem van de externe product code.
+          pattern: ^[^:\[\]]+$
           maxLength: 255
         code:
           type: string
           minLength: 1
-          description: De code van de van het product type in het systeem
+          description: De code van de van het product type in het externe systeem.
+          pattern: ^[^:\[\]]+$
           maxLength: 255
       required:
       - code
-      - systeem
+      - naam
     Link:
       type: object
       properties:
