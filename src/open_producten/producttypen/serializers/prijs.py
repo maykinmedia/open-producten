@@ -87,7 +87,8 @@ class PrijsSerializer(serializers.ModelSerializer):
             PrijsOptieSerializer().create(optie | {"prijs": prijs})
 
         for regel in prijsregels:
-            PrijsRegel.objects.create(prijs=prijs, **regel)
+            regel.pop("id", None)
+            PrijsRegelSerializer().create(regel | {"prijs": prijs})
 
         return prijs
 
@@ -113,7 +114,7 @@ class PrijsSerializer(serializers.ModelSerializer):
                     )
                     seen_optie_ids.add(optie_id)
 
-            PrijsOptie.objects.filter(
+            prijs.prijsopties.filter(
                 id__in=(current_optie_ids - seen_optie_ids)
             ).delete()
 
@@ -126,16 +127,16 @@ class PrijsSerializer(serializers.ModelSerializer):
             for regel in regels:
                 regel_id = regel.pop("id", None)
                 if regel_id is None:
-                    PrijsRegel.objects.create(prijs=prijs, **regel)
+                    PrijsRegelSerializer().create(regel | {"prijs": prijs})
 
                 else:
                     existing_regel = PrijsRegel.objects.get(id=regel_id)
-                    existing_regel.dmn_url = regel["dmn_url"]
-                    existing_regel.beschrijving = regel["beschrijving"]
-                    existing_regel.save()
+                    PrijsRegelSerializer(partial=self.partial).update(
+                        existing_regel, regel
+                    )
                     seen_regel_ids.add(regel_id)
 
-            PrijsRegel.objects.filter(
+            prijs.prijsregels.filter(
                 id__in=(current_regel_ids - seen_regel_ids)
             ).delete()
 
