@@ -6,7 +6,7 @@ from notifications_api_common.utils import notification_documentation
 from rest_framework.routers import DefaultRouter
 
 from open_producten.producten.kanalen import KANAAL_PRODUCTEN
-from open_producten.producten.views import ProductViewSet
+from open_producten.producten.viewsets import ProductViewSet
 
 ProductRouter = DefaultRouter()
 ProductRouter.register("producten", ProductViewSet, basename="product")
