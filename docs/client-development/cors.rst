@@ -9,7 +9,7 @@ runs completely in the browser, such as React, Angular or other frameworks.
 Open Producten must be deployed with an appropriate CORS-configuration for this.
 
 .. note:: We always recommend using an API gateway/own backend to communicate with Open
-   Zaak. It's simpler because you don't have to deal with CORS, and there's less risk
+   Producten. It's simpler because you don't have to deal with CORS, and there's less risk
    of credentials/secrets leaking. You should **never** store client ID/secret in your
    dist bundle(s).
 
