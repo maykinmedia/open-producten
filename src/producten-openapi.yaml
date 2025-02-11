@@ -19,6 +19,33 @@ paths:
       summary: Alle PRODUCTEN opvragen.
       parameters:
       - in: query
+        name: eind_datum
+        schema:
+          type: string
+          format: date
+        description: De einddatum van dit product. Op deze datum zal de status van
+          het product automatisch naar VERLOPEN worden gezet. Op het moment dat de
+          eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
+          toegestaan.
+      - in: query
+        name: eind_datum__gte
+        schema:
+          type: string
+          format: date
+        description: De einddatum van dit product. Op deze datum zal de status van
+          het product automatisch naar VERLOPEN worden gezet. Op het moment dat de
+          eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
+          toegestaan.
+      - in: query
+        name: eind_datum__lte
+        schema:
+          type: string
+          format: date
+        description: De einddatum van dit product. Op deze datum zal de status van
+          het product automatisch naar VERLOPEN worden gezet. Op het moment dat de
+          eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
+          toegestaan.
+      - in: query
         name: frequentie
         schema:
           type: string
@@ -37,6 +64,7 @@ paths:
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -49,6 +77,40 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: start_datum
+        schema:
+          type: string
+          format: date
+        description: De start datum van dit product. Op deze datum zal de status van
+          het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
+          wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
+      - in: query
+        name: start_datum__gte
+        schema:
+          type: string
+          format: date
+        description: De start datum van dit product. Op deze datum zal de status van
+          het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
+          wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
+      - in: query
+        name: start_datum__lte
+        schema:
+          type: string
+          format: date
+        description: De start datum van dit product. Op deze datum zal de status van
+          het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
+          wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
       - in: query
         name: status
         schema:
@@ -69,6 +131,10 @@ paths:
           * `ingetrokken` - Ingetrokken
           * `geweigerd` - Geweigerd
           * `verlopen` - Verlopen
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
       tags:
       - producten
       security:

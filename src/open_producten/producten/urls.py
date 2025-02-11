@@ -4,7 +4,7 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest_framework.routers import DefaultRouter
 
-from open_producten.producten.views import ProductViewSet
+from open_producten.producten.viewsets import ProductViewSet
 
 ProductRouter = DefaultRouter()
 ProductRouter.register("producten", ProductViewSet, basename="product")
