@@ -1,6 +1,6 @@
 # Licence
 
-Copyright © Maykin {% now "Y" %} # FIXME
+Copyright © Maykin 2025
 
 Licensed under the EUPL
 
