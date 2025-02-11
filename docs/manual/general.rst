@@ -195,14 +195,11 @@ Als voorbeeld zie je (een deel van) de detailweergave van een product:
    onder het veld een extra helptekst getoond die meer context geeft over de
    betekenis van een veld.
 
-2. Gerelateerde objecten worden vaak via een vergrootglas ingesteld. Wanneer je
-   het icoon aanklikt, dan wordt er een lijstscherm geladen waarin je het
-   gerelateerde object kan selecteren. Na selectie staat het database-ID
-   ingevuld in het veld.
+2. Gerelateerde objecten kunnen via de kleine iconen naast het invoer veld
+   ingesteld worden.
 
-3. Gerelateerde objecten worden *inline* getoond. Zo zul je bij een zaak een
-   aantal inlines zien: statussen, zaakobjecten, zaakinformatieobjecten...
-   Dit zijn allemaal relaties aan deze specifieke zaak.
+3. Gerelateerde objecten worden *inline* getoond indien de beheeromgeving
+   op deze manier geconfigureerd is.
 
 4. Je kan de geschiedenis inkijken van een specifiek object. Dit toont de
    wijzigingen aangebracht via de admin interface en door wie *en* de audit log
