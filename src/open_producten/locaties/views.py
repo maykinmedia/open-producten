@@ -49,6 +49,15 @@ class LocatieViewSet(OrderedModelViewSet):
     queryset = Locatie.objects.all()
     serializer_class = LocatieSerializer
     lookup_field = "id"
+    filterset_fields = {
+        "naam": ["iexact"],
+        "email": ["iexact"],
+        "telefoonnummer": ["contains"],
+        "straat": ["iexact"],
+        "huisnummer": ["iexact"],
+        "postcode": ["exact"],
+        "stad": ["iexact"],
+    }
 
 
 @extend_schema_view(
@@ -90,6 +99,15 @@ class ContactViewSet(OrderedModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
     lookup_field = "id"
+    filterset_fields = {
+        "organisatie__naam": ["exact"],
+        "organisatie__id": ["exact"],
+        "voornaam": ["exact"],
+        "achternaam": ["exact"],
+        "email": ["iexact"],
+        "telefoonnummer": ["contains"],
+        "rol": ["exact"],
+    }
 
 
 @extend_schema_view(
@@ -133,3 +151,13 @@ class OrganisatieViewSet(OrderedModelViewSet):
     queryset = Organisatie.objects.all()
     serializer_class = OrganisatieSerializer
     lookup_field = "id"
+    filterset_fields = {
+        "naam": ["iexact"],
+        "email": ["iexact"],
+        "telefoonnummer": ["contains"],
+        "straat": ["iexact"],
+        "huisnummer": ["iexact"],
+        "postcode": ["exact"],
+        "stad": ["iexact"],
+        "code": ["exact"],
+    }
