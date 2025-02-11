@@ -1,12 +1,31 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+import django_filters
 from notifications_api_common.viewsets import NotificationViewSetMixin
 
 from open_producten.logging.api_tools import AuditTrailViewSetMixin
 from open_producten.producten.kanalen import KANAAL_PRODUCTEN
 from open_producten.producten.models import Product
 from open_producten.producten.serializers.product import ProductSerializer
+from open_producten.utils.filters import FilterSet
 from open_producten.utils.views import OrderedModelViewSet
+
+
+class ProductFilterSet(FilterSet):
+    uniforme_product_naam = django_filters.CharFilter(
+        field_name="product_type__uniforme_product_naam__naam", lookup_expr="exact"
+    )
+
+    class Meta:
+        model = Product
+        fields = {
+            "gepubliceerd": ["exact"],
+            "status": ["exact"],
+            "frequentie": ["exact"],
+            "product_type__code": ["exact"],
+            "product_type__id": ["exact"],
+            "start_datum": ["exact", "gte", "lte"],
+            "eind_datum": ["exact", "gte", "lte"],
+        }
 
 
 @extend_schema_view(
@@ -74,6 +93,5 @@ class ProductViewSet(
     queryset = Product.objects.all()
     lookup_url_field = "id"
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd", "status", "frequentie"]
+    filterset_class = ProductFilterSet
     notifications_kanaal = KANAAL_PRODUCTEN

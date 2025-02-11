@@ -159,6 +159,8 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProductTypeFilterSet
+    # filterset_fields = ["naam", "code"]
+    # TODO toegestane_statussen
 
     @extend_schema(
         summary="De vertaling van een producttype aanpassen.",
@@ -282,8 +284,7 @@ class LinkViewSet(OrderedModelViewSet):
     queryset = Link.objects.all()
     serializer_class = LinkSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product_type_id"]
+    filterset_fields = ["product_type__id", "product_type__naam", "naam"]
 
 
 @extend_schema_view(
@@ -327,8 +328,11 @@ class PrijsViewSet(OrderedModelViewSet):
     queryset = Prijs.objects.all()
     serializer_class = PrijsSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product_type_id"]
+    filterset_fields = {
+        "product_type__id": ["exact"],
+        "product_type__naam": ["exact"],
+        "actief_vanaf": ["exact", "gte", "lte"],
+    }
 
 
 @extend_schema_view(
@@ -368,8 +372,7 @@ class BestandViewSet(OrderedModelViewSet):
     parser_classes = [MultiPartParser]
     serializer_class = BestandSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product_type_id"]
+    filterset_fields = ["product_type__id", "product_type__naam"]
 
 
 @extend_schema_view(
@@ -411,8 +414,7 @@ class ThemaViewSet(OrderedModelViewSet):
     queryset = Thema.objects.all()
     serializer_class = ThemaSerializer
     lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd"]
+    filterset_fields = ["gepubliceerd", "naam", "hoofd_thema__naam"]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
