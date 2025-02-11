@@ -12,6 +12,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../src"))
 os.environ["LOG_REQUESTS"] = "false"
+os.environ["DJANGO_SETTINGS_MODULE"] = "open_producten.conf.ci"
 
 import open_producten  # noqa isort:skip
 import django
