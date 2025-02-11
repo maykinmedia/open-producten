@@ -10,6 +10,23 @@
 * [#29] Added Read the Docs documentation
 * [#29] Added CHANGELOG file
 
+
+0.0.3 (04-02-2025)
+------------------
+
+**New features**
+
+* Added Celery to the project
+* Added ``code`` field to *ORGANISATIES*
+* Added audit logging for several resources
+* Added ``status``, ``prijs`` and ``frequentie`` fields to *PRODUCTEN*
+* Added ``code`` and ``toegestaneStasussen`` fields to *PRODUCTTYPES*
+
+**Breaking changes**
+
+* Added admin validation for *PRODUCTEN*
+
+
 0.0.2 (17-01-2025)
 ------------------
 
