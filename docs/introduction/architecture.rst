@@ -14,6 +14,12 @@ do not need to fetched over the network but can be directly obtained from the
 database. This also guarantees data integrity on database level, rather than on
 service (API) level.
 
+An overview of the information model can be seen in the image below:
+
+.. image:: assets/open-producten-informatiemodel-diagram.png
+    :width: 100%
+    :alt: Open Producten informatiemodel
+
 In addition, **Open Producten** uses caching wherever possible to prevent needless
 requests over the netwerk to fetch data from external API's. Data integrity can
 not be guaranteed on database level when relations are created to external

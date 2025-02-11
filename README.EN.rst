@@ -26,8 +26,8 @@ A product in this example is a parking permit of a person and contains in this i
 Information Model
 =================
 
-.. image:: docs/open-producten-informatiemodel-diagram.png
-    :alt: Open Producten informatiemodel
+.. image:: docs/introduction/assets/open-producten-informatiemodel-diagram.png
+   :alt: Open Producten informatiemodel
 
 
 API specification
