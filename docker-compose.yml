@@ -22,18 +22,12 @@ services:
       - DB_NAME=open_producten
       - DB_USER=open_producten
       - DB_HOST=db
-      - CACHE_DEFAULT=redis:6379/0
-      - CACHE_AXES=redis:6379/0
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - DISABLE_2FA=true
       # Only allow all hosts for development/testing purposes!
       - ALLOWED_HOSTS=*
     ports:
       - 8000:8000
     depends_on:
       - db
-      - redis
 
   celery:
     build: *web_build
