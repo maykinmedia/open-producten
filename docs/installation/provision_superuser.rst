@@ -14,7 +14,7 @@ Creating a superuser manually
 -----------------------------
 
 Superusers can be created through the :ref:`installation_reference_cli` built into Open
-Zaak, for example:
+Producten, for example:
 
 .. code-block:: bash
 

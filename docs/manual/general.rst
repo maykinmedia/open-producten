@@ -84,7 +84,7 @@ te regelen. Zie :ref:`manual_generate_token` voor hoe je dit doet.
 Producten
 ---------
 
-De groep *Producetn* laat je toe om gevens in te kijken die via de Open Producten
+De groep *Producten* laat je toe om gevens in te kijken die via de Open Producten
 API's aangemaakt en/of gewijzigd worden.
 
 **Producten** bevat alle informatie die de *Producten API* ontsluit. Hier kan je
@@ -131,7 +131,7 @@ Lijst- en detailweergaves
 De structuur van de admin volgt voor het grootste deel hetzelfde patroon:
 
 1. Vertrek vanaf het dashboard
-2. Klik een onderwerp aan binnen een groep, bijvoorbeeld *Zaken*
+2. Klik een onderwerp aan binnen een groep, bijvoorbeeld *Producten*
 3. Vervolgens zie je een lijst van gegevens
 4. Na het doorklikken op één item op de lijst zie je een detailweergave
 
@@ -182,13 +182,13 @@ Detailweergave
 In de detailweergave zie je de gegevens/attributen van één enkel object, al
 dan niet aangevuld met de gerelateerde objecten.
 
-Als voorbeeld zie je (een deel van) de detailweergave van een zaak:
+Als voorbeeld zie je (een deel van) de detailweergave van een product:
 
 .. image:: assets/product_detail.png
     :width: 100%
     :alt: Product detail
 
-1. De attributen van de zaak worden opgelijst als bewerkbare velden. Sommige
+1. De attributen van het product worden opgelijst als bewerkbare velden. Sommige
    attributen zullen niet bewerkbaar zijn, en als je geen bewerkrechten hebt
    zie je alles als alleen-lezen. Verplichte velden worden in het vet gedrukt,
    terwijl optionele velden normaal gedrukt zijn. Indien beschikbaar, dan wordt

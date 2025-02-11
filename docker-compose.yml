@@ -24,6 +24,8 @@ services:
       - DB_HOST=db
       - CACHE_DEFAULT=redis:6379/0
       - CACHE_AXES=redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - DISABLE_2FA=true
       # Only allow all hosts for development/testing purposes!
       - ALLOWED_HOSTS=*
