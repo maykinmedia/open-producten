@@ -26,8 +26,8 @@ Een product is in dit voorbeeld een parkeervergunning van een persoon en bevat i
 Informatiemodel
 ===============
 
-.. image:: docs/open-producten-informatiemodel-diagram.png
-    :alt: Open Producten informatiemodel
+.. image:: docs/introduction/assets/open-producten-informatiemodel-diagram.png
+   :alt: Open Producten informatiemodel
 
 
 

@@ -70,7 +70,6 @@ CELERY_BEAT_SCHEDULE = {
 SITE_TITLE = "API dashboard"
 PROJECT_NAME = "Open Producten"
 SHOW_ALERT = True
-ENABLE_ADMIN_NAV_SIDEBAR = config("ENABLE_ADMIN_NAV_SIDEBAR", default=False)
 
 # This setting is used by the csrf_failure view (accounts app).
 # You can specify any path that should match the request.path
