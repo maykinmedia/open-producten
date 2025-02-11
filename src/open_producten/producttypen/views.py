@@ -160,7 +160,7 @@ class LinkViewSet(OrderedModelViewSet):
         summary="Maak een PRIJS aan.",
         examples=[
             OpenApiExample(
-                "Create prijs",
+                "Create prijs met opties",
                 description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
                 value={
                     "prijsopties": [
@@ -171,7 +171,26 @@ class LinkViewSet(OrderedModelViewSet):
                     "actief_vanaf": "2024-12-01",
                 },
                 request_only=True,
-            )
+            ),
+            OpenApiExample(
+                "Create prijs met regels",
+                description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
+                value={
+                    "prijsregels": [
+                        {
+                            "dmn_url": "https://camunda.gemeente-a.nl/239840928q3740q982734",
+                            "beschrijving": "standaard",
+                        },
+                        {
+                            "dmn_url": "https://camunda.gemeente-a.nl/8ui3hoiwu3h4oiwu3h4",
+                            "beschrijving": "uitgebreid",
+                        },
+                    ],
+                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                    "actief_vanaf": "2024-12-01",
+                },
+                request_only=True,
+            ),
         ],
     ),
     update=extend_schema(
