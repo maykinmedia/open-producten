@@ -92,7 +92,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_taal(self, obj):
-        requested_language = self.context["view"].get_requested_language()
+        requested_language = self.context["request"].LANGUAGE_CODE
         return requested_language if obj.has_translation(requested_language) else "nl"
 
     class Meta:

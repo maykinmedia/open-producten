@@ -49,18 +49,9 @@ class IndexView(TemplateView):
 
 
 class TranslatableViewSetMixin:
-    def get_requested_language(self):
-        accept_language = self.request.headers.get("Accept-Language")
-        if accept_language and "," in accept_language:
-            raise ParseError(
-                _("Only a single language in Accept-Language is supported.")
-            )
-
-        return accept_language or "nl"
 
     def get_queryset(self):
-        language = self.get_requested_language()
-        return super().get_queryset().language(language)
+        return super().get_queryset().language(self.request.LANGUAGE_CODE)
 
     def update_vertaling(self, request, taal, **kwargs):
         instance = self.get_object()

@@ -105,7 +105,7 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     )
     @action(
         detail=True,
-        methods=["put"],
+        methods=["put", "patch"],
         serializer_class=ProductTypeTranslationSerializer,
         url_path="vertaling/(?P<taal>[^/.]+)",
     )
@@ -166,9 +166,7 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     def content(self, request, id=None):
         product_type = self.get_object()
 
-        language = self.get_requested_language()
-
-        queryset = product_type.content_elementen.language(language)
+        queryset = product_type.content_elementen.language(request.LANGUAGE_CODE)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

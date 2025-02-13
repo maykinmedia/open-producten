@@ -42,6 +42,10 @@ DATABASES = {
     }
 }
 
+MIDDLEWARE.insert(
+    MIDDLEWARE.index("django.middleware.common.CommonMiddleware"),
+    "django.middleware.locale.LocaleMiddleware",
+)
 
 #
 # CELERY
