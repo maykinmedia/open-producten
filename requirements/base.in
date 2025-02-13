@@ -16,5 +16,4 @@ django-celery-beat
 flower
 django-timeline-logger
 
-# waiting for > 2.0.1
-commonground-api-common==1.13.4
+commonground-api-common
