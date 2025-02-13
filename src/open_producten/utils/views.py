@@ -54,13 +54,15 @@ class TranslatableViewSetMixin:
         return super().get_queryset().language(self.request.LANGUAGE_CODE)
 
     def update_vertaling(self, request, taal, **kwargs):
+        partial = request.method == "PATCH"
+
         instance = self.get_object()
 
         if taal.lower() == "nl":
             raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
 
         instance.set_current_language(taal)
-        serializer = self.get_serializer(instance, data=request.data)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
