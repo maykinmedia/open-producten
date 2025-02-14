@@ -2499,7 +2499,9 @@ paths:
           description: ''
   /producttypen/{id}/content/:
     get:
-      operationId: producttypen_content_retrieve
+      operationId: content
+      description: Geeft de content van een PRODUCTTYPE terug.
+      summary: De CONTENT van een PRODUCTTYPE opvragen.
       parameters:
       - in: path
         name: id
@@ -3376,14 +3378,20 @@ components:
       - bestand
     NestedContentElement:
       type: object
+      description: Serializer that saves :class:`TranslatedFieldsField` automatically.
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
+        taal:
+          type: string
+          readOnly: true
+          description: De huidige taal van het content element.
         content:
           type: string
           description: De content van dit content element.
+          maxLength: 255
         labels:
           type: array
           items:
@@ -3391,7 +3399,7 @@ components:
       required:
       - content
       - id
-      - labels
+      - taal
     NestedLink:
       type: object
       properties:

@@ -16,6 +16,7 @@ from open_producten.locaties.tests.factories import (
 from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
+    ContentElementFactory,
     LinkFactory,
     PrijsFactory,
     PrijsOptieFactory,
@@ -898,3 +899,61 @@ class TestProductTypeActions(BaseApiTestCase):
 
         self.product_type.refresh_from_db()
         self.assertFalse(self.product_type.has_translation("en"))
+
+    def test_nl_content(self):
+        element1 = ContentElementFactory.create(product_type=self.product_type)
+        element2 = ContentElementFactory.create(product_type=self.product_type)
+
+        path = reverse("producttype-content", args=(self.product_type.id,))
+        response = self.client.get(path, headers={"Accept-Language": "nl"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertCountEqual(
+            response.data,
+            [
+                {
+                    "id": str(element1.id),
+                    "taal": "nl",
+                    "content": element1.content,
+                    "labels": [],
+                },
+                {
+                    "id": str(element2.id),
+                    "taal": "nl",
+                    "content": element2.content,
+                    "labels": [],
+                },
+            ],
+        )
+
+    def test_en_content_and_fallback(self):
+        element1 = ContentElementFactory.create(product_type=self.product_type)
+        element1.set_current_language("en")
+        element1.content = "EN content"
+        element1.save()
+
+        element2 = ContentElementFactory.create(product_type=self.product_type)
+
+        path = reverse("producttype-content", args=(self.product_type.id,))
+        response = self.client.get(path, headers={"Accept-Language": "en"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertCountEqual(
+            response.data,
+            [
+                {
+                    "id": str(element1.id),
+                    "taal": "en",
+                    "content": "EN content",
+                    "labels": [],
+                },
+                {
+                    "id": str(element2.id),
+                    "taal": "nl",
+                    "content": element2.content,
+                    "labels": [],
+                },
+            ],
+        )

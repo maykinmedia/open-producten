@@ -60,21 +60,13 @@ class ContentElementSerializer(TranslatableModelSerializer):
         return instance
 
 
-class NestedContentElementSerializer(serializers.ModelSerializer):
-
-    labels = serializers.SlugRelatedField(
-        slug_field="naam", queryset=ContentLabel.objects.all(), many=True
-    )
-
-    content = serializers.CharField(
-        required=True,
-        help_text=_("De content van dit content element."),
-    )
+class NestedContentElementSerializer(ContentElementSerializer):
 
     class Meta:
         model = ContentElement
         fields = (
             "id",
+            "taal",
             "content",
             "labels",
         )

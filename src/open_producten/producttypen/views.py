@@ -160,6 +160,11 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
         serializer = ProductTypeActuelePrijsSerializer(product_type)
         return Response(serializer.data)
 
+    @extend_schema(
+        "content",
+        summary="De CONTENT van een PRODUCTTYPE opvragen.",
+        description="Geeft de content van een PRODUCTTYPE terug.",
+    )
     @action(
         detail=True,
         serializer_class=NestedContentElementSerializer,
