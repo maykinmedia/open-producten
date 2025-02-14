@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from celery.schedules import crontab
 from open_api_framework.conf.base import *
 from open_api_framework.conf.utils import config
@@ -171,6 +173,11 @@ SUBPATH = config("SUBPATH", None)
 if SUBPATH:
     SUBPATH = f"/{SUBPATH.strip('/')}"
 
+
+LANGUAGES = [
+    ("nl", _("Dutch")),
+    ("en", _("English")),
+]
 
 PARLER_LANGUAGES = {
     1: (

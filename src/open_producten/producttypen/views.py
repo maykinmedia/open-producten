@@ -18,6 +18,7 @@ from rest_framework.viewsets import GenericViewSet
 from open_producten.producttypen.models import (
     Bestand,
     ContentElement,
+    ContentLabel,
     Link,
     Prijs,
     ProductType,
@@ -34,6 +35,7 @@ from open_producten.producttypen.serializers import (
 from open_producten.producttypen.serializers.content import (
     ContentElementSerializer,
     ContentElementTranslationSerializer,
+    ContentLabelSerializer,
     NestedContentElementSerializer,
 )
 from open_producten.producttypen.serializers.producttype import (
@@ -370,6 +372,35 @@ class ThemaViewSet(OrderedModelViewSet):
             )
 
 
+@extend_schema_view(
+    retrieve=extend_schema(
+        summary="Een specifiek CONTENTELEMENT opvragen.",
+    ),
+    create=extend_schema(
+        summary="Maak een CONTENTELEMENT aan.",
+        examples=[
+            OpenApiExample(
+                "Create content",
+                value={
+                    "labels": ["openingstijden"],
+                    "content": "ma-vr 8:00-17:00",
+                    "product_type_id": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
+                },
+                request_only=True,
+            )
+        ],
+    ),
+    update=extend_schema(
+        summary="Werk een CONTENTELEMENT in zijn geheel bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Werk een CONTENTELEMENT deels bij.",
+        description="Als product_type_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
+    ),
+    destroy=extend_schema(
+        summary="Verwijder een CONTENTELEMENT.",
+    ),
+)
 class ContentElementViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
@@ -418,3 +449,15 @@ class ContentElementViewSet(
     @vertaling.mapping.delete
     def delete_vertaling(self, request, taal, **kwargs):
         return super().delete_vertaling(request, taal, **kwargs)
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Alle CONTENTELEMENTLABELS opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
+    ),
+)
+class ContentLabelViewSet(mixins.ListModelMixin, GenericViewSet):
+    queryset = ContentLabel.objects.all()
+    serializer_class = ContentLabelSerializer
+    lookup_field = "id"

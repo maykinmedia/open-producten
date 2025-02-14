@@ -16,7 +16,7 @@ class ContentElementSerializer(TranslatableModelSerializer):
         required=False,
     )
 
-    content = serializers.CharField(  # TODO CHARFIELD?????
+    content = serializers.CharField(
         required=True,
         max_length=255,
         help_text=_("De content van dit content element."),
@@ -89,3 +89,10 @@ class ContentElementTranslationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentElement
         fields = ("id", "content")
+
+
+class ContentLabelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ContentLabel
+        fields = ("naam",)

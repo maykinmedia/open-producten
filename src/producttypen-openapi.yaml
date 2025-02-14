@@ -21,17 +21,17 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: productTypeId
         schema:
           type: string
           format: uuid
@@ -310,13 +310,13 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       tags:
@@ -592,6 +592,7 @@ paths:
   /content/:
     post:
       operationId: content_create
+      summary: Maak een CONTENTELEMENT aan.
       tags:
       - content
       requestBody:
@@ -599,6 +600,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ContentElementRequest'
+            examples:
+              CreateContent:
+                value:
+                  labels:
+                  - openingstijden
+                  content: ma-vr 8:00-17:00
+                  product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                summary: Create content
         required: true
       security:
       - tokenAuth: []
@@ -634,6 +643,7 @@ paths:
   /content/{id}/:
     get:
       operationId: content_retrieve
+      summary: Een specifiek CONTENTELEMENT opvragen.
       parameters:
       - in: path
         name: id
@@ -677,6 +687,7 @@ paths:
           description: ''
     put:
       operationId: content_update
+      summary: Werk een CONTENTELEMENT in zijn geheel bij.
       parameters:
       - in: path
         name: id
@@ -726,6 +737,9 @@ paths:
           description: ''
     patch:
       operationId: content_partial_update
+      description: Als product_type_ids in een patch request wordt meegegeven wordt
+        deze lijst geheel overschreven.
+      summary: Werk een CONTENTELEMENT deels bij.
       parameters:
       - in: path
         name: id
@@ -774,6 +788,7 @@ paths:
           description: ''
     delete:
       operationId: content_destroy
+      summary: Verwijder een CONTENTELEMENT.
       parameters:
       - in: path
         name: id
@@ -914,6 +929,57 @@ paths:
               schema:
                 $ref: '#/components/schemas/DetailError'
           description: ''
+  /contentlabels/:
+    get:
+      operationId: contentlabels_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle CONTENTELEMENTLABELS opvragen.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - contentlabels
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContentLabelList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /links/:
     get:
       operationId: links_list
@@ -923,17 +989,17 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: productTypeId
         schema:
           type: string
           format: uuid
@@ -1213,13 +1279,13 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       tags:
@@ -1501,13 +1567,13 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       tags:
@@ -1790,17 +1856,17 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: productTypeId
         schema:
           type: string
           format: uuid
@@ -2092,13 +2158,13 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       tags:
@@ -2532,6 +2598,61 @@ paths:
               schema:
                 $ref: '#/components/schemas/DetailError'
           description: ''
+    patch:
+      operationId: producttypen_vertaling_partial_update
+      description: nl kan worden aangepast via het model.
+      summary: De vertaling van een producttype aanpassen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Product type.
+        required: true
+      - in: path
+        name: taal
+        schema:
+          type: string
+        required: true
+      tags:
+      - producttypen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductTypeTranslationRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductTypeTranslation'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
     delete:
       operationId: producttypen_vertaling_destroy
       description: nl kan niet worden verwijderd.
@@ -2629,13 +2750,13 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       tags:
@@ -3082,6 +3203,14 @@ components:
           description: De content van dit content element.
       required:
       - content
+    ContentLabel:
+      type: object
+      properties:
+        naam:
+          type: string
+          maxLength: 255
+      required:
+      - naam
     DetailError:
       type: object
       properties:
@@ -3601,6 +3730,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
+    PaginatedContentLabelList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentLabel'
     PaginatedLinkList:
       type: object
       required:
@@ -3966,6 +4118,18 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
+    PatchedProductTypeTranslationRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: naam van het product type.
+          maxLength: 255
+        samenvatting:
+          type: string
+          minLength: 1
+          description: Korte beschrijving van het product type.
     PatchedThemaRequest:
       type: object
       properties:

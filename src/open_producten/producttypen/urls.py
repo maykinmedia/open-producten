@@ -12,6 +12,7 @@ from open_producten.locaties.urls import LocatieRouter
 from open_producten.producttypen.views import (
     BestandViewSet,
     ContentElementViewSet,
+    ContentLabelViewSet,
     LinkViewSet,
     PrijsViewSet,
     ProductTypeViewSet,
@@ -30,6 +31,10 @@ ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 ProductTypenRouter.register("bestanden", BestandViewSet, basename="bestand")
 
 ProductTypenRouter.register("content", ContentElementViewSet, basename="content")
+
+ProductTypenRouter.register(
+    "contentlabels", ContentLabelViewSet, basename="contentlabel"
+)
 
 description = """
 Een Api voor Product typen.
@@ -74,6 +79,10 @@ custom_settings = {
         {
             "name": "content",
             "description": "Opvragen en bewerken van PRODUCTTYPE CONTENT.",
+        },
+        {
+            "name": "contentlabels",
+            "description": "Opvragen van CONTENTLABELS.",
         },
     ],
 }

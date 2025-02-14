@@ -840,12 +840,50 @@ class TestProductTypeActions(BaseApiTestCase):
         self.product_type.set_current_language("nl")
         self.assertNotEqual(self.product_type.naam, "name EN")
 
+    def test_put_nl_vertaling(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "nl"))
+
+        data = {"naam": "name NL", "samenvatting": "summary NL"}
+        response = self.client.put(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_put_vertaling_with_unsupported_language(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "fr"))
+
+        data = {"naam": "name FR", "samenvatting": "summary FR"}
+        response = self.client.put(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_patch_vertaling(self):
+        self.product_type.set_current_language("en")
+        self.product_type.naam = "name EN"
+        self.product_type.samenvatting = "summary EN"
+        self.product_type.save()
+
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+
+        data = {"naam": "name EN 2"}
+        response = self.client.patch(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.product_type.refresh_from_db()
+        self.assertEqual(self.product_type.naam, "name EN 2")
+
     def test_delete_nonexistent_vertaling(self):
         path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
 
         response = self.client.delete(path)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_nl_vertaling(self):
+        path = reverse("producttype-vertaling", args=(self.product_type.id, "nl"))
+
+        response = self.client.delete(path)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_vertaling(self):
         self.product_type.set_current_language("en")

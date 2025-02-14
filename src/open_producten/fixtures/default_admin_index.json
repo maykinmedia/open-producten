@@ -49,6 +49,10 @@
                 [
                     "producttypen",
                     "uniformeproductnaam"
+                ],
+                [
+                    "producttypen",
+                    "contentlabel"
                 ]
             ]
         }
@@ -113,10 +117,6 @@
                     "applink"
                 ],
                 [
-                    "admin_index",
-                    "contenttypeproxy"
-                ],
-                [
                     "django_celery_beat",
                     "periodictask"
                 ]
@@ -172,10 +172,6 @@
                 [
                     "two_factor_webauthn",
                     "webauthndevice"
-                ],
-                [
-                    "vng_api_common",
-                    "apicredential"
                 ],
                 [
                     "vng_api_common",

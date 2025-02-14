@@ -1,4 +1,5 @@
 from django import http
+from django.conf import settings
 from django.template import TemplateDoesNotExist, loader
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import requires_csrf_token
@@ -50,6 +51,13 @@ class IndexView(TemplateView):
 
 class TranslatableViewSetMixin:
 
+    _supported_languages = {
+        language["code"]
+        for site in settings.PARLER_LANGUAGES
+        if isinstance(site, int)
+        for language in settings.PARLER_LANGUAGES[site]
+    }
+
     def get_queryset(self):
         return super().get_queryset().language(self.request.LANGUAGE_CODE)
 
@@ -58,8 +66,16 @@ class TranslatableViewSetMixin:
 
         instance = self.get_object()
 
-        if taal.lower() == "nl":
+        taal = taal.lower()
+
+        if taal == "nl":
             raise ParseError(_("nl vertaling kan worden aangepast via het model zelf."))
+
+        if taal not in self._supported_languages:
+            raise ParseError(_("{} vertaling wordt niet ondersteunt.").format(taal))
+
+        if partial and not request.data:
+            raise ParseError(_("patch request mag niet leeg zijn."))
 
         instance.set_current_language(taal)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)

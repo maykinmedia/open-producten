@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 from open_producten.producttypen.models import ContentElement, ContentLabel
 from open_producten.utils.tests.cases import BaseApiTestCase
 
-from ..factories import ContentElementFactory, ProductTypeFactory
+from ..factories import ContentElementFactory, ContentLabelFactory, ProductTypeFactory
 
 
 class TestContentElement(BaseApiTestCase):
@@ -137,12 +137,11 @@ class TestContentElementActions(BaseApiTestCase):
         super().setUp()
         self.content_element = ContentElementFactory.create()
 
-        self.path = reverse("content-vertaling", args=(self.content_element.id, "en"))
-
     def test_put_vertaling(self):
+        path = reverse("content-vertaling", args=(self.content_element.id, "en"))
 
         data = {"content": "content EN"}
-        response = self.client.put(self.path, data)
+        response = self.client.put(path, data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -158,6 +157,22 @@ class TestContentElementActions(BaseApiTestCase):
         self.content_element.set_current_language("nl")
         self.assertNotEqual(self.content_element.content, "content EN")
 
+    def test_put_nl_vertaling(self):
+        path = reverse("content-vertaling", args=(self.content_element.id, "nl"))
+
+        data = {"content": "content NL"}
+        response = self.client.put(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_put_vertaling_with_unsupported_language(self):
+        path = reverse("content-vertaling", args=(self.content_element.id, "fr"))
+
+        data = {"naam": "name FR", "samenvatting": "summary FR"}
+        response = self.client.put(path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_delete_nonexistent_vertaling(self):
         path = reverse("content-vertaling", args=(self.content_element.id, "de"))
 
@@ -165,13 +180,47 @@ class TestContentElementActions(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_delete_nl_vertaling(self):
+        path = reverse("content-vertaling", args=(self.content_element.id, "nl"))
+
+        response = self.client.delete(path)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_delete_vertaling(self):
         self.content_element.set_current_language("en")
         self.content_element.content = "content EN"
         self.content_element.save()
 
-        response = self.client.delete(self.path)
+        path = reverse("content-vertaling", args=(self.content_element.id, "en"))
+
+        response = self.client.delete(path)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         self.content_element.refresh_from_db()
         self.assertFalse(self.content_element.has_translation("en"))
+
+
+class TestContentLabel(BaseApiTestCase):
+    def setUp(self):
+        super().setUp()
+
+        self.path = reverse("contentlabel-list")
+
+    def test_read_content_labels(self):
+        label1 = ContentLabelFactory.create()
+        label2 = ContentLabelFactory.create()
+
+        response = self.client.get(self.path)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
+        expected_data = [
+            {
+                "naam": label1.naam,
+            },
+            {
+                "naam": label2.naam,
+            },
+        ]
+        self.assertCountEqual(response.data["results"], expected_data)

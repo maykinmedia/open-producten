@@ -4,6 +4,7 @@ from faker import Faker
 from ..models import (
     Bestand,
     ContentElement,
+    ContentLabel,
     Link,
     Prijs,
     PrijsOptie,
@@ -97,3 +98,10 @@ class ContentElementFactory(factory.django.DjangoModelFactory):
         self.set_current_language("nl")
         self.content = extracted or fake.word()
         self.save()
+
+
+class ContentLabelFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"label {n}")
+
+    class Meta:
+        model = ContentLabel
