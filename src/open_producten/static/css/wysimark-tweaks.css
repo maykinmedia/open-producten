@@ -1,0 +1,32 @@
+#wysimark-container > div > div:first-child {
+    background-color: var(--darkened-bg);
+    border-radius: 0.5em;
+}
+
+#wysimark-container > div > div:first-child [data-item-type="button"] {
+    color: var(--body-fg);
+}
+
+[data-slate-editor=true] {
+    color: var(--body-fg);
+    background: var(--body-bg);
+    border-radius: 0.5em;
+}
+
+#wysimark-container {
+    width: 50em;
+}
+
+h2[data-slate-node] {
+    padding: initial;
+    font-size: 1.5em;
+    text-align: initial;
+    margin-top: 1em;
+    font-weight: bold;
+    color: var(--body-fg);
+    background: var(--body-bg);
+
+    &:first-child {
+        margin-top: 0;
+    }
+}

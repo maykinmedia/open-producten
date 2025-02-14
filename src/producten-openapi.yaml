@@ -413,22 +413,10 @@ components:
           type: string
           format: uuid
           readOnly: true
-        naam:
-          type: string
-          title: Product type naam
-          description: naam van het product type.
-          maxLength: 100
         code:
           type: string
           description: code van het product type.
-          maxLength: 100
-        samenvatting:
-          type: string
-          description: Korte beschrijving van het product type, maximaal 300 karakters.
-          maxLength: 300
-        beschrijving:
-          type: string
-          description: Product type beschrijving, ondersteund markdown format.
+          maxLength: 255
         keywords:
           type: array
           items:
@@ -459,35 +447,18 @@ components:
           description: De datum waarop het object voor het laatst is gewijzigd.
       required:
       - aanmaak_datum
-      - beschrijving
       - code
       - id
-      - naam
       - uniforme_product_naam
       - update_datum
     NestedProductTypeRequest:
       type: object
       properties:
-        naam:
-          type: string
-          minLength: 1
-          title: Product type naam
-          description: naam van het product type.
-          maxLength: 100
         code:
           type: string
           minLength: 1
           description: code van het product type.
-          maxLength: 100
-        samenvatting:
-          type: string
-          minLength: 1
-          description: Korte beschrijving van het product type, maximaal 300 karakters.
-          maxLength: 300
-        beschrijving:
-          type: string
-          minLength: 1
-          description: Product type beschrijving, ondersteund markdown format.
+          maxLength: 255
         keywords:
           type: array
           items:
@@ -508,9 +479,7 @@ components:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
       required:
-      - beschrijving
       - code
-      - naam
       - uniforme_product_naam
     PaginatedProductList:
       type: object

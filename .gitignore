@@ -42,6 +42,8 @@ local.py
 
 # Static files
 src/open_producten/static/bundles/
+src/open_producten/static/wysimark/wysimark.js
+src/open_producten/static/wysimark/index*
 src/open_producten/fonts/
 
 tmp/*

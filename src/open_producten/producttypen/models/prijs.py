@@ -50,7 +50,7 @@ class PrijsOptie(BaseModel):
     )
     beschrijving = models.CharField(
         verbose_name=_("beschrijving"),
-        max_length=100,
+        max_length=255,
         help_text=_("Korte beschrijving van de optie."),
     )
 

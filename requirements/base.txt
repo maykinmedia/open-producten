@@ -91,6 +91,8 @@ django==4.2.17
     #   django-markdownx
     #   django-markup
     #   django-otp
+    #   django-parler
+    #   django-parler-rest
     #   django-phonenumber-field
     #   django-privates
     #   django-redis
@@ -153,6 +155,12 @@ django-ordered-model==3.7.4
     # via django-admin-index
 django-otp==1.5.4
     # via django-two-factor-auth
+django-parler==2.3
+    # via
+    #   -r requirements/base.in
+    #   django-parler-rest
+django-parler-rest==2.2
+    # via -r requirements/base.in
 django-phonenumber-field==8.0.0
     # via django-two-factor-auth
 django-privates==2.0.0.post1
@@ -187,6 +195,7 @@ django-two-factor-auth==1.17.0
 djangorestframework==3.15.2
     # via
     #   commonground-api-common
+    #   django-parler-rest
     #   djangorestframework-gis
     #   djangorestframework-inclusions
     #   drf-nested-routers

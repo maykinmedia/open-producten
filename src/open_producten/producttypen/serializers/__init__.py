@@ -3,7 +3,6 @@ from .link import LinkSerializer
 from .prijs import PrijsOptieSerializer, PrijsSerializer
 from .producttype import ProductTypeActuelePrijsSerializer, ProductTypeSerializer
 from .thema import ThemaSerializer
-from .vraag import VraagSerializer
 
 __all__ = [
     "LinkSerializer",
@@ -13,5 +12,4 @@ __all__ = [
     "PrijsOptieSerializer",
     "ProductTypeSerializer",
     "ProductTypeActuelePrijsSerializer",
-    "VraagSerializer",
 ]

@@ -2,19 +2,27 @@ from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
-from rest_framework import status
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    extend_schema,
+    extend_schema_view,
+)
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from open_producten.producttypen.models import (
     Bestand,
+    ContentElement,
+    ContentLabel,
     Link,
     Prijs,
     ProductType,
     Thema,
-    Vraag,
 )
 from open_producten.producttypen.serializers import (
     BestandSerializer,
@@ -23,9 +31,17 @@ from open_producten.producttypen.serializers import (
     ProductTypeActuelePrijsSerializer,
     ProductTypeSerializer,
     ThemaSerializer,
-    VraagSerializer,
 )
-from open_producten.utils.views import OrderedModelViewSet
+from open_producten.producttypen.serializers.content import (
+    ContentElementSerializer,
+    ContentElementTranslationSerializer,
+    ContentLabelSerializer,
+    NestedContentElementSerializer,
+)
+from open_producten.producttypen.serializers.producttype import (
+    ProductTypeTranslationSerializer,
+)
+from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
 
 
 @extend_schema_view(
@@ -70,12 +86,49 @@ from open_producten.utils.views import OrderedModelViewSet
         summary="Verwijder een PRODUCTTYPE.",
     ),
 )
-class ProductTypeViewSet(OrderedModelViewSet):
+class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     queryset = ProductType.objects.all()
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd"]
+
+    @extend_schema(
+        summary="De vertaling van een producttype aanpassen.",
+        description="nl kan worden aangepast via het model.",
+        parameters=[
+            OpenApiParameter(
+                name="taal",
+                required=True,
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
+    )
+    @action(
+        detail=True,
+        methods=["put", "patch"],
+        serializer_class=ProductTypeTranslationSerializer,
+        url_path="vertaling/(?P<taal>[^/.]+)",
+    )
+    def vertaling(self, request, taal, **kwargs):
+        return super().update_vertaling(request, taal, **kwargs)
+
+    @extend_schema(
+        summary="De vertaling van een producttype verwijderen.",
+        description="nl kan niet worden verwijderd.",
+        parameters=[
+            OpenApiParameter(
+                name="taal",
+                required=True,
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
+    )
+    @vertaling.mapping.delete
+    def delete_vertaling(self, request, taal, **kwargs):
+        return super().delete_vertaling(request, taal, **kwargs)
 
     @extend_schema(
         "actuele_prijzen",
@@ -105,6 +158,24 @@ class ProductTypeViewSet(OrderedModelViewSet):
     def actuele_prijs(self, request, id=None):
         product_type = self.get_object()
         serializer = ProductTypeActuelePrijsSerializer(product_type)
+        return Response(serializer.data)
+
+    @extend_schema(
+        "content",
+        summary="De CONTENT van een PRODUCTTYPE opvragen.",
+        description="Geeft de content van een PRODUCTTYPE terug.",
+    )
+    @action(
+        detail=True,
+        serializer_class=NestedContentElementSerializer,
+        url_path="content",
+    )
+    def content(self, request, id=None):
+        product_type = self.get_object()
+
+        queryset = product_type.content_elementen
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -191,44 +262,6 @@ class PrijsViewSet(OrderedModelViewSet):
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["product_type_id"]
-
-
-@extend_schema_view(
-    list=extend_schema(
-        summary="Alle VRAGEN opvragen.",
-        description="Deze lijst kan gefilterd wordt met query-string parameters.",
-    ),
-    retrieve=extend_schema(
-        summary="Een specifieke VRAAG opvragen.",
-    ),
-    create=extend_schema(
-        summary="Maak een VRAAG aan.",
-        examples=[
-            OpenApiExample(
-                "Create vraag",
-                value={
-                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
-                    "vraag": "Kom ik in aanmerking voor dit product?",
-                    "antwoord": "Ja",
-                },
-                request_only=True,
-            )
-        ],
-    ),
-    update=extend_schema(
-        summary="Werk een VRAAG in zijn geheel bij.",
-    ),
-    partial_update=extend_schema(summary="Werk een VRAAG deels bij."),
-    destroy=extend_schema(
-        summary="Verwijder een VRAAG.",
-    ),
-)
-class VraagViewSet(OrderedModelViewSet):
-    queryset = Vraag.objects.all()
-    serializer_class = VraagSerializer
-    lookup_url_kwarg = "id"
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product_type_id", "thema_id"]
 
 
 @extend_schema_view(
@@ -342,3 +375,94 @@ class ThemaViewSet(OrderedModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+@extend_schema_view(
+    retrieve=extend_schema(
+        summary="Een specifiek CONTENTELEMENT opvragen.",
+    ),
+    create=extend_schema(
+        summary="Maak een CONTENTELEMENT aan.",
+        examples=[
+            OpenApiExample(
+                "Create content",
+                value={
+                    "labels": ["openingstijden"],
+                    "content": "ma-vr 8:00-17:00",
+                    "product_type_id": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
+                },
+                request_only=True,
+            )
+        ],
+    ),
+    update=extend_schema(
+        summary="Werk een CONTENTELEMENT in zijn geheel bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Werk een CONTENTELEMENT deels bij.",
+        description="Als product_type_ids in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
+    ),
+    destroy=extend_schema(
+        summary="Verwijder een CONTENTELEMENT.",
+    ),
+)
+class ContentElementViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    TranslatableViewSetMixin,
+    GenericViewSet,
+):
+    queryset = ContentElement.objects.all()
+    serializer_class = ContentElementSerializer
+    lookup_url_kwarg = "id"
+
+    @extend_schema(
+        summary="De vertaling van een content element aanpassen.",
+        description="nl kan worden aangepast via het model.",
+        parameters=[
+            OpenApiParameter(
+                name="taal",
+                required=True,
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
+    )
+    @action(
+        detail=True,
+        methods=["put"],
+        serializer_class=ContentElementTranslationSerializer,
+        url_path="vertaling/(?P<taal>[^/.]+)",
+    )
+    def vertaling(self, request, taal, **kwargs):
+        return super().update_vertaling(request, taal, **kwargs)
+
+    @extend_schema(
+        summary="De vertaling van een content element verwijderen.",
+        description="nl kan niet worden verwijderd.",
+        parameters=[
+            OpenApiParameter(
+                name="taal",
+                required=True,
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
+    )
+    @vertaling.mapping.delete
+    def delete_vertaling(self, request, taal, **kwargs):
+        return super().delete_vertaling(request, taal, **kwargs)
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Alle CONTENTELEMENTLABELS opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
+    ),
+)
+class ContentLabelViewSet(mixins.ListModelMixin, GenericViewSet):
+    queryset = ContentLabel.objects.all()
+    serializer_class = ContentLabelSerializer
+    lookup_field = "id"

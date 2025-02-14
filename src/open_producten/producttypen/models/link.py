@@ -15,7 +15,7 @@ class Link(BaseModel):
         help_text=_("Het product type waarbij deze link hoort."),
     )
     naam = models.CharField(
-        verbose_name=_("naam"), max_length=100, help_text=_("Naam van de link.")
+        verbose_name=_("naam"), max_length=255, help_text=_("Naam van de link.")
     )
     url = models.URLField(verbose_name=_("Url"), help_text=_("Url van de link."))
 

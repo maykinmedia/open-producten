@@ -3,16 +3,22 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext as _
 
+from ordered_model.admin import OrderedInlineModelAdminMixin
+from parler.admin import TranslatableAdmin
+from parler.forms import TranslatableModelForm
+
+from ...utils.widgets import WysimarkWidget
 from ..models import ProductType, Thema
 from .bestand import BestandInline
+from .content import ContentElementInline
 from .link import LinkInline
-from .vraag import VraagInline
 
 
-class ProductTypeAdminForm(forms.ModelForm):
+class ProductTypeAdminForm(TranslatableModelForm):
     class Meta:
         model = ProductType
         fields = "__all__"
+        widgets = {"samenvatting": WysimarkWidget()}
 
     themas = forms.ModelMultipleChoiceField(
         label=_("thema's"),
@@ -29,7 +35,7 @@ class ProductTypeAdminForm(forms.ModelForm):
 
 
 @admin.register(ProductType)
-class ProductTypeAdmin(admin.ModelAdmin):
+class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
     list_display = (
         "naam",
         "uniforme_product_naam",
@@ -47,10 +53,22 @@ class ProductTypeAdmin(admin.ModelAdmin):
         "locaties",
     )
     search_fields = ("naam", "uniforme_product_naam__naam", "keywords")
-    ordering = ("naam",)
     save_on_top = True
     form = ProductTypeAdminForm
-    inlines = (BestandInline, LinkInline, VraagInline)
+    inlines = (BestandInline, LinkInline, ContentElementInline)
+    fields = (
+        "naam",
+        "gepubliceerd",
+        "code",
+        "uniforme_product_naam",
+        "toegestane_statussen",
+        "samenvatting",
+        "themas",
+        "keywords",
+        "organisaties",
+        "locaties",
+        "contacten",
+    )
 
     def get_queryset(self, request):
         return (

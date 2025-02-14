@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 from .factories import ThemaFactory
 
 
-class TestVraag(TestCase):
+class TestThema(TestCase):
 
     def test_hoofd_thema_must_be_published_when_publishing_sub_thema(self):
         hoofd_thema = ThemaFactory.create(gepubliceerd=False)

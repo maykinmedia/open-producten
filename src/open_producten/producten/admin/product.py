@@ -95,14 +95,14 @@ class ProductAdmin(AdminAuditLogMixin, admin.ModelAdmin):
         "show_actions",
     )
     list_filter = (
-        "product_type__naam",
+        ("product_type__translations__naam"),
         "aanmaak_datum",
         "start_datum",
         "eind_datum",
         "status",
     )
     autocomplete_fields = ("product_type",)
-    search_fields = ("product_type__naam",)
+    search_fields = ("product_type__translations__naam",)
     form = ProductAdminForm
 
     @admin.display(description="Product Type")

@@ -1,11 +1,13 @@
+from django import forms
 from django.contrib import admin
 from django.db.models import Count
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from open_producten.utils.widgets import WysimarkWidget
+
 from ..models import ProductType, Thema
-from .vraag import VraagInline
 
 
 class ProductTypeInline(admin.TabularInline):
@@ -25,14 +27,19 @@ class ProductTypeInline(admin.TabularInline):
         return False
 
 
+class ThemaAdminForm(forms.ModelForm):
+    class Meta:
+        model = Thema
+        fields = "__all__"
+        widgets = {"beschrijving": WysimarkWidget()}
+
+
 @admin.register(Thema)
 class ThemaAdmin(admin.ModelAdmin):
-    inlines = (
-        VraagInline,
-        ProductTypeInline,
-    )
+    inlines = (ProductTypeInline,)
     search_fields = ("naam", "hoofd_thema__naam")
     list_display = ("naam", "hoofd_thema", "gepubliceerd", "product_typen_count")
+    form = ThemaAdminForm
 
     @admin.display(description=_("Aantal product typen"))
     def product_typen_count(self, obj):

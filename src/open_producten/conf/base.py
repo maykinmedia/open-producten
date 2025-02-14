@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from celery.schedules import crontab
 from open_api_framework.conf.base import *
 from open_api_framework.conf.utils import config
@@ -20,6 +22,7 @@ INSTALLED_APPS += [
     "rest_framework.authtoken",
     "timeline_logger",
     "localflavor",
+    "parler",
     "markdownx",
     "django_celery_beat",
     "open_producten.accounts",
@@ -41,6 +44,10 @@ DATABASES = {
     }
 }
 
+MIDDLEWARE.insert(
+    MIDDLEWARE.index("django.middleware.common.CommonMiddleware"),
+    "django.middleware.locale.LocaleMiddleware",
+)
 
 #
 # CELERY
@@ -164,3 +171,24 @@ SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
 SUBPATH = config("SUBPATH", None)
 if SUBPATH:
     SUBPATH = f"/{SUBPATH.strip('/')}"
+
+
+LANGUAGES = [
+    ("nl", _("Dutch")),
+    ("en", _("English")),
+]
+
+PARLER_LANGUAGES = {
+    1: (
+        {
+            "code": "nl",
+        },
+        {
+            "code": "en",
+        },
+    ),
+    "default": {
+        "fallbacks": ["nl"],
+        "hide_untranslated": False,
+    },
+}

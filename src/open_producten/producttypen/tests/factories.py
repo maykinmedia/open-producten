@@ -1,15 +1,19 @@
 import factory.fuzzy
+from faker import Faker
 
 from ..models import (
     Bestand,
+    ContentElement,
+    ContentLabel,
     Link,
     Prijs,
     PrijsOptie,
     ProductType,
     Thema,
     UniformeProductNaam,
-    Vraag,
 )
+
+fake = Faker()
 
 
 class UniformeProductNaamFactory(factory.django.DjangoModelFactory):
@@ -21,15 +25,24 @@ class UniformeProductNaamFactory(factory.django.DjangoModelFactory):
 
 
 class ProductTypeFactory(factory.django.DjangoModelFactory):
-    naam = factory.Sequence(lambda n: f"product type {n}")
-    samenvatting = factory.Faker("sentence")
-    beschrijving = factory.Faker("paragraph")
     code = factory.Sequence(lambda n: f"product type code {n}")
     gepubliceerd = True
     uniforme_product_naam = factory.SubFactory(UniformeProductNaamFactory)
 
     class Meta:
         model = ProductType
+
+    @factory.post_generation
+    def naam(self, create, extracted, **kwargs):
+        self.set_current_language("nl")
+        self.naam = extracted or fake.word()
+        self.save()
+
+    @factory.post_generation
+    def samenvatting(self, create, extracted, **kwargs):
+        self.set_current_language("nl")
+        self.samenvatting = extracted or fake.sentence()
+        self.save()
 
 
 class ThemaFactory(factory.django.DjangoModelFactory):
@@ -39,14 +52,6 @@ class ThemaFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Thema
-
-
-class VraagFactory(factory.django.DjangoModelFactory):
-    vraag = factory.Faker("sentence")
-    antwoord = factory.Faker("text")
-
-    class Meta:
-        model = Vraag
 
 
 class PrijsFactory(factory.django.DjangoModelFactory):
@@ -80,3 +85,23 @@ class LinkFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Link
+
+
+class ContentElementFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+
+    class Meta:
+        model = ContentElement
+
+    @factory.post_generation
+    def content(self, create, extracted, **kwargs):
+        self.set_current_language("nl")
+        self.content = extracted or fake.word()
+        self.save()
+
+
+class ContentLabelFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"label {n}")
+
+    class Meta:
+        model = ContentLabel
