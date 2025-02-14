@@ -58,9 +58,6 @@ class TranslatableViewSetMixin:
         for language in settings.PARLER_LANGUAGES[site]
     }
 
-    def get_queryset(self):
-        return super().get_queryset().language(self.request.LANGUAGE_CODE)
-
     def update_vertaling(self, request, taal, **kwargs):
         partial = request.method == "PATCH"
 

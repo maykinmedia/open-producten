@@ -168,7 +168,7 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     def content(self, request, id=None):
         product_type = self.get_object()
 
-        queryset = product_type.content_elementen.language(request.LANGUAGE_CODE)
+        queryset = product_type.content_elementen
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
