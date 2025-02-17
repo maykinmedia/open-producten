@@ -63,7 +63,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "create",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeUrl": data["product_type_url"],
+                "productTypeId": data["product_type_id"],
             },
         }
 
@@ -85,7 +85,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "update",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeUrl": data["product_type_url"],
+                "productTypeId": data["product_type_id"],
             },
         }
 
@@ -107,7 +107,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "partial_update",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeUrl": data["product_type_url"],
+                "productTypeId": data["product_type_id"],
             },
         }
 
@@ -128,7 +128,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "destroy",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeUrl": f"http://testserver{reverse('producttype-detail', args=[self.product_type.id])}",
+                "productTypeId": str(self.product_type.id),
             },
         }
 
