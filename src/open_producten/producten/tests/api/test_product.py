@@ -78,7 +78,7 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
-            "product_type_url": f"http://testserver{reverse('producttype-detail', args=[product_type.id])}",
+            "product_type_id": product_type.id,
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
@@ -229,7 +229,7 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": product1.frequentie,
                 "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product1.update_datum.astimezone().isoformat(),
-                "product_type_url": f"http://testserver{reverse('producttype-detail', args=[self.product_type.id])}",
+                "product_type_id": self.product_type.id,
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
@@ -254,7 +254,7 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": product2.frequentie,
                 "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product2.update_datum.astimezone().isoformat(),
-                "product_type_url": f"http://testserver{reverse('producttype-detail', args=[self.product_type.id])}",
+                "product_type_id": self.product_type.id,
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
@@ -290,7 +290,7 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": "2025-12-31T01:00:00+01:00",
             "update_datum": "2025-12-31T01:00:00+01:00",
-            "product_type_url": f"http://testserver{reverse('producttype-detail', args=[product_type.id])}",
+            "product_type_id": product_type.id,
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,

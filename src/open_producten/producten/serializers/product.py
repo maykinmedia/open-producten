@@ -12,14 +12,9 @@ from open_producten.producttypen.serializers.thema import NestedProductTypeSeria
 
 class ProductSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="product-detail")
-    product_type_url = serializers.HyperlinkedRelatedField(
-        read_only=True,
-        view_name="producttype-detail",
-    )
-
     product_type = NestedProductTypeSerializer(read_only=True)
     product_type_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=ProductType.objects.all(), source="product_type"
+        queryset=ProductType.objects.all(), source="product_type"
     )
 
     class Meta:
