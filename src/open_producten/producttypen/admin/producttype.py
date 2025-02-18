@@ -11,6 +11,7 @@ from ...utils.widgets import WysimarkWidget
 from ..models import ProductType, Thema
 from .bestand import BestandInline
 from .content import ContentElementInline
+from .externe_code import ExterneCodeInline
 from .link import LinkInline
 
 
@@ -54,11 +55,17 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         "organisaties",
         "contacten",
         "locaties",
+        "uniforme_product_naam",
     )
     search_fields = ("naam", "uniforme_product_naam__naam", "keywords")
     save_on_top = True
     form = ProductTypeAdminForm
-    inlines = (BestandInline, LinkInline, ContentElementInline)
+    inlines = (
+        BestandInline,
+        LinkInline,
+        ContentElementInline,
+        ExterneCodeInline,
+    )
     fields = (
         "naam",
         "gepubliceerd",

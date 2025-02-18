@@ -2152,9 +2152,14 @@ paths:
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
+        name: externe_code
+        schema:
+          type: string
+      - in: query
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -2167,6 +2172,10 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
       tags:
       - producttypen
       security:
@@ -2213,7 +2222,7 @@ paths:
             examples:
               CreateProductType:
                 value:
-                  uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
+                  uniforme_product_naam: aanleunwoning
                   thema_ids:
                   - 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   locatie_ids:
@@ -2233,6 +2242,11 @@ paths:
                   beschrijving: uitgebreide beschrijving...
                   keywords:
                   - wonen
+                  externe_codes:
+                  - naam: ISO
+                    code: '123'
+                  - naam: CBS
+                    code: '456'
                 summary: Create product type
         required: true
       security:
@@ -3235,6 +3249,40 @@ components:
       required:
       - veld_a
       - veld_b
+    ExterneCode:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: De naam van het systeem van de externe product code.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        code:
+          type: string
+          description: De code van de van het product type in het externe systeem.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - code
+      - naam
+    ExterneCodeRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: De naam van het systeem van de externe product code.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        code:
+          type: string
+          minLength: 1
+          description: De code van de van het product type in het externe systeem.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - code
+      - naam
     Link:
       type: object
       properties:
@@ -4068,9 +4116,8 @@ components:
       properties:
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         thema_ids:
           type: array
           items:
@@ -4108,6 +4155,10 @@ components:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
+        externe_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExterneCodeRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4258,8 +4309,7 @@ components:
           readOnly: true
         uniforme_product_naam:
           type: string
-          format: uri
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         themas:
           type: array
           items:
@@ -4306,6 +4356,10 @@ components:
           type: string
           readOnly: true
           description: De huidige taal van het product type.
+        externe_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExterneCode'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4389,9 +4443,8 @@ components:
       properties:
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         thema_ids:
           type: array
           items:
@@ -4429,6 +4482,10 @@ components:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
+        externe_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExterneCodeRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.

@@ -16,6 +16,7 @@ from open_producten.locaties.serializers.locatie import (
 from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
+from .externe_code import ExterneCodeSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 
@@ -36,7 +37,7 @@ class NestedThemaSerializer(serializers.ModelSerializer):
 
 class ProductTypeSerializer(TranslatableModelSerializer):
     uniforme_product_naam = serializers.SlugRelatedField(
-        slug_field="uri", queryset=UniformeProductNaam.objects.all()
+        slug_field="naam", queryset=UniformeProductNaam.objects.all()
     )
 
     themas = NestedThemaSerializer(many=True, read_only=True)
@@ -95,6 +96,27 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         requested_language = self.context["request"].LANGUAGE_CODE
         return requested_language if obj.has_translation(requested_language) else "nl"
 
+    externe_codes = ExterneCodeSerializer(many=True, required=False)
+
+    def _validate_key_value_model_keys(
+        self, data_list: list[dict], unique_field: str, error_message: str
+    ):
+        seen = set()
+
+        for data in data_list:
+            if data[unique_field] in seen:
+                raise serializers.ValidationError(_(error_message))
+            seen.add(data[unique_field])
+
+        return data_list
+
+    def validate_externe_codes(self, externe_codes: list[dict]):
+        return self._validate_key_value_model_keys(
+            externe_codes,
+            "naam",
+            "De externe codes van een product type moeten een unieke naam hebben.",
+        )
+
     class Meta:
         model = ProductType
         fields = "__all__"
@@ -117,12 +139,18 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         contacten = validated_data.pop("contacten")
         naam = validated_data.pop("naam")
         samenvatting = validated_data.pop("samenvatting")
+        externe_codes = validated_data.pop("externe_codes", [])
 
         product_type = ProductType.objects.create(**validated_data)
         product_type.themas.set(themas)
         product_type.locaties.set(locaties)
         product_type.organisaties.set(organisaties)
         product_type.contacten.set(contacten)
+
+        for externe_code in externe_codes:
+            ExterneCodeSerializer().create(
+                externe_code | {"product_type": product_type}
+            )
 
         product_type.set_current_language("nl")
         product_type.naam = naam
@@ -140,6 +168,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 
         naam = validated_data.pop("naam", None)
         samenvatting = validated_data.pop("samenvatting", None)
+        externe_codes = validated_data.pop("externe_codes", None)
 
         instance = super().update(instance, validated_data)
 
@@ -151,6 +180,25 @@ class ProductTypeSerializer(TranslatableModelSerializer):
             instance.organisaties.set(organisaties)
         if contacten:
             instance.contacten.set(contacten)
+
+        if externe_codes is not None:
+            current_externe_codes = set(
+                instance.externe_codes.values_list("naam", flat=True)
+            )
+            seen_externe_codes = set()
+            for externe_code in externe_codes:
+                naam = externe_code.pop("naam")
+                if naam in current_externe_codes:
+                    existing_externe_code = instance.externe_codes.get(naam=naam)
+                    ExterneCodeSerializer().update(existing_externe_code, externe_code)
+                    seen_externe_codes.add(naam)
+                else:
+                    ExterneCodeSerializer().create(
+                        externe_code | {"product_type": instance, "naam": naam}
+                    )
+            instance.externe_codes.filter(
+                naam__in=(current_externe_codes - seen_externe_codes)
+            ).delete()
 
         instance.set_current_language("nl")
         if naam:
