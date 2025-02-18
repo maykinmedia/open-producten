@@ -1,6 +1,6 @@
 {
     "name": "open_producten",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "description": "open-producten project",
     "main": "src/static/open-producten/js/open-producten.js",
     "directories": {
