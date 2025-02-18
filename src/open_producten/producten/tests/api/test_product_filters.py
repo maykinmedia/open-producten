@@ -53,7 +53,20 @@ class TestProductFilters(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
-    def test_product_type_naam_filter(self):
+    def test_product_type_upn_filter(self):
+        ProductFactory.create(
+            product_type__uniforme_product_naam__naam="parkeervergunning"
+        )
+        ProductFactory.create(product_type__uniforme_product_naam__naam="aanbouw")
+
+        response = self.client.get(
+            self.path + "?uniforme_product_naam=parkeervergunning"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_product_type_id_filter(self):
         product_type_id = uuid4()
         ProductFactory.create(product_type__id=product_type_id)
         ProductFactory.create(product_type__id=uuid4())
