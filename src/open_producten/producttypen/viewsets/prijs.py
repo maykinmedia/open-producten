@@ -3,13 +3,17 @@ from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_v
 
 from open_producten.producttypen.models import Prijs
 from open_producten.producttypen.serializers import PrijsSerializer
-from open_producten.utils.views import OrderedModelViewSet
 from open_producten.utils.filters import FilterSet
+from open_producten.utils.views import OrderedModelViewSet
+
 
 class PrijsFilterSet(FilterSet):
     uniforme_product_naam = django_filters.CharFilter(
         field_name="product_type__uniforme_product_naam__naam", lookup_expr="exact"
     )
+
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset).distinct()
 
     class Meta:
         model = Prijs

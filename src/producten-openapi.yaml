@@ -19,7 +19,7 @@ paths:
       summary: Alle PRODUCTEN opvragen.
       parameters:
       - in: query
-        name: eind_datum
+        name: eindDatum
         schema:
           type: string
           format: date
@@ -28,7 +28,7 @@ paths:
           eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
           toegestaan.
       - in: query
-        name: eind_datum__gte
+        name: eindDatum__gte
         schema:
           type: string
           format: date
@@ -37,7 +37,7 @@ paths:
           eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
           toegestaan.
       - in: query
-        name: eind_datum__lte
+        name: eindDatum__lte
         schema:
           type: string
           format: date
@@ -68,27 +68,27 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       - in: query
-        name: product_type__code
+        name: productType__code
         schema:
           type: string
         description: code van het product type.
       - in: query
-        name: product_type__id
+        name: productType__id
         schema:
           type: string
           format: uuid
       - in: query
-        name: start_datum
+        name: startDatum
         schema:
           type: string
           format: date
@@ -96,7 +96,7 @@ paths:
           het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
           wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
       - in: query
-        name: start_datum__gte
+        name: startDatum__gte
         schema:
           type: string
           format: date
@@ -104,7 +104,7 @@ paths:
           het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
           wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
       - in: query
-        name: start_datum__lte
+        name: startDatum__lte
         schema:
           type: string
           format: date
@@ -132,7 +132,7 @@ paths:
           * `geweigerd` - Geweigerd
           * `verlopen` - Verlopen
       - in: query
-        name: uniforme_product_naam
+        name: uniformeProductNaam
         schema:
           type: string
       tags:

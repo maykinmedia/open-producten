@@ -4,12 +4,16 @@ from rest_framework.parsers import MultiPartParser
 
 from open_producten.producttypen.models import Bestand
 from open_producten.producttypen.serializers import BestandSerializer
-from open_producten.utils.views import OrderedModelViewSet
 from open_producten.utils.filters import FilterSet
+from open_producten.utils.views import OrderedModelViewSet
+
 
 class BestandFilterSet(FilterSet):
     uniforme_product_naam = django_filters.CharFilter(
         field_name="product_type__uniforme_product_naam__naam", lookup_expr="exact"
+    )
+    naam__contains = django_filters.CharFilter(
+        field_name="bestand", lookup_expr="contains"
     )
 
     class Meta:

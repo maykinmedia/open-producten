@@ -17,6 +17,7 @@ from open_producten.producttypen.serializers.content import (
 )
 from open_producten.utils.views import TranslatableViewSetMixin
 
+
 @extend_schema_view(
     retrieve=extend_schema(
         summary="Een specifiek CONTENTELEMENT opvragen.",

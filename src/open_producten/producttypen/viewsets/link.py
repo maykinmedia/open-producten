@@ -1,10 +1,11 @@
+import django_filters
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 
 from open_producten.producttypen.models import Link
 from open_producten.producttypen.serializers import LinkSerializer
-from open_producten.utils.views import OrderedModelViewSet
 from open_producten.utils.filters import FilterSet
-import django_filters
+from open_producten.utils.views import OrderedModelViewSet
+
 
 class LinkFilterSet(FilterSet):
     uniforme_product_naam = django_filters.CharFilter(
@@ -19,6 +20,7 @@ class LinkFilterSet(FilterSet):
             "naam": ["exact", "contains"],
             "url": ["exact", "contains"],
         }
+
 
 @extend_schema_view(
     list=extend_schema(

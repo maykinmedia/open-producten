@@ -1,4 +1,3 @@
-import django_filters
 from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
@@ -8,15 +7,11 @@ from rest_framework.response import Response
 
 from open_producten.producttypen.models import ProductType, Thema
 from open_producten.producttypen.serializers import ThemaSerializer
-from open_producten.utils.views import OrderedModelViewSet
 from open_producten.utils.filters import FilterSet
+from open_producten.utils.views import OrderedModelViewSet
+
 
 class ThemaFilterSet(FilterSet):
-    product_typen__uniforme_product_naam = django_filters.CharFilter(
-        field_name="product_typen__uniforme_product_naam__naam", lookup_expr="exact"
-    )
-
-    toegestane_statussen = django_filters.MultipleChoiceFilter
 
     class Meta:
         model = Thema
@@ -25,9 +20,8 @@ class ThemaFilterSet(FilterSet):
             "naam": ["exact"],
             "hoofd_thema__naam": ["exact"],
             "hoofd_thema__id": ["exact"],
-            "product_typen__code": ["exact"],
-            "product_typen__id": ["exact"],
         }
+
 
 @extend_schema_view(
     list=extend_schema(

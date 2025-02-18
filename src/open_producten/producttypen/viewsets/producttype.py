@@ -20,22 +20,21 @@ from open_producten.producttypen.serializers.content import (
 from open_producten.producttypen.serializers.producttype import (
     ProductTypeTranslationSerializer,
 )
-from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
 from open_producten.utils.filters import FilterSet
+from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
+
 
 class ProductTypeFilterSet(FilterSet):
     uniforme_product_naam = django_filters.CharFilter(
         field_name="uniforme_product_naam__naam", lookup_expr="exact"
     )
-    # TODO toegestane_statussen
 
     class Meta:
         model = ProductType
         fields = {
             "code": ["exact"],
-            "themas": ["exact"],
-            "contacten": ["in"],
         }
+
 
 @extend_schema_view(
     list=extend_schema(
