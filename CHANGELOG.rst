@@ -1,5 +1,5 @@
-0.0.x (TBD)
------------
+0.0.4 (18-02-2025)
+------------------
 
 **Project maintenance**
 
@@ -9,6 +9,11 @@
 
 * [#29] Added Read the Docs documentation
 * [#29] Added CHANGELOG file
+
+**New features**
+
+* Added multi-language support for PRODUCTTYPEN.
+* Added CONTENTELEMENTEN & CONTENTLABELS.
 
 
 0.0.3 (04-02-2025)
