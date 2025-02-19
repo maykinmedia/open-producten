@@ -40,7 +40,7 @@ using Open Notificaties to make a complete setup.
 ..    each other.
 
 Open Producten
----------
+--------------
 
 The configuration steps below need to be performed in Open Producten itself.
 

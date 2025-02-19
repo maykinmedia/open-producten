@@ -40,13 +40,13 @@ paths:
       - name: page
         required: false
         in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
+        description: A page number within the paginated result set.
         schema:
           type: integer
       - name: page_size
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Number of results to return per page.
         schema:
           type: integer
       - in: query
@@ -581,6 +581,10 @@ components:
           type: string
           format: uri
           readOnly: true
+          minLength: 1
+          maxLength: 1000
+          description: URL-referentie naar dit object. Dit is de unieke identificatie
+            en locatie van dit object.
         product_type:
           allOf:
           - $ref: '#/components/schemas/NestedProductType'
