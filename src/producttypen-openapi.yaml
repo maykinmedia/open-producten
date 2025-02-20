@@ -2228,6 +2228,7 @@ paths:
                   toegestane_statussen:
                   - gereed
                   - actief
+                  interne_opmerkingen: interne opmerkingen...
                   samenvatting: korte samenvatting...
                   beschrijving: uitgebreide beschrijving...
                   keywords:
@@ -4126,6 +4127,10 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
+        interne_opmerkingen:
+          type: string
+          minLength: 1
+          description: Interne opmerkingen over het product type.
     PatchedProductTypeTranslationRequest:
       type: object
       properties:
@@ -4330,6 +4335,9 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
+        interne_opmerkingen:
+          type: string
+          description: Interne opmerkingen over het product type.
       required:
       - aanmaak_datum
       - bestanden
@@ -4441,6 +4449,10 @@ components:
             type: string
             maxLength: 100
           description: Lijst van keywords waarop kan worden gezocht.
+        interne_opmerkingen:
+          type: string
+          minLength: 1
+          description: Interne opmerkingen over het product type.
       required:
       - code
       - naam

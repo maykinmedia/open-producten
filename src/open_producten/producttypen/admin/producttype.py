@@ -18,7 +18,10 @@ class ProductTypeAdminForm(TranslatableModelForm):
     class Meta:
         model = ProductType
         fields = "__all__"
-        widgets = {"samenvatting": WysimarkWidget()}
+        widgets = {
+            "samenvatting": WysimarkWidget(),
+            "interne_opmerkingen": WysimarkWidget(),
+        }
 
     themas = forms.ModelMultipleChoiceField(
         label=_("thema's"),
@@ -65,6 +68,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         "samenvatting",
         "themas",
         "keywords",
+        "interne_opmerkingen",
         "organisaties",
         "locaties",
         "contacten",
