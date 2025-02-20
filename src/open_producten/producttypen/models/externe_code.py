@@ -10,26 +10,26 @@ class ExterneCode(BaseModel):
     naam = models.CharField(
         verbose_name=_("naam"),
         max_length=255,
-        help_text=_("De naam van het systeem van de externe product code."),
+        help_text=_("De naam van het systeem van de externe producttype code."),
         validators=[RegexValidator(r"^[^:\[\]]+$")],
     )
 
     code = models.CharField(
         verbose_name=_("code"),
         max_length=255,
-        help_text=_("De code van de van het product type in het externe systeem."),
+        help_text=_("De code van het producttype in het externe systeem."),
         validators=[RegexValidator(r"^[^:\[\]]+$")],
     )
 
     product_type = models.ForeignKey(
         "ProductType",
-        verbose_name=_("product type"),
+        verbose_name=_("producttype"),
         on_delete=models.CASCADE,
         related_name="externe_codes",
-        help_text=_("Het product type waarbij deze externe code hoort."),
+        help_text=_("Het producttype waarbij deze externe code hoort."),
     )
 
     class Meta:
-        verbose_name = _("externe product type code")
-        verbose_name_plural = _("externe product type codes")
+        verbose_name = _("externe producttype code")
+        verbose_name_plural = _("externe producttype codes")
         unique_together = (("product_type", "naam"),)

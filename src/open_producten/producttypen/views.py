@@ -13,6 +13,7 @@ from drf_spectacular.utils import (
 )
 from rest_framework import mixins, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import ParseError
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -51,26 +52,33 @@ class ProductTypeFilterSet(FilterSet):
     regex = r"^\[([^:\[\]]+):([^:\[\]]+)\]$"  # [key:value] where the key and value cannot contain `[`, `]` or `:`
 
     externe_code = django_filters.CharFilter(
-        method="filter_by_externe_code", validators=[RegexValidator(regex)]
+        method="filter_by_externe_code",
+        validators=[RegexValidator(regex)],
+        help_text=_("Producttype codes uit externe omgevingen. [naam:code]"),
     )
 
     uniforme_product_naam = django_filters.CharFilter(
-        field_name="uniforme_product_naam__naam"
+        field_name="uniforme_product_naam__naam",
+        help_text=_("Uniforme product naam vanuit de UPL."),
     )
 
     def filter_by_externe_code(self, queryset, name, value):
-        value_list = value.strip("[]").split(":")
+        values = self.request.GET.getlist(name)
 
-        if len(value_list) != 2:
-            return queryset
+        for val in values:
+            value_list = val.strip("[]").split(":")
+            if len(value_list) != 2:
+                raise ParseError(_("Invalid format for externe_code query parameter."))
 
-        naam = value_list[0]
-        code = value_list[1]
-        return queryset.filter(externe_codes__naam=naam, externe_codes__code=code)
+            naam, code = value_list
+            queryset = queryset.filter(
+                externe_codes__naam=naam, externe_codes__code=code
+            )
+        return queryset
 
     class Meta:
         model = ProductType
-        fields = ["gepubliceerd", "uniforme_product_naam"]
+        fields = ("gepubliceerd",)
 
 
 @extend_schema_view(
@@ -85,7 +93,7 @@ class ProductTypeFilterSet(FilterSet):
         summary="Maak een PRODUCTTYPE aan.",
         examples=[
             OpenApiExample(
-                "Create product type",
+                "Create producttype",
                 value={
                     "uniforme_product_naam": "aanleunwoning",
                     "thema_ids": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],

@@ -2155,6 +2155,7 @@ paths:
         name: externe_code
         schema:
           type: string
+        description: Producttype codes uit externe omgevingen. [naam:code]
       - in: query
         name: gepubliceerd
         schema:
@@ -2176,6 +2177,7 @@ paths:
         name: uniforme_product_naam
         schema:
           type: string
+        description: Uniforme product naam vanuit de UPL.
       tags:
       - producttypen
       security:
@@ -2220,7 +2222,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
             examples:
-              CreateProductType:
+              CreateProducttype:
                 value:
                   uniforme_product_naam: aanleunwoning
                   thema_ids:
@@ -2247,7 +2249,7 @@ paths:
                     code: '123'
                   - naam: CBS
                     code: '456'
-                summary: Create product type
+                summary: Create producttype
         required: true
       security:
       - tokenAuth: []
@@ -3249,40 +3251,6 @@ components:
       required:
       - veld_a
       - veld_b
-    ExterneCode:
-      type: object
-      properties:
-        naam:
-          type: string
-          description: De naam van het systeem van de externe product code.
-          pattern: ^[^:\[\]]+$
-          maxLength: 255
-        code:
-          type: string
-          description: De code van de van het product type in het externe systeem.
-          pattern: ^[^:\[\]]+$
-          maxLength: 255
-      required:
-      - code
-      - naam
-    ExterneCodeRequest:
-      type: object
-      properties:
-        naam:
-          type: string
-          minLength: 1
-          description: De naam van het systeem van de externe product code.
-          pattern: ^[^:\[\]]+$
-          maxLength: 255
-        code:
-          type: string
-          minLength: 1
-          description: De code van de van het product type in het externe systeem.
-          pattern: ^[^:\[\]]+$
-          maxLength: 255
-      required:
-      - code
-      - naam
     Link:
       type: object
       properties:
@@ -3449,6 +3417,40 @@ components:
       - content
       - id
       - taal
+    NestedExterneCode:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: De naam van het systeem van de externe producttype code.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        code:
+          type: string
+          description: De code van het producttype in het externe systeem.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - code
+      - naam
+    NestedExterneCodeRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: De naam van het systeem van de externe producttype code.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        code:
+          type: string
+          minLength: 1
+          description: De code van het producttype in het externe systeem.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - code
+      - naam
     NestedLink:
       type: object
       properties:
@@ -4158,7 +4160,7 @@ components:
         externe_codes:
           type: array
           items:
-            $ref: '#/components/schemas/ExterneCodeRequest'
+            $ref: '#/components/schemas/NestedExterneCodeRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4187,12 +4189,12 @@ components:
         naam:
           type: string
           minLength: 1
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
           minLength: 1
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
     PatchedThemaRequest:
       type: object
       properties:
@@ -4359,7 +4361,7 @@ components:
         externe_codes:
           type: array
           items:
-            $ref: '#/components/schemas/ExterneCode'
+            $ref: '#/components/schemas/NestedExterneCode'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4485,7 +4487,7 @@ components:
         externe_codes:
           type: array
           items:
-            $ref: '#/components/schemas/ExterneCodeRequest'
+            $ref: '#/components/schemas/NestedExterneCodeRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4523,11 +4525,11 @@ components:
           readOnly: true
         naam:
           type: string
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
       required:
       - id
       - naam
@@ -4538,12 +4540,12 @@ components:
         naam:
           type: string
           minLength: 1
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
           minLength: 1
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
       required:
       - naam
       - samenvatting

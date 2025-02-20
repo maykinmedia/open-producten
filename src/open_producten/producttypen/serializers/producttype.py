@@ -16,7 +16,7 @@ from open_producten.locaties.serializers.locatie import (
 from ...utils.drf_validators import DuplicateIdValidator
 from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
-from .externe_code import ExterneCodeSerializer
+from .externe_code import ExterneCodeSerializer, NestedExterneCodeSerializer
 from .link import NestedLinkSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 
@@ -96,7 +96,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         requested_language = self.context["request"].LANGUAGE_CODE
         return requested_language if obj.has_translation(requested_language) else "nl"
 
-    externe_codes = ExterneCodeSerializer(many=True, required=False)
+    externe_codes = NestedExterneCodeSerializer(many=True, required=False)
 
     def _validate_key_value_model_keys(
         self, data_list: list[dict], unique_field: str, error_message: str
@@ -105,7 +105,9 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 
         for data in data_list:
             if data[unique_field] in seen:
-                raise serializers.ValidationError(_(error_message))
+                raise serializers.ValidationError(
+                    error_message.format(data[unique_field]), code="unique"
+                )
             seen.add(data[unique_field])
 
         return data_list
@@ -114,7 +116,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         return self._validate_key_value_model_keys(
             externe_codes,
             "naam",
-            "De externe codes van een product type moeten een unieke naam hebben.",
+            _("Er bestaat al een externe code met de naam {} voor dit ProductType."),
         )
 
     class Meta:
@@ -147,10 +149,12 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         product_type.organisaties.set(organisaties)
         product_type.contacten.set(contacten)
 
-        for externe_code in externe_codes:
-            ExterneCodeSerializer().create(
-                externe_code | {"product_type": product_type}
-            )
+        self.set_externe_codes(
+            [
+                externe_code | {"product_type": product_type.id}
+                for externe_code in externe_codes
+            ]
+        )
 
         product_type.set_current_language("nl")
         product_type.naam = naam
@@ -182,23 +186,13 @@ class ProductTypeSerializer(TranslatableModelSerializer):
             instance.contacten.set(contacten)
 
         if externe_codes is not None:
-            current_externe_codes = set(
-                instance.externe_codes.values_list("naam", flat=True)
+            instance.externe_codes.all().delete()
+            self.set_externe_codes(
+                [
+                    externe_code | {"product_type": instance.id}
+                    for externe_code in externe_codes
+                ]
             )
-            seen_externe_codes = set()
-            for externe_code in externe_codes:
-                naam = externe_code.pop("naam")
-                if naam in current_externe_codes:
-                    existing_externe_code = instance.externe_codes.get(naam=naam)
-                    ExterneCodeSerializer().update(existing_externe_code, externe_code)
-                    seen_externe_codes.add(naam)
-                else:
-                    ExterneCodeSerializer().create(
-                        externe_code | {"product_type": instance, "naam": naam}
-                    )
-            instance.externe_codes.filter(
-                naam__in=(current_externe_codes - seen_externe_codes)
-            ).delete()
 
         instance.set_current_language("nl")
         if naam:
@@ -208,6 +202,14 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 
         instance.add_contact_organisaties()
         return instance
+
+    def set_externe_codes(self, externe_codes: list[dict]):
+        externe_code_serializer = ExterneCodeSerializer(
+            data=externe_codes,
+            many=True,
+        )
+        externe_code_serializer.is_valid(raise_exception=True)
+        externe_code_serializer.save()
 
 
 class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
@@ -223,11 +225,11 @@ class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
 class ProductTypeTranslationSerializer(serializers.ModelSerializer):
 
     naam = serializers.CharField(
-        required=True, max_length=255, help_text=_("naam van het product type.")
+        required=True, max_length=255, help_text=_("naam van het producttype.")
     )
     samenvatting = serializers.CharField(
         required=True,
-        help_text=_("Korte beschrijving van het product type."),
+        help_text=_("Korte beschrijving van het producttype."),
     )
 
     class Meta:

@@ -204,12 +204,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "externe_codes": [
                     ErrorDetail(
-                        string=_(
-                            "De externe codes van een product type moeten een unieke naam hebben."
-                        ),
-                        code="invalid",
+                        string="Er bestaat al een externe code met de naam ISO voor dit ProductType.",
+                        code="unique",
                     )
-                ],
+                ]
             },
         )
 
@@ -476,7 +474,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ExterneCode.objects.count(), 1)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_update_product_type_with_updating_exising_externe_code(self):
+    def test_update_product_type_with_externe_code_replacing_existing(self):
         product_type = ProductTypeFactory.create()
         externe_code = ExterneCodeFactory.create(product_type=product_type)
 
@@ -486,25 +484,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
-        self.assertEqual(ExterneCode.objects.first().id, externe_code.id)
-        self.assertEqual(response.data["externe_codes"], externe_codes)
-
-    def test_update_product_type_removing_exising_externe_codes_and_adding_new_ones(
-        self,
-    ):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
-        ExterneCodeFactory.create(product_type=product_type)
-
-        externe_codes = [
-            {"naam": "ISO", "code": "123"},
-            {"naam": "CBS", "code": "1234"},
-        ]
-        data = self.data | {"externe_codes": externe_codes}
-        response = self.client.put(self.detail_path(product_type), data)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ExterneCode.objects.count(), 2)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
     def test_update_product_type_removing_externe_codes(self):
@@ -586,7 +565,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ExterneCode.objects.count(), 1)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_parial_update_product_type_with_updating_exising_externe_code(self):
+    def test_partial_update_product_type_with_externe_code_replacing_existing(self):
         product_type = ProductTypeFactory.create()
         externe_code = ExterneCodeFactory.create(product_type=product_type)
 
@@ -596,25 +575,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
-        self.assertEqual(ExterneCode.objects.first().id, externe_code.id)
-        self.assertEqual(response.data["externe_codes"], externe_codes)
-
-    def test_partial_update_product_type_removing_exising_externe_codes_and_adding_new_ones(
-        self,
-    ):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
-        ExterneCodeFactory.create(product_type=product_type)
-
-        externe_codes = [
-            {"naam": "ISO", "code": "123"},
-            {"naam": "CBS", "code": "1234"},
-        ]
-        data = {"externe_codes": externe_codes}
-        response = self.client.patch(self.detail_path(product_type), data)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ExterneCode.objects.count(), 2)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
     def test_partial_update_product_type_removing_externe_codes(self):
@@ -1117,7 +1077,7 @@ class TestProductTypeFilterSet(BaseApiTestCase):
         ProductTypeFactory.create(gepubliceerd=True)
         ProductTypeFactory.create(gepubliceerd=False)
 
-        response = self.client.get(self.path + "?gepubliceerd=true")
+        response = self.client.get(self.path, {"gepubliceerd": True})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -1144,22 +1104,37 @@ class TestProductTypeFilterSet(BaseApiTestCase):
         product_type_2 = ProductTypeFactory.create()
         ExterneCodeFactory(naam="ISO", code="9837549857", product_type=product_type_2)
 
-        response = self.client.get(self.path + "?externe_code=[ISO:12345]")
+        response = self.client.get(self.path, {"externe_code": "[ISO:12345]"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_multiple_externe_code_filters(self):
+        product_type_1 = ProductTypeFactory.create()
+        ExterneCodeFactory(naam="ISO", code="12345", product_type=product_type_1)
+        ExterneCodeFactory(naam="OSI", code="456", product_type=product_type_1)
+
+        product_type_2 = ProductTypeFactory.create()
+        ExterneCodeFactory(naam="ISO", code="9837549857", product_type=product_type_2)
+
+        response = self.client.get(
+            self.path, {"externe_code": ("[ISO:12345]", "[OSI:456]")}
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
     def test_externe_code_filter_without_brackets(self):
-        response = self.client.get(self.path + "?externe_code=abc")
+        response = self.client.get(self.path, {"externe_code": "abc"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_externe_code_filter_without_key_value(self):
-        response = self.client.get(self.path + "?externe_code=[:]")
+        response = self.client.get(self.path, {"externe_code": "[:]"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_externe_code_filter_with_invalid_characters(self):
-        response = self.client.get(self.path + "?externe_code=[a[b:[b:a]]")
+        response = self.client.get(self.path, {"externe_code": "[a[b:[b:a]]"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
