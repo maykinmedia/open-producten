@@ -1,7 +1,8 @@
-from django_json_schema_model.models import JsonSchema
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 from rest_framework import serializers
+
+from open_producten.producttypen.models import JsonSchema
 
 
 class JsonSchemaSerializer(serializers.ModelSerializer):
@@ -18,4 +19,4 @@ class JsonSchemaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JsonSchema
-        fields = "__all__"
+        fields = ("id", "naam", "schema")

@@ -3,7 +3,6 @@ import datetime
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -11,7 +10,10 @@ from rest_framework.test import APIClient
 
 from open_producten.producten.models import Product
 from open_producten.producten.tests.factories import ProductFactory
-from open_producten.producttypen.tests.factories import ProductTypeFactory
+from open_producten.producttypen.tests.factories import (
+    JsonSchemaFactory,
+    ProductTypeFactory,
+)
 from open_producten.utils.tests.cases import BaseApiTestCase
 
 
@@ -91,8 +93,7 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(response.data, expected_data)
 
     def test_create_product_with_verbruiksobject(self):
-        json_schema = JsonSchema.objects.create(
-            name="json-schema",
+        json_schema = JsonSchemaFactory.create(
             schema={
                 "type": "object",
                 "properties": {"naam": {"type": "string"}},
@@ -137,8 +138,7 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(response.data, expected_data)
 
     def test_create_product_with_invalid_verbruiksobject(self):
-        json_schema = JsonSchema.objects.create(
-            name="json-schema",
+        json_schema = JsonSchemaFactory.create(
             schema={
                 "type": "object",
                 "properties": {"naam": {"type": "string"}},

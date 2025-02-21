@@ -5,10 +5,12 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.translation import gettext as _
 
-from django_json_schema_model.models import JsonSchema
 from freezegun import freeze_time
 
-from open_producten.producttypen.tests.factories import ProductTypeFactory
+from open_producten.producttypen.tests.factories import (
+    JsonSchemaFactory,
+    ProductTypeFactory,
+)
 
 from ...producttypen.models.producttype import ProductStateChoices
 from ..models.product import validate_eind_datum, validate_start_datum, validate_status
@@ -112,8 +114,7 @@ class TestProduct(TestCase):
         product.clean()
 
     def test_verbruiksobject_is_valid(self):
-        json_schema = JsonSchema.objects.create(
-            name="json-schema",
+        json_schema = JsonSchemaFactory.create(
             schema={
                 "type": "object",
                 "properties": {"naam": {"type": "string"}},
@@ -132,8 +133,7 @@ class TestProduct(TestCase):
         product.clean()
 
     def test_verbruiksobject_is_invalid(self):
-        json_schema = JsonSchema.objects.create(
-            name="json-schema",
+        json_schema = JsonSchemaFactory.create(
             schema={
                 "type": "object",
                 "properties": {"naam": {"type": "string"}},
@@ -167,8 +167,7 @@ class TestProduct(TestCase):
         product.clean()
 
     def test_verbruiksobject_with_schema_without_object(self):
-        json_schema = JsonSchema.objects.create(
-            name="json-schema",
+        json_schema = JsonSchemaFactory.create(
             schema={
                 "type": "object",
                 "properties": {"naam": {"type": "string"}},
