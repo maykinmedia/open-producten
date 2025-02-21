@@ -2,7 +2,6 @@ from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
-from django_json_schema_model.models import JsonSchema
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
     OpenApiExample,
@@ -20,6 +19,7 @@ from open_producten.producttypen.models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    JsonSchema,
     Link,
     Prijs,
     ProductType,
@@ -485,7 +485,7 @@ class ContentLabelViewSet(mixins.ListModelMixin, GenericViewSet):
             OpenApiExample(
                 "Create schema",
                 value={
-                    "name": "parkeervergunning-verbruiksobject",
+                    "naam": "parkeervergunning-verbruiksobject",
                     "schema": {
                         "type": "object",
                         "properties": {"uren": {"type": "number"}},
@@ -511,4 +511,4 @@ class JsonSchemaViewSet(OrderedModelViewSet):
     serializer_class = JsonSchemaSerializer
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["name"]
+    filterset_fields = ["naam"]

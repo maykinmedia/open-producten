@@ -1,10 +1,12 @@
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
-from django_json_schema_model.models import JsonSchema
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
+from open_producten.producttypen.models import JsonSchema
+from open_producten.producttypen.tests.factories import JsonSchemaFactory
 from open_producten.utils.tests.cases import BaseApiTestCase
 
 
@@ -13,14 +15,14 @@ class TestProductTypeSchema(BaseApiTestCase):
     def setUp(self):
         super().setUp()
         self.data = {
-            "name": "parkeervergunning-verbruiksobject",
+            "naam": "parkeervergunning-verbruiksobject",
             "schema": {
                 "type": "object",
                 "properties": {"uren": {"type": "number"}},
                 "required": ["uren"],
             },
         }
-        self.schema = JsonSchema.objects.create(**self.data)
+        self.schema = JsonSchemaFactory.create(schema=self.data["schema"])
 
         self.path = reverse("schema-list")
         self.detail_path = reverse("schema-detail", args=[self.schema.id])
@@ -36,8 +38,12 @@ class TestProductTypeSchema(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "name": [ErrorDetail(string="Dit veld is vereist.", code="required")],
-                "schema": [ErrorDetail(string="Dit veld is vereist.", code="required")],
+                "naam": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
+                "schema": [
+                    ErrorDetail(string=_("This field is required."), code="required")
+                ],
             },
         )
 
@@ -68,23 +74,23 @@ class TestProductTypeSchema(BaseApiTestCase):
         )
 
     def test_update_schema(self):
-        data = self.data | {"name": "update"}
+        data = self.data | {"naam": "update"}
         response = self.client.put(self.detail_path, data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(JsonSchema.objects.count(), 1)
-        self.assertEqual(JsonSchema.objects.first().name, "update")
+        self.assertEqual(JsonSchema.objects.first().naam, "update")
 
     def test_partial_update_schema(self):
-        data = {"name": "update"}
+        data = {"naam": "update"}
         response = self.client.patch(self.detail_path, data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(JsonSchema.objects.count(), 1)
-        self.assertEqual(JsonSchema.objects.first().name, "update")
+        self.assertEqual(JsonSchema.objects.first().naam, "update")
 
     def test_read_schemas(self):
-        schema = JsonSchema.objects.create(name="test", schema={})
+        schema = JsonSchemaFactory.create(naam="test", schema={})
         response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -92,12 +98,12 @@ class TestProductTypeSchema(BaseApiTestCase):
         expected_data = [
             {
                 "id": self.schema.id,
-                "name": self.schema.name,
+                "naam": self.schema.naam,
                 "schema": self.schema.schema,
             },
             {
                 "id": schema.id,
-                "name": schema.name,
+                "naam": schema.naam,
                 "schema": schema.schema,
             },
         ]
@@ -110,7 +116,7 @@ class TestProductTypeSchema(BaseApiTestCase):
 
         expected_data = {
             "id": self.schema.id,
-            "name": self.schema.name,
+            "naam": self.schema.naam,
             "schema": self.schema.schema,
         }
         self.assertEqual(response.data, expected_data)

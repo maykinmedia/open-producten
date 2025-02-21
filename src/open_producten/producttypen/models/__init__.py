@@ -1,5 +1,6 @@
 from .bestand import Bestand
 from .content import ContentElement, ContentLabel
+from .jsonschema import JsonSchema
 from .link import Link
 from .prijs import Prijs, PrijsOptie
 from .producttype import ProductType
@@ -16,4 +17,5 @@ __all__ = [
     "Bestand",
     "ContentElement",
     "ContentLabel",
+    "JsonSchema",
 ]

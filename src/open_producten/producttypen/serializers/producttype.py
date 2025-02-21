@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from django_json_schema_model.models import JsonSchema
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from parler_rest.serializers import TranslatableModelSerializer
@@ -15,7 +14,7 @@ from open_producten.locaties.serializers.locatie import (
 )
 
 from ...utils.drf_validators import DuplicateIdValidator
-from ..models import ProductType, Thema, UniformeProductNaam
+from ..models import JsonSchema, ProductType, Thema, UniformeProductNaam
 from . import JsonSchemaSerializer
 from .bestand import NestedBestandSerializer
 from .link import NestedLinkSerializer
@@ -81,14 +80,15 @@ class ProductTypeSerializer(TranslatableModelSerializer):
     bestanden = NestedBestandSerializer(many=True, read_only=True)
 
     verbruiksobject_schema = JsonSchemaSerializer(read_only=True)
-    verbruiksobject_schema_id = serializers.PrimaryKeyRelatedField(
-        source="verbruiksobject_schema",
+    verbruiksobject_schema_naam = serializers.SlugRelatedField(
+        slug_field="naam",
         queryset=JsonSchema.objects.all(),
         write_only=True,
         help_text=_(
             "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
         ),
         required=False,
+        source="verbruiksobject_schema",
     )
 
     naam = serializers.CharField(
