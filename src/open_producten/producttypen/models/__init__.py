@@ -1,6 +1,7 @@
 from .bestand import Bestand
 from .content import ContentElement, ContentLabel
 from .externe_code import ExterneCode
+from .jsonschema import JsonSchema
 from .link import Link
 from .parameter import Parameter
 from .prijs import Prijs, PrijsOptie
@@ -20,4 +21,5 @@ __all__ = [
     "Parameter",
     "ContentElement",
     "ContentLabel",
+    "JsonSchema",
 ]

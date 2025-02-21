@@ -4,13 +4,13 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_json_schema_model.models import JsonSchema
 from parler.models import TranslatableModel, TranslatedFields
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
 from open_producten.utils.fields import ChoiceArrayField
 from open_producten.utils.models import BasePublishableModel
 
+from .jsonschema import JsonSchema
 from .thema import Thema
 from .upn import UniformeProductNaam
 

@@ -5,6 +5,7 @@ from ..models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    JsonSchema,
     ExterneCode,
     Link,
     Parameter,
@@ -125,3 +126,10 @@ class ParameterFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Parameter
+
+
+class JsonSchemaFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"jsonschema {n}")
+
+    class Meta:
+        model = JsonSchema
