@@ -5,6 +5,7 @@ from ..models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    JsonSchema,
     Link,
     Prijs,
     PrijsOptie,
@@ -105,3 +106,10 @@ class ContentLabelFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ContentLabel
+
+
+class JsonSchemaFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"jsonschema {n}")
+
+    class Meta:
+        model = JsonSchema

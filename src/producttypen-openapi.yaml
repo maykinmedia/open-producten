@@ -2747,7 +2747,7 @@ paths:
       summary: Alle SCHEMA'S opvragen.
       parameters:
       - in: query
-        name: name
+        name: naam
         schema:
           type: string
       - name: page
@@ -2808,7 +2808,7 @@ paths:
             examples:
               CreateSchema:
                 value:
-                  name: parkeervergunning-verbruiksobject
+                  naam: parkeervergunning-verbruiksobject
                   schema:
                     type: object
                     properties:
@@ -3530,32 +3530,30 @@ components:
         id:
           type: integer
           readOnly: true
+        naam:
+          type: string
+          description: Naam van het json schema.
+          maxLength: 200
         schema:
           type: object
           additionalProperties: {}
-        name:
-          type: string
-          title: Naam
-          description: Naam van het json schema.
-          maxLength: 200
       required:
       - id
-      - name
+      - naam
       - schema
     JsonSchemaRequest:
       type: object
       properties:
+        naam:
+          type: string
+          minLength: 1
+          description: Naam van het json schema.
+          maxLength: 200
         schema:
           type: object
           additionalProperties: {}
-        name:
-          type: string
-          minLength: 1
-          title: Naam
-          description: Naam van het json schema.
-          maxLength: 200
       required:
-      - name
+      - naam
       - schema
     Link:
       type: object
@@ -4305,15 +4303,14 @@ components:
     PatchedJsonSchemaRequest:
       type: object
       properties:
+        naam:
+          type: string
+          minLength: 1
+          description: Naam van het json schema.
+          maxLength: 200
         schema:
           type: object
           additionalProperties: {}
-        name:
-          type: string
-          minLength: 1
-          title: Naam
-          description: Naam van het json schema.
-          maxLength: 200
     PatchedLinkRequest:
       type: object
       properties:
@@ -4456,11 +4453,12 @@ components:
             format: uuid
           writeOnly: true
           default: []
-        verbruiksobject_schema_id:
-          type: integer
-          writeOnly: true
+        verbruiksobject_schema_naam:
+          type: string
+          minLength: 1
           description: JSON schema om het verbruiksobject van een gerelateerd product
             te valideren.
+          writeOnly: true
         naam:
           type: string
           minLength: 1
@@ -4781,11 +4779,12 @@ components:
             format: uuid
           writeOnly: true
           default: []
-        verbruiksobject_schema_id:
-          type: integer
-          writeOnly: true
+        verbruiksobject_schema_naam:
+          type: string
+          minLength: 1
           description: JSON schema om het verbruiksobject van een gerelateerd product
             te valideren.
+          writeOnly: true
         naam:
           type: string
           minLength: 1
