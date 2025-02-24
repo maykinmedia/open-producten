@@ -19,8 +19,8 @@ isort
 # Documentation
 pytest
 recommonmark
-sphinx
-sphinx-markdown-tables==0.0.15
+sphinx==7.4.0
+sphinx-markdown-tables
 sphinx-rtd-theme
 sphinxcontrib-applehelp==1.0.1
 sphinxcontrib-devhelp==1.0.1
