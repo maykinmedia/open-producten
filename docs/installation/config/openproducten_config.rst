@@ -95,7 +95,7 @@ Register notification channels
 ==============================
 
 Open Producten
----------
+--------------
 
 Before notifications can be sent to ``kanalen`` in Open Notificaties, these ``kanalen``
 must first be registered via Open Producten.
