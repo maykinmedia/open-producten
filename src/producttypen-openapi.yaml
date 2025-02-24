@@ -4129,7 +4129,6 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         interne_opmerkingen:
           type: string
-          minLength: 1
           description: Interne opmerkingen over het product type.
     PatchedProductTypeTranslationRequest:
       type: object
@@ -4451,7 +4450,6 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         interne_opmerkingen:
           type: string
-          minLength: 1
           description: Interne opmerkingen over het product type.
       required:
       - code

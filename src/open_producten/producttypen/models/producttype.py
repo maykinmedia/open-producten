@@ -97,7 +97,7 @@ class ProductType(BasePublishableModel, TranslatableModel):
 
     interne_opmerkingen = models.TextField(
         verbose_name=_("interne opmerkingen"),
-        default="",
+        blank=True,
         help_text=_("Interne opmerkingen over het product type."),
     )
 
