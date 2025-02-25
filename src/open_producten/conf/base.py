@@ -192,3 +192,8 @@ PARLER_LANGUAGES = {
         "hide_untranslated": False,
     },
 }
+
+FORCE_TRANSLATION_STRINGS = [
+    _("A page number within the paginated result set."),
+    _("Number of results to return per page."),
+]
