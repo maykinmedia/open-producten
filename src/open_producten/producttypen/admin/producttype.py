@@ -13,6 +13,7 @@ from .bestand import BestandInline
 from .content import ContentElementInline
 from .externe_code import ExterneCodeInline
 from .link import LinkInline
+from .parameter import ParameterInline
 
 
 class ProductTypeAdminForm(TranslatableModelForm):
@@ -65,6 +66,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         LinkInline,
         ContentElementInline,
         ExterneCodeInline,
+        ParameterInline,
     )
     fields = (
         "naam",

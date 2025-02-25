@@ -7,6 +7,7 @@ from ..models import (
     ContentLabel,
     ExterneCode,
     Link,
+    Parameter,
     Prijs,
     PrijsOptie,
     ProductType,
@@ -115,3 +116,12 @@ class ExterneCodeFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ExterneCode
+
+
+class ParameterFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    naam = factory.Sequence(lambda n: f"parameter {n}")
+    waarde = factory.Faker("word")
+
+    class Meta:
+        model = Parameter
