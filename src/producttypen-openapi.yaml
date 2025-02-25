@@ -2174,6 +2174,11 @@ paths:
         schema:
           type: integer
       - in: query
+        name: parameter
+        schema:
+          type: string
+        description: Producttype parameters. [naam:waarde]
+      - in: query
         name: uniforme_product_naam
         schema:
           type: string
@@ -2249,6 +2254,9 @@ paths:
                     code: '123'
                   - naam: CBS
                     code: '456'
+                  parameters:
+                  - naam: doelgroep
+                    waarde: inwoners
                 summary: Create producttype
         required: true
       security:
@@ -3488,6 +3496,40 @@ components:
       required:
       - naam
       - url
+    NestedParameter:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: De naam van de parameter.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        waarde:
+          type: string
+          description: De waarde van de parameter.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - naam
+      - waarde
+    NestedParameterRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: De naam van de parameter.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        waarde:
+          type: string
+          minLength: 1
+          description: De waarde van de parameter.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - naam
+      - waarde
     NestedPrijs:
       type: object
       properties:
@@ -4161,6 +4203,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NestedExterneCodeRequest'
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedParameterRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4362,6 +4408,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NestedExterneCode'
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedParameter'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4488,6 +4538,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NestedExterneCodeRequest'
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedParameterRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
