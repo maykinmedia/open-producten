@@ -67,6 +67,7 @@ from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetM
                     "naam": "Aanleunwoning",
                     "code": "PT-12345",
                     "toegestane_statussen": ["gereed", "actief"],
+                    "interne_opmerkingen": "interne opmerkingen...",
                     "samenvatting": "korte samenvatting...",
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],

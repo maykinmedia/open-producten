@@ -95,6 +95,12 @@ class ProductType(BasePublishableModel, TranslatableModel):
         help_text=_("De locaties waar het product beschikbaar is."),
     )
 
+    interne_opmerkingen = models.TextField(
+        verbose_name=_("interne opmerkingen"),
+        blank=True,
+        help_text=_("Interne opmerkingen over het product type."),
+    )
+
     translations = TranslatedFields(
         samenvatting=models.TextField(
             verbose_name=_("samenvatting"),

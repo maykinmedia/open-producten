@@ -14,6 +14,7 @@ class TestProductTypeAdminForm(TestCase):
             "uniforme_product_naam": upn,
             "beschrijving": "beschrijving",
             "samenvatting": "samenvatting",
+            "interne_opmerkingen": "interne opmerkingen",
         }
 
     def test_at_least_one_thema_is_required(self):
