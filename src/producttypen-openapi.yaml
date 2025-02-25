@@ -18,6 +18,10 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle BESTANDEN opvragen.
       parameters:
+      - in: query
+        name: naam__contains
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -31,11 +35,19 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
         schema:
           type: string
           format: uuid
-        description: Het product type waarbij dit bestand hoort.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
       tags:
       - bestanden
       security:
@@ -307,6 +319,25 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle CONTACTEN opvragen.
       parameters:
+      - in: query
+        name: achternaam
+        schema:
+          type: string
+        description: achternaam van het contact
+      - in: query
+        name: email__iexact
+        schema:
+          type: string
+        description: email van het contact
+      - in: query
+        name: organisatie__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: organisatie__naam
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -319,6 +350,21 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: rol
+        schema:
+          type: string
+        description: De rol/functie van het contact
+      - in: query
+        name: telefoonnummer__contains
+        schema:
+          type: string
+        description: telefoonnummer van het contact
+      - in: query
+        name: voornaam
+        schema:
+          type: string
+        description: voornaam van het contact
       tags:
       - contacten
       security:
@@ -986,6 +1032,16 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle LINKS opvragen.
       parameters:
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam van de link.
+      - in: query
+        name: naam__contains
+        schema:
+          type: string
+        description: Naam van de link.
       - name: page
         required: false
         in: query
@@ -999,11 +1055,29 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
         schema:
           type: string
           format: uuid
-        description: Het product type waarbij deze link hoort.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+      - in: query
+        name: url
+        schema:
+          type: string
+        description: Url van de link.
+      - in: query
+        name: url__contains
+        schema:
+          type: string
+        description: Url van de link.
       tags:
       - links
       security:
@@ -1276,6 +1350,18 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle LOCATIES opvragen.
       parameters:
+      - in: query
+        name: email__iexact
+        schema:
+          type: string
+      - in: query
+        name: huisnummer__iexact
+        schema:
+          type: string
+      - in: query
+        name: naam__iexact
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -1288,6 +1374,22 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: postcode
+        schema:
+          type: string
+      - in: query
+        name: stad
+        schema:
+          type: string
+      - in: query
+        name: straat__iexact
+        schema:
+          type: string
+      - in: query
+        name: telefoonnummer__contains
+        schema:
+          type: string
       tags:
       - locaties
       security:
@@ -1564,6 +1666,23 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle ORGANISATIES opvragen.
       parameters:
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: code van de organisatie.
+      - in: query
+        name: email__iexact
+        schema:
+          type: string
+      - in: query
+        name: huisnummer__iexact
+        schema:
+          type: string
+      - in: query
+        name: naam__iexact
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -1576,6 +1695,22 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: postcode
+        schema:
+          type: string
+      - in: query
+        name: stad
+        schema:
+          type: string
+      - in: query
+        name: straat__iexact
+        schema:
+          type: string
+      - in: query
+        name: telefoonnummer__contains
+        schema:
+          type: string
       tags:
       - organisaties
       security:
@@ -1853,6 +1988,24 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle PRIJZEN opvragen.
       parameters:
+      - in: query
+        name: actief_vanaf
+        schema:
+          type: string
+          format: date
+        description: De datum vanaf wanneer de prijs actief is.
+      - in: query
+        name: actief_vanaf__gte
+        schema:
+          type: string
+          format: date
+        description: De datum vanaf wanneer de prijs actief is.
+      - in: query
+        name: actief_vanaf__lte
+        schema:
+          type: string
+          format: date
+        description: De datum vanaf wanneer de prijs actief is.
       - name: page
         required: false
         in: query
@@ -1866,11 +2019,39 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: prijsopties__bedrag
+        schema:
+          type: number
+        description: Het bedrag van de prijs optie.
+      - in: query
+        name: prijsopties__bedrag__gte
+        schema:
+          type: number
+        description: Het bedrag van de prijs optie.
+      - in: query
+        name: prijsopties__bedrag__lte
+        schema:
+          type: number
+        description: Het bedrag van de prijs optie.
+      - in: query
+        name: prijsopties__beschrijving
+        schema:
+          type: string
+        description: Korte beschrijving van de optie.
+      - in: query
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
         schema:
           type: string
           format: uuid
-        description: Het product type waarbij deze prijs hoort.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
       tags:
       - prijzen
       security:
@@ -2152,6 +2333,11 @@ paths:
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
+        name: code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
         name: externe_code
         schema:
           type: string
@@ -2161,6 +2347,12 @@ paths:
         schema:
           type: boolean
         description: Geeft aan of het object getoond kan worden.
+      - in: query
+        name: letter
+        schema:
+          type: string
+        description: Filter op de eerste letter van de naam van het producttype (in
+          de meegegeven `Accept-Language` taal).
       - name: page
         required: false
         in: query
@@ -3065,6 +3257,22 @@ paths:
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
+      - in: query
+        name: hoofd_thema__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: hoofd_thema__naam
+        schema:
+          type: string
+        description: Naam van het thema.
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam van het thema.
       - name: page
         required: false
         in: query
