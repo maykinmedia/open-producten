@@ -7,7 +7,10 @@ from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
 
-from open_producten.producttypen.tests.factories import ProductTypeFactory
+from open_producten.producttypen.tests.factories import (
+    JsonSchemaFactory,
+    ProductTypeFactory,
+)
 
 from ...producttypen.models.producttype import ProductStateChoices
 from ..models.product import validate_eind_datum, validate_start_datum, validate_status
@@ -108,6 +111,77 @@ class TestProduct(TestCase):
             product_type=self.product_type,
             bsn="111222333",
         )
+        product.clean()
+
+    def test_verbruiksobject_is_valid(self):
+        json_schema = JsonSchemaFactory.create(
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": "test"},
+        )
+
+        product.clean()
+
+    def test_verbruiksobject_is_invalid(self):
+        json_schema = JsonSchemaFactory.create(
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": 1234},
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            _(
+                "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
+            ),
+        ):
+            product.clean()
+
+    def test_verbruiksobject_without_schema(self):
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            verbruiksobject={"naam": 1234},
+        )
+
+        product.clean()
+
+    def test_verbruiksobject_with_schema_without_object(self):
+        json_schema = JsonSchemaFactory.create(
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.verbruiksobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+        )
+
         product.clean()
 
 

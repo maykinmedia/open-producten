@@ -17,6 +17,7 @@ from open_producten.producttypen.models import Link, ProductType
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
     ContentElementFactory,
+    JsonSchemaFactory,
     LinkFactory,
     PrijsFactory,
     PrijsOptieFactory,
@@ -93,6 +94,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
+            "verbruiksobject_schema": None,
             "prijzen": [],
             "links": [],
             "bestanden": [],
@@ -220,11 +222,20 @@ class TestProducttypeViewSet(BaseApiTestCase):
         locatie = LocatieFactory.create()
         organisatie = OrganisatieFactory.create()
         contact = ContactFactory.create()
+        schema = JsonSchemaFactory.create(
+            naam="test",
+            schema={
+                "type": "object",
+                "properties": {"uren": {"type": "number"}},
+                "required": ["uren"],
+            },
+        )
 
         data = self.data | {
             "locatie_ids": [locatie.id],
             "organisatie_ids": [organisatie.id],
             "contact_ids": [contact.id],
+            "verbruiksobject_schema_naam": schema.naam,
         }
         response = self.client.post(self.path, data)
 
@@ -242,6 +253,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "interne_opmerkingen": product_type.interne_opmerkingen,
             "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+            "verbruiksobject_schema": {
+                "id": schema.id,
+                "naam": "test",
+                "schema": {
+                    "type": "object",
+                    "properties": {"uren": {"type": "number"}},
+                    "required": ["uren"],
+                },
+            },
             "toegestane_statussen": [],
             "prijzen": [],
             "links": [],
@@ -568,6 +588,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "taal": "nl",
                 "uniforme_product_naam": product_type1.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
+                "verbruiksobject_schema": None,
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
@@ -599,6 +620,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "taal": "nl",
                 "uniforme_product_naam": product_type2.uniforme_product_naam.uri,
                 "toegestane_statussen": [],
+                "verbruiksobject_schema": None,
                 "prijzen": [],
                 "links": [],
                 "bestanden": [],
@@ -641,6 +663,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.uri,
             "toegestane_statussen": [],
+            "verbruiksobject_schema": None,
             "prijzen": [],
             "links": [],
             "bestanden": [],

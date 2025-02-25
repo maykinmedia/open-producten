@@ -19,6 +19,7 @@ from open_producten.producttypen.models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    JsonSchema,
     Link,
     Prijs,
     ProductType,
@@ -26,6 +27,7 @@ from open_producten.producttypen.models import (
 )
 from open_producten.producttypen.serializers import (
     BestandSerializer,
+    JsonSchemaSerializer,
     LinkSerializer,
     PrijsSerializer,
     ProductTypeActuelePrijsSerializer,
@@ -71,6 +73,7 @@ from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetM
                     "samenvatting": "korte samenvatting...",
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
+                    "verbruiksobject_schema": 1,
                 },
                 request_only=True,
             )
@@ -467,3 +470,46 @@ class ContentLabelViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = ContentLabel.objects.all()
     serializer_class = ContentLabelSerializer
     lookup_field = "id"
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary="Alle SCHEMA'S opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
+    ),
+    retrieve=extend_schema(
+        summary="Een specifiek SCHEMA opvragen.",
+    ),
+    create=extend_schema(
+        summary="Maak een SCHEMA aan.",
+        examples=[
+            OpenApiExample(
+                "Create schema",
+                value={
+                    "naam": "parkeervergunning-verbruiksobject",
+                    "schema": {
+                        "type": "object",
+                        "properties": {"uren": {"type": "number"}},
+                        "required": ["uren"],
+                    },
+                },
+                request_only=True,
+            ),
+        ],
+    ),
+    update=extend_schema(
+        summary="Werk een SCHEMA in zijn geheel bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Werk een SCHEMA deels bij.",
+    ),
+    destroy=extend_schema(
+        summary="Verwijder een SCHEMA.",
+    ),
+)
+class JsonSchemaViewSet(OrderedModelViewSet):
+    queryset = JsonSchema.objects.all()
+    serializer_class = JsonSchemaSerializer
+    lookup_url_kwarg = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["naam"]
