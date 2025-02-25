@@ -18,6 +18,7 @@ from ..models import ProductType, Thema, UniformeProductNaam
 from .bestand import NestedBestandSerializer
 from .externe_code import ExterneCodeSerializer, NestedExterneCodeSerializer
 from .link import NestedLinkSerializer
+from .parameter import NestedParameterSerializer, ParameterSerializer
 from .prijs import NestedPrijsSerializer, PrijsSerializer
 
 
@@ -97,6 +98,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         return requested_language if obj.has_translation(requested_language) else "nl"
 
     externe_codes = NestedExterneCodeSerializer(many=True, required=False)
+    parameters = NestedParameterSerializer(many=True, required=False)
 
     def _validate_key_value_model_keys(
         self, data_list: list[dict], unique_field: str, error_message: str
@@ -117,6 +119,13 @@ class ProductTypeSerializer(TranslatableModelSerializer):
             externe_codes,
             "naam",
             _("Er bestaat al een externe code met de naam {} voor dit ProductType."),
+        )
+
+    def validate_parameters(self, parameters: list[dict]):
+        return self._validate_key_value_model_keys(
+            parameters,
+            "naam",
+            _("Er bestaat al een parameter met de naam {} voor dit ProductType."),
         )
 
     class Meta:
@@ -142,6 +151,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         naam = validated_data.pop("naam")
         samenvatting = validated_data.pop("samenvatting")
         externe_codes = validated_data.pop("externe_codes", [])
+        parameters = validated_data.pop("parameters", [])
 
         product_type = ProductType.objects.create(**validated_data)
         product_type.themas.set(themas)
@@ -154,6 +164,10 @@ class ProductTypeSerializer(TranslatableModelSerializer):
                 externe_code | {"product_type": product_type.id}
                 for externe_code in externe_codes
             ]
+        )
+
+        self.set_parameters(
+            [parameter | {"product_type": product_type.id} for parameter in parameters]
         )
 
         product_type.set_current_language("nl")
@@ -173,6 +187,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         naam = validated_data.pop("naam", None)
         samenvatting = validated_data.pop("samenvatting", None)
         externe_codes = validated_data.pop("externe_codes", None)
+        parameters = validated_data.pop("parameters", [])
 
         instance = super().update(instance, validated_data)
 
@@ -194,6 +209,12 @@ class ProductTypeSerializer(TranslatableModelSerializer):
                 ]
             )
 
+        if parameters is not None:
+            instance.parameters.all().delete()
+            self.set_parameters(
+                [parameter | {"product_type": instance.id} for parameter in parameters]
+            )
+
         instance.set_current_language("nl")
         if naam:
             instance.naam = naam
@@ -210,6 +231,14 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         )
         externe_code_serializer.is_valid(raise_exception=True)
         externe_code_serializer.save()
+
+    def set_parameters(self, parameters: list[dict]):
+        parameter_serializer = ParameterSerializer(
+            data=parameters,
+            many=True,
+        )
+        parameter_serializer.is_valid(raise_exception=True)
+        parameter_serializer.save()
 
 
 class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
