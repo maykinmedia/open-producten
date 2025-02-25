@@ -1,6 +1,8 @@
+from django.core.validators import RegexValidator
 from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
+import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
@@ -11,6 +13,7 @@ from drf_spectacular.utils import (
 )
 from rest_framework import mixins, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import ParseError
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -41,7 +44,41 @@ from open_producten.producttypen.serializers.content import (
 from open_producten.producttypen.serializers.producttype import (
     ProductTypeTranslationSerializer,
 )
+from open_producten.utils.filters import FilterSet
 from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
+
+
+class ProductTypeFilterSet(FilterSet):
+    regex = r"^\[([^:\[\]]+):([^:\[\]]+)\]$"  # [key:value] where the key and value cannot contain `[`, `]` or `:`
+
+    externe_code = django_filters.CharFilter(
+        method="filter_by_externe_code",
+        validators=[RegexValidator(regex)],
+        help_text=_("Producttype codes uit externe omgevingen. [naam:code]"),
+    )
+
+    uniforme_product_naam = django_filters.CharFilter(
+        field_name="uniforme_product_naam__naam",
+        help_text=_("Uniforme product naam vanuit de UPL."),
+    )
+
+    def filter_by_externe_code(self, queryset, name, value):
+        values = self.request.GET.getlist(name)
+
+        for val in values:
+            value_list = val.strip("[]").split(":")
+            if len(value_list) != 2:
+                raise ParseError(_("Invalid format for externe_code query parameter."))
+
+            naam, code = value_list
+            queryset = queryset.filter(
+                externe_codes__naam=naam, externe_codes__code=code
+            )
+        return queryset
+
+    class Meta:
+        model = ProductType
+        fields = ("gepubliceerd",)
 
 
 @extend_schema_view(
@@ -56,9 +93,9 @@ from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetM
         summary="Maak een PRODUCTTYPE aan.",
         examples=[
             OpenApiExample(
-                "Create product type",
+                "Create producttype",
                 value={
-                    "uniforme_product_naam": "http://standaarden.overheid.nl/owms/terms/aanleunwoning",
+                    "uniforme_product_naam": "aanleunwoning",
                     "thema_ids": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],
                     "locatie_ids": ["235de068-a9c5-4eda-b61d-92fd7f09e9dc"],
                     "organisatie_ids": ["2c2694f1-f948-4960-8312-d51c3a0e540f"],
@@ -71,6 +108,10 @@ from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetM
                     "samenvatting": "korte samenvatting...",
                     "beschrijving": "uitgebreide beschrijving...",
                     "keywords": ["wonen"],
+                    "externe_codes": [
+                        {"naam": "ISO", "code": "123"},
+                        {"naam": "CBS", "code": "456"},
+                    ],
                 },
                 request_only=True,
             )
@@ -92,7 +133,7 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
     serializer_class = ProductTypeSerializer
     lookup_url_kwarg = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["gepubliceerd"]
+    filterset_class = ProductTypeFilterSet
 
     @extend_schema(
         summary="De vertaling van een producttype aanpassen.",

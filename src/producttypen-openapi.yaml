@@ -2152,9 +2152,15 @@ paths:
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
+        name: externe_code
+        schema:
+          type: string
+        description: Producttype codes uit externe omgevingen. [naam:code]
+      - in: query
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -2167,6 +2173,11 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+        description: Uniforme product naam vanuit de UPL.
       tags:
       - producttypen
       security:
@@ -2211,9 +2222,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
             examples:
-              CreateProductType:
+              CreateProducttype:
                 value:
-                  uniforme_product_naam: http://standaarden.overheid.nl/owms/terms/aanleunwoning
+                  uniforme_product_naam: aanleunwoning
                   thema_ids:
                   - 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   locatie_ids:
@@ -2233,7 +2244,12 @@ paths:
                   beschrijving: uitgebreide beschrijving...
                   keywords:
                   - wonen
-                summary: Create product type
+                  externe_codes:
+                  - naam: ISO
+                    code: '123'
+                  - naam: CBS
+                    code: '456'
+                summary: Create producttype
         required: true
       security:
       - tokenAuth: []
@@ -3401,6 +3417,40 @@ components:
       - content
       - id
       - taal
+    NestedExterneCode:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: De naam van het systeem van de externe producttype code.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        code:
+          type: string
+          description: De code van het producttype in het externe systeem.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - code
+      - naam
+    NestedExterneCodeRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: De naam van het systeem van de externe producttype code.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        code:
+          type: string
+          minLength: 1
+          description: De code van het producttype in het externe systeem.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - code
+      - naam
     NestedLink:
       type: object
       properties:
@@ -4068,9 +4118,8 @@ components:
       properties:
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         thema_ids:
           type: array
           items:
@@ -4108,6 +4157,10 @@ components:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
+        externe_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedExterneCodeRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4136,12 +4189,12 @@ components:
         naam:
           type: string
           minLength: 1
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
           minLength: 1
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
     PatchedThemaRequest:
       type: object
       properties:
@@ -4258,8 +4311,7 @@ components:
           readOnly: true
         uniforme_product_naam:
           type: string
-          format: uri
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         themas:
           type: array
           items:
@@ -4306,6 +4358,10 @@ components:
           type: string
           readOnly: true
           description: De huidige taal van het product type.
+        externe_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedExterneCode'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4389,9 +4445,8 @@ components:
       properties:
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         thema_ids:
           type: array
           items:
@@ -4429,6 +4484,10 @@ components:
           type: string
           minLength: 1
           description: Korte beschrijving van het product type.
+        externe_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedExterneCodeRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4466,11 +4525,11 @@ components:
           readOnly: true
         naam:
           type: string
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
       required:
       - id
       - naam
@@ -4481,12 +4540,12 @@ components:
         naam:
           type: string
           minLength: 1
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
           minLength: 1
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
       required:
       - naam
       - samenvatting

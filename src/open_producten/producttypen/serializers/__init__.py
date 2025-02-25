@@ -1,4 +1,5 @@
 from .bestand import BestandSerializer
+from .externe_code import ExterneCodeSerializer
 from .link import LinkSerializer
 from .prijs import PrijsOptieSerializer, PrijsSerializer
 from .producttype import ProductTypeActuelePrijsSerializer, ProductTypeSerializer
@@ -12,4 +13,5 @@ __all__ = [
     "PrijsOptieSerializer",
     "ProductTypeSerializer",
     "ProductTypeActuelePrijsSerializer",
+    "ExterneCodeSerializer",
 ]

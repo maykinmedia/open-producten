@@ -5,6 +5,7 @@ from ..models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    ExterneCode,
     Link,
     Prijs,
     PrijsOptie,
@@ -105,3 +106,12 @@ class ContentLabelFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ContentLabel
+
+
+class ExterneCodeFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    naam = factory.Sequence(lambda n: f"systeem {n}")
+    code = factory.Faker("word")
+
+    class Meta:
+        model = ExterneCode
