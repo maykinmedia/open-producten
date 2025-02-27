@@ -31,7 +31,7 @@ paths:
         schema:
           type: integer
       - in: query
-        name: productTypeId
+        name: product_type_id
         schema:
           type: string
           format: uuid
@@ -999,7 +999,7 @@ paths:
         schema:
           type: integer
       - in: query
-        name: productTypeId
+        name: product_type_id
         schema:
           type: string
           format: uuid
@@ -1866,7 +1866,7 @@ paths:
         schema:
           type: integer
       - in: query
-        name: productTypeId
+        name: product_type_id
         schema:
           type: string
           format: uuid
