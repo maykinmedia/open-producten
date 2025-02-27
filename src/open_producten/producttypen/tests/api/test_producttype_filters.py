@@ -3,6 +3,8 @@ from django.urls import reverse
 from rest_framework import status
 
 from open_producten.producttypen.tests.factories import (
+    ContentElementFactory,
+    ContentLabelFactory,
     ExterneCodeFactory,
     ProductTypeFactory,
     UniformeProductNaamFactory,
@@ -34,7 +36,7 @@ class TestLinkFilters(BaseApiTestCase):
         )
 
         response = self.client.get(
-            self.path + "?uniforme_product_naam=parkeervergunning"
+            self.path, {"uniforme_product_naam": "parkeervergunning"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -86,7 +88,7 @@ class TestLinkFilters(BaseApiTestCase):
         ProductTypeFactory.create(code="123")
         ProductTypeFactory.create(code="8234098q2730492873")
 
-        response = self.client.get(self.path + "?code=8234098q2730492873")
+        response = self.client.get(self.path, {"code": "8234098q2730492873"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -96,7 +98,7 @@ class TestLinkFilters(BaseApiTestCase):
         ProductTypeFactory.create(uniforme_product_naam__naam="aanbouw")
 
         response = self.client.get(
-            self.path + "?uniforme_product_naam=parkeervergunning"
+            self.path, {"uniforme_product_naam": "parkeervergunning"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -108,7 +110,7 @@ class TestLinkFilters(BaseApiTestCase):
 
         with self.subTest("NL"):
             response = self.client.get(
-                self.path + "?letter=P", headers={"Accept-Language": "nl"}
+                self.path, {"letter": "P"}, headers={"Accept-Language": "nl"}
             )
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -125,9 +127,85 @@ class TestLinkFilters(BaseApiTestCase):
             product_type_2.save()
 
             response = self.client.get(
-                self.path + "?letter=q", headers={"Accept-Language": "en"}
+                self.path, {"letter": "q"}, headers={"Accept-Language": "en"}
             )
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
             self.assertEqual(response.data["results"][0]["naam"], "qqqq")
+
+    def test_producttype_content_label_filter(self):
+        product_type = ProductTypeFactory.create()
+        element_1 = ContentElementFactory.create(product_type=product_type)
+        element_1.labels.add(ContentLabelFactory.create(naam="openingstijden"))
+        element_1.labels.add(ContentLabelFactory.create(naam="main"))
+
+        element_2 = ContentElementFactory.create(product_type=product_type)
+        element_2.labels.add(ContentLabelFactory.create(naam="stappenplan"))
+
+        path = reverse("producttype-content", args=(product_type.id,))
+
+        with self.subTest("single label filter"):
+            response = self.client.get(path, {"labels": "openingstijden"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 1)
+            self.assertEqual(response.data[0]["labels"], ["openingstijden", "main"])
+
+        with self.subTest("multiple labels same content"):
+            response = self.client.get(path, {"labels": "openingstijden,main"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 1)
+            self.assertEqual(response.data[0]["labels"], ["openingstijden", "main"])
+
+        with self.subTest("multiple labels different content"):
+            response = self.client.get(path, {"labels": "openingstijden,stappenplan"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 2)
+
+        with self.subTest("non existing label"):
+            response = self.client.get(path, {"labels": "test"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 0)
+
+    def test_producttype_content_exclude_label_filter(self):
+        product_type = ProductTypeFactory.create()
+        element_1 = ContentElementFactory.create(product_type=product_type)
+        element_1.labels.add(ContentLabelFactory.create(naam="openingstijden"))
+        element_1.labels.add(ContentLabelFactory.create(naam="main"))
+
+        element_2 = ContentElementFactory.create(product_type=product_type)
+        element_2.labels.add(ContentLabelFactory.create(naam="stappenplan"))
+
+        path = reverse("producttype-content", args=(product_type.id,))
+
+        with self.subTest("single label filter"):
+            response = self.client.get(path, {"exclude_labels": "openingstijden"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 1)
+            self.assertEqual(response.data[0]["labels"], ["stappenplan"])
+
+        with self.subTest("multiple labels same content"):
+            response = self.client.get(path, {"exclude_labels": "openingstijden,main"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 1)
+            self.assertEqual(response.data[0]["labels"], ["stappenplan"])
+
+        with self.subTest("multiple labels different content"):
+            response = self.client.get(
+                path, {"exclude_labels": "openingstijden,stappenplan"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 0)
+
+        with self.subTest("non existing label"):
+            response = self.client.get(path, {"exclude_labels": "test"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(len(response.data), 2)

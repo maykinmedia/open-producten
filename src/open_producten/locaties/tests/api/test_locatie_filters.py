@@ -16,7 +16,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(naam="Maykin Media")
         LocatieFactory.create(naam="Gemeente A")
 
-        response = self.client.get(self.path + "?naam__iexact=Maykin Media")
+        response = self.client.get(self.path, {"naam__iexact": "Maykin Media"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -25,7 +25,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(email="bob@maykinmedia.nl")
         LocatieFactory.create(email="alice@maykinmedia.nl")
 
-        response = self.client.get(self.path + "?email__iexact=Bob@MaykinMedia.nl")
+        response = self.client.get(self.path, {"email__iexact": "Bob@MaykinMedia.nl"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -34,7 +34,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(telefoonnummer="0611223344")
         LocatieFactory.create(telefoonnummer="0611223355")
 
-        response = self.client.get(self.path + "?telefoonnummer__contains=344")
+        response = self.client.get(self.path, {"telefoonnummer__contains": "344"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -43,7 +43,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(straat="Kingsfortweg")
         LocatieFactory.create(naam="Queensfortweg")
 
-        response = self.client.get(self.path + "?straat__iexact=kingsfortweg")
+        response = self.client.get(self.path, {"straat__iexact": "kingsfortweg"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -52,7 +52,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(huisnummer="132AA")
         LocatieFactory.create(huisnummer="52")
 
-        response = self.client.get(self.path + "?huisnummer__iexact=132aa")
+        response = self.client.get(self.path, {"huisnummer__iexact": "132aa"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -61,7 +61,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(postcode="1111AA")
         LocatieFactory.create(postcode="2222BB")
 
-        response = self.client.get(self.path + "?postcode=1111AA")
+        response = self.client.get(self.path, {"postcode": "1111AA"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -70,7 +70,7 @@ class TestLocatieFilters(BaseApiTestCase):
         LocatieFactory.create(stad="Amsterdam")
         LocatieFactory.create(stad="Zaandam")
 
-        response = self.client.get(self.path + "?stad=Amsterdam")
+        response = self.client.get(self.path, {"stad": "Amsterdam"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)

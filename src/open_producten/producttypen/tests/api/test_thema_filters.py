@@ -18,7 +18,7 @@ class TestThemaFilters(BaseApiTestCase):
         ThemaFactory.create(gepubliceerd=True)
         ThemaFactory.create(gepubliceerd=False)
 
-        response = self.client.get(self.path + "?gepubliceerd=true")
+        response = self.client.get(self.path, {"gepubliceerd": "true"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -27,7 +27,7 @@ class TestThemaFilters(BaseApiTestCase):
         ThemaFactory.create(naam="organisatie a")
         ThemaFactory.create(naam="organisatie b")
 
-        response = self.client.get(self.path + "?naam=organisatie b")
+        response = self.client.get(self.path, {"naam": "organisatie b"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -37,7 +37,7 @@ class TestThemaFilters(BaseApiTestCase):
         ThemaFactory.create(hoofd_thema=hoofd_thema)
         ThemaFactory.create()
 
-        response = self.client.get(self.path + "?hoofd_thema__naam=vervoer")
+        response = self.client.get(self.path, {"hoofd_thema__naam": "vervoer"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)

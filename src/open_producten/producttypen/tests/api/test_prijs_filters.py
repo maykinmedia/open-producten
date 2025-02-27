@@ -24,19 +24,19 @@ class TestPrijsFilters(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs2, bedrag=Decimal(50))
 
         with self.subTest("exact"):
-            response = self.client.get(self.path + "?prijsopties__bedrag=50")
+            response = self.client.get(self.path, {"prijsopties__bedrag": "50"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
 
         with self.subTest("lte"):
-            response = self.client.get(self.path + "?prijsopties__bedrag__lte=40")
+            response = self.client.get(self.path, {"prijsopties__bedrag__lte": "40"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
 
         with self.subTest("gte"):
-            response = self.client.get(self.path + "?prijsopties__bedrag__gte=40")
+            response = self.client.get(self.path, {"prijsopties__bedrag__gte": "40"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
@@ -47,7 +47,7 @@ class TestPrijsFilters(BaseApiTestCase):
 
         PrijsOptieFactory.create(prijs=prijs, beschrijving="spoed")
 
-        response = self.client.get(self.path + "?prijsopties__beschrijving=spoed")
+        response = self.client.get(self.path, {"prijsopties__beschrijving": "spoed"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -57,19 +57,19 @@ class TestPrijsFilters(BaseApiTestCase):
         PrijsFactory.create(actief_vanaf=date(2025, 6, 7))
 
         with self.subTest("exact"):
-            response = self.client.get(self.path + "?actief_vanaf=2024-06-07")
+            response = self.client.get(self.path, {"actief_vanaf": "2024-06-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
 
         with self.subTest("lte"):
-            response = self.client.get(self.path + "?actief_vanaf__lte=2024-07-07")
+            response = self.client.get(self.path, {"actief_vanaf__lte": "2024-07-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
 
         with self.subTest("gte"):
-            response = self.client.get(self.path + "?actief_vanaf__gte=2025-04-07")
+            response = self.client.get(self.path, {"actief_vanaf__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
@@ -78,7 +78,9 @@ class TestPrijsFilters(BaseApiTestCase):
         PrijsFactory.create(product_type__code="123")
         PrijsFactory.create(product_type__code="8234098q2730492873")
 
-        response = self.client.get(self.path + "?product_type__code=8234098q2730492873")
+        response = self.client.get(
+            self.path, {"product_type__code": "8234098q2730492873"}
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -100,7 +102,7 @@ class TestPrijsFilters(BaseApiTestCase):
         PrijsFactory.create(product_type__uniforme_product_naam__naam="aanbouw")
 
         response = self.client.get(
-            self.path + "?uniforme_product_naam=parkeervergunning"
+            self.path, {"uniforme_product_naam": "parkeervergunning"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
