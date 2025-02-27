@@ -18,7 +18,7 @@ class TestLinkFilters(BaseApiTestCase):
         LinkFactory.create(naam="organisatie a")
         LinkFactory.create(naam="organisatie b")
 
-        response = self.client.get(self.path + "?naam=organisatie b")
+        response = self.client.get(self.path, {"naam": "organisatie b"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -27,7 +27,7 @@ class TestLinkFilters(BaseApiTestCase):
         LinkFactory.create(naam="organisatie a")
         LinkFactory.create(naam="organisatie b")
 
-        response = self.client.get(self.path + "?naam__contains=atie b")
+        response = self.client.get(self.path, {"naam__contains": "atie b"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -36,7 +36,7 @@ class TestLinkFilters(BaseApiTestCase):
         LinkFactory.create(url="https://google.com")
         LinkFactory.create(url="https://maykinmedia.nl")
 
-        response = self.client.get(self.path + "?url=https://maykinmedia.nl")
+        response = self.client.get(self.path, {"url": "https://maykinmedia.nl"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -45,7 +45,7 @@ class TestLinkFilters(BaseApiTestCase):
         LinkFactory.create(url="https://google.com")
         LinkFactory.create(url="https://maykinmedia.nl")
 
-        response = self.client.get(self.path + "?url__contains=maykin")
+        response = self.client.get(self.path, {"url__contains": "maykin"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -54,7 +54,9 @@ class TestLinkFilters(BaseApiTestCase):
         LinkFactory.create(product_type__code="123")
         LinkFactory.create(product_type__code="8234098q2730492873")
 
-        response = self.client.get(self.path + "?product_type__code=8234098q2730492873")
+        response = self.client.get(
+            self.path, {"product_type__code": "8234098q2730492873"}
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -76,7 +78,7 @@ class TestLinkFilters(BaseApiTestCase):
         LinkFactory.create(product_type__uniforme_product_naam__naam="aanbouw")
 
         response = self.client.get(
-            self.path + "?uniforme_product_naam=parkeervergunning"
+            self.path, {"uniforme_product_naam": "parkeervergunning"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

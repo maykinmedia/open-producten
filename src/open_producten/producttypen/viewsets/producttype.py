@@ -13,7 +13,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 
-from open_producten.producttypen.models import ProductType
+from open_producten.producttypen.models import ContentElement, ProductType
 from open_producten.producttypen.serializers import (
     ProductTypeActuelePrijsSerializer,
     ProductTypeSerializer,
@@ -79,6 +79,26 @@ class ProductTypeFilterSet(FilterSet):
             "code": ["exact"],
             "gepubliceerd": ["exact"],
         }
+
+
+class ContentFilterSet(FilterSet):
+    labels = django_filters.BaseInFilter(
+        field_name="labels__naam",
+        lookup_expr="in",
+        help_text=_("De labels van dit content element"),
+    )
+
+    exclude_labels = django_filters.BaseInFilter(
+        field_name="labels__naam",
+        lookup_expr="in",
+        exclude=True,
+        help_text=_("De labels van dit content element"),
+    )
+
+
+class Meta:
+    model = ContentElement
+    fields = ("label", "exclude_labels")
 
 
 @extend_schema_view(
@@ -205,6 +225,24 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
         "content",
         summary="De CONTENT van een PRODUCTTYPE opvragen.",
         description="Geeft de content van een PRODUCTTYPE terug.",
+        parameters=[
+            OpenApiParameter(
+                name="labels",
+                type={"type": "array", "items": {"type": "string"}},
+                location=OpenApiParameter.QUERY,
+                description="Filter content op basis van de labels.",
+                required=False,
+                explode=False,
+            ),
+            OpenApiParameter(
+                name="exclude_labels",
+                type={"type": "array", "items": {"type": "string"}},
+                location=OpenApiParameter.QUERY,
+                description="Sluit content met bepaalde labels uit.",
+                required=False,
+                explode=False,
+            ),
+        ],
     )
     @action(
         detail=True,
@@ -215,6 +253,11 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
         product_type = self.get_object()
 
         queryset = product_type.content_elementen
+
+        # Apply filtering
+        filterset = ContentFilterSet(request.GET, queryset=queryset)
+        if filterset.is_valid():
+            queryset = filterset.qs.distinct()
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

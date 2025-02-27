@@ -18,7 +18,7 @@ class TestContactFilters(BaseApiTestCase):
         ContactFactory.create(rol="manager")
         ContactFactory.create(rol="medewerker")
 
-        response = self.client.get(self.path + "?rol=manager")
+        response = self.client.get(self.path, {"rol": "manager"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -27,7 +27,7 @@ class TestContactFilters(BaseApiTestCase):
         ContactFactory.create(telefoonnummer="0611223344")
         ContactFactory.create(telefoonnummer="0611223355")
 
-        response = self.client.get(self.path + "?telefoonnummer__contains=344")
+        response = self.client.get(self.path, {"telefoonnummer__contains": "344"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -36,7 +36,7 @@ class TestContactFilters(BaseApiTestCase):
         ContactFactory.create(email="bob@maykinmedia.nl")
         ContactFactory.create(email="alice@maykinmedia.nl")
 
-        response = self.client.get(self.path + "?email__iexact=Bob@MaykinMedia.nl")
+        response = self.client.get(self.path, {"email__iexact": "Bob@MaykinMedia.nl"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -45,7 +45,7 @@ class TestContactFilters(BaseApiTestCase):
         ContactFactory.create(achternaam="de Vries")
         ContactFactory.create(achternaam="Jansen")
 
-        response = self.client.get(self.path + "?achternaam=Jansen")
+        response = self.client.get(self.path, {"achternaam": "Jansen"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -54,7 +54,7 @@ class TestContactFilters(BaseApiTestCase):
         ContactFactory.create(voornaam="Bob")
         ContactFactory.create(voornaam="Alice")
 
-        response = self.client.get(self.path + "?voornaam=Bob")
+        response = self.client.get(self.path, {"voornaam": "Bob"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -73,7 +73,7 @@ class TestContactFilters(BaseApiTestCase):
         ContactFactory.create(organisatie__naam="Maykin Media")
         ContactFactory.create(organisatie__naam="Gemeente A")
 
-        response = self.client.get(self.path + "?organisatie__naam=Maykin Media")
+        response = self.client.get(self.path, {"organisatie__naam": "Maykin Media"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
