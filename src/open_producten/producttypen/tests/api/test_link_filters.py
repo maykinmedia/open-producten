@@ -83,3 +83,14 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+
+    def test_product_type_naam_filter(self):
+        LinkFactory.create(product_type__naam="parkeervergunning")
+        LinkFactory.create(product_type__naam="aanbouw")
+
+        response = self.client.get(
+            self.path, {"product_type__naam": "parkeervergunning"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)

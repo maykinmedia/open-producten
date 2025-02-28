@@ -14,6 +14,7 @@ from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 
 from open_producten.producttypen.models import ContentElement, ProductType
+from open_producten.producttypen.models.producttype import ProductStateChoices
 from open_producten.producttypen.serializers import (
     ProductTypeActuelePrijsSerializer,
     ProductTypeSerializer,
@@ -24,7 +25,12 @@ from open_producten.producttypen.serializers.content import (
 from open_producten.producttypen.serializers.producttype import (
     ProductTypeTranslationSerializer,
 )
-from open_producten.utils.filters import FilterSet
+from open_producten.utils.filters import (
+    CharArrayFilter,
+    ChoiceArrayFilter,
+    FilterSet,
+    TranslationFilter,
+)
 from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
 
 
@@ -42,8 +48,9 @@ class ProductTypeFilterSet(FilterSet):
         help_text=_("Uniforme product naam vanuit de UPL."),
     )
 
-    letter = django_filters.CharFilter(
-        method="filter_letter",
+    letter = TranslationFilter(
+        field_name="naam",
+        lookup_expr="istartswith",
         help_text=_(
             _(
                 "Filter op de eerste letter van de naam van het producttype (in de meegegeven `Accept-Language` taal)."
@@ -51,13 +58,18 @@ class ProductTypeFilterSet(FilterSet):
         ),
     )
 
-    def filter_letter(self, queryset, name, value):
-        if len(value) != 1:  # Ensure the value is exactly one character
-            raise ParseError(_("de 'letter' filter moet 1 teken lang zijn."))
-        return queryset.filter(
-            translations__naam__istartswith=value,
-            translations__language_code=self.request.LANGUAGE_CODE,
-        )
+    keywords = CharArrayFilter(
+        field_name="keywords",
+        lookup_expr="overlap",
+        help_text=_("Lijst van keywords waarop kan worden gezocht."),
+    )
+
+    toegestane_statussen = ChoiceArrayFilter(
+        field_name="toegestane_statussen",
+        lookup_expr="overlap",
+        choices=ProductStateChoices.choices,
+        help_text=_("toegestane statussen voor producten van dit type."),
+    )
 
     def filter_by_externe_code(self, queryset, name, value):
         values = self.request.GET.getlist(name)
@@ -78,6 +90,8 @@ class ProductTypeFilterSet(FilterSet):
         fields = {
             "code": ["exact"],
             "gepubliceerd": ["exact"],
+            "aanmaak_datum": ["exact", "gte", "lte"],
+            "update_datum": ["exact", "gte", "lte"],
         }
 
 
@@ -86,6 +100,7 @@ class ContentFilterSet(FilterSet):
         field_name="labels__naam",
         lookup_expr="in",
         help_text=_("De labels van dit content element"),
+        distinct=True,
     )
 
     exclude_labels = django_filters.BaseInFilter(
@@ -257,7 +272,7 @@ class ProductTypeViewSet(TranslatableViewSetMixin, OrderedModelViewSet):
         # Apply filtering
         filterset = ContentFilterSet(request.GET, queryset=queryset)
         if filterset.is_valid():
-            queryset = filterset.qs.distinct()
+            queryset = filterset.qs
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

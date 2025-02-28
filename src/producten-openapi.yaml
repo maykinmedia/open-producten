@@ -19,6 +19,24 @@ paths:
       summary: Alle PRODUCTEN opvragen.
       parameters:
       - in: query
+        name: aanmaak_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
         name: eind_datum
         schema:
           type: string
@@ -78,6 +96,21 @@ paths:
         schema:
           type: integer
       - in: query
+        name: prijs
+        schema:
+          type: number
+        description: De prijs van het product.
+      - in: query
+        name: prijs__gte
+        schema:
+          type: number
+        description: De prijs van het product.
+      - in: query
+        name: prijs__lte
+        schema:
+          type: number
+        description: De prijs van het product.
+      - in: query
         name: product_type__code
         schema:
           type: string
@@ -87,6 +120,11 @@ paths:
         schema:
           type: string
           format: uuid
+      - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
       - in: query
         name: start_datum
         schema:
@@ -135,6 +173,25 @@ paths:
         name: uniforme_product_naam
         schema:
           type: string
+        description: Uniforme product naam vanuit de UPL.
+      - in: query
+        name: update_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
       tags:
       - producten
       security:

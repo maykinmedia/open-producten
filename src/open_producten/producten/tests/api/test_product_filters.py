@@ -1,8 +1,10 @@
 from datetime import date
+from decimal import Decimal
 from uuid import uuid4
 
 from django.urls import reverse
 
+from freezegun import freeze_time
 from rest_framework import status
 
 from open_producten.producten.models.product import PrijsFrequentieChoices
@@ -44,6 +46,28 @@ class TestProductFilters(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
+    def test_prijs_filter(self):
+        ProductFactory.create(prijs=Decimal("10"))
+        ProductFactory.create(prijs=Decimal("20.99"))
+
+        with self.subTest("exact"):
+            response = self.client.get(self.path, {"prijs": "20.99"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("lte"):
+            response = self.client.get(self.path, {"prijs__lte": "20"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("gte"):
+            response = self.client.get(self.path, {"prijs__gte": "20"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
     def test_product_type_code_filter(self):
         ProductFactory.create(product_type__code="123")
         ProductFactory.create(product_type__code="8234098q2730492873")
@@ -74,6 +98,17 @@ class TestProductFilters(BaseApiTestCase):
         ProductFactory.create(product_type__id=uuid4())
 
         response = self.client.get(self.path + f"?product_type__id={product_type_id}")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_product_type_naam_filter(self):
+        ProductFactory.create(product_type__naam="parkeervergunning")
+        ProductFactory.create(product_type__naam="aanbouw")
+
+        response = self.client.get(
+            self.path, {"product_type__naam": "parkeervergunning"}
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -118,6 +153,58 @@ class TestProductFilters(BaseApiTestCase):
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"eind_datum__gte": "2025-04-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+    def test_aanmaak_datum_filter(self):
+        with freeze_time("2024-06-07"):
+            ProductFactory.create()
+        with freeze_time("2025-06-07"):
+            ProductFactory.create()
+
+        with self.subTest("exact"):
+            response = self.client.get(
+                self.path, {"aanmaak_datum": "2024-06-07T00:00:00+00:00"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("lte"):
+            response = self.client.get(self.path, {"aanmaak_datum__lte": "2024-07-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("gte"):
+            response = self.client.get(self.path, {"aanmaak_datum__gte": "2025-04-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+    def test_update_datum_filter(self):
+        with freeze_time("2024-06-07"):
+            ProductFactory.create()
+        with freeze_time("2025-06-07"):
+            ProductFactory.create()
+
+        with self.subTest("exact"):
+            response = self.client.get(
+                self.path, {"update_datum": "2024-06-07T00:00:00+00:00"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("lte"):
+            response = self.client.get(self.path, {"update_datum__lte": "2024-07-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("gte"):
+            response = self.client.get(self.path, {"update_datum__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
