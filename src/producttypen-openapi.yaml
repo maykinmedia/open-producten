@@ -22,6 +22,7 @@ paths:
         name: naam__contains
         schema:
           type: string
+        description: Naam van het bestand.
       - name: page
         required: false
         in: query
@@ -45,9 +46,15 @@ paths:
           type: string
           format: uuid
       - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
         name: uniforme_product_naam
         schema:
           type: string
+        description: Uniforme product naam vanuit de UPL.
       tags:
       - bestanden
       security:
@@ -1065,9 +1072,15 @@ paths:
           type: string
           format: uuid
       - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
         name: uniforme_product_naam
         schema:
           type: string
+        description: Uniforme product naam vanuit de UPL.
       - in: query
         name: url
         schema:
@@ -2049,9 +2062,15 @@ paths:
           type: string
           format: uuid
       - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
         name: uniforme_product_naam
         schema:
           type: string
+        description: Uniforme product naam vanuit de UPL.
       tags:
       - prijzen
       security:
@@ -2333,6 +2352,24 @@ paths:
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
+        name: aanmaak_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
         name: code
         schema:
           type: string
@@ -2347,6 +2384,15 @@ paths:
         schema:
           type: boolean
         description: Geeft aan of het object getoond kan worden.
+      - in: query
+        name: keywords
+        schema:
+          type: array
+          items:
+            type: string
+        description: Lijst van keywords waarop kan worden gezocht.
+        explode: false
+        style: form
       - in: query
         name: letter
         schema:
@@ -2366,10 +2412,66 @@ paths:
         schema:
           type: integer
       - in: query
+        name: toegestane_statussen
+        schema:
+          type: array
+          items:
+            type: array
+            items:
+              enum:
+              - gereed
+              - actief
+              - ingetrokken
+              - geweigerd
+              - verlopen
+              type: string
+              description: |-
+                * `gereed` - Gereed
+                * `actief` - Actief
+                * `ingetrokken` - Ingetrokken
+                * `geweigerd` - Geweigerd
+                * `verlopen` - Verlopen
+            enum:
+            - actief
+            - gereed
+            - geweigerd
+            - ingetrokken
+            - initieel
+            - verlopen
+        description: |-
+          toegestane statussen voor producten van dit type.
+
+          * `initieel` - Initieel
+          * `gereed` - Gereed
+          * `actief` - Actief
+          * `ingetrokken` - Ingetrokken
+          * `geweigerd` - Geweigerd
+          * `verlopen` - Verlopen
+        explode: false
+        style: form
+      - in: query
         name: uniforme_product_naam
         schema:
           type: string
         description: Uniforme product naam vanuit de UPL.
+      - in: query
+        name: update_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
       tags:
       - producttypen
       security:
@@ -2712,6 +2814,14 @@ paths:
       description: Geeft de content van een PRODUCTTYPE terug.
       summary: De CONTENT van een PRODUCTTYPE opvragen.
       parameters:
+      - in: query
+        name: exclude_labels
+        schema:
+          type: array
+          items:
+            type: string
+        description: Sluit content met bepaalde labels uit.
+        explode: false
       - in: path
         name: id
         schema:
@@ -2719,6 +2829,14 @@ paths:
           format: uuid
         description: A UUID string identifying this Product type.
         required: true
+      - in: query
+        name: labels
+        schema:
+          type: array
+          items:
+            type: string
+        description: Filter content op basis van de labels.
+        explode: false
       tags:
       - producttypen
       security:
@@ -2955,6 +3073,24 @@ paths:
       summary: Alle THEMA'S opvragen.
       parameters:
       - in: query
+        name: aanmaak_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
         name: gepubliceerd
         schema:
           type: boolean
@@ -2986,6 +3122,24 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: update_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
       tags:
       - themas
       security:

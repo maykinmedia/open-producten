@@ -1,6 +1,8 @@
 from django.urls import reverse
 
+from freezegun import freeze_time
 from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 
 from open_producten.producttypen.tests.factories import (
     ContentElementFactory,
@@ -209,3 +211,177 @@ class TestLinkFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(len(response.data), 2)
+
+    def test_aanmaak_datum_filter(self):
+        with freeze_time("2024-06-07"):
+            ProductTypeFactory.create()
+        with freeze_time("2025-06-07"):
+            ProductTypeFactory.create()
+
+        with self.subTest("exact"):
+            response = self.client.get(
+                self.path, {"aanmaak_datum": "2024-06-07T00:00:00+00:00"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("lte"):
+            response = self.client.get(self.path, {"aanmaak_datum__lte": "2024-07-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("gte"):
+            response = self.client.get(self.path, {"aanmaak_datum__gte": "2025-04-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+    def test_update_datum_filter(self):
+        with freeze_time("2024-06-07"):
+            ProductTypeFactory.create()
+        with freeze_time("2025-06-07"):
+            ProductTypeFactory.create()
+
+        with self.subTest("exact"):
+            response = self.client.get(
+                self.path, {"update_datum": "2024-06-07T00:00:00+00:00"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("lte"):
+            response = self.client.get(self.path, {"update_datum__lte": "2024-07-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("gte"):
+            response = self.client.get(self.path, {"update_datum__gte": "2025-04-07"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+    def test_keywords_filter(self):
+        ProductTypeFactory.create(keywords=["test", "wonen", "jongeren"])
+        ProductTypeFactory.create(
+            keywords=[
+                "test",
+                "ouderen",
+            ]
+        )
+
+        with self.subTest("single keyword"):
+            response = self.client.get(self.path, {"keywords": "wonen"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("multiple keywords same producttype"):
+            response = self.client.get(self.path, {"keywords": "wonen,jongeren"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("multiple keywords different producttypes"):
+            response = self.client.get(self.path, {"keywords": "jongeren,ouderen"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 2)
+
+        with self.subTest("overlap"):
+            response = self.client.get(self.path, {"keywords": "test,jongeren,ouderen"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 2)
+
+        with self.subTest("duplicate keywords single producttype"):
+            response = self.client.get(self.path, {"keywords": "test,test"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 2)
+
+        with self.subTest("duplicate keywords single producttype"):
+            response = self.client.get(self.path, {"keywords": "jongeren,jongeren"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("non existing keyword"):
+            response = self.client.get(self.path, {"keywords": "abc"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 0)
+
+    def test_toegestane_statussen_filter(self):
+        ProductTypeFactory.create(toegestane_statussen=["actief", "gereed", "verlopen"])
+        ProductTypeFactory.create(
+            toegestane_statussen=[
+                "gereed",
+                "geweigerd",
+            ]
+        )
+
+        with self.subTest("single status"):
+            response = self.client.get(self.path, {"toegestane_statussen": "actief"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("multiple statuses same content"):
+            response = self.client.get(
+                self.path, {"toegestane_statussen": "actief,verlopen"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("multiple statuses different producttypes"):
+            response = self.client.get(
+                self.path, {"toegestane_statussen": "actief,geweigerd"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 2)
+
+        with self.subTest("overlap"):
+            response = self.client.get(
+                self.path, {"toegestane_statussen": "actief,gereed,geweigerd"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 2)
+
+        with self.subTest("duplicate status multiple producttypes"):
+            response = self.client.get(
+                self.path, {"toegestane_statussen": "gereed,gereed"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 2)
+
+        with self.subTest("duplicate status single producttype"):
+            response = self.client.get(
+                self.path, {"toegestane_statussen": "actief,actief"}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["count"], 1)
+
+        with self.subTest("non existing status"):
+            response = self.client.get(self.path, {"toegestane_statussen": "abc"})
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                response.data,
+                {
+                    "toegestane_statussen": [
+                        ErrorDetail(
+                            string="Selecteer een geldige keuze. abc is geen beschikbare keuze.",
+                            code="invalid_choice",
+                        )
+                    ]
+                },
+            )

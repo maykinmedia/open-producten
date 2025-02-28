@@ -20,6 +20,8 @@ class ThemaFilterSet(FilterSet):
             "naam": ["exact"],
             "hoofd_thema__naam": ["exact"],
             "hoofd_thema__id": ["exact"],
+            "aanmaak_datum": ["exact", "gte", "lte"],
+            "update_datum": ["exact", "gte", "lte"],
         }
 
 

@@ -1,15 +1,25 @@
+from django.utils.translation import gettext_lazy as _
+
 import django_filters
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
 
 from open_producten.producttypen.models import Link
 from open_producten.producttypen.serializers import LinkSerializer
-from open_producten.utils.filters import FilterSet
+from open_producten.utils.filters import FilterSet, TranslationFilter
 from open_producten.utils.views import OrderedModelViewSet
 
 
 class LinkFilterSet(FilterSet):
     uniforme_product_naam = django_filters.CharFilter(
-        field_name="product_type__uniforme_product_naam__naam", lookup_expr="exact"
+        field_name="product_type__uniforme_product_naam__naam",
+        lookup_expr="exact",
+        help_text=_("Uniforme product naam vanuit de UPL."),
+    )
+
+    product_type__naam = TranslationFilter(
+        field_name="product_type__naam",
+        lookup_expr="exact",
+        help_text=_("Naam van het product type."),
     )
 
     class Meta:
