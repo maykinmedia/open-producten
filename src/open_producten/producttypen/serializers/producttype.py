@@ -88,6 +88,7 @@ class NestedThemaSerializer(serializers.ModelSerializer):
                     {
                         "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                         "organisatie": {
+                            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                             "naam": "Maykin Media",
                             "code": "org-1234",
                             "email": "info@maykinmedia.nl",
@@ -137,6 +138,17 @@ class NestedThemaSerializer(serializers.ModelSerializer):
                     {"naam": "ISO", "code": "123"},
                     {"naam": "CBS", "code": "456"},
                 ],
+                "parameters": [
+                    {"naam": "doelgroep", "waarde": "inwoners"},
+                ],
+                "verbruiksobject_schema": {
+                    "naam": "verbruik_schema",
+                    "schema": {
+                        "type": "object",
+                        "properties": {"uren": {"type": "number"}},
+                        "required": ["uren"],
+                    },
+                },
                 "gepubliceerd": True,
                 "aanmaak_datum": "2019-08-24T14:15:22Z",
                 "update_datum": "2019-08-24T14:15:22Z",
@@ -166,6 +178,10 @@ class NestedThemaSerializer(serializers.ModelSerializer):
                     {"naam": "ISO", "code": "123"},
                     {"naam": "CBS", "code": "456"},
                 ],
+                "parameters": [
+                    {"naam": "doelgroep", "waarde": "inwoners"},
+                ],
+                "verbruiksobject_schema_naam": "verbruik_schema",
             },
             request_only=True,
         ),

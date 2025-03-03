@@ -50,7 +50,6 @@ class PrijsFilterSet(FilterSet):
     ),
     partial_update=extend_schema(
         summary="Werk een PRIJS deels bij.",
-        description="Als prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",  # TODO EXPLAIN OPTIE UPDATE
     ),
     destroy=extend_schema(
         summary="Verwijder een PRIJS.",

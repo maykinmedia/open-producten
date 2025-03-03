@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from open_producten.producten.models import Product
@@ -12,6 +13,54 @@ from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.serializers.thema import NestedProductTypeSerializer
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "product response",
+            value={
+                "id": "da0df49a-cd71-4e24-9bae-5be8b01f2c36",
+                "url": "https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36",
+                "start_datum": "2024-12-01",
+                "eind_datum": "2026-12-01",
+                "aanmaak_datum": "2019-08-24T14:15:22Z",
+                "update_datum": "2019-08-24T14:15:22Z",
+                "product_type": {
+                    "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                    "code": "129380-c21231",
+                    "keywords": ["auto"],
+                    "uniforme_product_naam": "parkeervergunning",
+                    "toegestane_statussen": ["gereed"],
+                    "gepubliceerd": True,
+                    "aanmaak_datum": "2019-08-24T14:15:22Z",
+                    "update_datum": "2019-08-24T14:15:22Z",
+                },
+                "gepubliceerd": False,
+                "bsn": "111222333",
+                "status": "gereed",
+                "prijs": "20.20",
+                "frequentie": "eenmalig",
+                "verbruiksobject": {"uren": 130},
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "product request",
+            value={
+                "start_datum": "2024-12-01",
+                "eind_datum": "2026-12-01",
+                "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                "gepubliceerd": False,
+                "bsn": "111222333",
+                "status": "gereed",
+                "prijs": "20.20",
+                "frequentie": "eenmalig",
+                "verbruiksobject": {"uren": 130},
+            },
+            media_type="multipart/form-data",
+            request_only=True,
+        ),
+    ],
+)
 class ProductSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="product-detail")
     product_type = NestedProductTypeSerializer(read_only=True)

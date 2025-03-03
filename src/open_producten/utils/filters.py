@@ -29,6 +29,12 @@ class ChoiceArrayFilter(django_filters.BaseInFilter, django_filters.ChoiceFilter
 
 
 class TranslationFilter(django_filters.CharFilter):
+    """
+    Simplifies parler field translations.
+
+    ProductType.naam -> .translations__naam
+    Product.product_type.naam -> product_type__translations__naam
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

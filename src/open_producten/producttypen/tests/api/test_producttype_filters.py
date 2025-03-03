@@ -8,13 +8,15 @@ from open_producten.producttypen.tests.factories import (
     ContentElementFactory,
     ContentLabelFactory,
     ExterneCodeFactory,
+    JsonSchemaFactory,
+    ParameterFactory,
     ProductTypeFactory,
     UniformeProductNaamFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
 
 
-class TestLinkFilters(BaseApiTestCase):
+class TestProductTypeFilters(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
@@ -83,6 +85,56 @@ class TestLinkFilters(BaseApiTestCase):
 
     def test_externe_code_filter_with_invalid_characters(self):
         response = self.client.get(self.path, {"externe_code": "[a[b:[b:a]]"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_parameter_filter(self):
+        product_type_1 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="inwoners", product_type=product_type_1
+        )
+
+        product_type_2 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="bedrijven", product_type=product_type_2
+        )
+
+        response = self.client.get(self.path, {"parameter": "[doelgroep:inwoners]"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_multiple_parameter_filters(self):
+        product_type_1 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="inwoners", product_type=product_type_1
+        )
+        ParameterFactory(naam="buurt", waarde="kwartier", product_type=product_type_1)
+
+        product_type_2 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="bedrijven", product_type=product_type_2
+        )
+
+        response = self.client.get(
+            self.path, {"parameter": ("[doelgroep:inwoners]", "[buurt:kwartier]")}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_parameter_filter_without_brackets(self):
+        response = self.client.get(self.path, {"parameter": "abc"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_parameter_filter_without_key_value(self):
+        response = self.client.get(self.path, {"parameter": "[:]"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_parameter_filter_with_invalid_characters(self):
+        response = self.client.get(self.path, {"parameter": "[a[b:[b:a]]"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -385,3 +437,25 @@ class TestLinkFilters(BaseApiTestCase):
                     ]
                 },
             )
+
+    def test_verbruiksobject_schema_filter(self):
+        schema = {
+            "type": "object",
+            "properties": {"naam": {"type": "string"}},
+            "required": ["naam"],
+        }
+        ProductTypeFactory.create(
+            verbruiksobject_schema=JsonSchemaFactory(naam="test-schema", schema=schema)
+        )
+        ProductTypeFactory.create(
+            verbruiksobject_schema=JsonSchemaFactory(
+                naam="parkeer-verbruik-schema", schema=schema
+            )
+        )
+
+        response = self.client.get(
+            self.path, {"verbruiksobject_schema__naam": "parkeer-verbruik-schema"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)

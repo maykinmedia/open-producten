@@ -19,7 +19,7 @@ class TestOrganisatie(BaseApiTestCase):
         self.data = {
             "naam": "locatie",
             "code": "ORG-123",
-            "postcode": "1111 AA",
+            "postcode": "1111AA",
             "stad": "Amsterdam",
         }
         self.organisatie = OrganisatieFactory.create()

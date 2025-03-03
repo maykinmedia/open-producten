@@ -27,7 +27,7 @@ class LocatieFilterSet(FilterSet):
         description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
-        summary="Een specifiek LOCATIE opvragen.",
+        summary="Een specifieke LOCATIE opvragen.",
     ),
     create=extend_schema(
         summary="Maak een LOCATIE aan.",

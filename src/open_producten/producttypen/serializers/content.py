@@ -20,6 +20,7 @@ from open_producten.producttypen.models import ContentElement, ContentLabel, Pro
                 "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                 "labels": ["openingstijden"],
                 "content": "ma-vr 8:00-17:00",
+                "taal": "nl",
                 "product_type_id": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
             },
             response_only=True,

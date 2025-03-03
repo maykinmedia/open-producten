@@ -38,6 +38,12 @@ class ProductTypeFilterSet(FilterSet):
         help_text=_("Producttype codes uit externe omgevingen. [naam:code]"),
     )
 
+    parameter = django_filters.CharFilter(
+        method="filter_by_parameter",
+        validators=[RegexValidator(regex)],
+        help_text=_("Producttype parameters. [naam:waarde]"),
+    )
+
     uniforme_product_naam = django_filters.CharFilter(
         field_name="uniforme_product_naam__naam",
         help_text=_("Uniforme product naam vanuit de UPL."),
@@ -80,6 +86,18 @@ class ProductTypeFilterSet(FilterSet):
             )
         return queryset
 
+    def filter_by_parameter(self, queryset, name, value):
+        values = self.request.GET.getlist(name)
+
+        for val in values:
+            value_list = val.strip("[]").split(":")
+            if len(value_list) != 2:
+                raise ParseError(_("Invalid format for parameter query parameter."))
+
+            naam, waarde = value_list
+            queryset = queryset.filter(parameters__naam=naam, parameters__waarde=waarde)
+        return queryset
+
     class Meta:
         model = ProductType
         fields = {
@@ -87,6 +105,7 @@ class ProductTypeFilterSet(FilterSet):
             "gepubliceerd": ["exact"],
             "aanmaak_datum": ["exact", "gte", "lte"],
             "update_datum": ["exact", "gte", "lte"],
+            "verbruiksobject_schema__naam": ["exact"],
         }
 
 

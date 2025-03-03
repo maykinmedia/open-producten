@@ -28,7 +28,7 @@ class OrganisatieFilterSet(FilterSet):
         description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
-        summary="Een specifiek ORGANISATIE opvragen.",
+        summary="Een specifieke ORGANISATIE opvragen.",
     ),
     create=extend_schema(
         summary="Maak een ORGANISATIE aan.",
