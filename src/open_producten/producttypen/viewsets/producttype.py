@@ -3,12 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 import django_filters
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (
-    OpenApiExample,
-    OpenApiParameter,
-    extend_schema,
-    extend_schema_view,
-)
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
@@ -126,31 +121,6 @@ class Meta:
     ),
     create=extend_schema(
         summary="Maak een PRODUCTTYPE aan.",
-        examples=[
-            OpenApiExample(
-                "Create producttype",
-                value={
-                    "uniforme_product_naam": "aanleunwoning",
-                    "thema_ids": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],
-                    "locatie_ids": ["235de068-a9c5-4eda-b61d-92fd7f09e9dc"],
-                    "organisatie_ids": ["2c2694f1-f948-4960-8312-d51c3a0e540f"],
-                    "contact_ids": ["6863d699-460d-4c1e-9297-16812d75d8ca"],
-                    "gepubliceerd": False,
-                    "naam": "Aanleunwoning",
-                    "code": "PT-12345",
-                    "toegestane_statussen": ["gereed", "actief"],
-                    "interne_opmerkingen": "interne opmerkingen...",
-                    "samenvatting": "korte samenvatting...",
-                    "beschrijving": "uitgebreide beschrijving...",
-                    "keywords": ["wonen"],
-                    "externe_codes": [
-                        {"naam": "ISO", "code": "123"},
-                        {"naam": "CBS", "code": "456"},
-                    ],
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een PRODUCTTYPE in zijn geheel bij.",

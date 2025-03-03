@@ -1,7 +1,7 @@
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from open_producten.locaties.models import Locatie
-from open_producten.locaties.serializers.locatie import LocatieSerializer
+from open_producten.locaties.serializers import LocatieSerializer
 from open_producten.utils.filters import FilterSet
 from open_producten.utils.views import OrderedModelViewSet
 
@@ -31,21 +31,6 @@ class LocatieFilterSet(FilterSet):
     ),
     create=extend_schema(
         summary="Maak een LOCATIE aan.",
-        examples=[
-            OpenApiExample(
-                "Create locatie",
-                value={
-                    "naam": "Maykin Media",
-                    "email": "info@maykinmedia.nl",
-                    "telefoonnummer": "+310207530523",
-                    "straat": "Kingsfortweg",
-                    "huisnummer": "151",
-                    "postcode": "1043GR",
-                    "stad": "Amsterdam",
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een LOCATIE in zijn geheel bij.",

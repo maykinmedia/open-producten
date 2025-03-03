@@ -1,10 +1,5 @@
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import (
-    OpenApiExample,
-    OpenApiParameter,
-    extend_schema,
-    extend_schema_view,
-)
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
@@ -24,17 +19,6 @@ from open_producten.utils.views import TranslatableViewSetMixin
     ),
     create=extend_schema(
         summary="Maak een CONTENTELEMENT aan.",
-        examples=[
-            OpenApiExample(
-                "Create content",
-                value={
-                    "labels": ["openingstijden"],
-                    "content": "ma-vr 8:00-17:00",
-                    "product_type_id": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een CONTENTELEMENT in zijn geheel bij.",

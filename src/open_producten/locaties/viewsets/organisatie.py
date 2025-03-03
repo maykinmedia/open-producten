@@ -1,7 +1,7 @@
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from open_producten.locaties.models import Organisatie
-from open_producten.locaties.serializers.locatie import OrganisatieSerializer
+from open_producten.locaties.serializers import OrganisatieSerializer
 from open_producten.utils.filters import FilterSet
 from open_producten.utils.views import OrderedModelViewSet
 
@@ -32,22 +32,6 @@ class OrganisatieFilterSet(FilterSet):
     ),
     create=extend_schema(
         summary="Maak een ORGANISATIE aan.",
-        examples=[
-            OpenApiExample(
-                "Create organisatie",
-                value={
-                    "naam": "Maykin Media",
-                    "code": "org-1234",
-                    "email": "info@maykinmedia.nl",
-                    "telefoonnummer": "+310207530523",
-                    "straat": "Kingsfortweg",
-                    "huisnummer": "151",
-                    "postcode": "1043GR",
-                    "stad": "Amsterdam",
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een ORGANISATIE in zijn geheel bij.",
