@@ -86,6 +86,7 @@ class NestedThemaSerializer(serializers.ModelSerializer):
                     {
                         "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                         "organisatie": {
+                            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                             "naam": "Maykin Media",
                             "code": "org-1234",
                             "email": "info@maykinmedia.nl",

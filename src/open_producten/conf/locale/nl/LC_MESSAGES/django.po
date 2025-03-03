@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-28 11:16+0100\n"
+"POT-Creation-Date: 2025-03-03 11:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -475,7 +475,7 @@ msgstr ""
 
 #: producten/viewsets/product.py:17 producttypen/viewsets/bestand.py:17
 #: producttypen/viewsets/link.py:16 producttypen/viewsets/prijs.py:16
-#: producttypen/viewsets/producttype.py:48
+#: producttypen/viewsets/producttype.py:43
 msgid "Uniforme product naam vanuit de UPL."
 msgstr ""
 
@@ -484,7 +484,7 @@ msgstr ""
 msgid "Naam van het product type."
 msgstr ""
 
-#: producttypen/admin/prijs.py:22 producttypen/serializers/prijs.py:31
+#: producttypen/admin/prijs.py:22 producttypen/serializers/prijs.py:65
 #: producttypen/tests/api/test_prijs.py:71
 #: producttypen/tests/api/test_prijs.py:129
 msgid "Er is minimaal één optie vereist."
@@ -500,7 +500,7 @@ msgid "Thema"
 msgstr ""
 
 #: producttypen/admin/producttype.py:37
-#: producttypen/serializers/producttype.py:133
+#: producttypen/serializers/producttype.py:267
 #: producttypen/tests/api/test_producttype.py:133
 #: producttypen/tests/api/test_producttype.py:384
 #: producttypen/tests/api/test_producttype.py:551
@@ -539,8 +539,8 @@ msgstr ""
 msgid "labels"
 msgstr ""
 
-#: producttypen/models/content.py:32 producttypen/viewsets/producttype.py:102
-#: producttypen/viewsets/producttype.py:110
+#: producttypen/models/content.py:32 producttypen/viewsets/producttype.py:97
+#: producttypen/viewsets/producttype.py:105
 msgid "De labels van dit content element"
 msgstr ""
 
@@ -693,7 +693,7 @@ msgid "toegestane statussen"
 msgstr ""
 
 #: producttypen/models/producttype.py:47
-#: producttypen/viewsets/producttype.py:71
+#: producttypen/viewsets/producttype.py:66
 msgid "toegestane statussen voor producten van dit type."
 msgstr ""
 
@@ -702,7 +702,7 @@ msgid "Keywords"
 msgstr ""
 
 #: producttypen/models/producttype.py:55
-#: producttypen/viewsets/producttype.py:64
+#: producttypen/viewsets/producttype.py:59
 msgid "Lijst van keywords waarop kan worden gezocht."
 msgstr ""
 
@@ -763,7 +763,7 @@ msgid "product type naam"
 msgstr ""
 
 #: producttypen/models/producttype.py:113
-#: producttypen/serializers/producttype.py:83
+#: producttypen/serializers/producttype.py:217
 msgid "naam van het product type."
 msgstr ""
 
@@ -826,36 +826,36 @@ msgstr ""
 msgid "Uniforme product namen"
 msgstr ""
 
-#: producttypen/serializers/content.py:22
-#: producttypen/serializers/content.py:78
+#: producttypen/serializers/content.py:49
+#: producttypen/serializers/content.py:105
 msgid "De content van dit content element."
 msgstr ""
 
-#: producttypen/serializers/content.py:30
+#: producttypen/serializers/content.py:57
 msgid "De huidige taal van het content element."
 msgstr ""
 
-#: producttypen/serializers/producttype.py:87
+#: producttypen/serializers/producttype.py:221
 msgid "Korte beschrijving van het product type."
 msgstr ""
 
-#: producttypen/serializers/producttype.py:91
+#: producttypen/serializers/producttype.py:225
 msgid "De huidige taal van het product type."
 msgstr ""
 
-#: producttypen/serializers/producttype.py:119
+#: producttypen/serializers/producttype.py:253
 msgid "Er bestaat al een externe code met de naam {} voor dit ProductType."
 msgstr ""
 
-#: producttypen/serializers/producttype.py:228
+#: producttypen/serializers/producttype.py:362
 msgid "naam van het producttype."
 msgstr ""
 
-#: producttypen/serializers/producttype.py:232
+#: producttypen/serializers/producttype.py:366
 msgid "Korte beschrijving van het producttype."
 msgstr ""
 
-#: producttypen/serializers/thema.py:35
+#: producttypen/serializers/thema.py:76
 msgid "Het hoofd thema waaronder dit thema valt."
 msgstr ""
 
@@ -912,25 +912,25 @@ msgstr ""
 msgid "Naam van het bestand."
 msgstr ""
 
-#: producttypen/viewsets/producttype.py:43
+#: producttypen/viewsets/producttype.py:38
 msgid "Producttype codes uit externe omgevingen. [naam:code]"
 msgstr ""
 
-#: producttypen/viewsets/producttype.py:56
+#: producttypen/viewsets/producttype.py:51
 msgid ""
 "Filter op de eerste letter van de naam van het producttype (in de meegegeven "
 "`Accept-Language` taal)."
 msgstr ""
 
-#: producttypen/viewsets/producttype.py:80
+#: producttypen/viewsets/producttype.py:75
 msgid "Invalid format for externe_code query parameter."
 msgstr ""
 
-#: producttypen/viewsets/thema.py:76
+#: producttypen/viewsets/thema.py:63
 msgid "Product Type {} moet aan een minimaal één thema zijn gelinkt."
 msgstr ""
 
-#: producttypen/viewsets/thema.py:91
+#: producttypen/viewsets/thema.py:78
 msgid ""
 "Dit thema kan niet worden verwijderd omdat er gerelateerde sub_themas zijn."
 msgstr ""
@@ -984,9 +984,11 @@ msgstr ""
 msgid "The provided value contains an invalid character: %s"
 msgstr ""
 
-#: utils/tests/test_validators.py:61 utils/validators.py:54
-msgid "Invalid postal code."
-msgstr ""
+#: utils/tests/test_validators.py:61 utils/validators.py:53
+#, fuzzy
+#| msgid "Invalid postal code."
+msgid "Invalid postal code (spaces are not allowed)."
+msgstr "Ongeldige postcode (spaties zijn niet toegestaan)."
 
 #: utils/tests/test_validators.py:85 utils/validators.py:32
 msgid "Ongeldig telefoonnummer."
@@ -1007,3 +1009,6 @@ msgstr ""
 #: utils/views.py:91
 msgid "{} vertaling bestaat niet."
 msgstr ""
+
+#~ msgid "Invalid postal code."
+#~ msgstr "Ongeldige postcode."

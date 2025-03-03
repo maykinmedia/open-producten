@@ -8,8 +8,6 @@ class ProducttypenConfig(AppConfig):
     name = "open_producten.producttypen"
 
     def ready(self):
-        import open_producten.utils.spectacular_extensions  # noqa
-
         unregister_camelize_filter_extension()
 
 
