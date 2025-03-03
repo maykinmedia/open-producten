@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from ..models import Prijs, PrijsOptie, ProductType
@@ -15,6 +16,39 @@ class PrijsOptieSerializer(serializers.ModelSerializer):
         fields = ("id", "bedrag", "beschrijving")
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "prijs response",
+            value={
+                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                "prijsopties": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "bedrag": "50.99",
+                        "beschrijving": "normaal",
+                    }
+                ],
+                "actief_vanaf": "2019-08-24",
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "prijs request",
+            description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
+            value={
+                "prijsopties": [
+                    {"bedrag": "50.99", "beschrijving": "normaal"},
+                    {"bedrag": "70.99", "beschrijving": "spoed"},
+                ],
+                "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                "actief_vanaf": "2024-12-01",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class PrijsSerializer(serializers.ModelSerializer):
     prijsopties = PrijsOptieSerializer(many=True)
     product_type_id = serializers.PrimaryKeyRelatedField(

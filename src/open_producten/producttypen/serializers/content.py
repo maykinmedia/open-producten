@@ -1,13 +1,41 @@
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema_field,
+    extend_schema_serializer,
+)
 from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers
 
 from open_producten.producttypen.models import ContentElement, ContentLabel, ProductType
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "content element response",
+            value={
+                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                "labels": ["openingstijden"],
+                "content": "ma-vr 8:00-17:00",
+                "taal": "nl",
+                "product_type_id": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "content element request",
+            value={
+                "labels": ["openingstijden"],
+                "content": "ma-vr 8:00-17:00",
+                "product_type_id": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class ContentElementSerializer(TranslatableModelSerializer):
     labels = serializers.SlugRelatedField(
         slug_field="naam",

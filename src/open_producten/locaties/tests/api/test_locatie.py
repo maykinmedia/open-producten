@@ -15,7 +15,7 @@ class TestLocatie(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
-        self.data = {"naam": "locatie", "postcode": "1111 AA", "stad": "Amsterdam"}
+        self.data = {"naam": "locatie", "postcode": "1111AA", "stad": "Amsterdam"}
         self.locatie = LocatieFactory.create()
 
         self.path = reverse("locatie-list")
