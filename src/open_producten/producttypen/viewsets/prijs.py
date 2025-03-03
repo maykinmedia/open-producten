@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 import django_filters
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from open_producten.producttypen.models import Prijs
 from open_producten.producttypen.serializers import PrijsSerializer
@@ -44,30 +44,13 @@ class PrijsFilterSet(FilterSet):
     retrieve=extend_schema(
         summary="Een specifieke PRIJS opvragen.",
     ),
-    create=extend_schema(
-        summary="Maak een PRIJS aan.",
-        examples=[
-            OpenApiExample(
-                "Create prijs",
-                description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
-                value={
-                    "prijsopties": [
-                        {"bedrag": "50.99", "beschrijving": "normaal"},
-                        {"bedrag": "70.99", "beschrijving": "spoed"},
-                    ],
-                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
-                    "actief_vanaf": "2024-12-01",
-                },
-                request_only=True,
-            )
-        ],
-    ),
+    create=extend_schema(summary="Maak een PRIJS aan."),
     update=extend_schema(
         summary="Werk een PRIJS in zijn geheel bij.",
     ),
     partial_update=extend_schema(
         summary="Werk een PRIJS deels bij.",
-        description="Als prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",
+        description="Als prijsopties in een patch request wordt meegegeven wordt deze lijst geheel overschreven.",  # TODO EXPLAIN OPTIE UPDATE
     ),
     destroy=extend_schema(
         summary="Verwijder een PRIJS.",

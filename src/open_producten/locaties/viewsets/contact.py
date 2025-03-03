@@ -1,7 +1,7 @@
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from open_producten.locaties.models import Contact
-from open_producten.locaties.serializers.locatie import ContactSerializer
+from open_producten.locaties.serializers import ContactSerializer
 from open_producten.utils.filters import FilterSet
 from open_producten.utils.views import OrderedModelViewSet
 
@@ -31,20 +31,6 @@ class ContactFilterSet(FilterSet):
     ),
     create=extend_schema(
         summary="Maak een CONTACT aan.",
-        examples=[
-            OpenApiExample(
-                "Create contact",
-                value={
-                    "organisatie_id": "73a745d4-7df0-4510-991e-abfb19f0d861",
-                    "voornaam": "Bob",
-                    "achternaam": "de Vries",
-                    "email": "bob@example.com",
-                    "telefoonnummer": "0611223344",
-                    "rol": "medewerker",
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een CONTACT in zijn geheel bij.",

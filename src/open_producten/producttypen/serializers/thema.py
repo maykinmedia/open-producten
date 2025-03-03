@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from open_producten.producttypen.models import ProductType, Thema, UniformeProductNaam
@@ -28,6 +29,46 @@ class NestedProductTypeSerializer(serializers.ModelSerializer):
         )
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "thema response",
+            value={
+                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                "naam": "Parkeren",
+                "beschrijving": "Parkeren in gemeente ABC",
+                "gepubliceerd": True,
+                "aanmaak_datum": "2019-08-24T14:15:22Z",
+                "update_datum": "2019-08-24T14:15:22Z",
+                "hoofd_thema": "41ec14a8-ca7d-43a9-a4a8-46f9587c8d91",
+                "product_typen": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "code": "129380-c21231",
+                        "keywords": ["auto"],
+                        "uniforme_product_naam": "parkeervergunning",
+                        "toegestane_statussen": ["gereed"],
+                        "gepubliceerd": True,
+                        "aanmaak_datum": "2019-08-24T14:15:22Z",
+                        "update_datum": "2019-08-24T14:15:22Z",
+                    }
+                ],
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "thema request",
+            value={
+                "hoofd_thema": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
+                "product_type_ids": ["95792000-d57f-4d3a-b14c-c4c7aa964907"],
+                "gepubliceerd": True,
+                "naam": "Parkeren",
+                "beschrijving": "Parkeren in gemeente ABC",
+            },
+            request_only=True,
+        ),
+    ],
+)
 class ThemaSerializer(serializers.ModelSerializer):
     hoofd_thema = serializers.PrimaryKeyRelatedField(
         queryset=Thema.objects.all(),

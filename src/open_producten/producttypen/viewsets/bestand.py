@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 import django_filters
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.parsers import MultiPartParser
 
 from open_producten.producttypen.models import Bestand
@@ -46,17 +46,6 @@ class BestandFilterSet(FilterSet):
     ),
     create=extend_schema(
         summary="Maak een BESTAND aan.",
-        examples=[
-            OpenApiExample(
-                "Create bestand",
-                value={
-                    "bestand": "test.txt",
-                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
-                },
-                media_type="multipart/form-data",
-                request_only=True,
-            ),
-        ],
     ),
     update=extend_schema(
         summary="Werk een BESTAND in zijn geheel bij.",

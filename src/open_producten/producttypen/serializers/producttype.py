@@ -2,12 +2,16 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema_field,
+    extend_schema_serializer,
+)
 from parler_rest.serializers import TranslatableModelSerializer
 from rest_framework import serializers
 
 from open_producten.locaties.models import Contact, Locatie, Organisatie
-from open_producten.locaties.serializers.locatie import (
+from open_producten.locaties.serializers import (
     ContactSerializer,
     LocatieSerializer,
     OrganisatieSerializer,
@@ -37,6 +41,136 @@ class NestedThemaSerializer(serializers.ModelSerializer):
         )
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "product type response",
+            value={
+                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                "uniforme_product_naam": "parkeervergunning",
+                "themas": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "naam": "Parkeren",
+                        "beschrijving": ".....",
+                        "gepubliceerd": True,
+                        "aanmaak_datum": "2019-08-24T14:15:22Z",
+                        "update_datum": "2019-08-24T14:15:22Z",
+                        "hoofd_thema": "41ec14a8-ca7d-43a9-a4a8-46f9587c8d91",
+                    }
+                ],
+                "locaties": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "naam": "Maykin Media",
+                        "email": "info@maykinmedia.nl",
+                        "telefoonnummer": "+310207530523",
+                        "straat": "Kingsfortweg",
+                        "huisnummer": "151",
+                        "postcode": "1043GR",
+                        "stad": "Amsterdam",
+                    }
+                ],
+                "organisaties": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "naam": "Maykin Media",
+                        "code": "org-1234",
+                        "email": "info@maykinmedia.nl",
+                        "telefoonnummer": "+310207530523",
+                        "straat": "Kingsfortweg",
+                        "huisnummer": "151",
+                        "postcode": "1043GR",
+                        "stad": "Amsterdam",
+                    }
+                ],
+                "contacten": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "organisatie": {
+                            "naam": "Maykin Media",
+                            "code": "org-1234",
+                            "email": "info@maykinmedia.nl",
+                            "telefoonnummer": "+310207530523",
+                            "straat": "Kingsfortweg",
+                            "huisnummer": "151",
+                            "postcode": "1043GR",
+                            "stad": "Amsterdam",
+                        },
+                        "voornaam": "Bob",
+                        "achternaam": "de Vries",
+                        "email": "bob@example.com",
+                        "telefoonnummer": "0611223344",
+                        "rol": "medewerker",
+                    }
+                ],
+                "prijzen": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "prijsopties": [
+                            {
+                                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                                "bedrag": "50.99",
+                                "beschrijving": "normaal",
+                            }
+                        ],
+                        "actief_vanaf": "2019-08-24",
+                    }
+                ],
+                "links": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "naam": "Open Producten",
+                        "url": "https://github.com/maykinmedia/open-producten",
+                    }
+                ],
+                "bestanden": [
+                    {
+                        "id": "da0df49a-cd71-4e24-9bae-5be8b01f2c36",
+                        "bestand": "https://gemeente.open-producten.nl/media/test.txt",
+                    }
+                ],
+                "naam": "Parkeervergunning",
+                "samenvatting": "korte samenvatting...",
+                "taal": "nl",
+                "externe_codes": [
+                    {"naam": "ISO", "code": "123"},
+                    {"naam": "CBS", "code": "456"},
+                ],
+                "gepubliceerd": True,
+                "aanmaak_datum": "2019-08-24T14:15:22Z",
+                "update_datum": "2019-08-24T14:15:22Z",
+                "code": "PT-12345",
+                "toegestane_statussen": ["gereed"],
+                "keywords": ["auto"],
+                "interne_opmerkingen": "interne opmerkingen...",
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "product type request",
+            value={
+                "uniforme_product_naam": "aanleunwoning",
+                "thema_ids": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],
+                "locatie_ids": ["235de068-a9c5-4eda-b61d-92fd7f09e9dc"],
+                "organisatie_ids": ["2c2694f1-f948-4960-8312-d51c3a0e540f"],
+                "contact_ids": ["6863d699-460d-4c1e-9297-16812d75d8ca"],
+                "gepubliceerd": False,
+                "naam": "Aanleunwoning",
+                "code": "PT-12345",
+                "toegestane_statussen": ["gereed", "actief"],
+                "interne_opmerkingen": "interne opmerkingen...",
+                "samenvatting": "korte samenvatting...",
+                "keywords": ["wonen"],
+                "externe_codes": [
+                    {"naam": "ISO", "code": "123"},
+                    {"naam": "CBS", "code": "456"},
+                ],
+            },
+            request_only=True,
+        ),
+    ],
+)
 class ProductTypeSerializer(TranslatableModelSerializer):
     uniforme_product_naam = serializers.SlugRelatedField(
         slug_field="naam", queryset=UniformeProductNaam.objects.all()

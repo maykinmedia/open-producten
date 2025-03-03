@@ -1,7 +1,7 @@
 from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -35,19 +35,6 @@ class ThemaFilterSet(FilterSet):
     ),
     create=extend_schema(
         summary="Maak een THEMA aan.",
-        examples=[
-            OpenApiExample(
-                "Create thema",
-                value={
-                    "hoofd_thema": "5f6a2219-5768-4e11-8a8e-ffbafff32482",
-                    "product_type_ids": ["95792000-d57f-4d3a-b14c-c4c7aa964907"],
-                    "gepubliceerd": True,
-                    "naam": "Parkeren",
-                    "beschrijving": "Parkeren in gemeente ABC",
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een THEMA in zijn geheel bij.",

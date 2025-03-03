@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 import django_filters
-from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from open_producten.producttypen.models import Link
 from open_producten.producttypen.serializers import LinkSerializer
@@ -42,17 +42,6 @@ class LinkFilterSet(FilterSet):
     ),
     create=extend_schema(
         summary="Maak een LINK aan.",
-        examples=[
-            OpenApiExample(
-                "Create link",
-                value={
-                    "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
-                    "naam": "Open Producten",
-                    "url": "https://github.com/maykinmedia/open-producten",
-                },
-                request_only=True,
-            )
-        ],
     ),
     update=extend_schema(
         summary="Werk een LINK in zijn geheel bij.",
