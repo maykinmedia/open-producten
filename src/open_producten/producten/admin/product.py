@@ -15,6 +15,8 @@ from open_producten.producttypen.models.producttype import (
     ProductType,
 )
 
+from .eigenaar import EigenaarInline
+
 
 def get_status_choices(product_type_id, instance):
 
@@ -104,6 +106,7 @@ class ProductAdmin(AdminAuditLogMixin, admin.ModelAdmin):
     autocomplete_fields = ("product_type",)
     search_fields = ("product_type__translations__naam",)
     form = ProductAdminForm
+    inlines = (EigenaarInline,)
 
     @admin.display(description="Product Type")
     def product_type_name(self, obj):

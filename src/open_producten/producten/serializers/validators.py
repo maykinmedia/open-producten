@@ -3,28 +3,54 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.serializers import Serializer
 
+from open_producten.producten.models.eigenaar import (
+    validate_bsn_kvk_or_klant,
+    validate_vestingsnummer_only_with_kvk,
+)
 from open_producten.producten.models.product import (
-    validate_bsn_or_kvk,
-    validate_dataobject,
     validate_dates,
     validate_eind_datum,
     validate_start_datum,
     validate_status,
     validate_verbruiksobject,
+    validate_dataobject,
 )
 from open_producten.utils.serializers import get_from_serializer_data_or_instance
 
 
-class BsnOrKvkValidator:
+class EigenaarIdentifierValidator:
     requires_context = True
 
     def __call__(self, value, serializer):
-        bsn = get_from_serializer_data_or_instance("bsn", value, serializer)
-        kvk = get_from_serializer_data_or_instance("kvk", value, serializer)
+        bsn_nummer = get_from_serializer_data_or_instance(
+            "bsn_nummer", value, serializer
+        )
+        kvk_nummer = get_from_serializer_data_or_instance(
+            "kvk_nummer", value, serializer
+        )
+        klantnummer = get_from_serializer_data_or_instance(
+            "klantnummer", value, serializer
+        )
         try:
-            validate_bsn_or_kvk(bsn, kvk)
+            validate_bsn_kvk_or_klant(bsn_nummer, kvk_nummer, klantnummer)
         except ValidationError as e:
-            raise serializers.ValidationError({"bsn_or_kvk": e.message})
+            raise serializers.ValidationError(e.message)
+
+
+class EigenaarVestigingsnummerValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        kvk_nummer = get_from_serializer_data_or_instance(
+            "kvk_nummer", value, serializer
+        )
+        vestigingsnummer = get_from_serializer_data_or_instance(
+            "vestigingsnummer", value, serializer
+        )
+        try:
+            validate_vestingsnummer_only_with_kvk(kvk_nummer, vestigingsnummer)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
 
 
 def get_from_serializer_data_or_instance_and_changed(

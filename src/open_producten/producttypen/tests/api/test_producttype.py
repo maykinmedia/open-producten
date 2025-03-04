@@ -208,7 +208,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "externe_codes": [
                     ErrorDetail(
-                        string="Er bestaat al een externe code met de naam ISO voor dit ProductType.",
+                        string=_(
+                            "Er bestaat al een externe code met de naam ISO voor dit ProductType."
+                        ),
                         code="unique",
                     )
                 ]
