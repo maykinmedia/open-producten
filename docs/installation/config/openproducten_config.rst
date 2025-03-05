@@ -31,14 +31,6 @@ Configure Notificaties API
 Next, the notifications for Open Producten must be configured. We assume you're also
 using Open Notificaties to make a complete setup.
 
-.. There are 2 things to keep in mind:
-
-.. 1. Open Producten offers an Autorisaties API and thus the Open Producten Autorisaties API
-..    must be consulted by the Notificaties API to check for **autorisations**.
-.. 2. Each component handles **authentication** themselves and thus we need to store
-..    the Client IDs and secrets in each component that wants to communicate with
-..    each other.
-
 Open Producten
 --------------
 

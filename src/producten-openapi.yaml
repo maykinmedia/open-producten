@@ -510,6 +510,7 @@ components:
         product_type_id:
           type: string
           format: uuid
+          writeOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -589,9 +590,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedProductType'
           readOnly: true
-        product_type_id:
-          type: string
-          format: uuid
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -668,7 +666,6 @@ components:
       - id
       - prijs
       - product_type
-      - product_type_id
       - update_datum
       - url
     ProductRequest:
@@ -677,6 +674,7 @@ components:
         product_type_id:
           type: string
           format: uuid
+          writeOnly: true
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.

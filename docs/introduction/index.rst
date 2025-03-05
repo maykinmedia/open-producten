@@ -14,7 +14,7 @@ Open Producten exposes several :ref:`API's<api_index>` to store and retrieve dat
 * Producten API
 * Producttype API
 
-The `Notificaties API`_ is required for Open Zaak to work but is available as
+The `Notificaties API`_ is required for Open Producten to work if notifications are enabled, but is available as
 a separate package, `Open Notificaties`_.
 
 .. _`Notificaties API`: https://vng-realisatie.github.io/gemma-zaken/standaard/notificaties/

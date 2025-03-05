@@ -15,9 +15,8 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 @freeze_time("2024-2-2T00:00:00Z")
 class SendNotifTestCase(BaseApiTestCase):
-
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpTestData(cls):
 
         service, _ = Service.objects.update_or_create(
             api_root="https://notificaties-api.vng.cloud/api/v1/",
@@ -33,19 +32,19 @@ class SendNotifTestCase(BaseApiTestCase):
         config.notifications_api_service = service
         config.save()
 
-        self.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
-        self.data = {
-            "product_type_id": self.product_type.id,
+        cls.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
+        cls.data = {
+            "product_type_id": cls.product_type.id,
             "bsn": "111222333",
             "status": "initieel",
             "prijs": "20.20",
             "frequentie": "eenmalig",
         }
 
-        self.product = ProductFactory.create(**self.data)
+        product = ProductFactory.create(**cls.data)
 
-        self.path = reverse("product-list")
-        self.detail_path = reverse("product-detail", args=[self.product.id])
+        cls.path = reverse("product-list")
+        cls.detail_path = reverse("product-detail", args=[product.id])
 
     @patch("notifications_api_common.viewsets.send_notification.delay")
     def test_send_notif_create_object(self, mock_task):
@@ -63,7 +62,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "create",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeId": data["product_type_id"],
+                "productType.id": data["product_type"]["id"],
             },
         }
 
@@ -85,7 +84,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "update",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeId": data["product_type_id"],
+                "productType.id": data["product_type"]["id"],
             },
         }
 
@@ -107,7 +106,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "partial_update",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeId": data["product_type_id"],
+                "productType.id": data["product_type"]["id"],
             },
         }
 
@@ -128,7 +127,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "actie": "destroy",
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
-                "productTypeId": str(self.product_type.id),
+                "productType.id": str(self.product_type.id),
             },
         }
 

@@ -79,10 +79,8 @@ urlpatterns = [
         IndexView.as_view(component="producttypen"),
         name="index-producttypen",
     ),
-    path("ref/", include("vng_api_common.urls")),
     path("ref/", include("notifications_api_common.urls")),
     # path("view-config/", ViewConfigView.as_view(), name="view-config"),
-    path("markdownx/", include("markdownx.urls")),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
