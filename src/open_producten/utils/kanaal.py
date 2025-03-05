@@ -5,7 +5,6 @@ from django.db.models import Field, Model
 from glom import glom
 from notifications_api_common.kanalen import Kanaal as _Kanaal
 from rest_framework.request import Request
-from vng_api_common.tests import reverse
 
 
 class Kanaal(_Kanaal):
@@ -13,7 +12,7 @@ class Kanaal(_Kanaal):
     def get_field(model: Model, field: str) -> Field:
         """
         Function to retrieve a field from a Model, can also be passed a path to a field
-        (e.g. `zaaktype.catalogus`)
+        (e.g. `product_type.id`)
         """
         if "." in field:
             model_field = None
@@ -33,18 +32,11 @@ class Kanaal(_Kanaal):
     ) -> Dict:
         """
         Overridden to support sending kenmerken that are not directly part of the main
-        resource (e.g `Zaak.zaaktype.catalogus`)
+        resource (e.g `Product.product_type.id`)
         """
         data = data or {}
         kenmerken = {}
         for kenmerk in self.kenmerken:
             value = data.get(kenmerk, glom(obj, kenmerk, default=""))
-            if isinstance(value, Model):
-                if _loose_fk_data := getattr(value, "_loose_fk_data", None):
-                    value = _loose_fk_data["url"]
-                else:
-                    value = reverse(value)
-                    if request:
-                        value = request.build_absolute_uri(value)
             kenmerken[kenmerk] = value
         return kenmerken

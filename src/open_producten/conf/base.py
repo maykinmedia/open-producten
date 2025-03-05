@@ -4,8 +4,6 @@ from celery.schedules import crontab
 from open_api_framework.conf.base import *
 from open_api_framework.conf.utils import config
 
-init_sentry()
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
