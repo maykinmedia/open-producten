@@ -187,7 +187,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         naam = validated_data.pop("naam", None)
         samenvatting = validated_data.pop("samenvatting", None)
         externe_codes = validated_data.pop("externe_codes", None)
-        parameters = validated_data.pop("parameters", [])
+        parameters = validated_data.pop("parameters", None)
 
         instance = super().update(instance, validated_data)
 
