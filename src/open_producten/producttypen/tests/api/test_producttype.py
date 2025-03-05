@@ -13,12 +13,13 @@ from open_producten.locaties.tests.factories import (
     LocatieFactory,
     OrganisatieFactory,
 )
-from open_producten.producttypen.models import ExterneCode, Link, ProductType
+from open_producten.producttypen.models import ExterneCode, Link, Parameter, ProductType
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
     ContentElementFactory,
     ExterneCodeFactory,
     LinkFactory,
+    ParameterFactory,
     PrijsFactory,
     PrijsOptieFactory,
     ProductTypeFactory,
@@ -101,6 +102,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "organisaties": [],
             "contacten": [],
             "externe_codes": [],
+            "parameters": [],
             "gepubliceerd": False,
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
@@ -211,6 +213,30 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
+    def test_create_product_type_with_duplicate_parameter_names_returns_error(
+        self,
+    ):
+        data = self.data | {
+            "parameters": [
+                {"naam": "doelgroep", "waarde": "inwoners"},
+                {"naam": "doelgroep", "waarde": "bedrijven"},
+            ],
+        }
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "parameters": [
+                    ErrorDetail(
+                        string="Er bestaat al een parameter met de naam doelgroep voor dit ProductType.",
+                        code="unique",
+                    )
+                ]
+            },
+        )
+
     def test_create_product_type_with_duplicate_ids_returns_error(self):
         thema = ThemaFactory.create()
 
@@ -252,6 +278,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "organisatie_ids": [organisatie.id],
             "contact_ids": [contact.id],
             "externe_codes": [{"naam": "ISO", "code": "123"}],
+            "parameters": [{"naam": "doelgroep", "waarde": "inwoners"}],
         }
         response = self.client.post(self.path, data)
 
@@ -331,6 +358,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 }
             ],
             "externe_codes": [{"naam": "ISO", "code": "123"}],
+            "parameters": [{"naam": "doelgroep", "waarde": "inwoners"}],
             "gepubliceerd": False,
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
@@ -499,6 +527,60 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ExterneCode.objects.count(), 0)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
+    def test_update_product_type_with_parameter(self):
+        product_type = ProductTypeFactory.create()
+
+        parameters = [{"naam": "doelgroep", "waarde": "inwoners"}]
+        data = self.data | {"parameters": parameters}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 1)
+        self.assertEqual(response.data["parameters"], parameters)
+
+    def test_update_product_type_with_parameter_replacing_existing(self):
+        product_type = ProductTypeFactory.create()
+        parameter = ParameterFactory.create(product_type=product_type)
+
+        parameters = [{"naam": parameter.naam, "waarde": "test"}]
+        data = self.data | {"parameters": parameters}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 1)
+        self.assertEqual(response.data["parameters"], parameters)
+
+    def test_update_product_type_removing_parameters(self):
+        product_type = ProductTypeFactory.create()
+        ParameterFactory.create(product_type=product_type)
+        ParameterFactory.create(product_type=product_type)
+
+        parameters = []
+        data = self.data | {"parameters": parameters}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 0)
+        self.assertEqual(response.data["parameters"], parameters)
+
+    def test_update_product_type_existing_parameters_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        ParameterFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), self.data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 1)
+
+    def test_update_product_type_existing_externe_codes_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        ExterneCodeFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), self.data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ExterneCode.objects.count(), 1)
+
     def test_partial_update_product_type(self):
         product_type = ProductTypeFactory.create()
         locatie = LocatieFactory.create()
@@ -590,6 +672,60 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ExterneCode.objects.count(), 0)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
+    def test_partial_update_product_type_with_parameter(self):
+        product_type = ProductTypeFactory.create()
+
+        parameters = [{"naam": "doelgroep", "waarde": "inwoners"}]
+        data = {"parameters": parameters}
+        response = self.client.patch(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 1)
+        self.assertEqual(response.data["parameters"], parameters)
+
+    def test_partial_update_product_type_with_parameter_replacing_existing(self):
+        product_type = ProductTypeFactory.create()
+        parameter = ParameterFactory.create(product_type=product_type)
+
+        parameters = [{"naam": parameter.naam, "waarde": "test"}]
+        data = {"parameters": parameters}
+        response = self.client.patch(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 1)
+        self.assertEqual(response.data["parameters"], parameters)
+
+    def test_partial_update_product_type_removing_parameters(self):
+        product_type = ProductTypeFactory.create()
+        ParameterFactory.create(product_type=product_type)
+        ParameterFactory.create(product_type=product_type)
+
+        parameters = []
+        data = {"parameters": parameters}
+        response = self.client.patch(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 0)
+        self.assertEqual(response.data["parameters"], parameters)
+
+    def test_partial_update_product_type_existing_parameters_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        ParameterFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Parameter.objects.count(), 1)
+
+    def test_partial_update_product_type_existing_externe_codes_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        ExterneCodeFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ExterneCode.objects.count(), 1)
+
     def test_read_product_type_link(self):
         product_type = ProductTypeFactory.create()
         link = LinkFactory.create(product_type=product_type)
@@ -675,6 +811,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "organisaties": [],
                 "contacten": [],
                 "externe_codes": [],
+                "parameters": [],
                 "gepubliceerd": True,
                 "aanmaak_datum": product_type1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type1.update_datum.astimezone().isoformat(),
@@ -707,6 +844,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "organisaties": [],
                 "contacten": [],
                 "externe_codes": [],
+                "parameters": [],
                 "gepubliceerd": True,
                 "aanmaak_datum": product_type2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type2.update_datum.astimezone().isoformat(),
@@ -754,6 +892,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "organisaties": [],
             "contacten": [],
             "externe_codes": [],
+            "parameters": [],
             "themas": [
                 {
                     "id": str(self.thema.id),
@@ -1136,5 +1275,55 @@ class TestProductTypeFilterSet(BaseApiTestCase):
 
     def test_externe_code_filter_with_invalid_characters(self):
         response = self.client.get(self.path, {"externe_code": "[a[b:[b:a]]"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_parameter_filter(self):
+        product_type_1 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="inwoners", product_type=product_type_1
+        )
+
+        product_type_2 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="bedrijven", product_type=product_type_2
+        )
+
+        response = self.client.get(self.path, {"parameter": "[doelgroep:inwoners]"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_multiple_parameter_filters(self):
+        product_type_1 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="inwoners", product_type=product_type_1
+        )
+        ParameterFactory(naam="buurt", waarde="kwartier", product_type=product_type_1)
+
+        product_type_2 = ProductTypeFactory.create()
+        ParameterFactory(
+            naam="doelgroep", waarde="bedrijven", product_type=product_type_2
+        )
+
+        response = self.client.get(
+            self.path, {"parameter": ("[doelgroep:inwoners]", "[buurt:kwartier]")}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_parameter_filter_without_brackets(self):
+        response = self.client.get(self.path, {"parameter": "abc"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_parameter_filter_without_key_value(self):
+        response = self.client.get(self.path, {"parameter": "[:]"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_parameter_filter_with_invalid_characters(self):
+        response = self.client.get(self.path, {"parameter": "[a[b:[b:a]]"})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
