@@ -111,11 +111,6 @@ class ProductSerializer(serializers.ModelSerializer):
                 else:
                     existing_eigenaar = Eigenaar.objects.get(id=eigenaar_id)
                     EigenaarSerializer().update(existing_eigenaar, eigenaar)
-
-                    # serializer = EigenaarSerializer(existing_eigenaar, data=eigenaar, partial=self.partial)
-                    # serializer.is_valid(raise_exception=True)
-                    # serializer.save()
-
                     seen_eigenaren_ids.add(eigenaar_id)
 
             product.eigenaren.filter(
@@ -123,15 +118,3 @@ class ProductSerializer(serializers.ModelSerializer):
             ).delete()
 
         return product
-
-
-# def update_nested_object(object_list: list[dict], child_serializer: Serializer):
-#     ids = [obj["id"] for obj in object_list]
-#     product.eigenaren.exclude(id__in=ids).delete()
-#
-#     for obj in object_list:
-#         if obj_id := obj.pop("id", None):
-#             existing_eigenaar = Eigenaar.objects.get(id=obj_id)
-#             child_serializer().update(existing_eigenaar, obj)
-#         else:
-#             child_serializer().create(obj | {"product": product})
