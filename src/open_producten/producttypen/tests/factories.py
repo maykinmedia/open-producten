@@ -20,7 +20,7 @@ fake = Faker()
 
 class UniformeProductNaamFactory(factory.django.DjangoModelFactory):
     naam = factory.Sequence(lambda n: f"upn {n}")
-    uri = factory.Faker("url")
+    uri = factory.Sequence(lambda n: f"{fake.url()}/{n}")
 
     class Meta:
         model = UniformeProductNaam
