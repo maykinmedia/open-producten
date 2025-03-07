@@ -32,7 +32,7 @@ class TestProduct(BaseApiTestCase):
             "status": "initieel",
             "prijs": "20.20",
             "frequentie": "eenmalig",
-            "data": [],
+            "eigenaren": [{"kvk_nummer": "12345678"}],
         }
 
     def detail_path(self, product):
@@ -58,6 +58,9 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
+                "eigenaren": [
+                    ErrorDetail(_("This field is required."), code="required")
+                ],
             },
         )
 
@@ -81,7 +84,15 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
-            "eigenaren": [],
+            "eigenaren": [
+                {
+                    "bsn_nummer": None,
+                    "kvk_nummer": "12345678",
+                    "vestigingsnummer": None,
+                    "klantnummer": None,
+                    "id": str(product.eigenaren.first().id),
+                }
+            ],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
@@ -117,8 +128,6 @@ class TestProduct(BaseApiTestCase):
         expected_data = {
             "id": str(product.id),
             "url": f"http://testserver{self.detail_path(product)}",
-            "bsn": product.bsn,
-            "kvk": product.kvk,
             "status": product.status,
             "verbruiksobject": {"naam": "Test"},
             "dataobject": None,
@@ -129,6 +138,15 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
+            "eigenaren": [
+                {
+                    "bsn_nummer": None,
+                    "kvk_nummer": "12345678",
+                    "vestigingsnummer": None,
+                    "klantnummer": None,
+                    "id": str(product.eigenaren.first().id),
+                }
+            ],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
@@ -247,28 +265,9 @@ class TestProduct(BaseApiTestCase):
             },
         )
 
-    def test_create_product_without_bsn_or_kvk_returns_error(self):
-        data = self.data.copy()
-        data.pop("bsn")
-        response = self.client.post(self.path, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data,
-            {
-                "bsn_or_kvk": [
-                    ErrorDetail(
-                        string=_(
-                            "Een product moet een bsn, kvk nummer of beiden hebben."
-                        ),
-                        code="invalid",
-                    )
-                ]
-            },
-        )
-        self.assertEqual(Product.objects.count(), 0)
-
     def test_create_product_with_not_allowed_state(self):
-        response = self.client.post(self.path, self.data | {"status": "actief"})
+        data = self.data | {"status": "actief"}
+        response = self.client.post(self.path, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
@@ -285,7 +284,8 @@ class TestProduct(BaseApiTestCase):
         )
 
     def test_create_product_with_allowed_state(self):
-        response = self.client.post(self.path, self.data | {"status": "gereed"})
+        data = self.data | {"status": "gereed"}
+        response = self.client.post(self.path, data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 1)
@@ -345,6 +345,22 @@ class TestProduct(BaseApiTestCase):
             },
         )
 
+    def test_create_product_without_eigenaren(self):
+        response = self.client.post(self.path, self.data | {"eigenaren": []})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "eigenaren": [
+                    ErrorDetail(
+                        string=_("Er is minimaal één eigenaar vereist."),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
     def test_create_product_with_vestigingsnummer_and_kvk(self):
         data = self.data | {
             "eigenaren": [{"vestingsnummer": "123", "kvk_nummer": "12345678"}]
@@ -361,6 +377,7 @@ class TestProduct(BaseApiTestCase):
         data = self.data | {
             "eind_datum": datetime.date(2025, 12, 31),
             "product_type_id": product_type.id,
+            "eigenaren": [{"kvk_nummer": "12345678"}],
         }
         response = self.client.put(self.detail_path(product), data)
 
@@ -390,46 +407,40 @@ class TestProduct(BaseApiTestCase):
 
     def test_update_product_removing_eigenaren(self):
         product = ProductFactory.create()
-        EigenaarFactory.create(product_id=product.id, bsn_nummer="111222333")
-        EigenaarFactory.create(product_id=product.id, kvk_nummer="12345678")
+        EigenaarFactory.create(product=product, bsn_nummer="111222333")
+        EigenaarFactory.create(product=product, kvk_nummer="12345678")
+
+        expected_error = {
+            "eigenaren": [
+                ErrorDetail(
+                    string=_("Er is minimaal één eigenaar vereist."),
+                    code="invalid",
+                )
+            ]
+        }
 
         with self.subTest("PUT"):
             response = self.client.put(
                 self.detail_path(product), self.data | {"eigenaren": []}
             )
 
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(Eigenaar.objects.count(), 0)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(Eigenaar.objects.count(), 2)
+            self.assertEqual(response.data, expected_error)
 
         with self.subTest("PATCH"):
             response = self.client.patch(self.detail_path(product), {"eigenaren": []})
 
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(Eigenaar.objects.count(), 0)
-
-    def test_update_keeps_existing_eigenaren(self):
-        product = ProductFactory.create()
-        EigenaarFactory.create(product_id=product.id, bsn_nummer="111222333")
-        EigenaarFactory.create(product_id=product.id, kvk_nummer="12345678")
-
-        with self.subTest("PUT"):
-            response = self.client.put(self.detail_path(product), self.data)
-
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(Eigenaar.objects.count(), 2)
-
-        with self.subTest("PATCH"):
-            response = self.client.patch(self.detail_path(product), {})
-
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(Eigenaar.objects.count(), 2)
+            self.assertEqual(response.data, expected_error)
 
     def test_update_updating_and_removing_eigenaren(self):
         product = ProductFactory.create()
         eigenaar_to_be_updated = EigenaarFactory.create(
-            product_id=product.id, bsn_nummer="111222333"
+            product=product, bsn_nummer="111222333"
         )
-        EigenaarFactory.create(product_id=product.id, kvk_nummer="12345678")
+        EigenaarFactory.create(product=product, kvk_nummer="12345678")
 
         self.maxDiff = None
 
@@ -470,7 +481,7 @@ class TestProduct(BaseApiTestCase):
 
     def test_update_creating_and_removing_eigenaren(self):
         product = ProductFactory.create()
-        EigenaarFactory.create(product_id=product.id, kvk_nummer="12345678")
+        EigenaarFactory.create(product=product, kvk_nummer="12345678")
 
         data = {"eigenaren": [{"klantnummer": "1234"}]}
 
@@ -552,7 +563,7 @@ class TestProduct(BaseApiTestCase):
     def test_update_product_with_duplicate_eigenaren_ids(self):
         product = ProductFactory.create()
         eigenaar_to_be_updated = EigenaarFactory.create(
-            product_id=product.id, bsn_nummer="111222333"
+            product=product, bsn_nummer="111222333"
         )
 
         expected_error = {
@@ -599,7 +610,9 @@ class TestProduct(BaseApiTestCase):
 
     def test_read_producten(self):
         product1 = ProductFactory.create(product_type=self.product_type)
+        EigenaarFactory(kvk_nummer="12345678", product=product1)
         product2 = ProductFactory.create(product_type=self.product_type)
+        EigenaarFactory(kvk_nummer="12345678", product=product2)
 
         response = self.client.get(self.path)
 
@@ -619,7 +632,15 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": product1.frequentie,
                 "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product1.update_datum.astimezone().isoformat(),
-                "eigenaren": [],
+                "eigenaren": [
+                    {
+                        "bsn_nummer": None,
+                        "kvk_nummer": "12345678",
+                        "vestigingsnummer": None,
+                        "klantnummer": None,
+                        "id": str(product1.eigenaren.first().id),
+                    }
+                ],
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
@@ -644,7 +665,15 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": product2.frequentie,
                 "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product2.update_datum.astimezone().isoformat(),
-                "eigenaren": [],
+                "eigenaren": [
+                    {
+                        "bsn_nummer": None,
+                        "kvk_nummer": "12345678",
+                        "vestigingsnummer": None,
+                        "klantnummer": None,
+                        "id": str(product2.eigenaren.first().id),
+                    }
+                ],
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
@@ -663,6 +692,7 @@ class TestProduct(BaseApiTestCase):
     def test_read_product(self):
         product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
         product = ProductFactory.create(product_type=product_type)
+        EigenaarFactory(kvk_nummer="12345678", product=product)
 
         response = self.client.get(self.detail_path(product))
 
@@ -680,7 +710,15 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": "2025-12-31T01:00:00+01:00",
             "update_datum": "2025-12-31T01:00:00+01:00",
-            "eigenaren": [],
+            "eigenaren": [
+                {
+                    "bsn_nummer": None,
+                    "kvk_nummer": "12345678",
+                    "vestigingsnummer": None,
+                    "klantnummer": None,
+                    "id": str(product.eigenaren.first().id),
+                }
+            ],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
@@ -714,7 +752,10 @@ class TestProduct(BaseApiTestCase):
 
         product = ProductFactory.create(**data)
 
-        response = self.client.put(self.detail_path(product), data)
+        response = self.client.put(
+            self.detail_path(product),
+            data | {"eigenaren": [{"kvk_nummer": "12345678"}]},
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @freeze_time("2025-11-30")
@@ -791,10 +832,15 @@ class TestProduct(BaseApiTestCase):
                 } | test["field"]
 
                 product = ProductFactory.create(**data)
+                EigenaarFactory(product=product)
 
                 response = self.client.put(
                     self.detail_path(product),
-                    data | {"product_type_id": new_product_type.id},
+                    data
+                    | {
+                        "product_type_id": new_product_type.id,
+                        "eigenaren": [{"kvk_nummer": "12345678"}],
+                    },
                 )
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -861,7 +907,7 @@ class TestProduct(BaseApiTestCase):
 
                 response = self.client.put(
                     self.detail_path(product),
-                    data | test["field"],
+                    data | test["field"] | {"eigenaren": [{"kvk_nummer": "12345678"}]},
                 )
                 self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
