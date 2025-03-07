@@ -36,6 +36,7 @@ custom_settings = {
             "Op het moment dat deze velden worden gezet moeten deze statussen wel zijn toegestaan op het product_type.\n\n"
             "De status zal via de start_datum alleen naar ACTIEF veranderen mits de status INITIEEL of GEREED is. Voor de eind_datum zijn dit INTIEEL, GEREED of ACTIEF.",
         },
+        {"name": "rollen", "description": "Opvragen en bewerken van ROLLEN."},
     ],
 }
 

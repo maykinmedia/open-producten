@@ -18,7 +18,6 @@ class TestProductAdminForm(TestCase):
         data = {
             "product_type": ProductTypeFactory.create(toegestane_statussen=[]),
             "status": "gereed",
-            "bsn": "111222333",
             "start_datum": datetime.date(2025, 12, 31),
             "eind_datum": datetime.date(2026, 12, 31),
         }
@@ -38,7 +37,6 @@ class TestProductAdminForm(TestCase):
         data = {
             "product_type": ProductTypeFactory.create(toegestane_statussen=["gereed"]),
             "status": "initeel",
-            "bsn": "111222333",
             "start_datum": datetime.date(2025, 12, 31),
             "eind_datum": datetime.date(2026, 12, 31),
             "prijs": "10",
@@ -66,7 +64,6 @@ class TestProductAdminForm(TestCase):
         data = {
             "product_type": ProductTypeFactory.create(toegestane_statussen=["gereed"]),
             "status": "gereed",
-            "bsn": "111222333",
             "start_datum": datetime.date(2025, 12, 31),
             "eind_datum": datetime.date(2026, 12, 31),
             "prijs": "10",
