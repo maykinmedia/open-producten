@@ -68,7 +68,6 @@ class TestProduct(TestCase):
         self.product_type.save()
 
         product = ProductFactory.build(
-            kvk="11122333",
             product_type=self.product_type,
             verbruiksobject={"naam": "test"},
         )
@@ -87,7 +86,6 @@ class TestProduct(TestCase):
         self.product_type.save()
 
         product = ProductFactory.build(
-            kvk="11122333",
             product_type=self.product_type,
             verbruiksobject={"naam": 1234},
         )
@@ -102,7 +100,6 @@ class TestProduct(TestCase):
 
     def test_verbruiksobject_without_schema(self):
         product = ProductFactory.build(
-            kvk="11122333",
             product_type=self.product_type,
             verbruiksobject={"naam": 1234},
         )
@@ -121,7 +118,6 @@ class TestProduct(TestCase):
         self.product_type.save()
 
         product = ProductFactory.build(
-            kvk="11122333",
             product_type=self.product_type,
         )
 
