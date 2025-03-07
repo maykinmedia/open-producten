@@ -4,8 +4,6 @@ from celery.schedules import crontab
 from open_api_framework.conf.base import *
 from open_api_framework.conf.utils import config
 
-init_sentry()
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -192,3 +190,8 @@ PARLER_LANGUAGES = {
         "hide_untranslated": False,
     },
 }
+
+FORCE_TRANSLATION_STRINGS = [
+    _("A page number within the paginated result set."),
+    _("Number of results to return per page."),
+]

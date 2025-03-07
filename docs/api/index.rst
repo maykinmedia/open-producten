@@ -16,3 +16,9 @@ API                     Specification version(s)
 Product API             `0.0.2 <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-producten/v0.0.2/src/producten-openapi.yaml>`__
 Producttype API         `0.0.2 <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-producten/v0.0.2/src/producttypen-openapi.yaml>`__
 ======================  ==========================================
+
+In addition, Open Producten can work with `Notificaties API`_. Open Producten uses
+`Open Notificaties`_ by default but this can be disabled using ``NOTIFICATIONS_DISABLED`` (see :ref:`installation_env_config`).
+
+.. _`Notificaties API`: https://vng-realisatie.github.io/gemma-zaken/standaard/notificaties/
+.. _`Open Notificaties`: https://github.com/open-zaak/open-notificaties

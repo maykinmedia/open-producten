@@ -425,8 +425,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         uniforme_product_naam:
           type: string
-          format: uri
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         toegestane_statussen:
           type: array
           items:
@@ -467,9 +466,8 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         toegestane_statussen:
           type: array
           items:
@@ -578,6 +576,14 @@ components:
           type: string
           format: uuid
           readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          minLength: 1
+          maxLength: 1000
+          description: URL-referentie naar dit object. Dit is de unieke identificatie
+            en locatie van dit object.
         product_type:
           allOf:
           - $ref: '#/components/schemas/NestedProductType'
@@ -659,6 +665,7 @@ components:
       - prijs
       - product_type
       - update_datum
+      - url
     ProductRequest:
       type: object
       properties:

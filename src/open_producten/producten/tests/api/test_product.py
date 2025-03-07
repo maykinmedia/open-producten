@@ -1,5 +1,6 @@
 import datetime
 
+from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -15,6 +16,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 @freeze_time("2024-01-01")
+@override_settings(NOTIFICATIONS_DISABLED=True, PRODUCTEN_API_MAJOR_VERSION=0)
 class TestProduct(BaseApiTestCase):
 
     def setUp(self):
@@ -64,6 +66,7 @@ class TestProduct(BaseApiTestCase):
         product = Product.objects.first()
         product_type = product.product_type
         expected_data = {
+            "url": f"http://testserver{self.detail_path(product)}",
             "id": str(product.id),
             "bsn": product.bsn,
             "kvk": product.kvk,
@@ -78,7 +81,7 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
-                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type.uniforme_product_naam.naam,
                 "gepubliceerd": True,
                 "toegestane_statussen": ["gereed"],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
@@ -213,6 +216,7 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
+                "url": f"http://testserver{self.detail_path(product1)}",
                 "id": str(product1.id),
                 "bsn": product1.bsn,
                 "kvk": product1.kvk,
@@ -227,7 +231,7 @@ class TestProduct(BaseApiTestCase):
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
-                    "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "uniforme_product_naam": self.product_type.uniforme_product_naam.naam,
                     "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
                     "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
@@ -236,6 +240,7 @@ class TestProduct(BaseApiTestCase):
                 },
             },
             {
+                "url": f"http://testserver{self.detail_path(product2)}",
                 "id": str(product2.id),
                 "bsn": product2.bsn,
                 "kvk": product2.kvk,
@@ -250,7 +255,7 @@ class TestProduct(BaseApiTestCase):
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
-                    "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "uniforme_product_naam": self.product_type.uniforme_product_naam.naam,
                     "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
                     "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
@@ -270,6 +275,7 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
+            "url": f"http://testserver{self.detail_path(product)}",
             "id": str(product.id),
             "bsn": "111222333",
             "kvk": None,
@@ -284,7 +290,7 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
-                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type.uniforme_product_naam.naam,
                 "toegestane_statussen": ["gereed"],
                 "gepubliceerd": True,
                 "aanmaak_datum": "2025-12-31T01:00:00+01:00",

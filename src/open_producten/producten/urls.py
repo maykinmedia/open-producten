@@ -2,17 +2,23 @@ from django.conf import settings
 from django.urls import include, path
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
+from notifications_api_common.utils import notification_documentation
 from rest_framework.routers import DefaultRouter
 
+from open_producten.producten.kanalen import KANAAL_PRODUCTEN
 from open_producten.producten.views import ProductViewSet
 
 ProductRouter = DefaultRouter()
 ProductRouter.register("producten", ProductViewSet, basename="product")
 
-description = """
+description = f"""
 Een Api voor Producten.
 
 Een product is de instantie van een Product type (zie producttypen api), hierin worden de specifieke gegevens van de instantie opgeslagen zoals bijvoorbeeld de gegevens van de eigenaar.
+
+### Notificaties
+
+{notification_documentation(KANAAL_PRODUCTEN)}
 
 """
 

@@ -1,7 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, extend_schema, extend_schema_view
+from notifications_api_common.viewsets import NotificationViewSetMixin
 
 from open_producten.logging.api_tools import AuditTrailViewSetMixin
+from open_producten.producten.kanalen import KANAAL_PRODUCTEN
 from open_producten.producten.models import Product
 from open_producten.producten.serializers.product import ProductSerializer
 from open_producten.utils.views import OrderedModelViewSet
@@ -64,9 +66,12 @@ from open_producten.utils.views import OrderedModelViewSet
         summary="Verwijder een PRODUCT.",
     ),
 )
-class ProductViewSet(AuditTrailViewSetMixin, OrderedModelViewSet):
+class ProductViewSet(
+    AuditTrailViewSetMixin, NotificationViewSetMixin, OrderedModelViewSet
+):
     queryset = Product.objects.all()
     lookup_url_field = "id"
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["gepubliceerd", "status", "frequentie"]
+    notifications_kanaal = KANAAL_PRODUCTEN

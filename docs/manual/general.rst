@@ -102,6 +102,10 @@ Via **Applicatiegroepen** kan je een **Applicatiegroep** aanmaken. Met deze
 **Applicatiegroepen** kunnen de verschillende admin paginas gekoppeld worden aan
 menu groepen.
 
+In de **Notificatiescomponentconfiguratie** kan je instellen van welke
+*Notificaties API* je gebruik maakt. Je moet een geldige configuratie instellen,
+anders worden er door Open Producten geen notificaties verstuurd.
+
 Logs
 ----
 
@@ -109,6 +113,11 @@ Via **Access attempts** en **Access logs** kan je de inlogpogingen en sessies
 in de admin van gebruikers bekijken. Deze worden gelogd om *brute-forcing*
 tegen te kunnen gaan en inzicht te verschaffen in wie op welk moment toegang
 had tot het systeem.
+
+**Failed notifications** toont de notificaties die Open Zaak probeerde te
+versturen, maar om één of andere reden niet slaagden. Je kan hier manueel
+notificaties opnieuw versturen of verder onderzoeken waarom de notificatie niet
+kon verstuurd worden.
 
 Er worden vaak informatieve logberichten weggeschreven die kunnen wijzen op een
 probleem in de Open Producten applicatie. Deze worden via de logs inzichtelijk
