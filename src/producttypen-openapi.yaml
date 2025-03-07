@@ -3905,8 +3905,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         uniforme_product_naam:
           type: string
-          format: uri
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         toegestane_statussen:
           type: array
           items:
@@ -3947,9 +3946,8 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         uniforme_product_naam:
           type: string
-          format: uri
           minLength: 1
-          description: Uri naar de UPN definitie.
+          description: Uniforme product naam
         toegestane_statussen:
           type: array
           items:

@@ -32,6 +32,16 @@ Before you begin
 * The target machine(s) should be reachable via at least a local DNS entry:
 
   * Open Producten: ``open-producten.<organization.local>``
+  * `Open Notificaties`_: ``open-notificaties.<organization.local>``
+
+    .. note:: Notifications can be disabled using ``NOTIFICATIONS_DISABLED`` (see :ref:`installation_env_config`).
+
+
+  The machine(s) do not need to be publicly accessible and do not need a public DNS
+  entry. In some cases, you might want this but it's not recommended. The same machine
+  can be used for both Open Producten and `Open Notificaties`_.
+
+.. _`Open Notificaties`: https://github.com/open-zaak/open-notificaties
 
 Guides
 ------
