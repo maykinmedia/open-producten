@@ -5,6 +5,7 @@ from ..models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    Eigenschap,
     ExterneCode,
     Link,
     Parameter,
@@ -125,3 +126,11 @@ class ParameterFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Parameter
+
+
+class EigenschapFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    naam = factory.Sequence(lambda n: f"eigenschap {n}")
+
+    class Meta:
+        model = Eigenschap

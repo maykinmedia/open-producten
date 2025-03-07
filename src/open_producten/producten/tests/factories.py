@@ -1,7 +1,7 @@
 import factory
 
-from ...producttypen.tests.factories import ProductTypeFactory
-from ..models import Product
+from ...producttypen.tests.factories import EigenschapFactory, ProductTypeFactory
+from ..models import Product, ProductEigenschap
 from ..models.product import PrijsFrequentieChoices
 
 
@@ -14,3 +14,12 @@ class ProductFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Product
+
+
+class ProductEigenschapFactory(factory.django.DjangoModelFactory):
+    product = factory.SubFactory(ProductFactory)
+    eigenschap = factory.SubFactory(EigenschapFactory)
+    waarde = factory.Faker("word")
+
+    class Meta:
+        model = ProductEigenschap

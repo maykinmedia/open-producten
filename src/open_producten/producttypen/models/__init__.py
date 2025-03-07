@@ -1,5 +1,6 @@
 from .bestand import Bestand
 from .content import ContentElement, ContentLabel
+from .eigenschap import Eigenschap
 from .externe_code import ExterneCode
 from .link import Link
 from .parameter import Parameter
@@ -20,4 +21,5 @@ __all__ = [
     "Parameter",
     "ContentElement",
     "ContentLabel",
+    "Eigenschap",
 ]
