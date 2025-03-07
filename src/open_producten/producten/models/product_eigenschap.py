@@ -19,7 +19,7 @@ class ProductEigenschap(BaseModel):
 
     eigenschap = models.ForeignKey(
         Eigenschap,
-        verbose_name=_("producttype"),
+        verbose_name=_("eigenschap"),
         on_delete=models.CASCADE,
         related_name="waardes",
         help_text=_("Het eigenschap waarbij deze waarde hoort."),
@@ -27,7 +27,7 @@ class ProductEigenschap(BaseModel):
 
     product = models.ForeignKey(
         Product,
-        verbose_name=_("producttype"),
+        verbose_name=_("product"),
         on_delete=models.CASCADE,
         related_name="eigenschappen",
         help_text=_("Het product waarbij deze eigenschap hoort."),

@@ -2257,6 +2257,8 @@ paths:
                   parameters:
                   - naam: doelgroep
                     waarde: inwoners
+                  eigenschappen:
+                  - naam: PSP-id
                 summary: Create producttype
         required: true
       security:

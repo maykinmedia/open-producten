@@ -293,6 +293,9 @@ paths:
                   eind_datum: '2019-08-24'
                   bsn: string
                   status: gereed
+                  eigenschappen:
+                  - naam: PSP-id
+                    waarde: 12983za1
                 summary: Patch product
               UpdateProductStatus:
                 value:
