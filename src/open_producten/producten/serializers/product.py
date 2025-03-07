@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
@@ -18,7 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
     product_type_id = serializers.PrimaryKeyRelatedField(
         write_only=True, queryset=ProductType.objects.all(), source="product_type"
     )
-    eigenaren = EigenaarSerializer(many=True, required=False)
+    eigenaren = EigenaarSerializer(many=True)
 
     class Meta:
         model = Product
@@ -28,6 +29,11 @@ class ProductSerializer(serializers.ModelSerializer):
             StatusValidator(),
             NestedObjectsValidator("eigenaren", Eigenaar),
         ]
+
+    def validate_eigenaren(self, eigenaren: list[Eigenaar]) -> list[Eigenaar]:
+        if len(eigenaren) == 0:
+            raise serializers.ValidationError(_("Er is minimaal één eigenaar vereist."))
+        return eigenaren
 
     @transaction.atomic()
     def create(self, validated_data):

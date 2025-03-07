@@ -25,10 +25,12 @@ from open_producten.utils.views import OrderedModelViewSet
                     "eind_datum": "2026-12-01",
                     "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                     "gepubliceerd": False,
-                    "bsn": "111222333",
                     "status": "gereed",
                     "prijs": "20.20",
                     "frequentie": "eenmalig",
+                    "eigenaren": [
+                        {"bsn_nummer": "111222333"},
+                    ],
                 },
                 request_only=True,
             )
@@ -46,7 +48,6 @@ from open_producten.utils.views import OrderedModelViewSet
                     "gepubliceerd": True,
                     "start_datum": "2019-08-24",
                     "eind_datum": "2019-08-24",
-                    "bsn": "string",
                     "status": "gereed",
                 },
                 request_only=True,

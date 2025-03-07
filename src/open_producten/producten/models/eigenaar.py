@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator, RegexValidator, validate_integer
+from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -48,12 +48,8 @@ class Eigenaar(BaseModel):
 
     klantnummer = models.CharField(
         _("Klantnummer"),
-        help_text=_(
-            "Uniek identificerend nummer dat tijdens communicatie tussen mensen kan "
-            "worden gebruikt om het specifieke klantcontact aan te duiden."
-        ),
-        validators=[validate_integer],
-        max_length=10,
+        help_text=_("generiek veld voor de identificatie van een klant."),
+        max_length=50,
         null=True,
         blank=True,
     )
