@@ -18,7 +18,7 @@ Producttype API         `0.0.2 <https://redocly.github.io/redoc/?url=https://raw
 ======================  ==========================================
 
 In addition, Open Producten can work with `Notificaties API`_. Open Producten uses
-`Open Notificaties`_ by default but this can be disabled using ``NOTIFICATIONS_DISABLED`` :ref:`installation_env_config` .
+`Open Notificaties`_ by default but this can be disabled using ``NOTIFICATIONS_DISABLED`` (see :ref:`installation_env_config`).
 
 .. _`Notificaties API`: https://vng-realisatie.github.io/gemma-zaken/standaard/notificaties/
 .. _`Open Notificaties`: https://github.com/open-zaak/open-notificaties

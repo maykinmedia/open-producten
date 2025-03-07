@@ -34,7 +34,7 @@ Before you begin
   * Open Producten: ``open-producten.<organization.local>``
   * `Open Notificaties`_: ``open-notificaties.<organization.local>``
 
-    .. note:: notifications can be disabled using ``NOTIFICATIONS_DISABLED`` :ref:`installation_env_config`.
+    .. note:: Notifications can be disabled using ``NOTIFICATIONS_DISABLED`` (see :ref:`installation_env_config`).
 
 
   The machine(s) do not need to be publicly accessible and do not need a public DNS
