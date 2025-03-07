@@ -6,6 +6,7 @@ from ..models import (
     ContentElement,
     ContentLabel,
     ExterneCode,
+    JsonSchema,
     Link,
     Parameter,
     Prijs,
@@ -20,7 +21,7 @@ fake = Faker()
 
 class UniformeProductNaamFactory(factory.django.DjangoModelFactory):
     naam = factory.Sequence(lambda n: f"upn {n}")
-    uri = factory.Faker("url")
+    uri = factory.Sequence(lambda n: f"{fake.url()}/{n}")
 
     class Meta:
         model = UniformeProductNaam
@@ -125,3 +126,10 @@ class ParameterFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Parameter
+
+
+class JsonSchemaFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"jsonschema {n}")
+
+    class Meta:
+        model = JsonSchema

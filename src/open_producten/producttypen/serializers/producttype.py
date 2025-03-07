@@ -14,7 +14,8 @@ from open_producten.locaties.serializers.locatie import (
 )
 
 from ...utils.drf_validators import DuplicateIdValidator
-from ..models import ProductType, Thema, UniformeProductNaam
+from ..models import JsonSchema, ProductType, Thema, UniformeProductNaam
+from . import JsonSchemaSerializer
 from .bestand import NestedBestandSerializer
 from .externe_code import ExterneCodeSerializer, NestedExterneCodeSerializer
 from .link import NestedLinkSerializer
@@ -79,6 +80,18 @@ class ProductTypeSerializer(TranslatableModelSerializer):
     prijzen = NestedPrijsSerializer(many=True, read_only=True)
     links = NestedLinkSerializer(many=True, read_only=True)
     bestanden = NestedBestandSerializer(many=True, read_only=True)
+
+    verbruiksobject_schema = JsonSchemaSerializer(read_only=True)
+    verbruiksobject_schema_naam = serializers.SlugRelatedField(
+        slug_field="naam",
+        queryset=JsonSchema.objects.all(),
+        write_only=True,
+        help_text=_(
+            "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
+        ),
+        required=False,
+        source="verbruiksobject_schema",
+    )
 
     naam = serializers.CharField(
         required=True, max_length=255, help_text=_("naam van het product type.")

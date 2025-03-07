@@ -1377,7 +1377,7 @@ paths:
   /locaties/{id}/:
     get:
       operationId: locaties_retrieve
-      summary: Een specifiek LOCATIE opvragen.
+      summary: Een specifieke LOCATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -1666,7 +1666,7 @@ paths:
   /organisaties/{id}/:
     get:
       operationId: organisaties_retrieve
-      summary: Een specifiek ORGANISATIE opvragen.
+      summary: Een specifieke ORGANISATIE opvragen.
       parameters:
       - in: path
         name: id
@@ -2257,6 +2257,7 @@ paths:
                   parameters:
                   - naam: doelgroep
                     waarde: inwoners
+                  verbruiksobject_schema_naam: verbruik_schema
                 summary: Create producttype
         required: true
       security:
@@ -2742,6 +2743,295 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductTypeActuelePrijs'
           description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /schemas/:
+    get:
+      operationId: schemas_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle SCHEMA'S opvragen.
+      parameters:
+      - in: query
+        name: naam
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedJsonSchemaList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    post:
+      operationId: schemas_create
+      summary: Maak een SCHEMA aan.
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonSchemaRequest'
+            examples:
+              CreateSchema:
+                value:
+                  naam: parkeervergunning-verbruiksobject
+                  schema:
+                    type: object
+                    properties:
+                      uren:
+                        type: number
+                    required:
+                    - uren
+                summary: Create schema
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /schemas/{id}/:
+    get:
+      operationId: schemas_retrieve
+      summary: Een specifiek SCHEMA opvragen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    put:
+      operationId: schemas_update
+      summary: Werk een SCHEMA in zijn geheel bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonSchemaRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    patch:
+      operationId: schemas_partial_update
+      summary: Werk een SCHEMA deels bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedJsonSchemaRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    delete:
+      operationId: schemas_destroy
+      summary: Verwijder een SCHEMA.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Json schema.
+        required: true
+      tags:
+      - schemas
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
         '400':
           content:
             application/json:
@@ -3259,6 +3549,37 @@ components:
       required:
       - veld_a
       - veld_b
+    JsonSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        naam:
+          type: string
+          description: Naam van het json schema.
+          maxLength: 200
+        schema:
+          type: object
+          additionalProperties: {}
+      required:
+      - id
+      - naam
+      - schema
+    JsonSchemaRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: Naam van het json schema.
+          maxLength: 200
+        schema:
+          type: object
+          additionalProperties: {}
+      required:
+      - naam
+      - schema
     Link:
       type: object
       properties:
@@ -3852,6 +4173,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContentLabel'
+    PaginatedJsonSchemaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/JsonSchema'
     PaginatedLinkList:
       type: object
       required:
@@ -4047,6 +4391,17 @@ components:
         product_type_id:
           type: string
           format: uuid
+    PatchedJsonSchemaRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: Naam van het json schema.
+          maxLength: 200
+        schema:
+          type: object
+          additionalProperties: {}
     PatchedLinkRequest:
       type: object
       properties:
@@ -4188,6 +4543,12 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        verbruiksobject_schema_naam:
+          type: string
+          minLength: 1
+          description: JSON schema om het verbruiksobject van een gerelateerd product
+            te valideren.
+          writeOnly: true
         naam:
           type: string
           minLength: 1
@@ -4391,6 +4752,10 @@ components:
           items:
             $ref: '#/components/schemas/NestedBestand'
           readOnly: true
+        verbruiksobject_schema:
+          allOf:
+          - $ref: '#/components/schemas/JsonSchema'
+          readOnly: true
         naam:
           type: string
           description: naam van het product type.
@@ -4457,6 +4822,7 @@ components:
       - themas
       - uniforme_product_naam
       - update_datum
+      - verbruiksobject_schema
     ProductTypeActuelePrijs:
       type: object
       properties:
@@ -4523,6 +4889,12 @@ components:
             format: uuid
           writeOnly: true
           default: []
+        verbruiksobject_schema_naam:
+          type: string
+          minLength: 1
+          description: JSON schema om het verbruiksobject van een gerelateerd product
+            te valideren.
+          writeOnly: true
         naam:
           type: string
           minLength: 1

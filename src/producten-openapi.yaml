@@ -127,6 +127,8 @@ paths:
                   status: gereed
                   prijs: '20.20'
                   frequentie: eenmalig
+                  verbruiksobject:
+                    uren: 130
                 summary: Create product
         required: true
       security:
@@ -569,6 +571,10 @@ components:
             * `eenmalig` - Eenmalig
             * `maandelijks` - Maandelijks
             * `jaarlijks` - Jaarlijks
+        verbruiksobject:
+          nullable: true
+          description: Verbruiksobject van dit product. Wordt gevalideerd met het
+            `verbruiksobject_schema` uit het product type.
     Product:
       type: object
       properties:
@@ -658,6 +664,10 @@ components:
             * `eenmalig` - Eenmalig
             * `maandelijks` - Maandelijks
             * `jaarlijks` - Jaarlijks
+        verbruiksobject:
+          nullable: true
+          description: Verbruiksobject van dit product. Wordt gevalideerd met het
+            `verbruiksobject_schema` uit het product type.
       required:
       - aanmaak_datum
       - frequentie
@@ -733,6 +743,10 @@ components:
             * `eenmalig` - Eenmalig
             * `maandelijks` - Maandelijks
             * `jaarlijks` - Jaarlijks
+        verbruiksobject:
+          nullable: true
+          description: Verbruiksobject van dit product. Wordt gevalideerd met het
+            `verbruiksobject_schema` uit het product type.
       required:
       - frequentie
       - prijs
