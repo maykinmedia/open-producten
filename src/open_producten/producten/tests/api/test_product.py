@@ -81,7 +81,7 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
-                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type.uniforme_product_naam.naam,
                 "gepubliceerd": True,
                 "toegestane_statussen": ["gereed"],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
@@ -231,7 +231,7 @@ class TestProduct(BaseApiTestCase):
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
-                    "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "uniforme_product_naam": self.product_type.uniforme_product_naam.naam,
                     "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
                     "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
@@ -255,7 +255,7 @@ class TestProduct(BaseApiTestCase):
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
-                    "uniforme_product_naam": self.product_type.uniforme_product_naam.uri,
+                    "uniforme_product_naam": self.product_type.uniforme_product_naam.naam,
                     "toegestane_statussen": ["gereed"],
                     "gepubliceerd": True,
                     "aanmaak_datum": self.product_type.aanmaak_datum.astimezone().isoformat(),
@@ -290,7 +290,7 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
-                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type.uniforme_product_naam.naam,
                 "toegestane_statussen": ["gereed"],
                 "gepubliceerd": True,
                 "aanmaak_datum": "2025-12-31T01:00:00+01:00",

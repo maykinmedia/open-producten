@@ -11,7 +11,7 @@ from .validators import ThemaGepubliceerdStateValidator, ThemaSelfReferenceValid
 
 class NestedProductTypeSerializer(serializers.ModelSerializer):
     uniforme_product_naam = serializers.SlugRelatedField(
-        slug_field="uri", queryset=UniformeProductNaam.objects.all()
+        slug_field="naam", queryset=UniformeProductNaam.objects.all()
     )
 
     class Meta:

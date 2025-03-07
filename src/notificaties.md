@@ -22,7 +22,9 @@ De architectuur van de notificaties staat beschreven op <a href="https://github.
 
 **Kenmerken**
 
-* `product_type_id`: Het type van dit product
+* `product_type.id`: 
+* `product_type.uniforme_product_naam`: Uniforme product naam gedefinieerd door de overheid.
+* `product_type.code`: code van het product type.
 
 **Resources en acties**
 

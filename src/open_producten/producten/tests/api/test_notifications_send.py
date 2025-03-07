@@ -63,6 +63,10 @@ class SendNotifTestCase(BaseApiTestCase):
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
                 "productType.id": data["product_type"]["id"],
+                "productType.uniformeProductNaam": data["product_type"][
+                    "uniforme_product_naam"
+                ],
+                "productType.code": data["product_type"]["code"],
             },
         }
 
@@ -85,6 +89,10 @@ class SendNotifTestCase(BaseApiTestCase):
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
                 "productType.id": data["product_type"]["id"],
+                "productType.uniformeProductNaam": data["product_type"][
+                    "uniforme_product_naam"
+                ],
+                "productType.code": data["product_type"]["code"],
             },
         }
 
@@ -107,6 +115,10 @@ class SendNotifTestCase(BaseApiTestCase):
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
                 "productType.id": data["product_type"]["id"],
+                "productType.uniformeProductNaam": data["product_type"][
+                    "uniforme_product_naam"
+                ],
+                "productType.code": data["product_type"]["code"],
             },
         }
 
@@ -128,6 +140,8 @@ class SendNotifTestCase(BaseApiTestCase):
             "aanmaakdatum": "2024-02-02T01:00:00+01:00",
             "kenmerken": {
                 "productType.id": str(self.product_type.id),
+                "productType.uniformeProductNaam": self.product_type.uniforme_product_naam.naam,
+                "productType.code": self.product_type.code,
             },
         }
 
