@@ -11,6 +11,9 @@ from open_producten.producten.models.product import (
     validate_status,
     validate_verbruiksobject,
 )
+from open_producten.producten.models.product_eigenschap import (
+    validate_eigenschap_part_of_producttype,
+)
 from open_producten.utils.serializers import get_from_serializer_data_or_instance
 
 
@@ -98,5 +101,20 @@ class VerbruiksObjectValidator:
         )
         try:
             validate_verbruiksobject(verbruiksobject, product_type)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
+
+
+class ProductEigenschapValidator:
+    requires_context = True
+
+    def __call__(self, value, serializer):
+        eigenschap = get_from_serializer_data_or_instance(
+            "eigenschap", value, serializer
+        )
+        waarde = get_from_serializer_data_or_instance("waarde", value, serializer)
+        product = get_from_serializer_data_or_instance("product", value, serializer)
+        try:
+            validate_eigenschap_part_of_producttype(eigenschap, waarde, product)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)

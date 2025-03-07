@@ -1,4 +1,5 @@
 from .bestand import BestandSerializer
+from .eigenschap import EigenschapSerializer
 from .externe_code import ExterneCodeSerializer
 from .jsonschema import JsonSchemaSerializer
 from .link import LinkSerializer
@@ -18,4 +19,5 @@ __all__ = [
     "ExterneCodeSerializer",
     "ParameterSerializer",
     "JsonSchemaSerializer",
+    "EigenschapSerializer",
 ]

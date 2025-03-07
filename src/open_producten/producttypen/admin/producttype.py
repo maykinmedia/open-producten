@@ -11,6 +11,7 @@ from ...utils.widgets import WysimarkWidget
 from ..models import ProductType, Thema
 from .bestand import BestandInline
 from .content import ContentElementInline
+from .eigenschap import EigenschapInline
 from .externe_code import ExterneCodeInline
 from .link import LinkInline
 from .parameter import ParameterInline
@@ -67,6 +68,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         ContentElementInline,
         ExterneCodeInline,
         ParameterInline,
+        EigenschapInline,
     )
     fields = (
         "naam",

@@ -13,10 +13,17 @@ from open_producten.locaties.tests.factories import (
     LocatieFactory,
     OrganisatieFactory,
 )
-from open_producten.producttypen.models import ExterneCode, Link, Parameter, ProductType
+from open_producten.producttypen.models import (
+    Eigenschap,
+    ExterneCode,
+    Link,
+    Parameter,
+    ProductType,
+)
 from open_producten.producttypen.tests.factories import (
     BestandFactory,
     ContentElementFactory,
+    EigenschapFactory,
     ExterneCodeFactory,
     JsonSchemaFactory,
     LinkFactory,
@@ -105,6 +112,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "contacten": [],
             "externe_codes": [],
             "parameters": [],
+            "eigenschappen": [],
             "gepubliceerd": False,
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
@@ -239,6 +247,30 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
+    def test_create_product_type_with_duplicate_eigenschap_names_returns_error(
+        self,
+    ):
+        data = self.data | {
+            "eigenschappen": [
+                {"naam": "abc-nummer"},
+                {"naam": "abc-nummer"},
+            ],
+        }
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "eigenschappen": [
+                    ErrorDetail(
+                        string="Er bestaat al een eigenschap met de naam abc-nummer voor dit ProductType.",
+                        code="unique",
+                    )
+                ]
+            },
+        )
+
     def test_create_product_type_with_duplicate_ids_returns_error(self):
         thema = ThemaFactory.create()
 
@@ -290,6 +322,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "externe_codes": [{"naam": "ISO", "code": "123"}],
             "parameters": [{"naam": "doelgroep", "waarde": "inwoners"}],
             "verbruiksobject_schema_naam": schema.naam,
+            "eigenschappen": [{"naam": "abc-nummer"}],
         }
         response = self.client.post(self.path, data)
 
@@ -379,6 +412,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             ],
             "externe_codes": [{"naam": "ISO", "code": "123"}],
             "parameters": [{"naam": "doelgroep", "waarde": "inwoners"}],
+            "eigenschappen": [{"naam": "abc-nummer"}],
             "gepubliceerd": False,
             "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product_type.update_datum.astimezone().isoformat(),
@@ -601,6 +635,51 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
 
+    def test_update_product_type_with_eigenschap(self):
+        product_type = ProductTypeFactory.create()
+
+        eigenschappen = [{"naam": "abc-nummer"}]
+        data = self.data | {"eigenschappen": eigenschappen}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 1)
+        self.assertEqual(response.data["eigenschappen"], eigenschappen)
+
+    def test_update_product_type_with_eigenschap_replacing_existing(self):
+        product_type = ProductTypeFactory.create()
+        eigenschap = EigenschapFactory.create(product_type=product_type)
+
+        eigenschappen = [{"naam": eigenschap.naam}]
+        data = self.data | {"eigenschappen": eigenschappen}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 1)
+        self.assertEqual(response.data["eigenschappen"], eigenschappen)
+
+    def test_update_product_type_removing_eigenschappen(self):
+        product_type = ProductTypeFactory.create()
+        EigenschapFactory.create(product_type=product_type)
+        EigenschapFactory.create(product_type=product_type)
+
+        eigenschappen = []
+        data = self.data | {"eigenschappen": eigenschappen}
+        response = self.client.put(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 0)
+        self.assertEqual(response.data["eigenschappen"], eigenschappen)
+
+    def test_update_product_type_existing_eigenschappen_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        EigenschapFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), self.data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 1)
+
     def test_partial_update_product_type(self):
         product_type = ProductTypeFactory.create()
         locatie = LocatieFactory.create()
@@ -746,6 +825,51 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
 
+    def test_partial_update_product_type_with_eigenschap(self):
+        product_type = ProductTypeFactory.create()
+
+        eigenschappen = [{"naam": "abc-nummer"}]
+        data = {"eigenschappen": eigenschappen}
+        response = self.client.patch(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 1)
+        self.assertEqual(response.data["eigenschappen"], eigenschappen)
+
+    def test_partial_update_product_type_with_eigenschap_replacing_existing(self):
+        product_type = ProductTypeFactory.create()
+        eigenschap = EigenschapFactory.create(product_type=product_type)
+
+        eigenschappen = [{"naam": eigenschap.naam}]
+        data = {"eigenschappen": eigenschappen}
+        response = self.client.patch(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 1)
+        self.assertEqual(response.data["eigenschappen"], eigenschappen)
+
+    def test_partial_update_product_type_removing_eigenschappen(self):
+        product_type = ProductTypeFactory.create()
+        EigenschapFactory.create(product_type=product_type)
+        EigenschapFactory.create(product_type=product_type)
+
+        eigenschappen = []
+        data = {"eigenschappen": eigenschappen}
+        response = self.client.patch(self.detail_path(product_type), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 0)
+        self.assertEqual(response.data["eigenschappen"], eigenschappen)
+
+    def test_partial_update_product_type_existing_eigenschappen_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        EigenschapFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Eigenschap.objects.count(), 1)
+
     def test_read_product_type_link(self):
         product_type = ProductTypeFactory.create()
         link = LinkFactory.create(product_type=product_type)
@@ -833,6 +957,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "contacten": [],
                 "externe_codes": [],
                 "parameters": [],
+                "eigenschappen": [],
                 "gepubliceerd": True,
                 "aanmaak_datum": product_type1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type1.update_datum.astimezone().isoformat(),
@@ -867,6 +992,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "contacten": [],
                 "externe_codes": [],
                 "parameters": [],
+                "eigenschappen": [],
                 "gepubliceerd": True,
                 "aanmaak_datum": product_type2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product_type2.update_datum.astimezone().isoformat(),
@@ -916,6 +1042,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "contacten": [],
             "externe_codes": [],
             "parameters": [],
+            "eigenschappen": [],
             "themas": [
                 {
                     "id": str(self.thema.id),

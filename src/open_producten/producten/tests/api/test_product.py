@@ -9,9 +9,13 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-from open_producten.producten.models import Product
-from open_producten.producten.tests.factories import ProductFactory
+from open_producten.producten.models import Product, ProductEigenschap
+from open_producten.producten.tests.factories import (
+    ProductEigenschapFactory,
+    ProductFactory,
+)
 from open_producten.producttypen.tests.factories import (
+    EigenschapFactory,
     JsonSchemaFactory,
     ProductTypeFactory,
 )
@@ -82,6 +86,7 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
+            "eigenschappen": [],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
@@ -128,6 +133,7 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
+            "eigenschappen": [],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
@@ -214,6 +220,92 @@ class TestProduct(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 1)
 
+    def test_create_product_with_eigenschap(self):
+        EigenschapFactory(product_type=self.product_type, naam="test")
+
+        data = self.data | {
+            "eigenschappen": [
+                {
+                    "naam": "test",
+                    "waarde": "123",
+                }
+            ]
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductEigenschap.objects.count(), 1)
+        self.assertEqual(
+            response.data["eigenschappen"],
+            [
+                {
+                    "naam": "test",
+                    "waarde": "123",
+                }
+            ],
+        )
+
+    def test_create_product_with_eigenschap_not_part_of_product_type(self):
+        EigenschapFactory(product_type=self.product_type, naam="test")
+
+        data = self.data | {
+            "eigenschappen": [
+                {
+                    "naam": "not-test",
+                    "waarde": "123",
+                }
+            ]
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(ProductEigenschap.objects.count(), 0)
+        self.assertEqual(
+            response.data,
+            {
+                "detail": ErrorDetail(
+                    string=_("Producttype {} heeft geen eigenschap `not-test`").format(
+                        self.product_type.id
+                    ),
+                    code="not_found",
+                )
+            },
+        )
+
+    def test_create_product_with_duplicate_eigenschappen(self):
+        EigenschapFactory(product_type=self.product_type, naam="test")
+
+        data = self.data | {
+            "eigenschappen": [
+                {
+                    "naam": "test",
+                    "waarde": "123",
+                },
+                {
+                    "naam": "test",
+                    "waarde": "456",
+                },
+            ]
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(ProductEigenschap.objects.count(), 0)
+        self.assertEqual(
+            response.data,
+            {
+                "eigenschappen": [
+                    ErrorDetail(
+                        string="Er bestaat al een eigenschap met de naam test voor dit Product.",
+                        code="unique",
+                    )
+                ]
+            },
+        )
+
     def test_update_product(self):
         product_type = ProductTypeFactory.create(toegestane_statussen=["verlopen"])
         product = ProductFactory.create(bsn="111222333", product_type=product_type)
@@ -269,6 +361,198 @@ class TestProduct(BaseApiTestCase):
             },
         )
 
+    def test_update_product_with_eigenschappen(self):
+        product = ProductFactory.create(product_type=self.product_type)
+        EigenschapFactory(product_type=self.product_type, naam="test")
+        EigenschapFactory(product_type=self.product_type, naam="abc")
+
+        data = {
+            "eigenschappen": [
+                {
+                    "naam": "test",
+                    "waarde": "123",
+                },
+                {
+                    "naam": "abc",
+                    "waarde": "456",
+                },
+            ]
+        }
+
+        with self.subTest("PUT"):
+            response = self.client.put(self.detail_path(product), self.data | data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 2)
+            self.assertEqual(response.data["eigenschappen"], data["eigenschappen"])
+
+        with self.subTest("PATCH"):
+            response = self.client.patch(self.detail_path(product), data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 2)
+            self.assertEqual(response.data["eigenschappen"], data["eigenschappen"])
+
+    def test_update_product_with_eigenschappen_replacing_existing(self):
+        product = ProductFactory.create(product_type=self.product_type)
+        eigenschap = EigenschapFactory(product_type=self.product_type, naam="test")
+        EigenschapFactory(product_type=self.product_type, naam="abc")
+
+        ProductEigenschapFactory.create(product=product, eigenschap=eigenschap)
+        ProductEigenschapFactory.create(
+            product=product,
+            eigenschap=EigenschapFactory(product_type=self.product_type),
+        )
+
+        data = {
+            "eigenschappen": [
+                {
+                    "naam": "test",
+                    "waarde": "123",
+                },
+                {
+                    "naam": "abc",
+                    "waarde": "456",
+                },
+            ]
+        }
+
+        with self.subTest("PUT"):
+            response = self.client.put(self.detail_path(product), self.data | data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 2)
+            self.assertEqual(response.data["eigenschappen"], data["eigenschappen"])
+
+        with self.subTest("PATCH"):
+            response = self.client.patch(self.detail_path(product), data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 2)
+            self.assertEqual(response.data["eigenschappen"], data["eigenschappen"])
+
+    def test_update_product_removing_eigenschappen(self):
+        product = ProductFactory.create(product_type=self.product_type)
+        ProductEigenschapFactory.create(
+            product=product,
+            eigenschap=EigenschapFactory(product_type=self.product_type),
+        )
+        ProductEigenschapFactory.create(
+            product=product,
+            eigenschap=EigenschapFactory(product_type=self.product_type),
+        )
+
+        with self.subTest("PUT"):
+            response = self.client.put(
+                self.detail_path(product), self.data | {"eigenschappen": []}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 0)
+
+        with self.subTest("PATCH"):
+            response = self.client.patch(
+                self.detail_path(product), {"eigenschappen": []}
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 0)
+
+    def test_update_keeps_existing_eigenschappen(self):
+        product = ProductFactory.create(product_type=self.product_type)
+        ProductEigenschapFactory.create(
+            product=product,
+            eigenschap=EigenschapFactory(product_type=self.product_type),
+        )
+        ProductEigenschapFactory.create(
+            product=product,
+            eigenschap=EigenschapFactory(product_type=self.product_type),
+        )
+
+        with self.subTest("PUT"):
+            response = self.client.put(self.detail_path(product), self.data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 2)
+
+        with self.subTest("PATCH"):
+            response = self.client.patch(self.detail_path(product), {})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(ProductEigenschap.objects.count(), 2)
+
+    def test_update_product_with_eigenschap_not_part_of_product_type(self):
+        product = ProductFactory(product_type=self.product_type, bsn="111222333")
+        EigenschapFactory(product_type=self.product_type, naam="test")
+
+        data = {
+            "eigenschappen": [
+                {
+                    "naam": "not-test",
+                    "waarde": "123",
+                }
+            ]
+        }
+
+        expected_error = {
+            "detail": ErrorDetail(
+                string=_("Producttype {} heeft geen eigenschap `not-test`").format(
+                    self.product_type.id
+                ),
+                code="not_found",
+            )
+        }
+
+        with self.subTest("PUT"):
+            response = self.client.put(self.detail_path(product), self.data | data)
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+            self.assertEqual(ProductEigenschap.objects.count(), 0)
+            self.assertEqual(response.data, expected_error)
+
+        with self.subTest("PATCH"):
+            response = self.client.patch(self.detail_path(product), data)
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+            self.assertEqual(ProductEigenschap.objects.count(), 0)
+            self.assertEqual(response.data, expected_error)
+
+    def test_update_product_with_duplicate_eigenschappen(self):
+        product = ProductFactory(product_type=self.product_type)
+        EigenschapFactory(product_type=self.product_type, naam="test")
+
+        data = self.data | {
+            "eigenschappen": [
+                {
+                    "naam": "test",
+                    "waarde": "123",
+                },
+                {
+                    "naam": "test",
+                    "waarde": "456",
+                },
+            ]
+        }
+
+        expected_error = {
+            "eigenschappen": [
+                ErrorDetail(
+                    string="Er bestaat al een eigenschap met de naam test voor dit Product.",
+                    code="unique",
+                )
+            ]
+        }
+
+        with self.subTest("PUT"):
+            response = self.client.put(self.detail_path(product), self.data | data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(ProductEigenschap.objects.count(), 0)
+            self.assertEqual(response.data, expected_error)
+
+        with self.subTest("PATCH"):
+            response = self.client.put(self.detail_path(product), data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(ProductEigenschap.objects.count(), 0)
+            self.assertEqual(response.data, expected_error)
+
     def test_partial_update_product(self):
         product = ProductFactory.create(
             bsn="111222333",
@@ -309,6 +593,7 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": product1.frequentie,
                 "aanmaak_datum": product1.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product1.update_datum.astimezone().isoformat(),
+                "eigenschappen": [],
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
@@ -334,6 +619,7 @@ class TestProduct(BaseApiTestCase):
                 "frequentie": product2.frequentie,
                 "aanmaak_datum": product2.aanmaak_datum.astimezone().isoformat(),
                 "update_datum": product2.update_datum.astimezone().isoformat(),
+                "eigenschappen": [],
                 "product_type": {
                     "id": str(self.product_type.id),
                     "code": self.product_type.code,
@@ -370,6 +656,7 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": "2025-12-31T01:00:00+01:00",
             "update_datum": "2025-12-31T01:00:00+01:00",
+            "eigenschappen": [],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,

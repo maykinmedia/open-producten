@@ -51,6 +51,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "eind_datum": "2019-08-24",
                     "bsn": "string",
                     "status": "gereed",
+                    "eigenschappen": [{"naam": "PSP-id", "waarde": "12983za1"}],
                 },
                 request_only=True,
             ),

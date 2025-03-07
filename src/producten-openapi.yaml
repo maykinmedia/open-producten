@@ -295,6 +295,9 @@ paths:
                   eind_datum: '2019-08-24'
                   bsn: string
                   status: gereed
+                  eigenschappen:
+                  - naam: PSP-id
+                    waarde: 12983za1
                 summary: Patch product
               UpdateProductStatus:
                 value:
@@ -408,6 +411,34 @@ components:
         * `eenmalig` - Eenmalig
         * `maandelijks` - Maandelijks
         * `jaarlijks` - Jaarlijks
+    NestedProductEigenschap:
+      type: object
+      properties:
+        waarde:
+          type: string
+          description: De waarde van de eigenschap.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        naam:
+          type: string
+      required:
+      - naam
+      - waarde
+    NestedProductEigenschapRequest:
+      type: object
+      properties:
+        waarde:
+          type: string
+          minLength: 1
+          description: De waarde van de eigenschap.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+        naam:
+          type: string
+          minLength: 1
+      required:
+      - naam
+      - waarde
     NestedProductType:
       type: object
       properties:
@@ -511,6 +542,10 @@ components:
           type: string
           format: uuid
           writeOnly: true
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductEigenschapRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -594,6 +629,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedProductType'
           readOnly: true
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductEigenschap'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -683,6 +722,10 @@ components:
           type: string
           format: uuid
           writeOnly: true
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedProductEigenschapRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.

@@ -4,6 +4,7 @@ from django.utils.html import format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.logging.service import AdminAuditLogMixin, get_logs_link
+from open_producten.producten.admin.product_eigenschap import ProductEigenschapInline
 from open_producten.producten.models import Product
 from open_producten.producten.models.product import (
     validate_eind_datum,
@@ -104,6 +105,7 @@ class ProductAdmin(AdminAuditLogMixin, admin.ModelAdmin):
     autocomplete_fields = ("product_type",)
     search_fields = ("product_type__translations__naam",)
     form = ProductAdminForm
+    inlines = [ProductEigenschapInline]
 
     @admin.display(description="Product Type")
     def product_type_name(self, obj):

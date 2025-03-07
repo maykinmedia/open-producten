@@ -1,5 +1,6 @@
 from .bestand import Bestand
 from .content import ContentElement, ContentLabel
+from .eigenschap import Eigenschap
 from .externe_code import ExterneCode
 from .jsonschema import JsonSchema
 from .link import Link
@@ -22,4 +23,5 @@ __all__ = [
     "ContentElement",
     "ContentLabel",
     "JsonSchema",
+    "Eigenschap",
 ]

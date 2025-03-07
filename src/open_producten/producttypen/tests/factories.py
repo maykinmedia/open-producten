@@ -5,6 +5,7 @@ from ..models import (
     Bestand,
     ContentElement,
     ContentLabel,
+    Eigenschap,
     ExterneCode,
     JsonSchema,
     Link,
@@ -133,3 +134,11 @@ class JsonSchemaFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = JsonSchema
+
+
+class EigenschapFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    naam = factory.Sequence(lambda n: f"eigenschap {n}")
+
+    class Meta:
+        model = Eigenschap
