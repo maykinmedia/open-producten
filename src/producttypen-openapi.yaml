@@ -2257,6 +2257,8 @@ paths:
                   parameters:
                   - naam: doelgroep
                     waarde: inwoners
+                  eigenschappen:
+                  - naam: PSP-id
                 summary: Create producttype
         required: true
       security:
@@ -3425,6 +3427,27 @@ components:
       - content
       - id
       - taal
+    NestedEigenschap:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: De naam van de eigenschap.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - naam
+    NestedEigenschapRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: De naam van de eigenschap.
+          pattern: ^[^:\[\]]+$
+          maxLength: 255
+      required:
+      - naam
     NestedExterneCode:
       type: object
       properties:
@@ -4205,6 +4228,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NestedParameterRequest'
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedEigenschapRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4410,6 +4437,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NestedParameter'
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedEigenschap'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -4540,6 +4571,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NestedParameterRequest'
+        eigenschappen:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedEigenschapRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.

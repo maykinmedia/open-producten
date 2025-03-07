@@ -133,6 +133,7 @@ class ProductTypeFilterSet(FilterSet):
                     "parameters": [
                         {"naam": "doelgroep", "waarde": "inwoners"},
                     ],
+                    "eigenschappen": [{"naam": "PSP-id"}],
                 },
                 request_only=True,
             )
