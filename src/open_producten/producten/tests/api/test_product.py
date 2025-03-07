@@ -116,6 +116,7 @@ class TestProduct(BaseApiTestCase):
         product_type = product.product_type
         expected_data = {
             "id": str(product.id),
+            "url": f"http://testserver{self.detail_path(product)}",
             "bsn": product.bsn,
             "kvk": product.kvk,
             "status": product.status,
@@ -130,7 +131,7 @@ class TestProduct(BaseApiTestCase):
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,
-                "uniforme_product_naam": product_type.uniforme_product_naam.uri,
+                "uniforme_product_naam": product_type.uniforme_product_naam.naam,
                 "gepubliceerd": True,
                 "toegestane_statussen": ["gereed"],
                 "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),

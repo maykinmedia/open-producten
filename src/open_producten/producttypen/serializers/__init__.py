@@ -1,6 +1,6 @@
 from .bestand import BestandSerializer
-from .jsonschema import JsonSchemaSerializer
 from .externe_code import ExterneCodeSerializer
+from .jsonschema import JsonSchemaSerializer
 from .link import LinkSerializer
 from .parameter import ParameterSerializer
 from .prijs import PrijsOptieSerializer, PrijsSerializer
