@@ -10,6 +10,7 @@ from open_producten.locaties.models import Contact, Locatie, Organisatie
 from open_producten.utils.fields import ChoiceArrayField
 from open_producten.utils.models import BasePublishableModel
 
+from .jsonschema import JsonSchema
 from .thema import Thema
 from .upn import UniformeProductNaam
 
@@ -31,6 +32,18 @@ class ProductType(BasePublishableModel, TranslatableModel):
         max_length=255,
         help_text=_("code van het product type."),
         unique=True,
+    )
+
+    verbruiksobject_schema = models.ForeignKey(
+        JsonSchema,
+        verbose_name=_("verbruiksobject schema"),
+        on_delete=models.PROTECT,
+        help_text=_(
+            "JSON schema om het verbruiksobject van een gerelateerd product te valideren."
+        ),
+        null=True,
+        blank=True,
+        related_name="product_typen",
     )
 
     toegestane_statussen = ChoiceArrayField(

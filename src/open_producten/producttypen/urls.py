@@ -13,6 +13,7 @@ from open_producten.producttypen.views import (
     BestandViewSet,
     ContentElementViewSet,
     ContentLabelViewSet,
+    JsonSchemaViewSet,
     LinkViewSet,
     PrijsViewSet,
     ProductTypeViewSet,
@@ -29,6 +30,8 @@ ProductTypenRouter.register("prijzen", PrijsViewSet, basename="prijs")
 ProductTypenRouter.register("themas", ThemaViewSet, basename="thema")
 
 ProductTypenRouter.register("bestanden", BestandViewSet, basename="bestand")
+
+ProductTypenRouter.register("schemas", JsonSchemaViewSet, basename="schema")
 
 ProductTypenRouter.register("content", ContentElementViewSet, basename="content")
 
@@ -84,6 +87,7 @@ custom_settings = {
             "name": "contentlabels",
             "description": "Opvragen van CONTENTLABELS.",
         },
+        {"name": "schemas", "description": "Opvragen en bewerken van SCHEMAS."},
     ],
 }
 
