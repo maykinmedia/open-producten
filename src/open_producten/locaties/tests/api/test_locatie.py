@@ -12,13 +12,13 @@ from ..factories import LocatieFactory
 
 
 class TestLocatie(BaseApiTestCase):
+    path = reverse("locatie-list")
 
     def setUp(self):
         super().setUp()
-        self.data = {"naam": "locatie", "postcode": "1111AA", "stad": "Amsterdam"}
+        self.data = {"naam": "locatie", "postcode": "1111 AA", "stad": "Amsterdam"}
         self.locatie = LocatieFactory.create()
 
-        self.path = reverse("locatie-list")
         self.detail_path = reverse("locatie-detail", args=[self.locatie.id])
 
     def test_read_locatie_without_credentials_returns_error(self):

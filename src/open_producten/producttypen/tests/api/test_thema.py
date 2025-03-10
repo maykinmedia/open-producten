@@ -11,6 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestThemaViewSet(BaseApiTestCase):
+    path = reverse("thema-list")
 
     def setUp(self):
         super().setUp()
@@ -19,7 +20,6 @@ class TestThemaViewSet(BaseApiTestCase):
             "hoofd_thema": None,
             "product_type_ids": [],
         }
-        self.path = reverse("thema-list")
 
     def detail_path(self, thema):
         return reverse("thema-detail", args=[thema.id])

@@ -18,9 +18,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestProductTypeFilters(BaseApiTestCase):
 
-    def setUp(self):
-        super().setUp()
-        self.path = reverse("producttype-list")
+    path = reverse("producttype-list")
 
     def test_gepubliceerd_filter(self):
         ProductTypeFactory.create(gepubliceerd=True)
@@ -30,6 +28,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["gepubliceerd"], True)
 
     def test_uniforme_product_naam_filter(self):
         ProductTypeFactory.create(
@@ -45,6 +44,9 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["uniforme_product_naam"], "parkeervergunning"
+        )
 
     def test_externe_code_filter(self):
         product_type_1 = ProductTypeFactory.create()
@@ -57,6 +59,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(product_type_1.id))
 
     def test_multiple_externe_code_filters(self):
         product_type_1 = ProductTypeFactory.create()
@@ -72,6 +75,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(product_type_1.id))
 
     def test_externe_code_filter_without_brackets(self):
         response = self.client.get(self.path, {"externe_code": "abc"})
@@ -103,6 +107,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(product_type_1.id))
 
     def test_multiple_parameter_filters(self):
         product_type_1 = ProductTypeFactory.create()
@@ -122,6 +127,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(product_type_1.id))
 
     def test_parameter_filter_without_brackets(self):
         response = self.client.get(self.path, {"parameter": "abc"})
@@ -146,17 +152,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
-
-    def test_upn_filter(self):
-        ProductTypeFactory.create(uniforme_product_naam__naam="parkeervergunning")
-        ProductTypeFactory.create(uniforme_product_naam__naam="aanbouw")
-
-        response = self.client.get(
-            self.path, {"uniforme_product_naam": "parkeervergunning"}
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["code"], "8234098q2730492873")
 
     def test_letter_filter(self):
         product_type_1 = ProductTypeFactory.create(naam="Parkeervergunning")
@@ -277,18 +273,30 @@ class TestProductTypeFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["aanmaak_datum"],
+                "2024-06-07T02:00:00+02:00",
+            )
 
         with self.subTest("lte"):
             response = self.client.get(self.path, {"aanmaak_datum__lte": "2024-07-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["aanmaak_datum"],
+                "2024-06-07T02:00:00+02:00",
+            )
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"aanmaak_datum__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["aanmaak_datum"],
+                "2025-06-07T02:00:00+02:00",
+            )
 
     def test_update_datum_filter(self):
         with freeze_time("2024-06-07"):
@@ -303,18 +311,27 @@ class TestProductTypeFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["update_datum"], "2024-06-07T02:00:00+02:00"
+            )
 
         with self.subTest("lte"):
             response = self.client.get(self.path, {"update_datum__lte": "2024-07-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["update_datum"], "2024-06-07T02:00:00+02:00"
+            )
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"update_datum__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["update_datum"], "2025-06-07T02:00:00+02:00"
+            )
 
     def test_keywords_filter(self):
         ProductTypeFactory.create(keywords=["test", "wonen", "jongeren"])
@@ -330,12 +347,18 @@ class TestProductTypeFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["keywords"], ["test", "wonen", "jongeren"]
+            )
 
         with self.subTest("multiple keywords same producttype"):
             response = self.client.get(self.path, {"keywords": "wonen,jongeren"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["keywords"], ["test", "wonen", "jongeren"]
+            )
 
         with self.subTest("multiple keywords different producttypes"):
             response = self.client.get(self.path, {"keywords": "jongeren,ouderen"})
@@ -360,6 +383,9 @@ class TestProductTypeFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["keywords"], ["test", "wonen", "jongeren"]
+            )
 
         with self.subTest("non existing keyword"):
             response = self.client.get(self.path, {"keywords": "abc"})
@@ -389,6 +415,10 @@ class TestProductTypeFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["toegestane_statussen"],
+                ["actief", "gereed", "verlopen"],
+            )
 
         with self.subTest("multiple statuses different producttypes"):
             response = self.client.get(
@@ -421,6 +451,10 @@ class TestProductTypeFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["toegestane_statussen"],
+                ["actief", "gereed", "verlopen"],
+            )
 
         with self.subTest("non existing status"):
             response = self.client.get(self.path, {"toegestane_statussen": "abc"})
@@ -459,3 +493,7 @@ class TestProductTypeFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["verbruiksobject_schema"]["naam"],
+            "parkeer-verbruik-schema",
+        )

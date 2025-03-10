@@ -10,9 +10,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestLinkFilters(BaseApiTestCase):
 
-    def setUp(self):
-        super().setUp()
-        self.path = reverse("link-list")
+    path = reverse("link-list")
 
     def test_naam_filter(self):
         LinkFactory.create(naam="organisatie a")
@@ -22,6 +20,7 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["naam"], "organisatie b")
 
     def test_naam_contains_filter(self):
         LinkFactory.create(naam="organisatie a")
@@ -31,6 +30,7 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["naam"], "organisatie b")
 
     def test_url_filter(self):
         LinkFactory.create(url="https://google.com")
@@ -40,6 +40,7 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["url"], "https://maykinmedia.nl")
 
     def test_url_contains_filter(self):
         LinkFactory.create(url="https://google.com")
@@ -49,10 +50,14 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["url"], "https://maykinmedia.nl")
 
     def test_product_type_code_filter(self):
+        product_type_id = uuid4()
         LinkFactory.create(product_type__code="123")
-        LinkFactory.create(product_type__code="8234098q2730492873")
+        LinkFactory.create(
+            product_type__code="8234098q2730492873", product_type__id=product_type_id
+        )
 
         response = self.client.get(
             self.path, {"product_type__code": "8234098q2730492873"}
@@ -60,6 +65,9 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )
 
     def test_product_type_id_filter(self):
         product_type_id = uuid4()
@@ -70,10 +78,15 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )
 
     def test_product_type_upn_filter(self):
+        product_type_id = uuid4()
         LinkFactory.create(
-            product_type__uniforme_product_naam__naam="parkeervergunning"
+            product_type__uniforme_product_naam__naam="parkeervergunning",
+            product_type__id=product_type_id,
         )
         LinkFactory.create(product_type__uniforme_product_naam__naam="aanbouw")
 
@@ -83,9 +96,15 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )
 
     def test_product_type_naam_filter(self):
-        LinkFactory.create(product_type__naam="parkeervergunning")
+        product_type_id = uuid4()
+        LinkFactory.create(
+            product_type__naam="parkeervergunning", product_type__id=product_type_id
+        )
         LinkFactory.create(product_type__naam="aanbouw")
 
         response = self.client.get(
@@ -94,3 +113,6 @@ class TestLinkFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )

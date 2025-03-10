@@ -202,6 +202,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
+              examples:
+                ProductResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      start_datum: '2024-12-01'
+                      eind_datum: '2026-12-01'
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      product_type:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        code: 129380-c21231
+                        keywords:
+                        - auto
+                        uniforme_product_naam: parkeervergunning
+                        toegestane_statussen:
+                        - gereed
+                        gepubliceerd: true
+                        aanmaak_datum: '2019-08-24T14:15:22Z'
+                        update_datum: '2019-08-24T14:15:22Z'
+                      gepubliceerd: false
+                      bsn: '111222333'
+                      status: gereed
+                      prijs: '20.20'
+                      frequentie: eenmalig
+                      verbruiksobject:
+                        uren: 130
+                      data:
+                        max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -239,22 +273,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductRequest'
-            examples:
-              CreateProduct:
-                value:
-                  start_datum: '2024-12-01'
-                  eind_datum: '2026-12-01'
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                  gepubliceerd: false
-                  bsn: '111222333'
-                  status: gereed
-                  prijs: '20.20'
-                  frequentie: eenmalig
-                  verbruiksobject:
-                    uren: 130
-                  data:
-                    max_uren: 150
-                summary: Create product
         required: true
       security:
       - tokenAuth: []
@@ -264,6 +282,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -313,6 +361,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -367,6 +445,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -412,19 +520,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedProductRequest'
-            examples:
-              PatchProduct:
-                value:
-                  gepubliceerd: true
-                  start_datum: '2019-08-24'
-                  eind_datum: '2019-08-24'
-                  bsn: string
-                  status: gereed
-                summary: Patch product
-              UpdateProductStatus:
-                value:
-                  status: actief
-                summary: Update product status
       security:
       - tokenAuth: []
       responses:
@@ -433,6 +528,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:

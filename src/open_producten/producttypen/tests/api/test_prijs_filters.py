@@ -12,9 +12,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestPrijsFilters(BaseApiTestCase):
 
-    def setUp(self):
-        super().setUp()
-        self.path = reverse("prijs-list")
+    path = reverse("prijs-list")
 
     def test_prijs_opties_bedrag_filter(self):
         prijs1 = PrijsFactory.create()
@@ -28,18 +26,21 @@ class TestPrijsFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(response.data["results"][0]["id"], str(prijs2.id))
 
         with self.subTest("lte"):
             response = self.client.get(self.path, {"prijsopties__bedrag__lte": "40"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(response.data["results"][0]["id"], str(prijs1.id))
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"prijsopties__bedrag__gte": "40"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(response.data["results"][0]["id"], str(prijs2.id))
 
     def test_prijs_opties_beschrijving_filter(self):
         prijs = PrijsFactory.create()
@@ -51,6 +52,7 @@ class TestPrijsFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(prijs.id))
 
     def test_actief_vanaf_filter(self):
         PrijsFactory.create(actief_vanaf=date(2024, 6, 7))
@@ -61,22 +63,28 @@ class TestPrijsFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(response.data["results"][0]["actief_vanaf"], "2024-06-07")
 
         with self.subTest("lte"):
             response = self.client.get(self.path, {"actief_vanaf__lte": "2024-07-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(response.data["results"][0]["actief_vanaf"], "2024-06-07")
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"actief_vanaf__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(response.data["results"][0]["actief_vanaf"], "2025-06-07")
 
     def test_product_type_code_filter(self):
+        product_type_id = uuid4()
         PrijsFactory.create(product_type__code="123")
-        PrijsFactory.create(product_type__code="8234098q2730492873")
+        PrijsFactory.create(
+            product_type__code="8234098q2730492873", product_type__id=product_type_id
+        )
 
         response = self.client.get(
             self.path, {"product_type__code": "8234098q2730492873"}
@@ -84,6 +92,9 @@ class TestPrijsFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )
 
     def test_product_type_id_filter(self):
         product_type_id = uuid4()
@@ -94,10 +105,15 @@ class TestPrijsFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )
 
     def test_product_type_upn_filter(self):
+        product_type_id = uuid4()
         PrijsFactory.create(
-            product_type__uniforme_product_naam__naam="parkeervergunning"
+            product_type__uniforme_product_naam__naam="parkeervergunning",
+            product_type__id=product_type_id,
         )
         PrijsFactory.create(product_type__uniforme_product_naam__naam="aanbouw")
 
@@ -107,9 +123,15 @@ class TestPrijsFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )
 
     def test_product_type_naam_filter(self):
-        PrijsFactory.create(product_type__naam="parkeervergunning")
+        product_type_id = uuid4()
+        PrijsFactory.create(
+            product_type__naam="parkeervergunning", product_type__id=product_type_id
+        )
         PrijsFactory.create(product_type__naam="aanbouw")
 
         response = self.client.get(
@@ -118,3 +140,6 @@ class TestPrijsFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["product_type_id"], product_type_id
+        )

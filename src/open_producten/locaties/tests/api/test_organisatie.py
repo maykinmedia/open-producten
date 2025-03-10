@@ -12,6 +12,7 @@ from ..factories import OrganisatieFactory
 
 
 class TestOrganisatie(BaseApiTestCase):
+    path = reverse("organisatie-list")
 
     def setUp(self):
         super().setUp()
@@ -19,12 +20,11 @@ class TestOrganisatie(BaseApiTestCase):
         self.data = {
             "naam": "locatie",
             "code": "ORG-123",
-            "postcode": "1111AA",
+            "postcode": "1111 AA",
             "stad": "Amsterdam",
         }
         self.organisatie = OrganisatieFactory.create()
 
-        self.path = reverse("organisatie-list")
         self.detail_path = reverse("organisatie-detail", args=[self.organisatie.id])
 
     def test_read_organisatie_without_credentials_returns_error(self):

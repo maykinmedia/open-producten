@@ -11,6 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestProductTypeSchema(BaseApiTestCase):
+    path = reverse("schema-list")
 
     def setUp(self):
         super().setUp()
@@ -24,7 +25,6 @@ class TestProductTypeSchema(BaseApiTestCase):
         }
         self.schema = JsonSchemaFactory.create(schema=self.data["schema"])
 
-        self.path = reverse("schema-list")
         self.detail_path = reverse("schema-detail", args=[self.schema.id])
 
     def test_read_schema_without_credentials_returns_error(self):

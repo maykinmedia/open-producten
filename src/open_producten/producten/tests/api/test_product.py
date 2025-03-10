@@ -21,6 +21,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 @freeze_time("2024-01-01")
 @override_settings(NOTIFICATIONS_DISABLED=True, PRODUCTEN_API_MAJOR_VERSION=0)
 class TestProduct(BaseApiTestCase):
+    path = reverse("product-list")
 
     def setUp(self):
         super().setUp()
@@ -33,7 +34,6 @@ class TestProduct(BaseApiTestCase):
             "frequentie": "eenmalig",
             "data": [],
         }
-        self.path = reverse("product-list")
 
     def detail_path(self, product):
         return reverse("product-detail", args=[product.id])

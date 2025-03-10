@@ -11,9 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestThemaFilters(BaseApiTestCase):
 
-    def setUp(self):
-        super().setUp()
-        self.path = reverse("thema-list")
+    path = reverse("thema-list")
 
     def test_gepubliceerd_filter(self):
         ThemaFactory.create(gepubliceerd=True)
@@ -23,6 +21,7 @@ class TestThemaFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["gepubliceerd"], True)
 
     def test_naam_filter(self):
         ThemaFactory.create(naam="organisatie a")
@@ -32,6 +31,7 @@ class TestThemaFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["naam"], "organisatie b")
 
     def test_hoofd_thema_naam_filter(self):
         hoofd_thema = ThemaFactory.create(naam="vervoer")
@@ -42,6 +42,7 @@ class TestThemaFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["hoofd_thema"], hoofd_thema.id)
 
     def test_hoofd_thema_id_filter(self):
         hoofd_thema_id = uuid4()
@@ -53,6 +54,7 @@ class TestThemaFilters(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["hoofd_thema"], hoofd_thema_id)
 
     def test_aanmaak_datum_filter(self):
         with freeze_time("2024-06-07"):
@@ -67,18 +69,30 @@ class TestThemaFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["aanmaak_datum"],
+                "2024-06-07T02:00:00+02:00",
+            )
 
         with self.subTest("lte"):
             response = self.client.get(self.path, {"aanmaak_datum__lte": "2024-07-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["aanmaak_datum"],
+                "2024-06-07T02:00:00+02:00",
+            )
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"aanmaak_datum__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["aanmaak_datum"],
+                "2025-06-07T02:00:00+02:00",
+            )
 
     def test_update_datum_filter(self):
         with freeze_time("2024-06-07"):
@@ -93,15 +107,24 @@ class TestThemaFilters(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["update_datum"], "2024-06-07T02:00:00+02:00"
+            )
 
         with self.subTest("lte"):
             response = self.client.get(self.path, {"update_datum__lte": "2024-07-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["update_datum"], "2024-06-07T02:00:00+02:00"
+            )
 
         with self.subTest("gte"):
             response = self.client.get(self.path, {"update_datum__gte": "2025-04-07"})
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data["count"], 1)
+            self.assertEqual(
+                response.data["results"][0]["update_datum"], "2025-06-07T02:00:00+02:00"
+            )

@@ -12,6 +12,7 @@ from ..factories import LinkFactory, ProductTypeFactory
 
 
 class TestProductTypeLink(BaseApiTestCase):
+    path = reverse("link-list")
 
     def setUp(self):
         super().setUp()
@@ -23,7 +24,6 @@ class TestProductTypeLink(BaseApiTestCase):
         }
         self.link = LinkFactory.create(product_type=self.product_type)
 
-        self.path = reverse("link-list")
         self.detail_path = reverse("link-detail", args=[self.link.id])
 
     def test_read_link_without_credentials_returns_error(self):

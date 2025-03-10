@@ -12,6 +12,7 @@ from ..factories import ContactFactory, OrganisatieFactory
 
 
 class TestContact(BaseApiTestCase):
+    path = reverse("contact-list")
 
     def setUp(self):
         super().setUp()
@@ -23,7 +24,6 @@ class TestContact(BaseApiTestCase):
         }
         self.contact = ContactFactory.create()
 
-        self.path = reverse("contact-list")
         self.detail_path = reverse("contact-detail", args=[self.contact.id])
 
     def test_read_contact_without_credentials_returns_error(self):

@@ -40,6 +40,7 @@ from open_producten.producttypen.serializers.thema import NestedProductTypeSeria
                 "prijs": "20.20",
                 "frequentie": "eenmalig",
                 "verbruiksobject": {"uren": 130},
+                "data": {"max_uren": 150},
             },
             response_only=True,
         ),

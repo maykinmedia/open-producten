@@ -31,6 +31,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestProducttypeViewSet(BaseApiTestCase):
+    path = reverse("producttype-list")
 
     def setUp(self):
         super().setUp()
@@ -44,8 +45,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": upn.naam,
             "thema_ids": [self.thema.id],
         }
-
-        self.path = reverse("producttype-list")
 
     def detail_path(self, product_type):
         return reverse("producttype-detail", args=[product_type.id])
@@ -318,7 +317,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 },
             },
             "dataobject_schema": {
-                "id": schema.id,
                 "naam": "test",
                 "schema": {
                     "type": "object",

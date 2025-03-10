@@ -20,7 +20,7 @@ from .organisatie import OrganisatieSerializer
                     "telefoonnummer": "+310207530523",
                     "straat": "Kingsfortweg",
                     "huisnummer": "151",
-                    "postcode": "1043GR",
+                    "postcode": "1043 GR",
                     "stad": "Amsterdam",
                 },
                 "voornaam": "Bob",
