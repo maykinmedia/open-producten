@@ -36,6 +36,10 @@
             ],
             [
                 "producttypen",
+                "jsonschema"
+            ],
+            [
+                "producttypen",
                 "link"
             ],
             [
