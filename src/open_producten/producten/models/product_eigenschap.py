@@ -48,7 +48,7 @@ class ProductEigenschap(BaseModel):
         )
 
     def __str__(self):
-        return f"{self.eigenschap.naam} {self.waarde} {self.product.naam}"
+        return f"{self.eigenschap.naam} {self.waarde}"
 
 
 def validate_eigenschap_part_of_producttype(eigenschap, waarde, product):
