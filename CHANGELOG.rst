@@ -1,3 +1,16 @@
+0.0.5 (11-03-2025)
+------------------
+
+**New features**
+
+* [#52] Added interne opmerkingen field to producttype.
+* [#13] Added externe codes to producttype.
+* [#12] Added parameters to producttype.
+* [#18] Added integration with Open Notificaties.
+* [#31] Added producttype verbruiksobject_schema & product verbruiksobject/
+
+
+
 0.0.4 (18-02-2025)
 ------------------
 
