@@ -92,8 +92,6 @@ class Product(BasePublishableModel):
 
     def clean(self):
         validate_dates(self.start_datum, self.eind_datum)
-        validate_verbruiksobject(self.verbruiksobject, self.product_type)
-        validate_dataobject(self.dataobject, self.product_type)
 
     def save(self, *args, **kwargs):
         self.handle_start_datum()
