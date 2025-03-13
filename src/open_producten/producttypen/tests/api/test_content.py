@@ -12,6 +12,7 @@ from ..factories import ContentElementFactory, ContentLabelFactory, ProductTypeF
 
 
 class TestContentElement(BaseApiTestCase):
+    path = reverse("content-list")
 
     def setUp(self):
         super().setUp()
@@ -30,7 +31,6 @@ class TestContentElement(BaseApiTestCase):
         self.content_element.labels.add(self.label)
         self.content_element.save()
 
-        self.path = reverse("content-list")
         self.detail_path = reverse("content-detail", args=[self.content_element.id])
 
     def test_read_content_element_without_credentials_returns_error(self):
@@ -202,10 +202,7 @@ class TestContentElementActions(BaseApiTestCase):
 
 
 class TestContentLabel(BaseApiTestCase):
-    def setUp(self):
-        super().setUp()
-
-        self.path = reverse("contentlabel-list")
+    path = reverse("contentlabel-list")
 
     def test_read_content_labels(self):
         label1 = ContentLabelFactory.create()

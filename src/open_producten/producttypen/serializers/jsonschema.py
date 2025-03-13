@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 from rest_framework import serializers
@@ -5,6 +6,34 @@ from rest_framework import serializers
 from open_producten.producttypen.models import JsonSchema
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "schema response",
+            value={
+                "naam": "parkeervergunning-verbruiksobject",
+                "schema": {
+                    "type": "object",
+                    "properties": {"uren": {"type": "number"}},
+                    "required": ["uren"],
+                },
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "schema request",
+            value={
+                "naam": "parkeervergunning-verbruiksobject",
+                "schema": {
+                    "type": "object",
+                    "properties": {"uren": {"type": "number"}},
+                    "required": ["uren"],
+                },
+            },
+            request_only=True,
+        ),
+    ],
+)
 class JsonSchemaSerializer(serializers.ModelSerializer):
 
     schema = serializers.DictField()
@@ -19,4 +48,4 @@ class JsonSchemaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JsonSchema
-        fields = ("id", "naam", "schema")
+        fields = ("naam", "schema")

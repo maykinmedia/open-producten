@@ -18,6 +18,11 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle BESTANDEN opvragen.
       parameters:
+      - in: query
+        name: naam__contains
+        schema:
+          type: string
+        description: Naam van het bestand.
       - name: page
         required: false
         in: query
@@ -31,11 +36,25 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
         schema:
           type: string
           format: uuid
-        description: Het product type waarbij dit bestand hoort.
+      - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+        description: Uniforme product naam vanuit de UPL.
       tags:
       - bestanden
       security:
@@ -46,6 +65,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedBestandList'
+              examples:
+                BestandResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      bestand: https://gemeente.open-producten.nl/media/test.txt
+                      product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                  summary: bestand response
           description: ''
         '400':
           content:
@@ -80,11 +110,11 @@ paths:
             schema:
               $ref: '#/components/schemas/BestandRequest'
             examples:
-              CreateBestand:
+              BestandRequest:
                 value:
                   bestand: test.txt
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                summary: Create bestand
+                summary: bestand request
         required: true
       security:
       - tokenAuth: []
@@ -94,6 +124,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bestand'
+              examples:
+                BestandResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    bestand: https://gemeente.open-producten.nl/media/test.txt
+                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                  summary: bestand response
           description: ''
         '400':
           content:
@@ -139,6 +176,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bestand'
+              examples:
+                BestandResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    bestand: https://gemeente.open-producten.nl/media/test.txt
+                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                  summary: bestand response
           description: ''
         '400':
           content:
@@ -180,6 +224,12 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/BestandRequest'
+            examples:
+              BestandRequest:
+                value:
+                  bestand: test.txt
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                summary: bestand request
         required: true
       security:
       - tokenAuth: []
@@ -189,6 +239,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bestand'
+              examples:
+                BestandResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    bestand: https://gemeente.open-producten.nl/media/test.txt
+                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                  summary: bestand response
           description: ''
         '400':
           content:
@@ -230,6 +287,12 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/PatchedBestandRequest'
+            examples:
+              BestandRequest:
+                value:
+                  bestand: test.txt
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                summary: bestand request
       security:
       - tokenAuth: []
       responses:
@@ -238,6 +301,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bestand'
+              examples:
+                BestandResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    bestand: https://gemeente.open-producten.nl/media/test.txt
+                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                  summary: bestand response
           description: ''
         '400':
           content:
@@ -307,6 +377,25 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle CONTACTEN opvragen.
       parameters:
+      - in: query
+        name: achternaam
+        schema:
+          type: string
+        description: achternaam van het contact
+      - in: query
+        name: email__iexact
+        schema:
+          type: string
+        description: email van het contact
+      - in: query
+        name: organisatie__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: organisatie__naam
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -319,6 +408,21 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: rol
+        schema:
+          type: string
+        description: De rol/functie van het contact
+      - in: query
+        name: telefoonnummer__contains
+        schema:
+          type: string
+        description: telefoonnummer van het contact
+      - in: query
+        name: voornaam
+        schema:
+          type: string
+        description: voornaam van het contact
       tags:
       - contacten
       security:
@@ -329,6 +433,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedContactList'
+              examples:
+                ContactResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      organisatie:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        code: org-1234
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      voornaam: Bob
+                      achternaam: de Vries
+                      email: bob@example.com
+                      telefoonnummer: '0611223344'
+                      rol: medewerker
+                  summary: contact response
           description: ''
         '400':
           content:
@@ -363,7 +491,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ContactRequest'
             examples:
-              CreateContact:
+              ContactRequest:
                 value:
                   organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
                   voornaam: Bob
@@ -371,7 +499,7 @@ paths:
                   email: bob@example.com
                   telefoonnummer: '0611223344'
                   rol: medewerker
-                summary: Create contact
+                summary: contact request
         required: true
       security:
       - tokenAuth: []
@@ -381,6 +509,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+              examples:
+                ContactResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    organisatie:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    voornaam: Bob
+                    achternaam: de Vries
+                    email: bob@example.com
+                    telefoonnummer: '0611223344'
+                    rol: medewerker
+                  summary: contact response
           description: ''
         '400':
           content:
@@ -426,6 +574,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+              examples:
+                ContactResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    organisatie:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    voornaam: Bob
+                    achternaam: de Vries
+                    email: bob@example.com
+                    telefoonnummer: '0611223344'
+                    rol: medewerker
+                  summary: contact response
           description: ''
         '400':
           content:
@@ -467,6 +635,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ContactRequest'
+            examples:
+              ContactRequest:
+                value:
+                  organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                  voornaam: Bob
+                  achternaam: de Vries
+                  email: bob@example.com
+                  telefoonnummer: '0611223344'
+                  rol: medewerker
+                summary: contact request
         required: true
       security:
       - tokenAuth: []
@@ -476,6 +654,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+              examples:
+                ContactResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    organisatie:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    voornaam: Bob
+                    achternaam: de Vries
+                    email: bob@example.com
+                    telefoonnummer: '0611223344'
+                    rol: medewerker
+                  summary: contact response
           description: ''
         '400':
           content:
@@ -518,6 +716,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedContactRequest'
+            examples:
+              ContactRequest:
+                value:
+                  organisatie_id: 73a745d4-7df0-4510-991e-abfb19f0d861
+                  voornaam: Bob
+                  achternaam: de Vries
+                  email: bob@example.com
+                  telefoonnummer: '0611223344'
+                  rol: medewerker
+                summary: contact request
       security:
       - tokenAuth: []
       responses:
@@ -526,6 +734,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+              examples:
+                ContactResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    organisatie:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    voornaam: Bob
+                    achternaam: de Vries
+                    email: bob@example.com
+                    telefoonnummer: '0611223344'
+                    rol: medewerker
+                  summary: contact response
           description: ''
         '400':
           content:
@@ -601,13 +829,13 @@ paths:
             schema:
               $ref: '#/components/schemas/ContentElementRequest'
             examples:
-              CreateContent:
+              ContentElementRequest:
                 value:
                   labels:
                   - openingstijden
                   content: ma-vr 8:00-17:00
                   product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
-                summary: Create content
+                summary: content element request
         required: true
       security:
       - tokenAuth: []
@@ -617,6 +845,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContentElement'
+              examples:
+                ContentElementResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    labels:
+                    - openingstijden
+                    content: ma-vr 8:00-17:00
+                    taal: nl
+                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  summary: content element response
           description: ''
         '400':
           content:
@@ -662,6 +900,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContentElement'
+              examples:
+                ContentElementResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    labels:
+                    - openingstijden
+                    content: ma-vr 8:00-17:00
+                    taal: nl
+                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  summary: content element response
           description: ''
         '400':
           content:
@@ -703,6 +951,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ContentElementRequest'
+            examples:
+              ContentElementRequest:
+                value:
+                  labels:
+                  - openingstijden
+                  content: ma-vr 8:00-17:00
+                  product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                summary: content element request
         required: true
       security:
       - tokenAuth: []
@@ -712,6 +968,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContentElement'
+              examples:
+                ContentElementResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    labels:
+                    - openingstijden
+                    content: ma-vr 8:00-17:00
+                    taal: nl
+                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  summary: content element response
           description: ''
         '400':
           content:
@@ -755,6 +1021,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedContentElementRequest'
+            examples:
+              ContentElementRequest:
+                value:
+                  labels:
+                  - openingstijden
+                  content: ma-vr 8:00-17:00
+                  product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                summary: content element request
       security:
       - tokenAuth: []
       responses:
@@ -763,6 +1037,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ContentElement'
+              examples:
+                ContentElementResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    labels:
+                    - openingstijden
+                    content: ma-vr 8:00-17:00
+                    taal: nl
+                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  summary: content element response
           description: ''
         '400':
           content:
@@ -986,6 +1270,16 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle LINKS opvragen.
       parameters:
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam van de link.
+      - in: query
+        name: naam__contains
+        schema:
+          type: string
+        description: Naam van de link.
       - name: page
         required: false
         in: query
@@ -999,11 +1293,35 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
         schema:
           type: string
           format: uuid
-        description: Het product type waarbij deze link hoort.
+      - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+        description: Uniforme product naam vanuit de UPL.
+      - in: query
+        name: url
+        schema:
+          type: string
+        description: Url van de link.
+      - in: query
+        name: url__contains
+        schema:
+          type: string
+        description: Url van de link.
       tags:
       - links
       security:
@@ -1014,6 +1332,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedLinkList'
+              examples:
+                LinkResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      naam: Open Producten
+                      url: https://github.com/maykinmedia/open-producten
+                  summary: link response
           description: ''
         '400':
           content:
@@ -1048,12 +1378,12 @@ paths:
             schema:
               $ref: '#/components/schemas/LinkRequest'
             examples:
-              CreateLink:
+              LinkRequest:
                 value:
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Open Producten
                   url: https://github.com/maykinmedia/open-producten
-                summary: Create link
+                summary: link request
         required: true
       security:
       - tokenAuth: []
@@ -1063,6 +1393,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+              examples:
+                LinkResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Open Producten
+                    url: https://github.com/maykinmedia/open-producten
+                  summary: link response
           description: ''
         '400':
           content:
@@ -1108,6 +1446,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+              examples:
+                LinkResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Open Producten
+                    url: https://github.com/maykinmedia/open-producten
+                  summary: link response
           description: ''
         '400':
           content:
@@ -1149,6 +1495,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LinkRequest'
+            examples:
+              LinkRequest:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Open Producten
+                  url: https://github.com/maykinmedia/open-producten
+                summary: link request
         required: true
       security:
       - tokenAuth: []
@@ -1158,6 +1511,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+              examples:
+                LinkResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Open Producten
+                    url: https://github.com/maykinmedia/open-producten
+                  summary: link response
           description: ''
         '400':
           content:
@@ -1199,6 +1560,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedLinkRequest'
+            examples:
+              LinkRequest:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Open Producten
+                  url: https://github.com/maykinmedia/open-producten
+                summary: link request
       security:
       - tokenAuth: []
       responses:
@@ -1207,6 +1575,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Link'
+              examples:
+                LinkResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Open Producten
+                    url: https://github.com/maykinmedia/open-producten
+                  summary: link response
           description: ''
         '400':
           content:
@@ -1276,6 +1652,18 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle LOCATIES opvragen.
       parameters:
+      - in: query
+        name: email__iexact
+        schema:
+          type: string
+      - in: query
+        name: huisnummer__iexact
+        schema:
+          type: string
+      - in: query
+        name: naam__iexact
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -1288,6 +1676,22 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: postcode
+        schema:
+          type: string
+      - in: query
+        name: stad
+        schema:
+          type: string
+      - in: query
+        name: straat__iexact
+        schema:
+          type: string
+      - in: query
+        name: telefoonnummer__contains
+        schema:
+          type: string
       tags:
       - locaties
       security:
@@ -1298,6 +1702,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedLocatieList'
+              examples:
+                LocatieResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                  summary: locatie response
           description: ''
         '400':
           content:
@@ -1332,16 +1752,16 @@ paths:
             schema:
               $ref: '#/components/schemas/LocatieRequest'
             examples:
-              CreateLocatie:
+              LocatieRequest:
                 value:
                   naam: Maykin Media
                   email: info@maykinmedia.nl
                   telefoonnummer: '+310207530523'
                   straat: Kingsfortweg
                   huisnummer: '151'
-                  postcode: 1043GR
+                  postcode: 1043 GR
                   stad: Amsterdam
-                summary: Create locatie
+                summary: locatie request
         required: true
       security:
       - tokenAuth: []
@@ -1351,6 +1771,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                LocatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: locatie response
           description: ''
         '400':
           content:
@@ -1396,6 +1828,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                LocatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: locatie response
           description: ''
         '400':
           content:
@@ -1437,6 +1881,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LocatieRequest'
+            examples:
+              LocatieRequest:
+                value:
+                  naam: Maykin Media
+                  email: info@maykinmedia.nl
+                  telefoonnummer: '+310207530523'
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043 GR
+                  stad: Amsterdam
+                summary: locatie request
         required: true
       security:
       - tokenAuth: []
@@ -1446,6 +1901,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                LocatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: locatie response
           description: ''
         '400':
           content:
@@ -1487,6 +1954,17 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedLocatieRequest'
+            examples:
+              LocatieRequest:
+                value:
+                  naam: Maykin Media
+                  email: info@maykinmedia.nl
+                  telefoonnummer: '+310207530523'
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043 GR
+                  stad: Amsterdam
+                summary: locatie request
       security:
       - tokenAuth: []
       responses:
@@ -1495,6 +1973,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                LocatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: locatie response
           description: ''
         '400':
           content:
@@ -1564,6 +2054,23 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle ORGANISATIES opvragen.
       parameters:
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: code van de organisatie.
+      - in: query
+        name: email__iexact
+        schema:
+          type: string
+      - in: query
+        name: huisnummer__iexact
+        schema:
+          type: string
+      - in: query
+        name: naam__iexact
+        schema:
+          type: string
       - name: page
         required: false
         in: query
@@ -1576,6 +2083,22 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: postcode
+        schema:
+          type: string
+      - in: query
+        name: stad
+        schema:
+          type: string
+      - in: query
+        name: straat__iexact
+        schema:
+          type: string
+      - in: query
+        name: telefoonnummer__contains
+        schema:
+          type: string
       tags:
       - organisaties
       security:
@@ -1586,6 +2109,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedOrganisatieList'
+              examples:
+                OrganisatieResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                  summary: organisatie response
           description: ''
         '400':
           content:
@@ -1620,7 +2160,7 @@ paths:
             schema:
               $ref: '#/components/schemas/OrganisatieRequest'
             examples:
-              CreateOrganisatie:
+              OrganisatieRequest:
                 value:
                   naam: Maykin Media
                   code: org-1234
@@ -1628,9 +2168,9 @@ paths:
                   telefoonnummer: '+310207530523'
                   straat: Kingsfortweg
                   huisnummer: '151'
-                  postcode: 1043GR
+                  postcode: 1043 GR
                   stad: Amsterdam
-                summary: Create organisatie
+                summary: organisatie request
         required: true
       security:
       - tokenAuth: []
@@ -1640,6 +2180,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+              examples:
+                OrganisatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    code: org-1234
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: organisatie response
           description: ''
         '400':
           content:
@@ -1685,6 +2238,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+              examples:
+                OrganisatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    code: org-1234
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: organisatie response
           description: ''
         '400':
           content:
@@ -1726,6 +2292,18 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/OrganisatieRequest'
+            examples:
+              OrganisatieRequest:
+                value:
+                  naam: Maykin Media
+                  code: org-1234
+                  email: info@maykinmedia.nl
+                  telefoonnummer: '+310207530523'
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043 GR
+                  stad: Amsterdam
+                summary: organisatie request
         required: true
       security:
       - tokenAuth: []
@@ -1735,6 +2313,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+              examples:
+                OrganisatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    code: org-1234
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: organisatie response
           description: ''
         '400':
           content:
@@ -1776,6 +2367,18 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedOrganisatieRequest'
+            examples:
+              OrganisatieRequest:
+                value:
+                  naam: Maykin Media
+                  code: org-1234
+                  email: info@maykinmedia.nl
+                  telefoonnummer: '+310207530523'
+                  straat: Kingsfortweg
+                  huisnummer: '151'
+                  postcode: 1043 GR
+                  stad: Amsterdam
+                summary: organisatie request
       security:
       - tokenAuth: []
       responses:
@@ -1784,6 +2387,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organisatie'
+              examples:
+                OrganisatieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Maykin Media
+                    code: org-1234
+                    email: info@maykinmedia.nl
+                    telefoonnummer: '+310207530523'
+                    straat: Kingsfortweg
+                    huisnummer: '151'
+                    postcode: 1043 GR
+                    stad: Amsterdam
+                  summary: organisatie response
           description: ''
         '400':
           content:
@@ -1853,6 +2469,24 @@ paths:
       description: Deze lijst kan gefilterd wordt met query-string parameters.
       summary: Alle PRIJZEN opvragen.
       parameters:
+      - in: query
+        name: actief_vanaf
+        schema:
+          type: string
+          format: date
+        description: De datum vanaf wanneer de prijs actief is.
+      - in: query
+        name: actief_vanaf__gte
+        schema:
+          type: string
+          format: date
+        description: De datum vanaf wanneer de prijs actief is.
+      - in: query
+        name: actief_vanaf__lte
+        schema:
+          type: string
+          format: date
+        description: De datum vanaf wanneer de prijs actief is.
       - name: page
         required: false
         in: query
@@ -1866,11 +2500,45 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type_id
+        name: prijsopties__bedrag
+        schema:
+          type: number
+        description: Het bedrag van de prijs optie.
+      - in: query
+        name: prijsopties__bedrag__gte
+        schema:
+          type: number
+        description: Het bedrag van de prijs optie.
+      - in: query
+        name: prijsopties__bedrag__lte
+        schema:
+          type: number
+        description: Het bedrag van de prijs optie.
+      - in: query
+        name: prijsopties__beschrijving
+        schema:
+          type: string
+        description: Korte beschrijving van de optie.
+      - in: query
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
         schema:
           type: string
           format: uuid
-        description: Het product type waarbij deze prijs hoort.
+      - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+        description: Uniforme product naam vanuit de UPL.
       tags:
       - prijzen
       security:
@@ -1881,6 +2549,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedPrijsList'
+              examples:
+                PrijsResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      prijsopties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        bedrag: '50.99'
+                        beschrijving: normaal
+                      actief_vanaf: '2019-08-24'
+                  summary: prijs response
           description: ''
         '400':
           content:
@@ -1915,7 +2598,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PrijsRequest'
             examples:
-              CreatePrijs:
+              PrijsRequest:
                 value:
                   prijsopties:
                   - bedrag: '50.99'
@@ -1924,7 +2607,7 @@ paths:
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
-                summary: Create prijs
+                summary: prijs request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
         required: true
@@ -1936,6 +2619,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+              examples:
+                PrijsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsopties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      bedrag: '50.99'
+                      beschrijving: normaal
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs response
           description: ''
         '400':
           content:
@@ -1981,6 +2675,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+              examples:
+                PrijsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsopties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      bedrag: '50.99'
+                      beschrijving: normaal
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs response
           description: ''
         '400':
           content:
@@ -2022,6 +2727,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PrijsRequest'
+            examples:
+              PrijsRequest:
+                value:
+                  prijsopties:
+                  - bedrag: '50.99'
+                    beschrijving: normaal
+                  - bedrag: '70.99'
+                    beschrijving: spoed
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: prijs request
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
         required: true
       security:
       - tokenAuth: []
@@ -2031,6 +2749,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+              examples:
+                PrijsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsopties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      bedrag: '50.99'
+                      beschrijving: normaal
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs response
           description: ''
         '400':
           content:
@@ -2056,8 +2785,6 @@ paths:
           description: ''
     patch:
       operationId: prijzen_partial_update
-      description: Als prijsopties in een patch request wordt meegegeven wordt deze
-        lijst geheel overschreven.
       summary: Werk een PRIJS deels bij.
       parameters:
       - in: path
@@ -2074,6 +2801,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedPrijsRequest'
+            examples:
+              PrijsRequest:
+                value:
+                  prijsopties:
+                  - bedrag: '50.99'
+                    beschrijving: normaal
+                  - bedrag: '70.99'
+                    beschrijving: spoed
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: prijs request
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
       security:
       - tokenAuth: []
       responses:
@@ -2082,6 +2822,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Prijs'
+              examples:
+                PrijsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsopties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      bedrag: '50.99'
+                      beschrijving: normaal
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs response
           description: ''
         '400':
           content:
@@ -2152,6 +2903,29 @@ paths:
       summary: Alle PRODUCTTYPEN opvragen.
       parameters:
       - in: query
+        name: aanmaak_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
         name: externe_code
         schema:
           type: string
@@ -2161,6 +2935,21 @@ paths:
         schema:
           type: boolean
         description: Geeft aan of het object getoond kan worden.
+      - in: query
+        name: keywords
+        schema:
+          type: array
+          items:
+            type: string
+        description: Lijst van keywords waarop kan worden gezocht.
+        explode: false
+        style: form
+      - in: query
+        name: letter
+        schema:
+          type: string
+        description: Filter op de eerste letter van de naam van het producttype (in
+          de meegegeven `Accept-Language` taal).
       - name: page
         required: false
         in: query
@@ -2179,10 +2968,71 @@ paths:
           type: string
         description: Producttype parameters. [naam:waarde]
       - in: query
+        name: toegestane_statussen
+        schema:
+          type: array
+          items:
+            type: array
+            items:
+              enum:
+              - gereed
+              - actief
+              - ingetrokken
+              - geweigerd
+              - verlopen
+              type: string
+              description: |-
+                * `gereed` - Gereed
+                * `actief` - Actief
+                * `ingetrokken` - Ingetrokken
+                * `geweigerd` - Geweigerd
+                * `verlopen` - Verlopen
+            enum:
+            - actief
+            - gereed
+            - geweigerd
+            - ingetrokken
+            - initieel
+            - verlopen
+        description: |-
+          toegestane statussen voor producten van dit type.
+
+          * `initieel` - Initieel
+          * `gereed` - Gereed
+          * `actief` - Actief
+          * `ingetrokken` - Ingetrokken
+          * `geweigerd` - Geweigerd
+          * `verlopen` - Verlopen
+        explode: false
+        style: form
+      - in: query
         name: uniforme_product_naam
         schema:
           type: string
         description: Uniforme product naam vanuit de UPL.
+      - in: query
+        name: update_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: verbruiksobject_schema__naam
+        schema:
+          type: string
+        description: Naam van het json schema.
       tags:
       - producttypen
       security:
@@ -2193,6 +3043,112 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductTypeList'
+              examples:
+                ProductTypeResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      uniforme_product_naam: parkeervergunning
+                      themas:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Parkeren
+                        beschrijving: '.....'
+                        gepubliceerd: true
+                        aanmaak_datum: '2019-08-24T14:15:22Z'
+                        update_datum: '2019-08-24T14:15:22Z'
+                        hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                      locaties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      organisaties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        code: org-1234
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      contacten:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        organisatie:
+                          id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                          naam: Maykin Media
+                          code: org-1234
+                          email: info@maykinmedia.nl
+                          telefoonnummer: '+310207530523'
+                          straat: Kingsfortweg
+                          huisnummer: '151'
+                          postcode: 1043 GR
+                          stad: Amsterdam
+                        voornaam: Bob
+                        achternaam: de Vries
+                        email: bob@example.com
+                        telefoonnummer: '0611223344'
+                        rol: medewerker
+                      prijzen:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        prijsopties:
+                        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                          bedrag: '50.99'
+                          beschrijving: normaal
+                        actief_vanaf: '2019-08-24'
+                      links:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Open Producten
+                        url: https://github.com/maykinmedia/open-producten
+                      bestanden:
+                      - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                        bestand: https://gemeente.open-producten.nl/media/test.txt
+                      naam: Parkeervergunning
+                      samenvatting: korte samenvatting...
+                      taal: nl
+                      externe_codes:
+                      - naam: ISO
+                        code: '123'
+                      - naam: CBS
+                        code: '456'
+                      parameters:
+                      - naam: doelgroep
+                        waarde: inwoners
+                      verbruiksobject_schema:
+                        naam: verbruik_schema
+                        schema:
+                          type: object
+                          properties:
+                            uren:
+                              type: number
+                          required:
+                          - uren
+                      dataobject_schema:
+                        naam: data_schema
+                        schema:
+                          type: object
+                          properties:
+                            max_uren:
+                              type: number
+                          required:
+                          - max_uren
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      code: PT-12345
+                      toegestane_statussen:
+                      - gereed
+                      keywords:
+                      - auto
+                      interne_opmerkingen: interne opmerkingen...
+                  summary: product type response
           description: ''
         '400':
           content:
@@ -2227,7 +3183,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
             examples:
-              CreateProducttype:
+              ProductTypeRequest:
                 value:
                   uniforme_product_naam: aanleunwoning
                   thema_ids:
@@ -2246,7 +3202,6 @@ paths:
                   - actief
                   interne_opmerkingen: interne opmerkingen...
                   samenvatting: korte samenvatting...
-                  beschrijving: uitgebreide beschrijving...
                   keywords:
                   - wonen
                   externe_codes:
@@ -2259,7 +3214,7 @@ paths:
                     waarde: inwoners
                   verbruiksobject_schema_naam: verbruik_schema
                   dataobject_schema: data_schema
-                summary: Create producttype
+                summary: product type request
         required: true
       security:
       - tokenAuth: []
@@ -2269,6 +3224,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+              examples:
+                ProductTypeResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    uniforme_product_naam: parkeervergunning
+                    themas:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeren
+                      beschrijving: '.....'
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    locaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    organisaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    contacten:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      organisatie:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        code: org-1234
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      voornaam: Bob
+                      achternaam: de Vries
+                      email: bob@example.com
+                      telefoonnummer: '0611223344'
+                      rol: medewerker
+                    prijzen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      prijsopties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        bedrag: '50.99'
+                        beschrijving: normaal
+                      actief_vanaf: '2019-08-24'
+                    links:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Open Producten
+                      url: https://github.com/maykinmedia/open-producten
+                    bestanden:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      bestand: https://gemeente.open-producten.nl/media/test.txt
+                    naam: Parkeervergunning
+                    samenvatting: korte samenvatting...
+                    taal: nl
+                    externe_codes:
+                    - naam: ISO
+                      code: '123'
+                    - naam: CBS
+                      code: '456'
+                    parameters:
+                    - naam: doelgroep
+                      waarde: inwoners
+                    verbruiksobject_schema:
+                      naam: verbruik_schema
+                      schema:
+                        type: object
+                        properties:
+                          uren:
+                            type: number
+                        required:
+                        - uren
+                    dataobject_schema:
+                      naam: data_schema
+                      schema:
+                        type: object
+                        properties:
+                          max_uren:
+                            type: number
+                        required:
+                        - max_uren
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    keywords:
+                    - auto
+                    interne_opmerkingen: interne opmerkingen...
+                  summary: product type response
           description: ''
         '400':
           content:
@@ -2314,6 +3371,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+              examples:
+                ProductTypeResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    uniforme_product_naam: parkeervergunning
+                    themas:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeren
+                      beschrijving: '.....'
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    locaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    organisaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    contacten:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      organisatie:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        code: org-1234
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      voornaam: Bob
+                      achternaam: de Vries
+                      email: bob@example.com
+                      telefoonnummer: '0611223344'
+                      rol: medewerker
+                    prijzen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      prijsopties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        bedrag: '50.99'
+                        beschrijving: normaal
+                      actief_vanaf: '2019-08-24'
+                    links:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Open Producten
+                      url: https://github.com/maykinmedia/open-producten
+                    bestanden:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      bestand: https://gemeente.open-producten.nl/media/test.txt
+                    naam: Parkeervergunning
+                    samenvatting: korte samenvatting...
+                    taal: nl
+                    externe_codes:
+                    - naam: ISO
+                      code: '123'
+                    - naam: CBS
+                      code: '456'
+                    parameters:
+                    - naam: doelgroep
+                      waarde: inwoners
+                    verbruiksobject_schema:
+                      naam: verbruik_schema
+                      schema:
+                        type: object
+                        properties:
+                          uren:
+                            type: number
+                        required:
+                        - uren
+                    dataobject_schema:
+                      naam: data_schema
+                      schema:
+                        type: object
+                        properties:
+                          max_uren:
+                            type: number
+                        required:
+                        - max_uren
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    keywords:
+                    - auto
+                    interne_opmerkingen: interne opmerkingen...
+                  summary: product type response
           description: ''
         '400':
           content:
@@ -2355,6 +3514,39 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
+            examples:
+              ProductTypeRequest:
+                value:
+                  uniforme_product_naam: aanleunwoning
+                  thema_ids:
+                  - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  locatie_ids:
+                  - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
+                  organisatie_ids:
+                  - 2c2694f1-f948-4960-8312-d51c3a0e540f
+                  contact_ids:
+                  - 6863d699-460d-4c1e-9297-16812d75d8ca
+                  gepubliceerd: false
+                  naam: Aanleunwoning
+                  code: PT-12345
+                  toegestane_statussen:
+                  - gereed
+                  - actief
+                  interne_opmerkingen: interne opmerkingen...
+                  samenvatting: korte samenvatting...
+                  keywords:
+                  - wonen
+                  externe_codes:
+                  - naam: ISO
+                    code: '123'
+                  - naam: CBS
+                    code: '456'
+                  parameters:
+                  - naam: doelgroep
+                    waarde: inwoners
+                  verbruiksobject_schema_naam: verbruik_schema
+                  dataobject_schema: data_schema
+                summary: product type request
         required: true
       security:
       - tokenAuth: []
@@ -2364,6 +3556,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+              examples:
+                ProductTypeResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    uniforme_product_naam: parkeervergunning
+                    themas:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeren
+                      beschrijving: '.....'
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    locaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    organisaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    contacten:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      organisatie:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        code: org-1234
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      voornaam: Bob
+                      achternaam: de Vries
+                      email: bob@example.com
+                      telefoonnummer: '0611223344'
+                      rol: medewerker
+                    prijzen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      prijsopties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        bedrag: '50.99'
+                        beschrijving: normaal
+                      actief_vanaf: '2019-08-24'
+                    links:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Open Producten
+                      url: https://github.com/maykinmedia/open-producten
+                    bestanden:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      bestand: https://gemeente.open-producten.nl/media/test.txt
+                    naam: Parkeervergunning
+                    samenvatting: korte samenvatting...
+                    taal: nl
+                    externe_codes:
+                    - naam: ISO
+                      code: '123'
+                    - naam: CBS
+                      code: '456'
+                    parameters:
+                    - naam: doelgroep
+                      waarde: inwoners
+                    verbruiksobject_schema:
+                      naam: verbruik_schema
+                      schema:
+                        type: object
+                        properties:
+                          uren:
+                            type: number
+                        required:
+                        - uren
+                    dataobject_schema:
+                      naam: data_schema
+                      schema:
+                        type: object
+                        properties:
+                          max_uren:
+                            type: number
+                        required:
+                        - max_uren
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    keywords:
+                    - auto
+                    interne_opmerkingen: interne opmerkingen...
+                  summary: product type response
           description: ''
         '400':
           content:
@@ -2407,6 +3701,39 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedProductTypeRequest'
+            examples:
+              ProductTypeRequest:
+                value:
+                  uniforme_product_naam: aanleunwoning
+                  thema_ids:
+                  - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  locatie_ids:
+                  - 235de068-a9c5-4eda-b61d-92fd7f09e9dc
+                  organisatie_ids:
+                  - 2c2694f1-f948-4960-8312-d51c3a0e540f
+                  contact_ids:
+                  - 6863d699-460d-4c1e-9297-16812d75d8ca
+                  gepubliceerd: false
+                  naam: Aanleunwoning
+                  code: PT-12345
+                  toegestane_statussen:
+                  - gereed
+                  - actief
+                  interne_opmerkingen: interne opmerkingen...
+                  samenvatting: korte samenvatting...
+                  keywords:
+                  - wonen
+                  externe_codes:
+                  - naam: ISO
+                    code: '123'
+                  - naam: CBS
+                    code: '456'
+                  parameters:
+                  - naam: doelgroep
+                    waarde: inwoners
+                  verbruiksobject_schema_naam: verbruik_schema
+                  dataobject_schema: data_schema
+                summary: product type request
       security:
       - tokenAuth: []
       responses:
@@ -2415,6 +3742,108 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductType'
+              examples:
+                ProductTypeResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    uniforme_product_naam: parkeervergunning
+                    themas:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeren
+                      beschrijving: '.....'
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    locaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    organisaties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Maykin Media
+                      code: org-1234
+                      email: info@maykinmedia.nl
+                      telefoonnummer: '+310207530523'
+                      straat: Kingsfortweg
+                      huisnummer: '151'
+                      postcode: 1043 GR
+                      stad: Amsterdam
+                    contacten:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      organisatie:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Maykin Media
+                        code: org-1234
+                        email: info@maykinmedia.nl
+                        telefoonnummer: '+310207530523'
+                        straat: Kingsfortweg
+                        huisnummer: '151'
+                        postcode: 1043 GR
+                        stad: Amsterdam
+                      voornaam: Bob
+                      achternaam: de Vries
+                      email: bob@example.com
+                      telefoonnummer: '0611223344'
+                      rol: medewerker
+                    prijzen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      prijsopties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        bedrag: '50.99'
+                        beschrijving: normaal
+                      actief_vanaf: '2019-08-24'
+                    links:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Open Producten
+                      url: https://github.com/maykinmedia/open-producten
+                    bestanden:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      bestand: https://gemeente.open-producten.nl/media/test.txt
+                    naam: Parkeervergunning
+                    samenvatting: korte samenvatting...
+                    taal: nl
+                    externe_codes:
+                    - naam: ISO
+                      code: '123'
+                    - naam: CBS
+                      code: '456'
+                    parameters:
+                    - naam: doelgroep
+                      waarde: inwoners
+                    verbruiksobject_schema:
+                      naam: verbruik_schema
+                      schema:
+                        type: object
+                        properties:
+                          uren:
+                            type: number
+                        required:
+                        - uren
+                    dataobject_schema:
+                      naam: data_schema
+                      schema:
+                        type: object
+                        properties:
+                          max_uren:
+                            type: number
+                        required:
+                        - max_uren
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    code: PT-12345
+                    toegestane_statussen:
+                    - gereed
+                    keywords:
+                    - auto
+                    interne_opmerkingen: interne opmerkingen...
+                  summary: product type response
           description: ''
         '400':
           content:
@@ -2530,6 +3959,14 @@ paths:
       description: Geeft de content van een PRODUCTTYPE terug.
       summary: De CONTENT van een PRODUCTTYPE opvragen.
       parameters:
+      - in: query
+        name: exclude_labels
+        schema:
+          type: array
+          items:
+            type: string
+        description: Sluit content met bepaalde labels uit.
+        explode: false
       - in: path
         name: id
         schema:
@@ -2537,6 +3974,14 @@ paths:
           format: uuid
         description: A UUID string identifying this Product type.
         required: true
+      - in: query
+        name: labels
+        schema:
+          type: array
+          items:
+            type: string
+        description: Filter content op basis van de labels.
+        explode: false
       tags:
       - producttypen
       security:
@@ -2547,6 +3992,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NestedContentElement'
+              examples:
+                ContentElementResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    labels:
+                    - openingstijden
+                    content: ma-vr 8:00-17:00
+                    taal: nl
+                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  summary: content element response
           description: ''
         '400':
           content:
@@ -2776,6 +4231,12 @@ paths:
         name: naam
         schema:
           type: string
+        description: Naam van het json schema.
+      - in: query
+        name: naam__contains
+        schema:
+          type: string
+        description: Naam van het json schema.
       - name: page
         required: false
         in: query
@@ -2798,6 +4259,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedJsonSchemaList'
+              examples:
+                SchemaResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - naam: parkeervergunning-verbruiksobject
+                      schema:
+                        type: object
+                        properties:
+                          uren:
+                            type: number
+                        required:
+                        - uren
+                  summary: schema response
           description: ''
         '400':
           content:
@@ -2832,7 +4309,7 @@ paths:
             schema:
               $ref: '#/components/schemas/JsonSchemaRequest'
             examples:
-              CreateSchema:
+              SchemaRequest:
                 value:
                   naam: parkeervergunning-verbruiksobject
                   schema:
@@ -2842,7 +4319,7 @@ paths:
                         type: number
                     required:
                     - uren
-                summary: Create schema
+                summary: schema request
         required: true
       security:
       - tokenAuth: []
@@ -2852,6 +4329,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JsonSchema'
+              examples:
+                SchemaResponse:
+                  value:
+                    naam: parkeervergunning-verbruiksobject
+                    schema:
+                      type: object
+                      properties:
+                        uren:
+                          type: number
+                      required:
+                      - uren
+                  summary: schema response
           description: ''
         '400':
           content:
@@ -2896,6 +4385,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JsonSchema'
+              examples:
+                SchemaResponse:
+                  value:
+                    naam: parkeervergunning-verbruiksobject
+                    schema:
+                      type: object
+                      properties:
+                        uren:
+                          type: number
+                      required:
+                      - uren
+                  summary: schema response
           description: ''
         '400':
           content:
@@ -2936,6 +4437,18 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/JsonSchemaRequest'
+            examples:
+              SchemaRequest:
+                value:
+                  naam: parkeervergunning-verbruiksobject
+                  schema:
+                    type: object
+                    properties:
+                      uren:
+                        type: number
+                    required:
+                    - uren
+                summary: schema request
         required: true
       security:
       - tokenAuth: []
@@ -2945,6 +4458,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JsonSchema'
+              examples:
+                SchemaResponse:
+                  value:
+                    naam: parkeervergunning-verbruiksobject
+                    schema:
+                      type: object
+                      properties:
+                        uren:
+                          type: number
+                      required:
+                      - uren
+                  summary: schema response
           description: ''
         '400':
           content:
@@ -2985,6 +4510,18 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedJsonSchemaRequest'
+            examples:
+              SchemaRequest:
+                value:
+                  naam: parkeervergunning-verbruiksobject
+                  schema:
+                    type: object
+                    properties:
+                      uren:
+                        type: number
+                    required:
+                    - uren
+                summary: schema request
       security:
       - tokenAuth: []
       responses:
@@ -2993,6 +4530,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JsonSchema'
+              examples:
+                SchemaResponse:
+                  value:
+                    naam: parkeervergunning-verbruiksobject
+                    schema:
+                      type: object
+                      properties:
+                        uren:
+                          type: number
+                      required:
+                      - uren
+                  summary: schema response
           description: ''
         '400':
           content:
@@ -3062,9 +4611,43 @@ paths:
       summary: Alle THEMA'S opvragen.
       parameters:
       - in: query
+        name: aanmaak_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
+      - in: query
+        name: hoofd_thema__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: hoofd_thema__naam
+        schema:
+          type: string
+        description: Naam van het thema.
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam van het thema.
       - name: page
         required: false
         in: query
@@ -3077,6 +4660,24 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: update_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
       tags:
       - themas
       security:
@@ -3087,6 +4688,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedThemaList'
+              examples:
+                ThemaResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeren
+                      beschrijving: Parkeren in gemeente ABC
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                      product_typen:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        code: 129380-c21231
+                        keywords:
+                        - auto
+                        uniforme_product_naam: parkeervergunning
+                        toegestane_statussen:
+                        - gereed
+                        gepubliceerd: true
+                        aanmaak_datum: '2019-08-24T14:15:22Z'
+                        update_datum: '2019-08-24T14:15:22Z'
+                  summary: thema response
           description: ''
         '400':
           content:
@@ -3121,7 +4748,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ThemaRequest'
             examples:
-              CreateThema:
+              ThemaRequest:
                 value:
                   hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                   product_type_ids:
@@ -3129,7 +4756,7 @@ paths:
                   gepubliceerd: true
                   naam: Parkeren
                   beschrijving: Parkeren in gemeente ABC
-                summary: Create thema
+                summary: thema request
         required: true
       security:
       - tokenAuth: []
@@ -3139,6 +4766,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Thema'
+              examples:
+                ThemaResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Parkeren
+                    beschrijving: Parkeren in gemeente ABC
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    product_typen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                  summary: thema response
           description: ''
         '400':
           content:
@@ -3184,6 +4833,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Thema'
+              examples:
+                ThemaResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Parkeren
+                    beschrijving: Parkeren in gemeente ABC
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    product_typen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                  summary: thema response
           description: ''
         '400':
           content:
@@ -3225,6 +4896,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ThemaRequest'
+            examples:
+              ThemaRequest:
+                value:
+                  hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  product_type_ids:
+                  - 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  gepubliceerd: true
+                  naam: Parkeren
+                  beschrijving: Parkeren in gemeente ABC
+                summary: thema request
         required: true
       security:
       - tokenAuth: []
@@ -3234,6 +4915,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Thema'
+              examples:
+                ThemaResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Parkeren
+                    beschrijving: Parkeren in gemeente ABC
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    product_typen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                  summary: thema response
           description: ''
         '400':
           content:
@@ -3277,6 +4980,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedThemaRequest'
+            examples:
+              ThemaRequest:
+                value:
+                  hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  product_type_ids:
+                  - 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  gepubliceerd: true
+                  naam: Parkeren
+                  beschrijving: Parkeren in gemeente ABC
+                summary: thema request
       security:
       - tokenAuth: []
       responses:
@@ -3285,6 +4998,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Thema'
+              examples:
+                ThemaResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    naam: Parkeren
+                    beschrijving: Parkeren in gemeente ABC
+                    gepubliceerd: true
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
+                    product_typen:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                  summary: thema response
           description: ''
         '400':
           content:
@@ -3553,9 +5288,6 @@ components:
     JsonSchema:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
         naam:
           type: string
           description: Naam van het json schema.
@@ -3564,7 +5296,6 @@ components:
           type: object
           additionalProperties: {}
       required:
-      - id
       - naam
       - schema
     JsonSchemaRequest:
@@ -3657,7 +5388,7 @@ components:
         postcode:
           type: string
           nullable: true
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
           maxLength: 7
         stad:
           type: string
@@ -3694,7 +5425,7 @@ components:
         postcode:
           type: string
           nullable: true
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
           maxLength: 7
         stad:
           type: string
@@ -4049,7 +5780,7 @@ components:
         postcode:
           type: string
           nullable: true
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
           maxLength: 7
         stad:
           type: string
@@ -4091,7 +5822,7 @@ components:
         postcode:
           type: string
           nullable: true
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
           maxLength: 7
         stad:
           type: string
@@ -4448,7 +6179,7 @@ components:
         postcode:
           type: string
           nullable: true
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
           maxLength: 7
         stad:
           type: string
@@ -4482,7 +6213,7 @@ components:
         postcode:
           type: string
           nullable: true
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
           maxLength: 7
         stad:
           type: string

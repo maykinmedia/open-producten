@@ -19,6 +19,51 @@ paths:
       summary: Alle PRODUCTEN opvragen.
       parameters:
       - in: query
+        name: aanmaak_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: aanmaak_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object is aangemaakt.
+      - in: query
+        name: eind_datum
+        schema:
+          type: string
+          format: date
+        description: De einddatum van dit product. Op deze datum zal de status van
+          het product automatisch naar VERLOPEN worden gezet. Op het moment dat de
+          eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
+          toegestaan.
+      - in: query
+        name: eind_datum__gte
+        schema:
+          type: string
+          format: date
+        description: De einddatum van dit product. Op deze datum zal de status van
+          het product automatisch naar VERLOPEN worden gezet. Op het moment dat de
+          eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
+          toegestaan.
+      - in: query
+        name: eind_datum__lte
+        schema:
+          type: string
+          format: date
+        description: De einddatum van dit product. Op deze datum zal de status van
+          het product automatisch naar VERLOPEN worden gezet. Op het moment dat de
+          eind_datum wordt ingevuld moet de status VERLOPEN op het product type zijn
+          toegestaan.
+      - in: query
         name: frequentie
         schema:
           type: string
@@ -37,6 +82,7 @@ paths:
         name: gepubliceerd
         schema:
           type: boolean
+        description: Geeft aan of het object getoond kan worden.
       - name: page
         required: false
         in: query
@@ -49,6 +95,60 @@ paths:
         description: Het aantal resultaten terug te geven per pagina.
         schema:
           type: integer
+      - in: query
+        name: prijs
+        schema:
+          type: number
+        description: De prijs van het product.
+      - in: query
+        name: prijs__gte
+        schema:
+          type: number
+        description: De prijs van het product.
+      - in: query
+        name: prijs__lte
+        schema:
+          type: number
+        description: De prijs van het product.
+      - in: query
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
+        name: start_datum
+        schema:
+          type: string
+          format: date
+        description: De start datum van dit product. Op deze datum zal de status van
+          het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
+          wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
+      - in: query
+        name: start_datum__gte
+        schema:
+          type: string
+          format: date
+        description: De start datum van dit product. Op deze datum zal de status van
+          het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
+          wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
+      - in: query
+        name: start_datum__lte
+        schema:
+          type: string
+          format: date
+        description: De start datum van dit product. Op deze datum zal de status van
+          het product automatisch naar ACTIEF worden gezet. Op het moment dat de start_datum
+          wordt ingevuld moet de status ACTIEF op het product type zijn toegestaan.
       - in: query
         name: status
         schema:
@@ -69,6 +169,29 @@ paths:
           * `ingetrokken` - Ingetrokken
           * `geweigerd` - Geweigerd
           * `verlopen` - Verlopen
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+        description: Uniforme product naam vanuit de UPL.
+      - in: query
+        name: update_datum
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__gte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: update_datum__lte
+        schema:
+          type: string
+          format: date-time
+        description: De datum waarop het object voor het laatst is gewijzigd.
       tags:
       - producten
       security:
@@ -79,6 +202,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
+              examples:
+                ProductResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                      start_datum: '2024-12-01'
+                      eind_datum: '2026-12-01'
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                      product_type:
+                        id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        code: 129380-c21231
+                        keywords:
+                        - auto
+                        uniforme_product_naam: parkeervergunning
+                        toegestane_statussen:
+                        - gereed
+                        gepubliceerd: true
+                        aanmaak_datum: '2019-08-24T14:15:22Z'
+                        update_datum: '2019-08-24T14:15:22Z'
+                      gepubliceerd: false
+                      bsn: '111222333'
+                      status: gereed
+                      prijs: '20.20'
+                      frequentie: eenmalig
+                      verbruiksobject:
+                        uren: 130
+                      data:
+                        max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -116,22 +273,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductRequest'
-            examples:
-              CreateProduct:
-                value:
-                  start_datum: '2024-12-01'
-                  eind_datum: '2026-12-01'
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
-                  gepubliceerd: false
-                  bsn: '111222333'
-                  status: gereed
-                  prijs: '20.20'
-                  frequentie: eenmalig
-                  verbruiksobject:
-                    uren: 130
-                  data:
-                    max_uren: 150
-                summary: Create product
         required: true
       security:
       - tokenAuth: []
@@ -141,6 +282,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -190,6 +361,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -244,6 +445,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:
@@ -289,19 +520,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedProductRequest'
-            examples:
-              PatchProduct:
-                value:
-                  gepubliceerd: true
-                  start_datum: '2019-08-24'
-                  eind_datum: '2019-08-24'
-                  bsn: string
-                  status: gereed
-                summary: Patch product
-              UpdateProductStatus:
-                value:
-                  status: actief
-                summary: Update product status
       security:
       - tokenAuth: []
       responses:
@@ -310,6 +528,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                ProductResponse:
+                  value:
+                    id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    url: https://gemeente.open-producten.nl/producten/api/v0/producten/da0df49a-cd71-4e24-9bae-5be8b01f2c36
+                    start_datum: '2024-12-01'
+                    eind_datum: '2026-12-01'
+                    aanmaak_datum: '2019-08-24T14:15:22Z'
+                    update_datum: '2019-08-24T14:15:22Z'
+                    product_type:
+                      id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      code: 129380-c21231
+                      keywords:
+                      - auto
+                      uniforme_product_naam: parkeervergunning
+                      toegestane_statussen:
+                      - gereed
+                      gepubliceerd: true
+                      aanmaak_datum: '2019-08-24T14:15:22Z'
+                      update_datum: '2019-08-24T14:15:22Z'
+                    gepubliceerd: false
+                    bsn: '111222333'
+                    status: gereed
+                    prijs: '20.20'
+                    frequentie: eenmalig
+                    verbruiksobject:
+                      uren: 130
+                    data:
+                      max_uren: 150
+                  summary: product response
           description: ''
         '400':
           content:

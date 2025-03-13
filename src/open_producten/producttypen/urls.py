@@ -9,7 +9,7 @@ from drf_spectacular.views import (
 from rest_framework.routers import DefaultRouter
 
 from open_producten.locaties.urls import LocatieRouter
-from open_producten.producttypen.views import (
+from open_producten.producttypen.viewsets import (
     BestandViewSet,
     ContentElementViewSet,
     ContentLabelViewSet,

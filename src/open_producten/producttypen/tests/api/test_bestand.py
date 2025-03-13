@@ -19,6 +19,7 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp()
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestProductTypeBestand(BaseApiTestCase):
+    path = reverse("bestand-list")
 
     def setUp(self):
         super().setUp()
@@ -31,7 +32,6 @@ class TestProductTypeBestand(BaseApiTestCase):
         }
         self.bestand = BestandFactory.create(product_type=self.product_type)
 
-        self.path = reverse("bestand-list")
         self.detail_path = reverse("bestand-detail", args=[self.bestand.id])
 
     def test_read_bestand_without_credentials_returns_error(self):
