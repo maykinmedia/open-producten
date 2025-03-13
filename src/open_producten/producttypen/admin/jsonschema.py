@@ -23,3 +23,29 @@ class JsonSchemaAdminForm(forms.ModelForm):
 class JsonSchemaAdmin(admin.ModelAdmin):
     form = JsonSchemaAdminForm
     search_fields = ["naam"]
+
+    def get_changeform_initial_data(self, request):
+        return {
+            "schema": {
+                "type": "object",
+                "title": "productDataExample",
+                "description": "Voorbeeld",
+                "examples": [{"eigenschap1": "Een value", "eigenschap2": 2}],
+                "required": ["eigenschap1"],
+                "properties": {
+                    "eigenschap1": {
+                        "type": "string",
+                        "description": "Een verplichte eigenschap",
+                    },
+                    "eigenschap2": {
+                        "type": "integer",
+                        "description": "Een optionele eigenschap als integer",
+                    },
+                    "eigenschap3": {
+                        "type": "string",
+                        "description": "Een optionele eigenschap",
+                    },
+                },
+                "additionalProperties": False,
+            }
+        }
