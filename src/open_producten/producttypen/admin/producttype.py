@@ -58,6 +58,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         "locaties",
         "uniforme_product_naam",
         "verbruiksobject_schema",
+        "dataobject_schema",
     )
     search_fields = ("naam", "uniforme_product_naam__naam", "keywords")
     save_on_top = True
@@ -78,6 +79,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         "samenvatting",
         "themas",
         "verbruiksobject_schema",
+        "dataobject_schema",
         "keywords",
         "interne_opmerkingen",
         "organisaties",

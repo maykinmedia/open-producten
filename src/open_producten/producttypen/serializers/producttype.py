@@ -93,6 +93,18 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         source="verbruiksobject_schema",
     )
 
+    dataobject_schema = JsonSchemaSerializer(read_only=True)
+    dataobject_schema_naam = serializers.SlugRelatedField(
+        slug_field="naam",
+        queryset=JsonSchema.objects.all(),
+        write_only=True,
+        help_text=_(
+            "JSON schema om het dataobject van een gerelateerd product te valideren."
+        ),
+        required=False,
+        source="dataobject_schema",
+    )
+
     naam = serializers.CharField(
         required=True, max_length=255, help_text=_("naam van het product type.")
     )

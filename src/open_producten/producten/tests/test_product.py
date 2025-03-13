@@ -184,6 +184,75 @@ class TestProduct(TestCase):
 
         product.clean()
 
+    def test_dataobject_is_valid(self):
+        json_schema = JsonSchemaFactory.create(
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.dataobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            dataobject={"naam": "test"},
+        )
+
+        product.clean()
+
+    def test_dataobject_is_invalid(self):
+        json_schema = JsonSchemaFactory.create(
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.dataobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            dataobject={"naam": 1234},
+        )
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Het dataobject komt niet overeen met het schema gedefinieerd op het product type.",
+        ):
+            product.clean()
+
+    def test_dataobject_without_schema(self):
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+            dataobject={"naam": 1234},
+        )
+
+        product.clean()
+
+    def test_dataobject_with_schema_without_object(self):
+        json_schema = JsonSchemaFactory.create(
+            schema={
+                "type": "object",
+                "properties": {"naam": {"type": "string"}},
+                "required": ["naam"],
+            },
+        )
+        self.product_type.dataobject_schema = json_schema
+        self.product_type.save()
+
+        product = ProductFactory.build(
+            kvk="11122333",
+            product_type=self.product_type,
+        )
+
+        product.clean()
+
 
 @freeze_time("2024-1-1")
 class TestProductStateTask(TestCase):

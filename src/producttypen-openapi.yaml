@@ -2258,6 +2258,7 @@ paths:
                   - naam: doelgroep
                     waarde: inwoners
                   verbruiksobject_schema_naam: verbruik_schema
+                  dataobject_schema: data_schema
                 summary: Create producttype
         required: true
       security:
@@ -4549,6 +4550,12 @@ components:
           description: JSON schema om het verbruiksobject van een gerelateerd product
             te valideren.
           writeOnly: true
+        dataobject_schema_naam:
+          type: string
+          minLength: 1
+          description: JSON schema om het dataobject van een gerelateerd product te
+            valideren.
+          writeOnly: true
         naam:
           type: string
           minLength: 1
@@ -4756,6 +4763,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/JsonSchema'
           readOnly: true
+        dataobject_schema:
+          allOf:
+          - $ref: '#/components/schemas/JsonSchema'
+          readOnly: true
         naam:
           type: string
           description: naam van het product type.
@@ -4811,6 +4822,7 @@ components:
       - bestanden
       - code
       - contacten
+      - dataobject_schema
       - id
       - links
       - locaties
@@ -4894,6 +4906,12 @@ components:
           minLength: 1
           description: JSON schema om het verbruiksobject van een gerelateerd product
             te valideren.
+          writeOnly: true
+        dataobject_schema_naam:
+          type: string
+          minLength: 1
+          description: JSON schema om het dataobject van een gerelateerd product te
+            valideren.
           writeOnly: true
         naam:
           type: string
