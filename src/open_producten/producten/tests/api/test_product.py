@@ -212,8 +212,6 @@ class TestProduct(BaseApiTestCase):
         expected_data = {
             "id": str(product.id),
             "url": f"http://testserver{self.detail_path(product)}",
-            "bsn": product.bsn,
-            "kvk": product.kvk,
             "status": product.status,
             "verbruiksobject": None,
             "dataobject": {"naam": "Test"},
@@ -224,6 +222,15 @@ class TestProduct(BaseApiTestCase):
             "frequentie": product.frequentie,
             "aanmaak_datum": product.aanmaak_datum.astimezone().isoformat(),
             "update_datum": product.update_datum.astimezone().isoformat(),
+            "eigenaren": [
+                {
+                    "bsn_nummer": None,
+                    "kvk_nummer": "12345678",
+                    "vestigingsnummer": None,
+                    "klantnummer": None,
+                    "id": str(product.eigenaren.first().id),
+                }
+            ],
             "product_type": {
                 "id": str(product_type.id),
                 "code": product_type.code,

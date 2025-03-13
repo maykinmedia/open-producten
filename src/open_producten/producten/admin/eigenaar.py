@@ -9,7 +9,7 @@ from open_producten.producten.models import Eigenaar
 class EigenaarInlineFormSet(AuditLogInlineformset):
 
     def clean(self):
-        """Check that at least one optie has been added."""
+        """Check that at least one eigenaar has been added."""
         super().clean()
         if any(self.errors):
             return
@@ -17,7 +17,7 @@ class EigenaarInlineFormSet(AuditLogInlineformset):
             cleaned_data and not cleaned_data.get("DELETE", False)
             for cleaned_data in self.cleaned_data
         ):
-            raise ValidationError(_("Er is minimaal één optie vereist."))
+            raise ValidationError(_("Er is minimaal één eigenaar vereist."))
 
 
 class EigenaarInline(admin.TabularInline):

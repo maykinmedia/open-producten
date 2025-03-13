@@ -67,3 +67,23 @@ class TestEigenaar(TestCase):
         EigenaarFactory.create(
             vestigingsnummer="123", kvk_nummer="12345678"
         ).full_clean()
+
+    def test_eigenaar_str(self):
+
+        with self.subTest("bsn"):
+            eigenaar = EigenaarFactory.create(bsn_nummer="111222333")
+            self.assertEqual(str(eigenaar), "BSN 111222333")
+
+        with self.subTest("klantnummer"):
+            eigenaar = EigenaarFactory.create(klantnummer="123")
+            self.assertEqual(str(eigenaar), "klantnummer 123")
+
+        with self.subTest("kvk"):
+            eigenaar = EigenaarFactory.create(kvk_nummer="12345678")
+            self.assertEqual(str(eigenaar), "KVK 12345678")
+
+        with self.subTest("kvk with vestigingsnummer"):
+            eigenaar = EigenaarFactory.create(
+                kvk_nummer="12345678", vestigingsnummer="123"
+            )
+            self.assertEqual(str(eigenaar), "KVK 12345678 vestigingsnummer 123")

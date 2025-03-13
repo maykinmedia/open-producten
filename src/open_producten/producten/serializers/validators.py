@@ -8,12 +8,12 @@ from open_producten.producten.models.eigenaar import (
     validate_vestingsnummer_only_with_kvk,
 )
 from open_producten.producten.models.product import (
+    validate_dataobject,
     validate_dates,
     validate_eind_datum,
     validate_start_datum,
     validate_status,
     validate_verbruiksobject,
-    validate_dataobject,
 )
 from open_producten.utils.serializers import get_from_serializer_data_or_instance
 

@@ -7,9 +7,10 @@ from rest_framework import serializers
 from open_producten.producten.models import Eigenaar, Product
 from open_producten.producten.serializers.eigenaar import EigenaarSerializer
 from open_producten.producten.serializers.validators import (
+    DataObjectValidator,
     DateValidator,
     StatusValidator,
-    VerbruiksObjectValidator, DataObjectValidator,
+    VerbruiksObjectValidator,
 )
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.serializers.thema import NestedProductTypeSerializer
