@@ -17,6 +17,7 @@ from open_producten.producttypen.models import (
     ProductType,
 )
 from open_producten.producttypen.tests.factories import (
+    DmnConfigFactory,
     PrijsFactory,
     PrijsOptieFactory,
     PrijsRegelFactory,
@@ -38,6 +39,8 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.prijs = PrijsFactory.create(
             product_type=self.product_type, actief_vanaf=datetime.date(2024, 1, 2)
         )
+
+        DmnConfigFactory.create(tabel_endpoint="https://maykinmedia.nl")
 
         self.path = reverse("prijs-list")
         self.detail_path = reverse("prijs-detail", args=[self.prijs.id])
@@ -155,7 +158,11 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": datetime.date(2024, 1, 3),
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "spoed"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
             ],
             "product_type_id": self.product_type.id,
         }
@@ -166,8 +173,8 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 2)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(
-            PrijsRegel.objects.first().dmn_url,
-            "https://maykinmedia.nl",
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
         )
 
     def test_create_prijs_with_opties_and_regels(self):
@@ -175,7 +182,11 @@ class TestProductTypePrijs(BaseApiTestCase):
             "actief_vanaf": datetime.date(2024, 1, 3),
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "spoed"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
             ],
             "product_type_id": self.product_type.id,
         }
@@ -256,7 +267,11 @@ class TestProductTypePrijs(BaseApiTestCase):
             "actief_vanaf": self.prijs.actief_vanaf,
             "product_type_id": self.product_type.id,
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "spoed"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
             ],
             "prijsopties": [],
         }
@@ -323,7 +338,8 @@ class TestProductTypePrijs(BaseApiTestCase):
             "prijsregels": [
                 {
                     "id": regel_to_be_updated.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel_to_be_updated.beschrijving,
                 }
             ],
@@ -334,7 +350,10 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
-        self.assertEqual(PrijsRegel.objects.first().dmn_url, "https://maykinmedia.nl")
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
         self.assertEqual(PrijsRegel.objects.first().id, regel_to_be_updated.id)
 
     def test_update_prijs_creating_and_deleting_opties(self):
@@ -361,7 +380,11 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "test"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "test",
+                }
             ],
             "product_type_id": self.product_type.id,
         }
@@ -371,7 +394,10 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
-        self.assertEqual(PrijsRegel.objects.first().dmn_url, "https://maykinmedia.nl")
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
 
     def test_update_prijs_with_optie_not_part_of_prijs_returns_error(self):
 
@@ -412,7 +438,8 @@ class TestProductTypePrijs(BaseApiTestCase):
             "prijsregels": [
                 {
                     "id": regel.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel.beschrijving,
                 }
             ],
@@ -474,7 +501,8 @@ class TestProductTypePrijs(BaseApiTestCase):
             "prijsregels": [
                 {
                     "id": non_existing_id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": "test",
                 }
             ],
@@ -535,12 +563,14 @@ class TestProductTypePrijs(BaseApiTestCase):
             "prijsregels": [
                 {
                     "id": regel.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel.beschrijving,
                 },
                 {
                     "id": regel.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel.beschrijving,
                 },
             ],
@@ -567,7 +597,11 @@ class TestProductTypePrijs(BaseApiTestCase):
             "product_type_id": self.product_type.id,
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "spoed"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
             ],
         }
 
@@ -636,7 +670,8 @@ class TestProductTypePrijs(BaseApiTestCase):
             "prijsregels": [
                 {
                     "id": regel_to_be_updated.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel_to_be_updated.beschrijving,
                 }
             ],
@@ -647,7 +682,10 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
-        self.assertEqual(PrijsRegel.objects.first().dmn_url, "https://maykinmedia.nl")
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
         self.assertEqual(PrijsRegel.objects.first().id, regel_to_be_updated.id)
 
     def test_partial_update_prijs_creating_and_deleting_opties(self):
@@ -677,7 +715,11 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": datetime.date(2024, 1, 4),
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "test"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "test",
+                }
             ],
         }
 
@@ -748,22 +790,26 @@ class TestProductTypePrijs(BaseApiTestCase):
             "prijsregels": [
                 {
                     "id": regel.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel.beschrijving,
                 },
                 {
                     "id": regel.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel.beschrijving,
                 },
                 {
                     "id": regel_of_other_prijs.id,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": regel_of_other_prijs.beschrijving,
                 },
                 {
                     "id": non_existing_regel,
-                    "dmn_url": "https://maykinmedia.nl",
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
                     "beschrijving": "test",
                 },
             ]
@@ -802,7 +848,11 @@ class TestProductTypePrijs(BaseApiTestCase):
             "product_type_id": self.product_type.id,
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "prijsregels": [
-                {"dmn_url": "https://maykinmedia.nl", "beschrijving": "spoed"}
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
             ],
         }
 

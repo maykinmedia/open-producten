@@ -316,11 +316,13 @@ class LinkViewSet(OrderedModelViewSet):
                 value={
                     "prijsregels": [
                         {
-                            "dmn_url": "https://camunda.gemeente-a.nl/239840928q3740q982734",
+                            "tabel_endpoint": "https://camunda.gemeente-a.nl",
+                            "dmn_tabel_id": "239840928q3740q982734",
                             "beschrijving": "standaard",
                         },
                         {
-                            "dmn_url": "https://camunda.gemeente-a.nl/8ui3hoiwu3h4oiwu3h4",
+                            "tabel_endpoint": "https://camunda.gemeente-a.nl",
+                            "dmn_tabel_id": "8ui3hoiwu3h4oiwu3h4",
                             "beschrijving": "uitgebreid",
                         },
                     ],

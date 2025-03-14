@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from open_producten.utils.models import BaseModel
 
+from .dmn_config import DmnConfig
 from .producttype import ProductType
 
 
@@ -67,7 +68,7 @@ class PrijsRegel(BaseModel):
     beschrijving = models.CharField(
         verbose_name=_("beschrijving"),
         max_length=255,
-        help_text=_("Korte beschrijving van de prijs regel en dmn tabel."),
+        help_text=_("Korte beschrijving van de prijs regel."),
     )
 
     prijs = models.ForeignKey(
@@ -77,8 +78,18 @@ class PrijsRegel(BaseModel):
         related_name="prijsregels",
         help_text=_("De prijs waarbij deze regel hoort."),
     )
-    dmn_url = models.URLField(
-        _("dmn url"), help_text=_("Url om de dmn tabel te evalueren")
+    dmn_config = models.ForeignKey(
+        DmnConfig,
+        verbose_name=_("dmn config"),
+        on_delete=models.CASCADE,
+        related_name="prijsregels",
+        help_text=_("de dmn engine waar de tabel is gedefinieerd."),
+    )
+
+    dmn_tabel_id = models.CharField(
+        verbose_name=_("dmn tabel id"),
+        max_length=255,
+        help_text=_("id van de dmn tabel binnen de dmn instantie."),
     )
 
     class Meta:

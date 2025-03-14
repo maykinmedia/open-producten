@@ -1930,9 +1930,11 @@ paths:
               CreatePrijsMetRegels:
                 value:
                   prijsregels:
-                  - dmn_url: https://camunda.gemeente-a.nl/239840928q3740q982734
+                  - tabel_endpoint: https://camunda.gemeente-a.nl
+                    dmn_tabel_id: 239840928q3740q982734
                     beschrijving: standaard
-                  - dmn_url: https://camunda.gemeente-a.nl/8ui3hoiwu3h4oiwu3h4
+                  - tabel_endpoint: https://camunda.gemeente-a.nl
+                    dmn_tabel_id: 8ui3hoiwu3h4oiwu3h4
                     beschrijving: uitgebreid
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
@@ -4720,35 +4722,51 @@ components:
         dmn_url:
           type: string
           format: uri
-          description: Url om de dmn tabel te evalueren
-          maxLength: 200
+          readOnly: true
         beschrijving:
           type: string
-          description: Korte beschrijving van de prijs regel en dmn tabel.
+          description: Korte beschrijving van de prijs regel.
           maxLength: 255
+        dmn_tabel_id:
+          type: string
+          description: id van de dmn tabel binnen de dmn instantie.
+          maxLength: 255
+        tabel_endpoint:
+          type: string
+          format: uri
+          title: Url
+          description: basis endpoint voor de dnm tabellen.
       required:
       - beschrijving
+      - dmn_tabel_id
       - dmn_url
+      - tabel_endpoint
     PrijsRegelRequest:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        dmn_url:
-          type: string
-          format: uri
-          minLength: 1
-          description: Url om de dmn tabel te evalueren
-          maxLength: 200
         beschrijving:
           type: string
           minLength: 1
-          description: Korte beschrijving van de prijs regel en dmn tabel.
+          description: Korte beschrijving van de prijs regel.
           maxLength: 255
+        dmn_tabel_id:
+          type: string
+          minLength: 1
+          description: id van de dmn tabel binnen de dmn instantie.
+          maxLength: 255
+        tabel_endpoint:
+          type: string
+          format: uri
+          minLength: 1
+          title: Url
+          description: basis endpoint voor de dnm tabellen.
       required:
       - beschrijving
-      - dmn_url
+      - dmn_tabel_id
+      - tabel_endpoint
     PrijsRequest:
       type: object
       properties:

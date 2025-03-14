@@ -4,6 +4,8 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from freezegun import freeze_time
+
 from .factories import PrijsFactory, PrijsOptieFactory, ProductTypeFactory
 
 
