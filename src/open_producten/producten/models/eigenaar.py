@@ -52,7 +52,7 @@ class Eigenaar(BaseModel):
 
     def clean(self):
         validate_vestingsnummer_only_with_kvk(self.kvk_nummer, self.vestigingsnummer)
-        validate_bsn_kvk_or_klant(self.bsn, self.kvk_nummer, self.klantnummer)
+        validate_identifier(self.bsn, self.kvk_nummer, self.klantnummer)
 
     def __str__(self):
         if self.bsn:
@@ -73,11 +73,14 @@ class Eigenaar(BaseModel):
         verbose_name_plural = _("Eigenaren")
 
 
-def validate_bsn_kvk_or_klant(bsn, kvk_nummer, klantnummer):
-    if not bsn and not kvk_nummer and not klantnummer:
+def validate_identifier(bsn, kvk_nummer, klantnummer):
+
+    if (not (bsn or klantnummer) and not kvk_nummer) or (
+        (bsn or klantnummer) and kvk_nummer
+    ):
         raise ValidationError(
             _(
-                "Een eigenaar moet een bsn, klantnummer, kvk nummer (met of zonder vestigingsnummer) of een combinatie hebben."
+                "Een eigenaar moet een bsn (en/of klantnummer) of een kvk nummer (met of zonder vestigingsnummer) hebben."
             )
         )
 

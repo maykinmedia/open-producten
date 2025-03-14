@@ -44,7 +44,7 @@ class TestEigenaar(TestCase):
         with self.assertRaisesMessage(
             ValidationError,
             _(
-                "Een eigenaar moet een bsn, klantnummer, kvk nummer (met of zonder vestigingsnummer) of een combinatie hebben."
+                "Een eigenaar moet een bsn (en/of klantnummer) of een kvk nummer (met of zonder vestigingsnummer) hebben."
             ),
         ):
             eigenaar.clean()
@@ -53,7 +53,7 @@ class TestEigenaar(TestCase):
         EigenaarFactory.create(klantnummer="123").full_clean()
         EigenaarFactory.create(kvk_nummer="12345678").full_clean()
 
-    def test_vestigingsnummer_only_with_kvk(self):
+    def test_vestigingsnummer_without_kvk(self):
         eigenaar = EigenaarFactory.create(vestigingsnummer="123")
 
         with self.assertRaisesMessage(
@@ -67,6 +67,24 @@ class TestEigenaar(TestCase):
         EigenaarFactory.create(
             vestigingsnummer="123", kvk_nummer="12345678"
         ).full_clean()
+
+    def test_identifier(self):
+        expected_message = _(
+            "Een eigenaar moet een bsn (en/of klantnummer) of een kvk nummer (met of zonder vestigingsnummer) hebben."
+        )
+
+        with self.subTest("bsn & kvk"):
+            with self.assertRaisesMessage(ValidationError, expected_message):
+                EigenaarFactory.create(bsn="111222333", kvk_nummer="12345678").clean()
+
+        with self.subTest("klantnummer & kvk"):
+            with self.assertRaisesMessage(ValidationError, expected_message):
+                EigenaarFactory.create(
+                    klantnummer="111222333", kvk_nummer="12345678"
+                ).clean()
+
+        with self.subTest("bsn & klantnummer"):
+            EigenaarFactory.create(bsn="111222333", klantnummer="111222333").clean()
 
     def test_eigenaar_str(self):
 

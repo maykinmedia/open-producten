@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import Serializer
 
 from open_producten.producten.models.eigenaar import (
-    validate_bsn_kvk_or_klant,
+    validate_identifier,
     validate_vestingsnummer_only_with_kvk,
 )
 from open_producten.producten.models.product import (
@@ -30,7 +30,7 @@ class EigenaarIdentifierValidator:
             "klantnummer", value, serializer
         )
         try:
-            validate_bsn_kvk_or_klant(bsn, kvk_nummer, klantnummer)
+            validate_identifier(bsn, kvk_nummer, klantnummer)
         except ValidationError as e:
             raise serializers.ValidationError(e.message)
 
