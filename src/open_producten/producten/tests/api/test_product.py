@@ -86,10 +86,10 @@ class TestProduct(BaseApiTestCase):
             "update_datum": product.update_datum.astimezone().isoformat(),
             "eigenaren": [
                 {
-                    "bsn_nummer": None,
+                    "bsn": "",
                     "kvk_nummer": "12345678",
-                    "vestigingsnummer": None,
-                    "klantnummer": None,
+                    "vestigingsnummer": "",
+                    "klantnummer": "",
                     "id": str(product.eigenaren.first().id),
                 }
             ],
@@ -140,10 +140,10 @@ class TestProduct(BaseApiTestCase):
             "update_datum": product.update_datum.astimezone().isoformat(),
             "eigenaren": [
                 {
-                    "bsn_nummer": None,
+                    "bsn": "",
                     "kvk_nummer": "12345678",
-                    "vestigingsnummer": None,
-                    "klantnummer": None,
+                    "vestigingsnummer": "",
+                    "klantnummer": "",
                     "id": str(product.eigenaren.first().id),
                 }
             ],
@@ -224,10 +224,10 @@ class TestProduct(BaseApiTestCase):
             "update_datum": product.update_datum.astimezone().isoformat(),
             "eigenaren": [
                 {
-                    "bsn_nummer": None,
+                    "bsn": "",
                     "kvk_nummer": "12345678",
-                    "vestigingsnummer": None,
-                    "klantnummer": None,
+                    "vestigingsnummer": "",
+                    "klantnummer": "",
                     "id": str(product.eigenaren.first().id),
                 }
             ],
@@ -300,7 +300,7 @@ class TestProduct(BaseApiTestCase):
     def test_create_product_with_eigenaren(self):
         data = self.data | {
             "eigenaren": [
-                {"bsn_nummer": "111222333"},
+                {"bsn": "111222333"},
                 {"kvk_nummer": "11122233"},
                 {"klantnummer": "123"},
             ]
@@ -309,6 +309,19 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Eigenaar.objects.count(), 3)
+
+    def test_create_product_with_eigenaar_with_id(self):
+        id = uuid.uuid4()
+        data = self.data | {
+            "eigenaren": [
+                {"id": id, "kvk_nummer": "11122233"},
+            ]
+        }
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Eigenaar.objects.count(), 1)
+        self.assertNotEqual(Eigenaar.objects.get().id, id)
 
     def test_create_product_with_empty_eigenaar(self):
         data = self.data | {"eigenaren": [{}]}
@@ -414,7 +427,7 @@ class TestProduct(BaseApiTestCase):
 
     def test_update_product_removing_eigenaren(self):
         product = ProductFactory.create()
-        EigenaarFactory.create(product=product, bsn_nummer="111222333")
+        EigenaarFactory.create(product=product, bsn="111222333")
         EigenaarFactory.create(product=product, kvk_nummer="12345678")
 
         expected_error = {
@@ -445,7 +458,7 @@ class TestProduct(BaseApiTestCase):
     def test_update_updating_and_removing_eigenaren(self):
         product = ProductFactory.create()
         eigenaar_to_be_updated = EigenaarFactory.create(
-            product=product, bsn_nummer="111222333"
+            product=product, bsn="111222333"
         )
         EigenaarFactory.create(product=product, kvk_nummer="12345678")
 
@@ -456,7 +469,7 @@ class TestProduct(BaseApiTestCase):
                 {
                     "id": eigenaar_to_be_updated.id,
                     "klantnummer": "1234",
-                    "bsn_nummer": None,
+                    "bsn": "",
                 }
             ]
         }
@@ -465,9 +478,9 @@ class TestProduct(BaseApiTestCase):
             {
                 "id": str(eigenaar_to_be_updated.id),
                 "klantnummer": "1234",
-                "bsn_nummer": None,
-                "kvk_nummer": None,
-                "vestigingsnummer": None,
+                "bsn": "",
+                "kvk_nummer": "",
+                "vestigingsnummer": "",
             }
         ]
 
@@ -570,7 +583,7 @@ class TestProduct(BaseApiTestCase):
     def test_update_product_with_duplicate_eigenaren_ids(self):
         product = ProductFactory.create()
         eigenaar_to_be_updated = EigenaarFactory.create(
-            product=product, bsn_nummer="111222333"
+            product=product, bsn="111222333"
         )
 
         expected_error = {
@@ -641,10 +654,10 @@ class TestProduct(BaseApiTestCase):
                 "update_datum": product1.update_datum.astimezone().isoformat(),
                 "eigenaren": [
                     {
-                        "bsn_nummer": None,
+                        "bsn": "",
                         "kvk_nummer": "12345678",
-                        "vestigingsnummer": None,
-                        "klantnummer": None,
+                        "vestigingsnummer": "",
+                        "klantnummer": "",
                         "id": str(product1.eigenaren.first().id),
                     }
                 ],
@@ -674,10 +687,10 @@ class TestProduct(BaseApiTestCase):
                 "update_datum": product2.update_datum.astimezone().isoformat(),
                 "eigenaren": [
                     {
-                        "bsn_nummer": None,
+                        "bsn": "",
                         "kvk_nummer": "12345678",
-                        "vestigingsnummer": None,
-                        "klantnummer": None,
+                        "vestigingsnummer": "",
+                        "klantnummer": "",
                         "id": str(product2.eigenaren.first().id),
                     }
                 ],
@@ -719,10 +732,10 @@ class TestProduct(BaseApiTestCase):
             "update_datum": "2025-12-31T01:00:00+01:00",
             "eigenaren": [
                 {
-                    "bsn_nummer": None,
+                    "bsn": "",
                     "kvk_nummer": "12345678",
-                    "vestigingsnummer": None,
-                    "klantnummer": None,
+                    "vestigingsnummer": "",
+                    "klantnummer": "",
                     "id": str(product.eigenaren.first().id),
                 }
             ],

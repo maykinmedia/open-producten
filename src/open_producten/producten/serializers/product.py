@@ -47,6 +47,7 @@ class ProductSerializer(serializers.ModelSerializer):
         product = super().create(validated_data)
 
         for eigenaar in eigenaren:
+            eigenaar.pop("id", None)
             EigenaarSerializer().create(eigenaar | {"product": product})
 
         return product

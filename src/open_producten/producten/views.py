@@ -32,7 +32,7 @@ from open_producten.utils.views import OrderedModelViewSet
                     "frequentie": "eenmalig",
                     "verbruiksobject": {"uren": 130},
                     "eigenaren": [
-                        {"bsn_nummer": "111222333"},
+                        {"bsn": "111222333"},
                     ],
                     "data": {"max_uren": 150},
                 },

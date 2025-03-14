@@ -39,6 +39,7 @@ class PrijsSerializer(serializers.ModelSerializer):
         prijs = Prijs.objects.create(**validated_data, product_type=product_type)
 
         for optie in prijsopties:
+            optie.pop("id", None)
             PrijsOptieSerializer().create(optie | {"prijs": prijs})
 
         return prijs
@@ -49,9 +50,7 @@ class PrijsSerializer(serializers.ModelSerializer):
         prijs = super().update(instance, validated_data)
 
         if opties is not None:
-            current_optie_ids = set(
-                prijs.prijsopties.values_list("id", flat=True).distinct()
-            )
+            current_optie_ids = set(prijs.prijsopties.values_list("id", flat=True))
             seen_optie_ids = set()
 
             for optie in opties:

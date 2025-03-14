@@ -22,9 +22,7 @@ class EigenaarIdentifierValidator:
     requires_context = True
 
     def __call__(self, value, serializer):
-        bsn_nummer = get_from_serializer_data_or_instance(
-            "bsn_nummer", value, serializer
-        )
+        bsn = get_from_serializer_data_or_instance("bsn", value, serializer)
         kvk_nummer = get_from_serializer_data_or_instance(
             "kvk_nummer", value, serializer
         )
@@ -32,7 +30,7 @@ class EigenaarIdentifierValidator:
             "klantnummer", value, serializer
         )
         try:
-            validate_bsn_kvk_or_klant(bsn_nummer, kvk_nummer, klantnummer)
+            validate_bsn_kvk_or_klant(bsn, kvk_nummer, klantnummer)
         except ValidationError as e:
             raise serializers.ValidationError(e.message)
 
