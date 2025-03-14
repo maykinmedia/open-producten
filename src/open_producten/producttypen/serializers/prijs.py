@@ -1,10 +1,13 @@
 from django.db import transaction
 
 from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from ...utils.drf_validators import NestedObjectsValidator
 from ..models import Prijs, PrijsOptie, ProductType
+from ..models.dmn_config import DmnConfig
 from ..models.prijs import PrijsRegel
 from .validators import PrijsOptieRegelValidator
 
@@ -20,9 +23,21 @@ class PrijsOptieSerializer(serializers.ModelSerializer):
 class PrijsRegelSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(required=False)
 
+    tabel_endpoint = serializers.SlugRelatedField(
+        slug_field="tabel_endpoint",
+        queryset=DmnConfig.objects.all(),
+        source="dmn_config",
+    )
+
+    dmn_url = serializers.SerializerMethodField()
+
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_dmn_url(self, obj):
+        return f"{obj.dmn_config.tabel_endpoint.rstrip('/')}/{obj.dmn_tabel_id}"
+
     class Meta:
         model = PrijsRegel
-        fields = ("id", "dmn_url", "beschrijving")
+        fields = ("id", "dmn_url", "beschrijving", "dmn_tabel_id", "tabel_endpoint")
 
 
 @extend_schema_serializer(

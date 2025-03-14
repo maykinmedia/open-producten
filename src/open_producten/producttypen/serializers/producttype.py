@@ -24,7 +24,7 @@ from .bestand import NestedBestandSerializer
 from .externe_code import ExterneCodeSerializer, NestedExterneCodeSerializer
 from .link import NestedLinkSerializer
 from .parameter import NestedParameterSerializer, ParameterSerializer
-from .prijs import NestedPrijsSerializer, PrijsSerializer
+from .prijs import NestedPrijsSerializer
 
 
 class NestedThemaSerializer(serializers.ModelSerializer):

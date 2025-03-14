@@ -10,12 +10,14 @@ from ..models.prijs import PrijsRegel, validate_optie_xor_regel
 class PrijsOptieInline(admin.TabularInline):
     model = PrijsOptie
     extra = 1
-    ordering = ("beschrijving",)
+    fields = ("bedrag", "beschrijving")
 
 
 class PrijsRegelInline(admin.TabularInline):
     model = PrijsRegel
+    autocomplete_fields = ("dmn_config",)
     extra = 1
+    fields = ("dmn_config", "dmn_tabel_id", "beschrijving")
 
 
 class PrijsAdminForm(forms.ModelForm):

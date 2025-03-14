@@ -16,6 +16,7 @@ from ..models import (
     Thema,
     UniformeProductNaam,
 )
+from ..models.dmn_config import DmnConfig
 
 fake = Faker()
 
@@ -74,9 +75,18 @@ class PrijsOptieFactory(factory.django.DjangoModelFactory):
         model = PrijsOptie
 
 
+class DmnConfigFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"dmn config {n}")
+    tabel_endpoint = factory.Sequence(lambda n: f"{fake.url()}/{n}")
+
+    class Meta:
+        model = DmnConfig
+
+
 class PrijsRegelFactory(factory.django.DjangoModelFactory):
     beschrijving = factory.Faker("sentence")
-    dmn_url = factory.Faker("url")
+    dmn_config = factory.SubFactory(DmnConfigFactory)
+    dmn_tabel_id = factory.Faker("word")
 
     class Meta:
         model = PrijsRegel
