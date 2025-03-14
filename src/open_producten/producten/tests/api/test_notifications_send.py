@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from django.test import override_settings
 from django.urls import reverse
 
 from freezegun import freeze_time
@@ -14,6 +15,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 @freeze_time("2024-2-2T00:00:00Z")
+@override_settings(NOTIFICATIONS_DISABLED=False)
 class SendNotifTestCase(BaseApiTestCase):
     @classmethod
     def setUpTestData(cls):
@@ -35,13 +37,13 @@ class SendNotifTestCase(BaseApiTestCase):
         cls.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
         cls.data = {
             "product_type_id": cls.product_type.id,
-            "bsn": "111222333",
             "status": "initieel",
             "prijs": "20.20",
             "frequentie": "eenmalig",
+            "eigenaren": [{"bsn": "111222333"}],
         }
 
-        product = ProductFactory.create(**cls.data)
+        product = ProductFactory.create(product_type=cls.product_type)
 
         cls.path = reverse("product-list")
         cls.detail_path = reverse("product-detail", args=[product.id])

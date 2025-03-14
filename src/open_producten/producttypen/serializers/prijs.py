@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from ...utils.drf_validators import NestedObjectsValidator
 from ..models import Prijs, PrijsOptie, ProductType
-from .validators import PrijsOptieValidator
 
 
 class PrijsOptieSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class PrijsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prijs
         fields = ("id", "product_type_id", "prijsopties", "actief_vanaf")
-        validators = [PrijsOptieValidator()]
+        validators = [NestedObjectsValidator("prijsopties", PrijsOptie)]
 
     def validate_prijsopties(self, opties: list[PrijsOptie]) -> list[PrijsOptie]:
         if len(opties) == 0:
@@ -39,7 +39,8 @@ class PrijsSerializer(serializers.ModelSerializer):
         prijs = Prijs.objects.create(**validated_data, product_type=product_type)
 
         for optie in prijsopties:
-            PrijsOptie.objects.create(prijs=prijs, **optie)
+            optie.pop("id", None)
+            PrijsOptieSerializer().create(optie | {"prijs": prijs})
 
         return prijs
 
@@ -49,21 +50,20 @@ class PrijsSerializer(serializers.ModelSerializer):
         prijs = super().update(instance, validated_data)
 
         if opties is not None:
-            current_optie_ids = set(
-                prijs.prijsopties.values_list("id", flat=True).distinct()
-            )
+            current_optie_ids = set(prijs.prijsopties.values_list("id", flat=True))
             seen_optie_ids = set()
 
             for optie in opties:
                 optie_id = optie.pop("id", None)
                 if optie_id is None:
-                    PrijsOptie.objects.create(prijs=prijs, **optie)
+                    PrijsOptieSerializer().create(optie | {"prijs": prijs})
 
                 else:
                     existing_optie = PrijsOptie.objects.get(id=optie_id)
-                    existing_optie.bedrag = optie["bedrag"]
-                    existing_optie.beschrijving = optie["beschrijving"]
-                    existing_optie.save()
+                    PrijsOptieSerializer(partial=self.partial).update(
+                        existing_optie, optie
+                    )
+                    seen_optie_ids.add(optie_id)
 
             PrijsOptie.objects.filter(
                 id__in=(current_optie_ids - seen_optie_ids)

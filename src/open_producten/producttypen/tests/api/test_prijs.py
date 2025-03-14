@@ -108,6 +108,21 @@ class TestProductTypePrijs(BaseApiTestCase):
             Decimal("74.99"),
         )
 
+    def test_create_prijs_with_optie_with_id(self):
+        id = uuid.uuid4()
+        data = {
+            "actief_vanaf": datetime.date(2024, 1, 3),
+            "prijsopties": [{"id": id, "bedrag": "74.99", "beschrijving": "spoed"}],
+            "product_type_id": self.product_type.id,
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Prijs.objects.count(), 2)
+        self.assertEqual(PrijsOptie.objects.count(), 1)
+        self.assertNotEqual(PrijsOptie.objects.first().id, id)
+
     def test_update_prijs_removing_all_opties(self):
         PrijsOptieFactory.create(prijs=self.prijs)
         PrijsOptieFactory.create(prijs=self.prijs)
@@ -156,6 +171,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
 
     def test_update_prijs_creating_and_deleting_opties(self):
 
@@ -195,7 +211,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "prijsopties": [
                     ErrorDetail(
                         string=_(
-                            "Prijs optie id {} op index 0 is niet onderdeel van het prijs object."
+                            "Prijs optie id {} op index 0 is niet onderdeel van het Prijs object."
                         ).format(optie.id),
                         code="invalid",
                     )
@@ -298,6 +314,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
 
     def test_partial_update_prijs_creating_and_deleting_opties(self):
 
@@ -351,7 +368,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     ),
                     ErrorDetail(
                         string=_(
-                            "Prijs optie id {} op index 2 is niet onderdeel van het prijs object."
+                            "Prijs optie id {} op index 2 is niet onderdeel van het Prijs object."
                         ).format(optie_of_other_prijs.id),
                         code="invalid",
                     ),

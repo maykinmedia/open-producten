@@ -123,12 +123,13 @@ paths:
                   eind_datum: '2026-12-01'
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   gepubliceerd: false
-                  bsn: '111222333'
                   status: gereed
                   prijs: '20.20'
                   frequentie: eenmalig
                   verbruiksobject:
                     uren: 130
+                  eigenaren:
+                  - bsn: '111222333'
                   data:
                     max_uren: 150
                 summary: Create product
@@ -295,7 +296,6 @@ paths:
                   gepubliceerd: true
                   start_datum: '2019-08-24'
                   eind_datum: '2019-08-24'
-                  bsn: string
                   status: gereed
                 summary: Patch product
               UpdateProductStatus:
@@ -386,6 +386,56 @@ components:
           type: string
       required:
       - detail
+    Eigenaar:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bsn:
+          type: string
+          title: Burgerservicenummer
+          description: Het BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk_nummer:
+          type: string
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+        vestigingsnummer:
+          type: string
+          description: Een korte unieke aanduiding van een vestiging.
+          maxLength: 24
+        klantnummer:
+          type: string
+          description: generiek veld voor de identificatie van een klant.
+          maxLength: 50
+    EigenaarRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bsn:
+          type: string
+          title: Burgerservicenummer
+          description: Het BSN van de product eigenaar, BSN van 8 karakters moet met
+            een extra 0 beginnen.
+        kvk_nummer:
+          type: string
+          description: Het kvk nummer van de product eigenaar
+          pattern: ^[0-9]*$
+          maxLength: 8
+          minLength: 8
+        vestigingsnummer:
+          type: string
+          description: Een korte unieke aanduiding van een vestiging.
+          maxLength: 24
+        klantnummer:
+          type: string
+          description: generiek veld voor de identificatie van een klant.
+          maxLength: 50
     Error:
       type: object
       properties:
@@ -513,6 +563,10 @@ components:
           type: string
           format: uuid
           writeOnly: true
+        eigenaren:
+          type: array
+          items:
+            $ref: '#/components/schemas/EigenaarRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -532,11 +586,6 @@ components:
             het product automatisch naar VERLOPEN worden gezet. Op het moment dat
             de eind_datum wordt ingevuld moet de status VERLOPEN op het product type
             zijn toegestaan.
-        bsn:
-          type: string
-          nullable: true
-          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
-            een extra 0 beginnen.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -549,14 +598,6 @@ components:
             * `ingetrokken` - Ingetrokken
             * `geweigerd` - Geweigerd
             * `verlopen` - Verlopen
-        kvk:
-          type: string
-          nullable: true
-          title: KVK nummer
-          description: Het kvk nummer van de product eigenaar
-          pattern: ^[0-9]*$
-          maxLength: 8
-          minLength: 8
         prijs:
           type: string
           format: decimal
@@ -600,6 +641,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedProductType'
           readOnly: true
+        eigenaren:
+          type: array
+          items:
+            $ref: '#/components/schemas/Eigenaar'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -629,11 +674,6 @@ components:
             het product automatisch naar VERLOPEN worden gezet. Op het moment dat
             de eind_datum wordt ingevuld moet de status VERLOPEN op het product type
             zijn toegestaan.
-        bsn:
-          type: string
-          nullable: true
-          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
-            een extra 0 beginnen.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -646,14 +686,6 @@ components:
             * `ingetrokken` - Ingetrokken
             * `geweigerd` - Geweigerd
             * `verlopen` - Verlopen
-        kvk:
-          type: string
-          nullable: true
-          title: KVK nummer
-          description: Het kvk nummer van de product eigenaar
-          pattern: ^[0-9]*$
-          maxLength: 8
-          minLength: 8
         prijs:
           type: string
           format: decimal
@@ -680,6 +712,7 @@ components:
             uit het product type.
       required:
       - aanmaak_datum
+      - eigenaren
       - frequentie
       - id
       - prijs
@@ -693,6 +726,10 @@ components:
           type: string
           format: uuid
           writeOnly: true
+        eigenaren:
+          type: array
+          items:
+            $ref: '#/components/schemas/EigenaarRequest'
         gepubliceerd:
           type: boolean
           description: Geeft aan of het object getoond kan worden.
@@ -712,11 +749,6 @@ components:
             het product automatisch naar VERLOPEN worden gezet. Op het moment dat
             de eind_datum wordt ingevuld moet de status VERLOPEN op het product type
             zijn toegestaan.
-        bsn:
-          type: string
-          nullable: true
-          description: De BSN van de product eigenaar, BSN van 8 karakters moet met
-            een extra 0 beginnen.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -729,14 +761,6 @@ components:
             * `ingetrokken` - Ingetrokken
             * `geweigerd` - Geweigerd
             * `verlopen` - Verlopen
-        kvk:
-          type: string
-          nullable: true
-          title: KVK nummer
-          description: Het kvk nummer van de product eigenaar
-          pattern: ^[0-9]*$
-          maxLength: 8
-          minLength: 8
         prijs:
           type: string
           format: decimal
@@ -762,6 +786,7 @@ components:
           description: Dataobject van dit product. Wordt gevalideerd met het `dataobject_schema`
             uit het product type.
       required:
+      - eigenaren
       - frequentie
       - prijs
       - product_type_id

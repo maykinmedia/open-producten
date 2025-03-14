@@ -1,12 +1,7 @@
 from datetime import date
 from decimal import Decimal
 
-from django.core.validators import (
-    MinLengthValidator,
-    MinValueValidator,
-    RegexValidator,
-    ValidationError,
-)
+from django.core.validators import MinValueValidator, ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -14,8 +9,6 @@ from open_producten.logging.logevent import audit_automation_update
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.models.producttype import ProductStateChoices
 from open_producten.utils.models import BasePublishableModel
-
-from .validators import validate_bsn
 
 
 class PrijsFrequentieChoices(models.TextChoices):
@@ -51,16 +44,6 @@ class Product(BasePublishableModel):
         blank=True,
     )
 
-    bsn = models.CharField(
-        _("BSN"),
-        help_text=_(
-            "De BSN van de product eigenaar, BSN van 8 karakters moet met een extra 0 beginnen."
-        ),
-        validators=[validate_bsn],
-        null=True,
-        blank=True,
-    )
-
     status = models.CharField(
         _("status"),
         choices=ProductStateChoices.choices,
@@ -68,15 +51,6 @@ class Product(BasePublishableModel):
             "De status opties worden bepaald door het veld 'toegestane statussen' van het gerelateerde product type."
         ),
         default=ProductStateChoices.INITIEEL,
-    )
-
-    kvk = models.CharField(
-        _("KVK nummer"),
-        help_text=_("Het kvk nummer van de product eigenaar"),
-        max_length=8,
-        validators=[MinLengthValidator(8), RegexValidator("^[0-9]*$")],
-        null=True,
-        blank=True,
     )
 
     prijs = models.DecimalField(
@@ -117,10 +91,7 @@ class Product(BasePublishableModel):
         verbose_name_plural = _("Producten")
 
     def clean(self):
-        validate_bsn_or_kvk(self.bsn, self.kvk)
         validate_dates(self.start_datum, self.eind_datum)
-        validate_verbruiksobject(self.verbruiksobject, self.product_type)
-        validate_dataobject(self.dataobject, self.product_type)
 
     def save(self, *args, **kwargs):
         self.handle_start_datum()
@@ -156,14 +127,7 @@ class Product(BasePublishableModel):
             self.status = ProductStateChoices.VERLOPEN
 
     def __str__(self):
-        return f"{self.bsn if self.bsn else self.kvk} {self.product_type.naam}"
-
-
-def validate_bsn_or_kvk(bsn, kvk):
-    if not bsn and not kvk:
-        raise ValidationError(
-            _("Een product moet een bsn, kvk nummer of beiden hebben.")
-        )
+        return f"{self.product_type.naam} instantie."
 
 
 def validate_status(status, product_type):
