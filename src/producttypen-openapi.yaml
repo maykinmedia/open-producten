@@ -1915,7 +1915,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PrijsRequest'
             examples:
-              CreatePrijs:
+              CreatePrijsMetOpties:
                 value:
                   prijsopties:
                   - bedrag: '50.99'
@@ -1924,7 +1924,21 @@ paths:
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
-                summary: Create prijs
+                summary: Create prijs met opties
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
+              CreatePrijsMetRegels:
+                value:
+                  prijsregels:
+                  - tabel_endpoint: https://camunda.gemeente-a.nl
+                    dmn_tabel_id: 239840928q3740q982734
+                    beschrijving: standaard
+                  - tabel_endpoint: https://camunda.gemeente-a.nl
+                    dmn_tabel_id: 8ui3hoiwu3h4oiwu3h4
+                    beschrijving: uitgebreid
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: Create prijs met regels
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
         required: true
@@ -3871,7 +3885,6 @@ components:
       required:
       - actief_vanaf
       - id
-      - prijsopties
     NestedPrijsRequest:
       type: object
       properties:
@@ -3886,7 +3899,6 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
-      - prijsopties
     NestedProductType:
       type: object
       properties:
@@ -4503,6 +4515,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
+        prijsregels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsRegelRequest'
         actief_vanaf:
           type: string
           format: date
@@ -4647,6 +4663,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptie'
+        prijsregels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsRegel'
         actief_vanaf:
           type: string
           format: date
@@ -4655,7 +4675,6 @@ components:
       required:
       - actief_vanaf
       - id
-      - prijsopties
       - product_type_id
     PrijsOptie:
       type: object
@@ -4694,6 +4713,60 @@ components:
       required:
       - bedrag
       - beschrijving
+    PrijsRegel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dmn_url:
+          type: string
+          format: uri
+          readOnly: true
+        beschrijving:
+          type: string
+          description: Korte beschrijving van de prijs regel.
+          maxLength: 255
+        dmn_tabel_id:
+          type: string
+          description: id van de dmn tabel binnen de dmn instantie.
+          maxLength: 255
+        tabel_endpoint:
+          type: string
+          format: uri
+          title: Url
+          description: basis endpoint voor de dnm tabellen.
+      required:
+      - beschrijving
+      - dmn_tabel_id
+      - dmn_url
+      - tabel_endpoint
+    PrijsRegelRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        beschrijving:
+          type: string
+          minLength: 1
+          description: Korte beschrijving van de prijs regel.
+          maxLength: 255
+        dmn_tabel_id:
+          type: string
+          minLength: 1
+          description: id van de dmn tabel binnen de dmn instantie.
+          maxLength: 255
+        tabel_endpoint:
+          type: string
+          format: uri
+          minLength: 1
+          title: Url
+          description: basis endpoint voor de dnm tabellen.
+      required:
+      - beschrijving
+      - dmn_tabel_id
+      - tabel_endpoint
     PrijsRequest:
       type: object
       properties:
@@ -4704,6 +4777,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrijsOptieRequest'
+        prijsregels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrijsRegelRequest'
         actief_vanaf:
           type: string
           format: date
@@ -4711,7 +4788,6 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
-      - prijsopties
       - product_type_id
     ProductType:
       type: object
@@ -4857,7 +4933,7 @@ components:
           readOnly: true
         actuele_prijs:
           allOf:
-          - $ref: '#/components/schemas/Prijs'
+          - $ref: '#/components/schemas/NestedPrijs'
           nullable: true
       required:
       - actuele_prijs

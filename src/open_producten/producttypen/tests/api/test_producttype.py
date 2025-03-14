@@ -1060,7 +1060,6 @@ class TestProductTypeActions(BaseApiTestCase):
                 | {
                     "actuele_prijs": {
                         "id": str(prijs.id),
-                        "product_type_id": self.product_type.id,
                         "actief_vanaf": "2024-01-01",
                         "prijsopties": [
                             {
@@ -1091,7 +1090,6 @@ class TestProductTypeActions(BaseApiTestCase):
             | {
                 "actuele_prijs": {
                     "id": str(prijs.id),
-                    "product_type_id": self.product_type.id,
                     "actief_vanaf": "2024-01-01",
                     "prijsopties": [
                         {

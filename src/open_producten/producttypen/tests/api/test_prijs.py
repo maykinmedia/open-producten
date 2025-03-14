@@ -10,10 +10,17 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-from open_producten.producttypen.models import Prijs, PrijsOptie, ProductType
+from open_producten.producttypen.models import (
+    Prijs,
+    PrijsOptie,
+    PrijsRegel,
+    ProductType,
+)
 from open_producten.producttypen.tests.factories import (
+    DmnConfigFactory,
     PrijsFactory,
     PrijsOptieFactory,
+    PrijsRegelFactory,
     ProductTypeFactory,
 )
 from open_producten.utils.tests.cases import BaseApiTestCase
@@ -33,6 +40,8 @@ class TestProductTypePrijs(BaseApiTestCase):
             product_type=self.product_type, actief_vanaf=datetime.date(2024, 1, 2)
         )
 
+        DmnConfigFactory.create(tabel_endpoint="https://maykinmedia.nl")
+
         self.path = reverse("prijs-list")
         self.detail_path = reverse("prijs-detail", args=[self.prijs.id])
 
@@ -50,9 +59,6 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "actief_vanaf": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "prijsopties": [
-                    ErrorDetail(_("This field is required."), code="required")
-                ],
                 "product_type_id": [
                     ErrorDetail(_("This field is required."), code="required")
                 ],
@@ -66,9 +72,29 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "prijsopties": [
+                "opties_or_regels": [
                     ErrorDetail(
-                        string=_("Er is minimaal één optie vereist."),
+                        string=_(
+                            "Een prijs moet één of meerdere opties of regels hebben."
+                        ),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_create_prijs_with_empty_regels(self):
+        response = self.client.post(self.path, self.prijs_data | {"prijsregels": []})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "opties_or_regels": [
+                    ErrorDetail(
+                        string=_(
+                            "Een prijs moet één of meerdere opties of regels hebben."
+                        ),
                         code="invalid",
                     )
                 ]
@@ -82,10 +108,30 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "prijsopties": [
+                "opties_or_regels": [
                     ErrorDetail(
-                        string=_("This field is required."),
-                        code="required",
+                        string=_(
+                            "Een prijs moet één of meerdere opties of regels hebben."
+                        ),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_create_prijs_without_regels(self):
+        response = self.client.post(self.path, self.prijs_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "opties_or_regels": [
+                    ErrorDetail(
+                        string=_(
+                            "Een prijs moet één of meerdere opties of regels hebben."
+                        ),
+                        code="invalid",
                     )
                 ]
             },
@@ -108,6 +154,58 @@ class TestProductTypePrijs(BaseApiTestCase):
             Decimal("74.99"),
         )
 
+    def test_create_prijs_with_prijs_regels(self):
+        data = {
+            "actief_vanaf": datetime.date(2024, 1, 3),
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
+            ],
+            "product_type_id": self.product_type.id,
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Prijs.objects.count(), 2)
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
+
+    def test_create_prijs_with_opties_and_regels(self):
+        data = {
+            "actief_vanaf": datetime.date(2024, 1, 3),
+            "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
+            ],
+            "product_type_id": self.product_type.id,
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "opties_or_regels": [
+                    ErrorDetail(
+                        string=_("Een prijs kan niet zowel opties als regels hebben."),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
     def test_update_prijs_removing_all_opties(self):
         PrijsOptieFactory.create(prijs=self.prijs)
         PrijsOptieFactory.create(prijs=self.prijs)
@@ -124,14 +222,85 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "prijsopties": [
+                "opties_or_regels": [
                     ErrorDetail(
-                        string=_("Er is minimaal één optie vereist."),
+                        string=_(
+                            "Een prijs moet één of meerdere opties of regels hebben."
+                        ),
                         code="invalid",
                     )
                 ]
             },
         )
+
+    def test_update_prijs_removing_all_regels(self):
+        PrijsRegelFactory.create(prijs=self.prijs)
+        PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsregels": [],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "opties_or_regels": [
+                    ErrorDetail(
+                        string=_(
+                            "Een prijs moet één of meerdere opties of regels hebben."
+                        ),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_update_prijs_removing_optie_adding_regel(self):
+        PrijsOptieFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
+            ],
+            "prijsopties": [],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["prijsregels"]), 1)
+        self.assertEqual(len(response.data["prijsopties"]), 0)
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertEqual(PrijsOptie.objects.count(), 0)
+
+    def test_update_prijs_removing_regel_adding_optie(self):
+        PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsregels": [],
+            "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["prijsregels"]), 0)
+        self.assertEqual(len(response.data["prijsopties"]), 1)
+        self.assertEqual(PrijsRegel.objects.count(), 0)
+        self.assertEqual(PrijsOptie.objects.count(), 1)
 
     def test_update_prijs_updating_and_removing_opties(self):
 
@@ -156,6 +325,36 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
+
+    def test_update_prijs_updating_and_removing_regels(self):
+
+        regel_to_be_updated = PrijsRegelFactory.create(prijs=self.prijs)
+        PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsregels": [
+                {
+                    "id": regel_to_be_updated.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel_to_be_updated.beschrijving,
+                }
+            ],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Prijs.objects.count(), 1)
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
+        self.assertEqual(PrijsRegel.objects.first().id, regel_to_be_updated.id)
 
     def test_update_prijs_creating_and_deleting_opties(self):
 
@@ -173,6 +372,32 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+
+    def test_update_prijs_creating_and_deleting_regels(self):
+
+        PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "test",
+                }
+            ],
+            "product_type_id": self.product_type.id,
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Prijs.objects.count(), 1)
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
 
     def test_update_prijs_with_optie_not_part_of_prijs_returns_error(self):
 
@@ -195,8 +420,42 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "prijsopties": [
                     ErrorDetail(
                         string=_(
-                            "Prijs optie id {} op index 0 is niet onderdeel van het prijs object."
+                            "Prijs optie id {} op index 0 is niet onderdeel van het Prijs object."
                         ).format(optie.id),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_update_prijs_with_regel_not_part_of_prijs_returns_error(self):
+
+        regel = PrijsRegelFactory.create(prijs=PrijsFactory.create())
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsregels": [
+                {
+                    "id": regel.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel.beschrijving,
+                }
+            ],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "prijsregels": [
+                    ErrorDetail(
+                        string=_(
+                            "Prijs regel id {} op index 0 is niet onderdeel van het Prijs object."
+                        ).format(regel.id),
                         code="invalid",
                     )
                 ]
@@ -232,6 +491,40 @@ class TestProductTypePrijs(BaseApiTestCase):
             },
         )
 
+    def test_update_prijs_with_regel_with_unknown_id_returns_error(self):
+
+        non_existing_id = uuid.uuid4()
+
+        data = {
+            "product_type_id": self.product_type.id,
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "prijsregels": [
+                {
+                    "id": non_existing_id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "test",
+                }
+            ],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "prijsregels": [
+                    ErrorDetail(
+                        string=_("Prijs regel id {} op index 0 bestaat niet.").format(
+                            non_existing_id
+                        ),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
     def test_update_prijs_with_duplicate_optie_ids_returns_error(self):
 
         optie = PrijsOptieFactory.create(prijs=self.prijs)
@@ -254,6 +547,73 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "prijsopties": [
                     ErrorDetail(
                         string=_("Dubbel id: {} op index 1.").format(optie.id),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_update_prijs_with_duplicate_regel_ids_returns_error(self):
+
+        regel = PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsregels": [
+                {
+                    "id": regel.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel.beschrijving,
+                },
+                {
+                    "id": regel.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel.beschrijving,
+                },
+            ],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "prijsregels": [
+                    ErrorDetail(
+                        string=_("Dubbel id: {} op index 1.").format(regel.id),
+                        code="invalid",
+                    )
+                ]
+            },
+        )
+
+    def test_update_prijs_with_opties_and_regels(self):
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
+            ],
+        }
+
+        response = self.client.put(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "opties_or_regels": [
+                    ErrorDetail(
+                        string=_("Een prijs kan niet zowel opties als regels hebben."),
                         code="invalid",
                     )
                 ]
@@ -298,6 +658,35 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
+
+    def test_partial_update_prijs_updating_and_removing_regels(self):
+
+        regel_to_be_updated = PrijsRegelFactory.create(prijs=self.prijs)
+        PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "prijsregels": [
+                {
+                    "id": regel_to_be_updated.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel_to_be_updated.beschrijving,
+                }
+            ],
+        }
+
+        response = self.client.patch(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Prijs.objects.count(), 1)
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertEqual(
+            response.data["prijsregels"][0]["dmn_url"],
+            "https://maykinmedia.nl/iqjowijdoanwda",
+        )
+        self.assertEqual(PrijsRegel.objects.first().id, regel_to_be_updated.id)
 
     def test_partial_update_prijs_creating_and_deleting_opties(self):
 
@@ -319,7 +708,33 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.first().beschrijving, "test")
 
-    def test_partial_update_with_multiple_errors(self):
+    def test_partial_update_prijs_creating_and_deleting_regels(self):
+
+        PrijsRegelFactory.create(prijs=self.prijs)
+
+        data = {
+            "actief_vanaf": datetime.date(2024, 1, 4),
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "test",
+                }
+            ],
+        }
+
+        response = self.client.patch(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Prijs.objects.count(), 1)
+        self.assertEqual(
+            ProductType.objects.first().prijzen.first().actief_vanaf,
+            datetime.date(2024, 1, 4),
+        )
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertEqual(PrijsRegel.objects.first().beschrijving, "test")
+
+    def test_partial_update_with_multiple_optie_errors(self):
 
         optie = PrijsOptieFactory.create(prijs=self.prijs)
         optie_of_other_prijs = PrijsOptieFactory.create(prijs=PrijsFactory.create())
@@ -351,7 +766,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     ),
                     ErrorDetail(
                         string=_(
-                            "Prijs optie id {} op index 2 is niet onderdeel van het prijs object."
+                            "Prijs optie id {} op index 2 is niet onderdeel van het Prijs object."
                         ).format(optie_of_other_prijs.id),
                         code="invalid",
                     ),
@@ -361,6 +776,97 @@ class TestProductTypePrijs(BaseApiTestCase):
                         ),
                         code="invalid",
                     ),
+                ]
+            },
+        )
+
+    def test_partial_update_with_multiple_regel_errors(self):
+
+        regel = PrijsRegelFactory.create(prijs=self.prijs)
+        regel_of_other_prijs = PrijsRegelFactory.create(prijs=PrijsFactory.create())
+        non_existing_regel = uuid.uuid4()
+
+        data = {
+            "prijsregels": [
+                {
+                    "id": regel.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel.beschrijving,
+                },
+                {
+                    "id": regel.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel.beschrijving,
+                },
+                {
+                    "id": regel_of_other_prijs.id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": regel_of_other_prijs.beschrijving,
+                },
+                {
+                    "id": non_existing_regel,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "test",
+                },
+            ]
+        }
+
+        response = self.client.patch(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "prijsregels": [
+                    ErrorDetail(
+                        string=_("Dubbel id: {} op index 1.").format(regel.id),
+                        code="invalid",
+                    ),
+                    ErrorDetail(
+                        string=_(
+                            "Prijs regel id {} op index 2 is niet onderdeel van het Prijs object."
+                        ).format(regel_of_other_prijs.id),
+                        code="invalid",
+                    ),
+                    ErrorDetail(
+                        string=_("Prijs regel id {} op index 3 bestaat niet.").format(
+                            non_existing_regel
+                        ),
+                        code="invalid",
+                    ),
+                ]
+            },
+        )
+
+    def test_partial_update_prijs_with_opties_and_regels(self):
+        data = {
+            "actief_vanaf": self.prijs.actief_vanaf,
+            "product_type_id": self.product_type.id,
+            "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
+            "prijsregels": [
+                {
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "spoed",
+                }
+            ],
+        }
+
+        response = self.client.patch(self.detail_path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {
+                "opties_or_regels": [
+                    ErrorDetail(
+                        string=_("Een prijs kan niet zowel opties als regels hebben."),
+                        code="invalid",
+                    )
                 ]
             },
         )
@@ -378,12 +884,14 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "id": str(self.prijs.id),
                 "actief_vanaf": str(self.prijs.actief_vanaf),
                 "prijsopties": [],
+                "prijsregels": [],
                 "product_type_id": self.product_type.id,
             },
             {
                 "id": str(prijs.id),
                 "actief_vanaf": str(prijs.actief_vanaf),
                 "prijsopties": [],
+                "prijsregels": [],
                 "product_type_id": self.product_type.id,
             },
         ]
@@ -396,6 +904,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             "id": str(self.prijs.id),
             "actief_vanaf": str(self.prijs.actief_vanaf),
             "prijsopties": [],
+            "prijsregels": [],
             "product_type_id": self.product_type.id,
         }
         self.assertEqual(response.data, expected_data)

@@ -20,7 +20,7 @@ from .bestand import NestedBestandSerializer
 from .externe_code import ExterneCodeSerializer, NestedExterneCodeSerializer
 from .link import NestedLinkSerializer
 from .parameter import NestedParameterSerializer, ParameterSerializer
-from .prijs import NestedPrijsSerializer, PrijsSerializer
+from .prijs import NestedPrijsSerializer
 
 
 class NestedThemaSerializer(serializers.ModelSerializer):
@@ -269,7 +269,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
     upl_uri = serializers.ReadOnlyField(source="uniforme_product_naam.uri")
     upl_naam = serializers.ReadOnlyField(source="uniforme_product_naam.naam")
-    actuele_prijs = PrijsSerializer(allow_null=True)
+    actuele_prijs = NestedPrijsSerializer(allow_null=True)
 
     class Meta:
         model = ProductType
