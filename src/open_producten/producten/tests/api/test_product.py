@@ -335,7 +335,9 @@ class TestProduct(BaseApiTestCase):
                     {
                         "model_errors": [
                             ErrorDetail(
-                                string="Een eigenaar moet een bsn, klantnummer, kvk nummer (met of zonder vestigingsnummer) of een combinatie hebben.",
+                                string=_(
+                                    "Een eigenaar moet een bsn (en/of klantnummer) of een kvk nummer (met of zonder vestigingsnummer) hebben."
+                                ),
                                 code="invalid",
                             )
                         ]
