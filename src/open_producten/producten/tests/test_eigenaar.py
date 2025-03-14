@@ -17,10 +17,10 @@ class TestEigenaar(TestCase):
         for value in invalid_values:
             with self.subTest(f"{value} should raise an error"):
                 with self.assertRaises(ValidationError):
-                    EigenaarFactory.create(bsn_nummer=value).full_clean()
+                    EigenaarFactory.create(bsn=value).full_clean()
 
     def test_bsn_validation_validates_on_valid_value(self):
-        EigenaarFactory.create(bsn_nummer="111222333").full_clean()
+        EigenaarFactory.create(bsn="111222333").full_clean()
 
     def test_kvk_validation_raises_on_invalid_value(self):
         invalid_values = [
@@ -49,7 +49,7 @@ class TestEigenaar(TestCase):
         ):
             eigenaar.clean()
 
-        EigenaarFactory.create(bsn_nummer="111222333").full_clean()
+        EigenaarFactory.create(bsn="111222333").full_clean()
         EigenaarFactory.create(klantnummer="123").full_clean()
         EigenaarFactory.create(kvk_nummer="12345678").full_clean()
 
@@ -71,7 +71,7 @@ class TestEigenaar(TestCase):
     def test_eigenaar_str(self):
 
         with self.subTest("bsn"):
-            eigenaar = EigenaarFactory.create(bsn_nummer="111222333")
+            eigenaar = EigenaarFactory.create(bsn="111222333")
             self.assertEqual(str(eigenaar), "BSN 111222333")
 
         with self.subTest("klantnummer"):

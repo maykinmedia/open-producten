@@ -40,7 +40,7 @@ from open_producten.utils.drf_validators import NestedObjectsValidator
                 },
                 "gepubliceerd": False,
                 "eigenaren": [
-                    {"bsn_nummer": "111222333"}, #TODO add other fields!
+                    {"bsn": "111222333"}, #TODO add other fields!
                 ],
                 "status": "gereed",
                 "prijs": "20.20",
@@ -58,7 +58,7 @@ from open_producten.utils.drf_validators import NestedObjectsValidator
                 "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                 "gepubliceerd": False,
                 "eigenaren": [
-                    {"bsn_nummer": "111222333"},
+                    {"bsn": "111222333"},
                 ],
                 "status": "gereed",
                 "prijs": "20.20",
@@ -101,6 +101,7 @@ class ProductSerializer(serializers.ModelSerializer):
         product = super().create(validated_data)
 
         for eigenaar in eigenaren:
+            eigenaar.pop("id", None)
             EigenaarSerializer().create(eigenaar | {"product": product})
 
         return product

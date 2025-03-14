@@ -40,7 +40,7 @@ class SendNotifTestCase(BaseApiTestCase):
             "status": "initieel",
             "prijs": "20.20",
             "frequentie": "eenmalig",
-            "eigenaren": [{"bsn_nummer": "111222333"}],
+            "eigenaren": [{"bsn": "111222333"}],
         }
 
         product = ProductFactory.create(product_type=cls.product_type)

@@ -42,7 +42,7 @@ class NestedObjectsValidator:
         errors = []
 
         current_ids = set(
-            getattr(parent_instance, self.key).values_list("id", flat=True).distinct()
+            getattr(parent_instance, self.key).values_list("id", flat=True)
         )
 
         seen_ids = set()
@@ -62,6 +62,9 @@ class NestedObjectsValidator:
             else:
                 try:
                     self.model.objects.get(id=obj_id)
+
+                    # If the object is not related to the parent object but does exist when querying the nested object model itself
+                    # it means that the nested object is related to a different parent object. It is only allowed to related nested objects.
                     errors.append(
                         _(
                             "{} id {} op index {} is niet onderdeel van het {} object."

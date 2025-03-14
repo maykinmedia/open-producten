@@ -19,13 +19,12 @@ class Eigenaar(BaseModel):
         help_text=_("De organisatie van het contact"),
     )
 
-    bsn_nummer = models.CharField(
-        _("BSN nummer"),
+    bsn = models.CharField(
+        _("Burgerservicenummer"),
         help_text=_(
-            "De BSN van de product eigenaar, BSN van 8 karakters moet met een extra 0 beginnen."
+            "Het BSN van de product eigenaar, BSN van 8 karakters moet met een extra 0 beginnen."
         ),
         validators=[validate_bsn],
-        null=True,
         blank=True,
     )
 
@@ -34,14 +33,12 @@ class Eigenaar(BaseModel):
         help_text=_("Het kvk nummer van de product eigenaar"),
         max_length=8,
         validators=[MinLengthValidator(8), RegexValidator("^[0-9]*$")],
-        null=True,
         blank=True,
     )
 
     vestigingsnummer = models.CharField(
         _("Vestigingsnummer"),
         max_length=24,
-        null=True,
         blank=True,
         help_text=_("Een korte unieke aanduiding van een vestiging."),
     )
@@ -50,17 +47,16 @@ class Eigenaar(BaseModel):
         _("Klantnummer"),
         help_text=_("generiek veld voor de identificatie van een klant."),
         max_length=50,
-        null=True,
         blank=True,
     )
 
     def clean(self):
         validate_vestingsnummer_only_with_kvk(self.kvk_nummer, self.vestigingsnummer)
-        validate_bsn_kvk_or_klant(self.bsn_nummer, self.kvk_nummer, self.klantnummer)
+        validate_bsn_kvk_or_klant(self.bsn, self.kvk_nummer, self.klantnummer)
 
     def __str__(self):
-        if self.bsn_nummer:
-            return f"BSN {self.bsn_nummer}"
+        if self.bsn:
+            return f"BSN {self.bsn}"
 
         if self.klantnummer:
             return f"klantnummer {self.klantnummer}"
@@ -77,8 +73,8 @@ class Eigenaar(BaseModel):
         verbose_name_plural = _("Eigenaren")
 
 
-def validate_bsn_kvk_or_klant(bsn_nummer, kvk_nummer, klantnummer):
-    if not bsn_nummer and not kvk_nummer and not klantnummer:
+def validate_bsn_kvk_or_klant(bsn, kvk_nummer, klantnummer):
+    if not bsn and not kvk_nummer and not klantnummer:
         raise ValidationError(
             _(
                 "Een eigenaar moet een bsn, klantnummer, kvk nummer (met of zonder vestigingsnummer) of een combinatie hebben."
