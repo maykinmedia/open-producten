@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -8,7 +8,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestJsonSchemaFilters(BaseApiTestCase):
 
-    path = reverse("schema-list")
+    path = reverse_lazy("schema-list")
 
     def test_naam_filter(self):
         JsonSchemaFactory.create(naam="schema a", schema={})

@@ -2,7 +2,7 @@ from datetime import date
 from decimal import Decimal
 from uuid import uuid4
 
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -15,7 +15,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestProductFilters(BaseApiTestCase):
 
-    path = reverse("product-list")
+    path = reverse_lazy("product-list")
 
     def test_gepubliceerd_filter(self):
         ProductFactory.create(gepubliceerd=True)

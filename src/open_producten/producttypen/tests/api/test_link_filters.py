@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -10,7 +10,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestLinkFilters(BaseApiTestCase):
 
-    path = reverse("link-list")
+    path = reverse_lazy("link-list")
 
     def test_naam_filter(self):
         LinkFactory.create(naam="organisatie a")

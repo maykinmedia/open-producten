@@ -50,5 +50,7 @@ class CustomRegexValidator(RegexValidator):
 
 validate_postal_code = CustomRegexValidator(
     regex="^[1-9][0-9]{3} [A-Z]{2}$",
-    message=_("Invalid postal code (spaces are not allowed)."),
+    message=_(
+        "Invalid postal code. A postal code must consist of 4 numbers followed by a space and two capital letters (e.g. 1234 AB)."
+    ),
 )

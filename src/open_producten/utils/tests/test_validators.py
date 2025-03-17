@@ -63,7 +63,9 @@ class ValidatorsTestCase(TestCase):
         for invalid_postal_code in invalid_postal_codes:
             self.assertRaisesMessage(
                 ValidationError,
-                _("Invalid postal code (spaces are not allowed)."),
+                _(
+                    "Invalid postal code. A postal code must consist of 4 numbers followed by a space and two capital letters (e.g. 1234 AB)."
+                ),
                 validate_postal_code,
                 invalid_postal_code,
             )

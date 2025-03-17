@@ -15,7 +15,7 @@ from open_producten.locaties.models import Locatie
                 "telefoonnummer": "+310207530523",
                 "straat": "Kingsfortweg",
                 "huisnummer": "151",
-                "postcode": "1043 GR",
+                "postcode": "1043TESTGR",
                 "stad": "Amsterdam",
             },
             response_only=True,

@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -9,7 +9,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestContactFilters(BaseApiTestCase):
-    path = reverse("contact-list")
+    path = reverse_lazy("contact-list")
 
     def test_rol_filter(self):
         ContactFactory.create(rol="manager")

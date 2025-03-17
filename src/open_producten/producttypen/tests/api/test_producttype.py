@@ -1,6 +1,6 @@
 import datetime
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
@@ -31,7 +31,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestProducttypeViewSet(BaseApiTestCase):
-    path = reverse("producttype-list")
+    path = reverse_lazy("producttype-list")
 
     def setUp(self):
         super().setUp()

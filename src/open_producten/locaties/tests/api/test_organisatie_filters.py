@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -8,7 +8,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestOrganisatieFilters(BaseApiTestCase):
 
-    path = reverse("organisatie-list")
+    path = reverse_lazy("organisatie-list")
 
     def test_naam_filter(self):
         OrganisatieFactory.create(naam="Maykin Media")

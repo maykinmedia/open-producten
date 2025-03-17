@@ -1,7 +1,7 @@
 import datetime
 
 from django.test import override_settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
@@ -21,7 +21,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 @freeze_time("2024-01-01")
 @override_settings(NOTIFICATIONS_DISABLED=True, PRODUCTEN_API_MAJOR_VERSION=0)
 class TestProduct(BaseApiTestCase):
-    path = reverse("product-list")
+    path = reverse_lazy("product-list")
 
     def setUp(self):
         super().setUp()

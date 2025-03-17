@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -7,7 +7,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestLocatieFilters(BaseApiTestCase):
-    path = reverse("locatie-list")
+    path = reverse_lazy("locatie-list")
 
     def test_naam_filter(self):
         LocatieFactory.create(naam="Maykin Media")

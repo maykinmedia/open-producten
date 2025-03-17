@@ -2,7 +2,7 @@ import tempfile
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from rest_framework import status
@@ -19,7 +19,7 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp()
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestProductTypeBestand(BaseApiTestCase):
-    path = reverse("bestand-list")
+    path = reverse_lazy("bestand-list")
 
     def setUp(self):
         super().setUp()

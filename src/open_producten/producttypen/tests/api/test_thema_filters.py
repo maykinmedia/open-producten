@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -11,7 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestThemaFilters(BaseApiTestCase):
 
-    path = reverse("thema-list")
+    path = reverse_lazy("thema-list")
 
     def test_gepubliceerd_filter(self):
         ThemaFactory.create(gepubliceerd=True)

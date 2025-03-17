@@ -2,7 +2,7 @@ from datetime import date
 from decimal import Decimal
 from uuid import uuid4
 
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -12,7 +12,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestPrijsFilters(BaseApiTestCase):
 
-    path = reverse("prijs-list")
+    path = reverse_lazy("prijs-list")
 
     def test_prijs_opties_bedrag_filter(self):
         prijs1 = PrijsFactory.create()

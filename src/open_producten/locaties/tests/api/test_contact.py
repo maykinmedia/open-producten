@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from rest_framework import status
@@ -12,7 +12,7 @@ from ..factories import ContactFactory, OrganisatieFactory
 
 
 class TestContact(BaseApiTestCase):
-    path = reverse("contact-list")
+    path = reverse_lazy("contact-list")
 
     def setUp(self):
         super().setUp()

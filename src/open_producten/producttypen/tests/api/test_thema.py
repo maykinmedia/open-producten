@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from rest_framework import status
@@ -11,7 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestThemaViewSet(BaseApiTestCase):
-    path = reverse("thema-list")
+    path = reverse_lazy("thema-list")
 
     def setUp(self):
         super().setUp()

@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -18,7 +18,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestProductTypeFilters(BaseApiTestCase):
 
-    path = reverse("producttype-list")
+    path = reverse_lazy("producttype-list")
 
     def test_gepubliceerd_filter(self):
         ProductTypeFactory.create(gepubliceerd=True)

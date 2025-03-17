@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from django.core.files.base import ContentFile
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from rest_framework import status
 
@@ -11,7 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 class TestBestandFilters(BaseApiTestCase):
 
-    path = reverse("bestand-list")
+    path = reverse_lazy("bestand-list")
 
     def test_naam_filter(self):
         bestand = BestandFactory.create(bestand=ContentFile(b"abc", "abc.txt"))
