@@ -44,4 +44,4 @@ class TestProductType(TestCase):
         product_type.clean()
 
         self.assertEqual(product_type.organisaties.count(), 1)
-        self.assertEqual(product_type.organisaties.first().id, contact.organisatie.id)
+        self.assertEqual(product_type.organisaties.get().id, contact.organisatie.id)

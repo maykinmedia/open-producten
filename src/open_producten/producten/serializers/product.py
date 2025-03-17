@@ -40,7 +40,10 @@ from open_producten.utils.drf_validators import NestedObjectsValidator
                 },
                 "gepubliceerd": False,
                 "eigenaren": [
-                    {"bsn": "111222333"}, #TODO add other fields!
+                    {
+                        "id": "9de01697-7fc5-4113-803c-a8c9a8dad4f2",
+                        "bsn": "111222333",
+                    }
                 ],
                 "status": "gereed",
                 "prijs": "20.20",

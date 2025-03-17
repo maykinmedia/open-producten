@@ -90,7 +90,7 @@ class TestProduct(BaseApiTestCase):
                     "kvk_nummer": "12345678",
                     "vestigingsnummer": "",
                     "klantnummer": "",
-                    "id": str(product.eigenaren.first().id),
+                    "id": str(product.eigenaren.get().id),
                 }
             ],
             "product_type": {
@@ -144,7 +144,7 @@ class TestProduct(BaseApiTestCase):
                     "kvk_nummer": "12345678",
                     "vestigingsnummer": "",
                     "klantnummer": "",
-                    "id": str(product.eigenaren.first().id),
+                    "id": str(product.eigenaren.get().id),
                 }
             ],
             "product_type": {
@@ -228,7 +228,7 @@ class TestProduct(BaseApiTestCase):
                     "kvk_nummer": "12345678",
                     "vestigingsnummer": "",
                     "klantnummer": "",
-                    "id": str(product.eigenaren.first().id),
+                    "id": str(product.eigenaren.get().id),
                 }
             ],
             "product_type": {
@@ -405,7 +405,7 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Product.objects.count(), 1)
-        self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
+        self.assertEqual(Product.objects.get().eind_datum, data["eind_datum"])
 
     def test_update_product_with_not_allowed_state(self):
         product = ProductFactory.create()
@@ -512,14 +512,14 @@ class TestProduct(BaseApiTestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(Eigenaar.objects.count(), 1)
-            self.assertEqual(Eigenaar.objects.first().klantnummer, "1234")
+            self.assertEqual(Eigenaar.objects.get().klantnummer, "1234")
 
         with self.subTest("PATCH"):
             response = self.client.patch(self.detail_path(product), data)
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(Eigenaar.objects.count(), 1)
-            self.assertEqual(Eigenaar.objects.first().klantnummer, "1234")
+            self.assertEqual(Eigenaar.objects.get().klantnummer, "1234")
 
     def test_update_product_with_eigenaar_not_part_of_product(self):
         product = ProductFactory.create()
@@ -628,7 +628,7 @@ class TestProduct(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Product.objects.count(), 1)
-        self.assertEqual(Product.objects.first().eind_datum, data["eind_datum"])
+        self.assertEqual(Product.objects.get().eind_datum, data["eind_datum"])
 
     def test_read_producten(self):
         product1 = ProductFactory.create(product_type=self.product_type)
@@ -660,7 +660,7 @@ class TestProduct(BaseApiTestCase):
                         "kvk_nummer": "12345678",
                         "vestigingsnummer": "",
                         "klantnummer": "",
-                        "id": str(product1.eigenaren.first().id),
+                        "id": str(product1.eigenaren.get().id),
                     }
                 ],
                 "product_type": {
@@ -693,7 +693,7 @@ class TestProduct(BaseApiTestCase):
                         "kvk_nummer": "12345678",
                         "vestigingsnummer": "",
                         "klantnummer": "",
-                        "id": str(product2.eigenaren.first().id),
+                        "id": str(product2.eigenaren.get().id),
                     }
                 ],
                 "product_type": {
@@ -738,7 +738,7 @@ class TestProduct(BaseApiTestCase):
                     "kvk_nummer": "12345678",
                     "vestigingsnummer": "",
                     "klantnummer": "",
-                    "id": str(product.eigenaren.first().id),
+                    "id": str(product.eigenaren.get().id),
                 }
             ],
             "product_type": {

@@ -64,7 +64,7 @@ class TestProductTypeLink(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Link.objects.count(), 1)
-        self.assertEqual(ProductType.objects.first().links.first().naam, "update")
+        self.assertEqual(ProductType.objects.get().links.get().naam, "update")
 
     def test_partial_update_link(self):
         data = {"naam": "update"}
@@ -72,7 +72,7 @@ class TestProductTypeLink(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Link.objects.count(), 1)
-        self.assertEqual(ProductType.objects.first().links.first().naam, "update")
+        self.assertEqual(ProductType.objects.get().links.get().naam, "update")
 
     def test_read_links(self):
         link = LinkFactory.create(product_type=self.product_type)

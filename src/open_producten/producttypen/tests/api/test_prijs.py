@@ -104,7 +104,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 2)
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertEqual(
-            PrijsOptie.objects.first().bedrag,
+            PrijsOptie.objects.get().bedrag,
             Decimal("74.99"),
         )
 
@@ -121,7 +121,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Prijs.objects.count(), 2)
         self.assertEqual(PrijsOptie.objects.count(), 1)
-        self.assertNotEqual(PrijsOptie.objects.first().id, id)
+        self.assertNotEqual(PrijsOptie.objects.get().id, id)
 
     def test_update_prijs_removing_all_opties(self):
         PrijsOptieFactory.create(prijs=self.prijs)
@@ -170,8 +170,8 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
-        self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
-        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
+        self.assertEqual(PrijsOptie.objects.get().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.get().id, optie_to_be_updated.id)
 
     def test_update_prijs_creating_and_deleting_opties(self):
 
@@ -188,7 +188,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
-        self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.get().bedrag, Decimal("20"))
 
     def test_update_prijs_with_optie_not_part_of_prijs_returns_error(self):
 
@@ -287,7 +287,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(
-            ProductType.objects.first().prijzen.first().actief_vanaf,
+            ProductType.objects.get().prijzen.get().actief_vanaf,
             datetime.date(2024, 1, 4),
         )
         self.assertEqual(PrijsOptie.objects.count(), 1)
@@ -313,8 +313,8 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsOptie.objects.count(), 1)
-        self.assertEqual(PrijsOptie.objects.first().bedrag, Decimal("20"))
-        self.assertEqual(PrijsOptie.objects.first().id, optie_to_be_updated.id)
+        self.assertEqual(PrijsOptie.objects.get().bedrag, Decimal("20"))
+        self.assertEqual(PrijsOptie.objects.get().id, optie_to_be_updated.id)
 
     def test_partial_update_prijs_creating_and_deleting_opties(self):
 
@@ -330,11 +330,11 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(
-            ProductType.objects.first().prijzen.first().actief_vanaf,
+            ProductType.objects.get().prijzen.get().actief_vanaf,
             datetime.date(2024, 1, 4),
         )
         self.assertEqual(PrijsOptie.objects.count(), 1)
-        self.assertEqual(PrijsOptie.objects.first().beschrijving, "test")
+        self.assertEqual(PrijsOptie.objects.get().beschrijving, "test")
 
     def test_partial_update_with_multiple_errors(self):
 

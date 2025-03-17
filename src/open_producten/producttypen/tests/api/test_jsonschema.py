@@ -78,7 +78,7 @@ class TestProductTypeSchema(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(JsonSchema.objects.count(), 1)
-        self.assertEqual(JsonSchema.objects.first().naam, "update")
+        self.assertEqual(JsonSchema.objects.get().naam, "update")
 
     def test_partial_update_schema(self):
         data = {"naam": "update"}
@@ -86,7 +86,7 @@ class TestProductTypeSchema(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(JsonSchema.objects.count(), 1)
-        self.assertEqual(JsonSchema.objects.first().naam, "update")
+        self.assertEqual(JsonSchema.objects.get().naam, "update")
 
     def test_read_schemas(self):
         schema = JsonSchemaFactory.create(naam="test", schema={})

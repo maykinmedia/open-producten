@@ -74,7 +74,7 @@ class TestContentElement(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ContentElement.objects.count(), 1)
-        self.assertEqual(ContentElement.objects.first().content, "update")
+        self.assertEqual(ContentElement.objects.get().content, "update")
 
     def test_partial_update_content_element(self):
         data = {"content": "update"}
@@ -82,7 +82,7 @@ class TestContentElement(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ContentElement.objects.count(), 1)
-        self.assertEqual(ContentElement.objects.first().content, "update")
+        self.assertEqual(ContentElement.objects.get().content, "update")
 
     def test_read_content_element(self):
         response = self.client.get(self.detail_path)
