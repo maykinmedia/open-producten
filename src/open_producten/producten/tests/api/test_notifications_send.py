@@ -37,13 +37,13 @@ class SendNotifTestCase(BaseApiTestCase):
         cls.product_type = ProductTypeFactory.create(toegestane_statussen=["gereed"])
         cls.data = {
             "product_type_id": cls.product_type.id,
-            "bsn": "111222333",
             "status": "initieel",
             "prijs": "20.20",
             "frequentie": "eenmalig",
+            "eigenaren": [{"bsn": "111222333"}],
         }
 
-        product = ProductFactory.create(**cls.data)
+        product = ProductFactory.create(product_type=cls.product_type)
 
         cls.path = reverse("product-list")
         cls.detail_path = reverse("product-detail", args=[product.id])

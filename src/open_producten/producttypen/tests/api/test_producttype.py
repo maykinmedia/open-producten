@@ -180,7 +180,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
         # contact org is added in ProductType clean
-        self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
+        self.assertEqual(ProductType.objects.get().organisaties.count(), 1)
 
     def test_create_product_type_with_toegestane_statussen(self):
         response = self.client.post(
@@ -208,7 +208,9 @@ class TestProducttypeViewSet(BaseApiTestCase):
             {
                 "externe_codes": [
                     ErrorDetail(
-                        string="Er bestaat al een externe code met de naam ISO voor dit ProductType.",
+                        string=_(
+                            "Er bestaat al een externe code met de naam ISO voor dit ProductType."
+                        ),
                         code="unique",
                     )
                 ]
@@ -486,7 +488,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         )
 
         # contact org is added in ProductType clean
-        self.assertEqual(ProductType.objects.first().organisaties.count(), 1)
+        self.assertEqual(ProductType.objects.get().organisaties.count(), 1)
 
     def test_update_product_type_with_duplicate_ids_returns_error(self):
         product_type = ProductTypeFactory.create()

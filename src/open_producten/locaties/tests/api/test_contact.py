@@ -80,7 +80,7 @@ class TestContact(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Contact.objects.count(), 1)
-        self.assertEqual(Contact.objects.first().voornaam, "update")
+        self.assertEqual(Contact.objects.get().voornaam, "update")
 
     def test_partial_update_contact(self):
         data = {"voornaam": "update"}
@@ -88,7 +88,7 @@ class TestContact(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Contact.objects.count(), 1)
-        self.assertEqual(Contact.objects.first().voornaam, "update")
+        self.assertEqual(Contact.objects.get().voornaam, "update")
 
     def test_read_contacten(self):
         contact = ContactFactory.create()

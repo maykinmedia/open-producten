@@ -80,7 +80,7 @@ class TestProductTypeBestand(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Bestand.objects.count(), 1)
-        self.assertEqual(Bestand.objects.first().product_type, product_type)
+        self.assertEqual(Bestand.objects.get().product_type, product_type)
 
     def test_update_bestand_file(self):
         data = self.data | {
@@ -92,10 +92,8 @@ class TestProductTypeBestand(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Bestand.objects.count(), 1)
-        self.assertEqual(Bestand.objects.first().bestand.url, "/media/456.txt")
-        self.assertEqual(
-            Bestand.objects.first().bestand.file.readline(), b"456 content."
-        )
+        self.assertEqual(Bestand.objects.get().bestand.url, "/media/456.txt")
+        self.assertEqual(Bestand.objects.get().bestand.file.readline(), b"456 content.")
 
     def test_partial_update_bestand_product_type_id(self):
         product_type = ProductTypeFactory.create()
@@ -104,7 +102,7 @@ class TestProductTypeBestand(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Bestand.objects.count(), 1)
-        self.assertEqual(Bestand.objects.first().product_type, product_type)
+        self.assertEqual(Bestand.objects.get().product_type, product_type)
 
     def test_partial_update_bestand_file(self):
         data = {
@@ -116,10 +114,8 @@ class TestProductTypeBestand(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Bestand.objects.count(), 1)
-        self.assertEqual(Bestand.objects.first().bestand.url, "/media/123.txt")
-        self.assertEqual(
-            Bestand.objects.first().bestand.file.readline(), b"123 content."
-        )
+        self.assertEqual(Bestand.objects.get().bestand.url, "/media/123.txt")
+        self.assertEqual(Bestand.objects.get().bestand.file.readline(), b"123 content.")
 
     def test_read_bestanden(self):
         bestand = BestandFactory.create(product_type=self.product_type)

@@ -72,7 +72,7 @@ class TestOrganisatie(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Organisatie.objects.count(), 1)
-        self.assertEqual(Organisatie.objects.first().naam, "update")
+        self.assertEqual(Organisatie.objects.get().naam, "update")
 
     def test_partial_update_organisatie(self):
         data = {"naam": "update"}
@@ -80,7 +80,7 @@ class TestOrganisatie(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Organisatie.objects.count(), 1)
-        self.assertEqual(Organisatie.objects.first().naam, "update")
+        self.assertEqual(Organisatie.objects.get().naam, "update")
 
     def test_read_organisaties(self):
         organisatie = OrganisatieFactory.create()

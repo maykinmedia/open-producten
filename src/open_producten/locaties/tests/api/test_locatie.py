@@ -63,7 +63,7 @@ class TestLocatie(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Locatie.objects.count(), 1)
-        self.assertEqual(Locatie.objects.first().naam, "update")
+        self.assertEqual(Locatie.objects.get().naam, "update")
 
     def test_partial_update_locatie(self):
         data = {"naam": "update"}
@@ -71,7 +71,7 @@ class TestLocatie(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Locatie.objects.count(), 1)
-        self.assertEqual(Locatie.objects.first().naam, "update")
+        self.assertEqual(Locatie.objects.get().naam, "update")
 
     def test_read_locaties(self):
         locatie = LocatieFactory.create()

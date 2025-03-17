@@ -1,9 +1,12 @@
+from django.db import transaction
+from django.utils.translation import gettext_lazy as _
+
 from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
-from open_producten.producten.models import Product
+from open_producten.producten.models import Eigenaar, Product
+from open_producten.producten.serializers.eigenaar import EigenaarSerializer
 from open_producten.producten.serializers.validators import (
-    BsnOrKvkValidator,
     DataObjectValidator,
     DateValidator,
     StatusValidator,
@@ -11,6 +14,7 @@ from open_producten.producten.serializers.validators import (
 )
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.serializers.thema import NestedProductTypeSerializer
+from open_producten.utils.drf_validators import NestedObjectsValidator
 
 
 @extend_schema_serializer(
@@ -35,7 +39,12 @@ from open_producten.producttypen.serializers.thema import NestedProductTypeSeria
                     "update_datum": "2019-08-24T14:15:22Z",
                 },
                 "gepubliceerd": False,
-                "bsn": "111222333",
+                "eigenaren": [
+                    {
+                        "id": "9de01697-7fc5-4113-803c-a8c9a8dad4f2",
+                        "bsn": "111222333",
+                    }
+                ],
                 "status": "gereed",
                 "prijs": "20.20",
                 "frequentie": "eenmalig",
@@ -51,7 +60,9 @@ from open_producten.producttypen.serializers.thema import NestedProductTypeSeria
                 "eind_datum": "2026-12-01",
                 "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                 "gepubliceerd": False,
-                "bsn": "111222333",
+                "eigenaren": [
+                    {"bsn": "111222333"},
+                ],
                 "status": "gereed",
                 "prijs": "20.20",
                 "frequentie": "eenmalig",
@@ -68,14 +79,57 @@ class ProductSerializer(serializers.ModelSerializer):
     product_type_id = serializers.PrimaryKeyRelatedField(
         write_only=True, queryset=ProductType.objects.all(), source="product_type"
     )
+    eigenaren = EigenaarSerializer(many=True)
 
     class Meta:
         model = Product
         fields = "__all__"
         validators = [
-            BsnOrKvkValidator(),
             DateValidator(),
             StatusValidator(),
             VerbruiksObjectValidator(),
             DataObjectValidator(),
+            NestedObjectsValidator("eigenaren", Eigenaar),
         ]
+
+    def validate_eigenaren(self, eigenaren: list[Eigenaar]) -> list[Eigenaar]:
+        if len(eigenaren) == 0:
+            raise serializers.ValidationError(_("Er is minimaal één eigenaar vereist."))
+        return eigenaren
+
+    @transaction.atomic()
+    def create(self, validated_data):
+        eigenaren = validated_data.pop("eigenaren", [])
+
+        product = super().create(validated_data)
+
+        for eigenaar in eigenaren:
+            eigenaar.pop("id", None)
+            EigenaarSerializer().create(eigenaar | {"product": product})
+
+        return product
+
+    @transaction.atomic()
+    def update(self, instance, validated_data):
+        eigenaren = validated_data.pop("eigenaren", None)
+        product = super().update(instance, validated_data)
+
+        if eigenaren is not None:
+            current_eigenaren_ids = set(product.eigenaren.values_list("id", flat=True))
+            seen_eigenaren_ids = set()
+
+            for eigenaar in eigenaren:
+                eigenaar_id = eigenaar.pop("id", None)
+                if eigenaar_id is None:
+                    EigenaarSerializer().create(eigenaar | {"product": product})
+
+                else:
+                    existing_eigenaar = Eigenaar.objects.get(id=eigenaar_id)
+                    EigenaarSerializer().update(existing_eigenaar, eigenaar)
+                    seen_eigenaren_ids.add(eigenaar_id)
+
+            product.eigenaren.filter(
+                id__in=(current_eigenaren_ids - seen_eigenaren_ids)
+            ).delete()
+
+        return product

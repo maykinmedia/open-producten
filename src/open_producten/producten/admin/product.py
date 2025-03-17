@@ -6,14 +6,18 @@ from django.utils.translation import gettext_lazy as _
 from open_producten.logging.service import AdminAuditLogMixin, get_logs_link
 from open_producten.producten.models import Product
 from open_producten.producten.models.product import (
+    validate_dataobject,
     validate_eind_datum,
     validate_start_datum,
     validate_status,
+    validate_verbruiksobject,
 )
 from open_producten.producttypen.models.producttype import (
     ProductStateChoices,
     ProductType,
 )
+
+from .eigenaar import EigenaarInline
 
 
 def get_status_choices(product_type_id, instance):
@@ -66,6 +70,14 @@ class ProductAdminForm(forms.ModelForm):
         if self.errors:
             return
 
+        validate_verbruiksobject(
+            self.cleaned_data["verbruiksobject"], self.cleaned_data["product_type"]
+        )
+
+        validate_dataobject(
+            self.cleaned_data["dataobject"], self.cleaned_data["product_type"]
+        )
+
         product_type_changed = "product_type" in self.changed_data
 
         if "status" in self.changed_data or product_type_changed:
@@ -104,6 +116,7 @@ class ProductAdmin(AdminAuditLogMixin, admin.ModelAdmin):
     autocomplete_fields = ("product_type",)
     search_fields = ("product_type__translations__naam",)
     form = ProductAdminForm
+    inlines = (EigenaarInline,)
 
     @admin.display(description="Product Type")
     def product_type_name(self, obj):
