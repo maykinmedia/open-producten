@@ -1,3 +1,4 @@
+from .actie import Actie
 from .bestand import Bestand
 from .content import ContentElement, ContentLabel
 from .externe_code import ExterneCode
@@ -23,4 +24,5 @@ __all__ = [
     "ContentElement",
     "ContentLabel",
     "JsonSchema",
+    "Actie",
 ]

@@ -1,16 +1,17 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from open_producten.producttypen.models import ProductType
-from open_producten.producttypen.models.dmn_config import DmnConfig
 from open_producten.utils.models import BaseModel
+
+from .dmn_config import DmnConfig
+from .producttype import ProductType
 
 
 class Actie(BaseModel):
-    beschrijving = models.CharField(
-        verbose_name=_("beschrijving"),
+    naam = models.CharField(
+        verbose_name=_("naam"),
         max_length=255,
-        help_text=_("Korte beschrijving van de actie."),
+        help_text=_("naam van de actie."),
     )
 
     product_type = models.ForeignKey(
@@ -20,11 +21,12 @@ class Actie(BaseModel):
         help_text=_("Het producttype waarbij deze actie hoort."),
         related_name="acties",
     )
+
     dmn_config = models.ForeignKey(
         DmnConfig,
         verbose_name=_("dmn config"),
         on_delete=models.CASCADE,
-        related_name="prijsregels",
+        related_name="%(class)s",
         help_text=_("de dmn engine waar de tabel is gedefinieerd."),
     )
 
@@ -33,3 +35,14 @@ class Actie(BaseModel):
         max_length=255,
         help_text=_("id van de dmn tabel binnen de dmn instantie."),
     )
+
+    @property
+    def url(self):
+        return f"{self.dmn_config.tabel_endpoint.rstrip('/')}/{self.dmn_tabel_id}"
+
+    def __str__(self):
+        return f"{self.naam} {self.url}"
+
+    class Meta:
+        verbose_name = _("actie")
+        verbose_name_plural = _("acties")

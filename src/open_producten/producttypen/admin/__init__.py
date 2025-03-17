@@ -1,3 +1,4 @@
+from .actie import ActieInline
 from .bestand import BestandAdmin
 from .content import ContentLabelAdmin
 from .dmn_config import DmnConfigAdmin
@@ -18,4 +19,5 @@ __all__ = [
     "ContentLabelAdmin",
     "JsonSchemaAdmin",
     "DmnConfigAdmin",
+    "ActieInline",
 ]

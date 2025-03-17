@@ -29,15 +29,11 @@ class PrijsRegelSerializer(serializers.ModelSerializer):
         source="dmn_config",
     )
 
-    dmn_url = serializers.SerializerMethodField()
-
-    @extend_schema_field(OpenApiTypes.URI)
-    def get_dmn_url(self, obj):
-        return f"{obj.dmn_config.tabel_endpoint.rstrip('/')}/{obj.dmn_tabel_id}"
+    url = serializers.ReadOnlyField()
 
     class Meta:
         model = PrijsRegel
-        fields = ("id", "dmn_url", "beschrijving", "dmn_tabel_id", "tabel_endpoint")
+        fields = ("id", "url", "beschrijving", "dmn_tabel_id", "tabel_endpoint")
 
 
 @extend_schema_serializer(

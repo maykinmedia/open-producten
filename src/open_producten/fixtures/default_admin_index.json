@@ -28,6 +28,10 @@
         "models": [
             [
                 "producttypen",
+                "actie"
+            ],
+            [
+                "producttypen",
                 "bestand"
             ],
             [
@@ -131,6 +135,10 @@
             [
                 "notifications_api_common",
                 "notificationsconfig"
+            ],
+            [
+                "producttypen",
+                "dmnconfig"
             ]
         ]
     }

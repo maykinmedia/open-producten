@@ -18,8 +18,10 @@ from open_producten.locaties.serializers import (
 )
 
 from ...utils.drf_validators import DuplicateIdValidator
+from ...utils.serializers import set_nested_serializer, validate_key_value_model_keys
 from ..models import JsonSchema, ProductType, Thema, UniformeProductNaam
 from . import JsonSchemaSerializer
+from .actie import NestedActieSerializer
 from .bestand import NestedBestandSerializer
 from .externe_code import ExterneCodeSerializer, NestedExterneCodeSerializer
 from .link import NestedLinkSerializer
@@ -239,6 +241,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
     prijzen = NestedPrijsSerializer(many=True, read_only=True)
     links = NestedLinkSerializer(many=True, read_only=True)
     bestanden = NestedBestandSerializer(many=True, read_only=True)
+    acties = NestedActieSerializer(many=True, read_only=True)
 
     verbruiksobject_schema = JsonSchemaSerializer(read_only=True)
     verbruiksobject_schema_naam = serializers.SlugRelatedField(
@@ -284,29 +287,15 @@ class ProductTypeSerializer(TranslatableModelSerializer):
     externe_codes = NestedExterneCodeSerializer(many=True, required=False)
     parameters = NestedParameterSerializer(many=True, required=False)
 
-    def _validate_key_value_model_keys(
-        self, data_list: list[dict], unique_field: str, error_message: str
-    ):
-        seen = set()
-
-        for data in data_list:
-            if data[unique_field] in seen:
-                raise serializers.ValidationError(
-                    error_message.format(data[unique_field]), code="unique"
-                )
-            seen.add(data[unique_field])
-
-        return data_list
-
     def validate_externe_codes(self, externe_codes: list[dict]):
-        return self._validate_key_value_model_keys(
+        return validate_key_value_model_keys(
             externe_codes,
             "naam",
             _("Er bestaat al een externe code met de naam {} voor dit ProductType."),
         )
 
     def validate_parameters(self, parameters: list[dict]):
-        return self._validate_key_value_model_keys(
+        return validate_key_value_model_keys(
             parameters,
             "naam",
             _("Er bestaat al een parameter met de naam {} voor dit ProductType."),
@@ -343,15 +332,17 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         product_type.organisaties.set(organisaties)
         product_type.contacten.set(contacten)
 
-        self.set_externe_codes(
+        set_nested_serializer(
             [
                 externe_code | {"product_type": product_type.id}
                 for externe_code in externe_codes
-            ]
+            ],
+            ExterneCodeSerializer,
         )
 
-        self.set_parameters(
-            [parameter | {"product_type": product_type.id} for parameter in parameters]
+        set_nested_serializer(
+            [parameter | {"product_type": product_type.id} for parameter in parameters],
+            ParameterSerializer,
         )
 
         product_type.set_current_language("nl")

@@ -78,6 +78,7 @@ class PrijsRegel(BaseModel):
         related_name="prijsregels",
         help_text=_("De prijs waarbij deze regel hoort."),
     )
+
     dmn_config = models.ForeignKey(
         DmnConfig,
         verbose_name=_("dmn config"),
@@ -92,12 +93,16 @@ class PrijsRegel(BaseModel):
         help_text=_("id van de dmn tabel binnen de dmn instantie."),
     )
 
+    @property
+    def url(self):
+        return f"{self.dmn_config.tabel_endpoint.rstrip('/')}/{self.dmn_tabel_id}"
+
     class Meta:
         verbose_name = _("Prijs regel")
         verbose_name_plural = _("Prijs regels")
 
     def __str__(self):
-        return self.beschrijving
+        return f"{self.beschrijving} {self.url}"
 
 
 def validate_optie_xor_regel(optie_count: int, regel_count: int):
