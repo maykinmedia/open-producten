@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from rest_framework import status
@@ -12,6 +12,7 @@ from ..factories import OrganisatieFactory
 
 
 class TestOrganisatie(BaseApiTestCase):
+    path = reverse_lazy("organisatie-list")
 
     def setUp(self):
         super().setUp()
@@ -24,7 +25,6 @@ class TestOrganisatie(BaseApiTestCase):
         }
         self.organisatie = OrganisatieFactory.create()
 
-        self.path = reverse("organisatie-list")
         self.detail_path = reverse("organisatie-detail", args=[self.organisatie.id])
 
     def test_read_organisatie_without_credentials_returns_error(self):

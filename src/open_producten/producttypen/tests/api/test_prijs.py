@@ -2,7 +2,7 @@ import datetime
 import uuid
 from decimal import Decimal
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
@@ -21,6 +21,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 @freeze_time("2024-01-01")
 class TestProductTypePrijs(BaseApiTestCase):
+    path = reverse_lazy("prijs-list")
 
     def setUp(self):
         super().setUp()
@@ -33,7 +34,6 @@ class TestProductTypePrijs(BaseApiTestCase):
             product_type=self.product_type, actief_vanaf=datetime.date(2024, 1, 2)
         )
 
-        self.path = reverse("prijs-list")
         self.detail_path = reverse("prijs-detail", args=[self.prijs.id])
 
     def test_read_prijs_without_credentials_returns_error(self):

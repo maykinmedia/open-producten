@@ -1,4 +1,4 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from rest_framework import status
@@ -11,6 +11,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestProductTypeSchema(BaseApiTestCase):
+    path = reverse_lazy("schema-list")
 
     def setUp(self):
         super().setUp()
@@ -24,7 +25,6 @@ class TestProductTypeSchema(BaseApiTestCase):
         }
         self.schema = JsonSchemaFactory.create(schema=self.data["schema"])
 
-        self.path = reverse("schema-list")
         self.detail_path = reverse("schema-detail", args=[self.schema.id])
 
     def test_read_schema_without_credentials_returns_error(self):
@@ -53,7 +53,6 @@ class TestProductTypeSchema(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(JsonSchema.objects.count(), 2)
 
-        response.data.pop("id")
         self.assertEqual(response.data, self.data)
 
     def test_create_invalid_schema(self):
@@ -97,12 +96,10 @@ class TestProductTypeSchema(BaseApiTestCase):
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
-                "id": self.schema.id,
                 "naam": self.schema.naam,
                 "schema": self.schema.schema,
             },
             {
-                "id": schema.id,
                 "naam": schema.naam,
                 "schema": schema.schema,
             },
@@ -115,7 +112,6 @@ class TestProductTypeSchema(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         expected_data = {
-            "id": self.schema.id,
             "naam": self.schema.naam,
             "schema": self.schema.schema,
         }

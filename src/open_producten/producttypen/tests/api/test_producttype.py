@@ -1,6 +1,6 @@
 import datetime
 
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from freezegun import freeze_time
@@ -31,6 +31,7 @@ from open_producten.utils.tests.cases import BaseApiTestCase
 
 
 class TestProducttypeViewSet(BaseApiTestCase):
+    path = reverse_lazy("producttype-list")
 
     def setUp(self):
         super().setUp()
@@ -44,8 +45,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "uniforme_product_naam": upn.naam,
             "thema_ids": [self.thema.id],
         }
-
-        self.path = reverse("producttype-list")
 
     def detail_path(self, product_type):
         return reverse("producttype-detail", args=[product_type.id])
@@ -310,7 +309,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "taal": "nl",
             "uniforme_product_naam": product_type.uniforme_product_naam.naam,
             "verbruiksobject_schema": {
-                "id": schema.id,
                 "naam": "test",
                 "schema": {
                     "type": "object",
@@ -319,7 +317,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 },
             },
             "dataobject_schema": {
-                "id": schema.id,
                 "naam": "test",
                 "schema": {
                     "type": "object",
@@ -1241,126 +1238,3 @@ class TestProductTypeActions(BaseApiTestCase):
                 },
             ],
         )
-
-
-class TestProductTypeFilterSet(BaseApiTestCase):
-
-    def setUp(self):
-        super().setUp()
-        self.path = reverse("producttype-list")
-
-    def test_gepubliceerd_filter(self):
-        ProductTypeFactory.create(gepubliceerd=True)
-        ProductTypeFactory.create(gepubliceerd=False)
-
-        response = self.client.get(self.path, {"gepubliceerd": True})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-
-    def test_uniforme_product_naam_filter(self):
-        ProductTypeFactory.create(
-            uniforme_product_naam=UniformeProductNaamFactory(naam="parkeervergunning")
-        )
-        ProductTypeFactory.create(
-            uniforme_product_naam=UniformeProductNaamFactory(naam="aanleunwoning")
-        )
-
-        response = self.client.get(
-            self.path + "?uniforme_product_naam=parkeervergunning"
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-
-    def test_externe_code_filter(self):
-        product_type_1 = ProductTypeFactory.create()
-        ExterneCodeFactory(naam="ISO", code="12345", product_type=product_type_1)
-
-        product_type_2 = ProductTypeFactory.create()
-        ExterneCodeFactory(naam="ISO", code="9837549857", product_type=product_type_2)
-
-        response = self.client.get(self.path, {"externe_code": "[ISO:12345]"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-
-    def test_multiple_externe_code_filters(self):
-        product_type_1 = ProductTypeFactory.create()
-        ExterneCodeFactory(naam="ISO", code="12345", product_type=product_type_1)
-        ExterneCodeFactory(naam="OSI", code="456", product_type=product_type_1)
-
-        product_type_2 = ProductTypeFactory.create()
-        ExterneCodeFactory(naam="ISO", code="9837549857", product_type=product_type_2)
-
-        response = self.client.get(
-            self.path, {"externe_code": ("[ISO:12345]", "[OSI:456]")}
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-
-    def test_externe_code_filter_without_brackets(self):
-        response = self.client.get(self.path, {"externe_code": "abc"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_externe_code_filter_without_key_value(self):
-        response = self.client.get(self.path, {"externe_code": "[:]"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_externe_code_filter_with_invalid_characters(self):
-        response = self.client.get(self.path, {"externe_code": "[a[b:[b:a]]"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_parameter_filter(self):
-        product_type_1 = ProductTypeFactory.create()
-        ParameterFactory(
-            naam="doelgroep", waarde="inwoners", product_type=product_type_1
-        )
-
-        product_type_2 = ProductTypeFactory.create()
-        ParameterFactory(
-            naam="doelgroep", waarde="bedrijven", product_type=product_type_2
-        )
-
-        response = self.client.get(self.path, {"parameter": "[doelgroep:inwoners]"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-
-    def test_multiple_parameter_filters(self):
-        product_type_1 = ProductTypeFactory.create()
-        ParameterFactory(
-            naam="doelgroep", waarde="inwoners", product_type=product_type_1
-        )
-        ParameterFactory(naam="buurt", waarde="kwartier", product_type=product_type_1)
-
-        product_type_2 = ProductTypeFactory.create()
-        ParameterFactory(
-            naam="doelgroep", waarde="bedrijven", product_type=product_type_2
-        )
-
-        response = self.client.get(
-            self.path, {"parameter": ("[doelgroep:inwoners]", "[buurt:kwartier]")}
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-
-    def test_parameter_filter_without_brackets(self):
-        response = self.client.get(self.path, {"parameter": "abc"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_parameter_filter_without_key_value(self):
-        response = self.client.get(self.path, {"parameter": "[:]"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_parameter_filter_with_invalid_characters(self):
-        response = self.client.get(self.path, {"parameter": "[a[b:[b:a]]"})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

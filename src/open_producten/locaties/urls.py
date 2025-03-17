@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from open_producten.locaties.views import (
+from open_producten.locaties.viewsets import (
     ContactViewSet,
     LocatieViewSet,
     OrganisatieViewSet,

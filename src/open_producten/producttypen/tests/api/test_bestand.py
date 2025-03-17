@@ -2,7 +2,7 @@ import tempfile
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 
 from rest_framework import status
@@ -19,6 +19,7 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp()
 
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestProductTypeBestand(BaseApiTestCase):
+    path = reverse_lazy("bestand-list")
 
     def setUp(self):
         super().setUp()
@@ -31,7 +32,6 @@ class TestProductTypeBestand(BaseApiTestCase):
         }
         self.bestand = BestandFactory.create(product_type=self.product_type)
 
-        self.path = reverse("bestand-list")
         self.detail_path = reverse("bestand-detail", args=[self.bestand.id])
 
     def test_read_bestand_without_credentials_returns_error(self):
