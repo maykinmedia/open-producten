@@ -1715,7 +1715,7 @@ paths:
                       telefoonnummer: '+310207530523'
                       straat: Kingsfortweg
                       huisnummer: '151'
-                      postcode: 1043TESTGR
+                      postcode: 1043 GR
                       stad: Amsterdam
                   summary: locatie response
           description: ''
@@ -1780,7 +1780,7 @@ paths:
                     telefoonnummer: '+310207530523'
                     straat: Kingsfortweg
                     huisnummer: '151'
-                    postcode: 1043TESTGR
+                    postcode: 1043 GR
                     stad: Amsterdam
                   summary: locatie response
           description: ''
@@ -1837,7 +1837,7 @@ paths:
                     telefoonnummer: '+310207530523'
                     straat: Kingsfortweg
                     huisnummer: '151'
-                    postcode: 1043TESTGR
+                    postcode: 1043 GR
                     stad: Amsterdam
                   summary: locatie response
           description: ''
@@ -1910,7 +1910,7 @@ paths:
                     telefoonnummer: '+310207530523'
                     straat: Kingsfortweg
                     huisnummer: '151'
-                    postcode: 1043TESTGR
+                    postcode: 1043 GR
                     stad: Amsterdam
                   summary: locatie response
           description: ''
@@ -1982,7 +1982,7 @@ paths:
                     telefoonnummer: '+310207530523'
                     straat: Kingsfortweg
                     huisnummer: '151'
-                    postcode: 1043TESTGR
+                    postcode: 1043 GR
                     stad: Amsterdam
                   summary: locatie response
           description: ''
