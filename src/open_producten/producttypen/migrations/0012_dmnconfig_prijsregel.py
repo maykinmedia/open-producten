@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 (
                     "tabel_endpoint",
                     models.URLField(
-                        help_text="basis endpoint voor de dnm tabellen.",
+                        help_text="basis endpoint voor de dmn tabellen.",
                         unique=True,
                         verbose_name="url",
                     ),

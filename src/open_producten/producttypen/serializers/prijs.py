@@ -1,8 +1,12 @@
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 
-from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema_field,
+    extend_schema_serializer,
+)
 from rest_framework import serializers
 
 from ...utils.drf_validators import NestedObjectsValidator
@@ -27,9 +31,20 @@ class PrijsRegelSerializer(serializers.ModelSerializer):
         slug_field="tabel_endpoint",
         queryset=DmnConfig.objects.all(),
         source="dmn_config",
+        write_only=True,
+        help_text=_("tabel endpoint van een bestaande dmn config."),
     )
 
-    url = serializers.ReadOnlyField()
+    dmn_tabel_id = serializers.CharField(
+        write_only=True,
+        help_text=_("id van de dmn tabel binnen de dmn instantie."),
+    )
+
+    url = serializers.SerializerMethodField(help_text=_("De url naar de dmn tabel."))
+
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_url(self, obj):
+        return obj.url
 
     class Meta:
         model = PrijsRegel
@@ -39,7 +54,7 @@ class PrijsRegelSerializer(serializers.ModelSerializer):
 @extend_schema_serializer(
     examples=[
         OpenApiExample(
-            "prijs response",
+            "prijs met opties response",
             value={
                 "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                 "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
@@ -55,12 +70,44 @@ class PrijsRegelSerializer(serializers.ModelSerializer):
             response_only=True,
         ),
         OpenApiExample(
-            "prijs request",
+            "prijs met regels response",
+            value={
+                "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                "prijsregels": [
+                    {
+                        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+                        "url": "https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a",
+                        "beschrijving": "base",
+                    }
+                ],
+                "actief_vanaf": "2019-08-24",
+            },
+            response_only=True,
+        ),
+        OpenApiExample(
+            "prijs met opties request",
             description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
             value={
                 "prijsopties": [
                     {"bedrag": "50.99", "beschrijving": "normaal"},
                     {"bedrag": "70.99", "beschrijving": "spoed"},
+                ],
+                "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
+                "actief_vanaf": "2024-12-01",
+            },
+            request_only=True,
+        ),
+        OpenApiExample(
+            "prijs met regels request",
+            description="prijsOptie bedragen kunnen worden ingevuld als een getal of als string met een . of , voor de decimalen",
+            value={
+                "prijsregels": [
+                    {
+                        "tabel_endpoint": "https://gemeente-a-flowable/dmn-repository/decision-tables",
+                        "dmn_tabel_id": "46aa6b3a-c0a1-11e6-bc93-6ab56fad108a",
+                        "beschrijving": "base",
+                    },
                 ],
                 "product_type_id": "95792000-d57f-4d3a-b14c-c4c7aa964907",
                 "actief_vanaf": "2024-12-01",

@@ -12,6 +12,398 @@ info:
     name: EUPL 1.2
     url: https://opensource.org/licenses/EUPL-1.2
 paths:
+  /acties/:
+    get:
+      operationId: acties_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle ACTIE opvragen.
+      parameters:
+      - in: query
+        name: dmn_config__naam
+        schema:
+          type: string
+        description: naam van de dmn instantie.
+      - in: query
+        name: dmn_config__tabel_endpoint
+        schema:
+          type: string
+        description: basis endpoint voor de dmn tabellen.
+      - in: query
+        name: dmn_tabel_id
+        schema:
+          type: string
+        description: id van de dmn tabel binnen de dmn instantie.
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: naam van de actie.
+      - in: query
+        name: naam__contains
+        schema:
+          type: string
+        description: naam van de actie.
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: product_type__code
+        schema:
+          type: string
+        description: code van het product type.
+      - in: query
+        name: product_type__id
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: product_type__naam
+        schema:
+          type: string
+        description: Naam van het product type.
+      - in: query
+        name: uniforme_product_naam
+        schema:
+          type: string
+        description: Uniforme product naam vanuit de UPL.
+      tags:
+      - acties
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedActieList'
+              examples:
+                ActieResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      naam: Parkeervergunning opzegging
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                  summary: actie response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    post:
+      operationId: acties_create
+      description: De tabel_endpoint is een verwijzing naar url gedefinieerd in een
+        DMNCONFIG object. Deze objecten kunnen in de admin worden aangemaakt.
+      summary: Maak een ACTIE aan.
+      tags:
+      - acties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActieRequest'
+            examples:
+              ActieRequest:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Parkeervergunning opzegging
+                  tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
+                  dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                summary: actie request
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actie'
+              examples:
+                ActieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Parkeervergunning opzegging
+                    url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                  summary: actie response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+  /acties/{id}/:
+    get:
+      operationId: acties_retrieve
+      summary: Een specifieke ACTIE opvragen.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this actie.
+        required: true
+      tags:
+      - acties
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actie'
+              examples:
+                ActieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Parkeervergunning opzegging
+                    url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                  summary: actie response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    put:
+      operationId: acties_update
+      summary: Werk een ACTIE in zijn geheel bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this actie.
+        required: true
+      tags:
+      - acties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActieRequest'
+            examples:
+              ActieRequest:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Parkeervergunning opzegging
+                  tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
+                  dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                summary: actie request
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actie'
+              examples:
+                ActieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Parkeervergunning opzegging
+                    url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                  summary: actie response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    patch:
+      operationId: acties_partial_update
+      summary: Werk een ACTIE deels bij.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this actie.
+        required: true
+      tags:
+      - acties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedActieRequest'
+            examples:
+              ActieRequest:
+                value:
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  naam: Parkeervergunning opzegging
+                  tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
+                  dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                summary: actie request
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actie'
+              examples:
+                ActieResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    naam: Parkeervergunning opzegging
+                    url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                  summary: actie response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
+    delete:
+      operationId: acties_destroy
+      summary: Verwijder een ACTIE.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this actie.
+        required: true
+      tags:
+      - acties
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                BadRequestExample:
+                  value:
+                    veld_a:
+                    - Dit veld is vereist.
+                    veld_b:
+                    - ‘<uuid>’ is geen geldige UUID.
+                  summary: Bad request example
+                  description: Errors worden per veld teruggegeven. Hieronder volgt
+                    een voorbeeld.
+          description: Validation error
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailError'
+          description: ''
   /bestanden/:
     get:
       operationId: bestanden_list
@@ -2550,7 +2942,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedPrijsList'
               examples:
-                PrijsResponse:
+                PrijsMetOptiesResponse:
                   value:
                     count: 123
                     next: http://api.example.org/accounts/?page=4
@@ -2563,7 +2955,21 @@ paths:
                         bedrag: '50.99'
                         beschrijving: normaal
                       actief_vanaf: '2019-08-24'
-                  summary: prijs response
+                  summary: prijs met opties response
+                PrijsMetRegelsResponse:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      prijsregels:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                        beschrijving: base
+                      actief_vanaf: '2019-08-24'
+                  summary: prijs met regels response
           description: ''
         '400':
           content:
@@ -2598,7 +3004,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PrijsRequest'
             examples:
-              PrijsRequest:
+              PrijsMetOptiesRequest:
                 value:
                   prijsopties:
                   - bedrag: '50.99'
@@ -2607,7 +3013,18 @@ paths:
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
-                summary: prijs request
+                summary: prijs met opties request
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
+              PrijsMetRegelsRequest:
+                value:
+                  prijsregels:
+                  - tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
+                    dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                    beschrijving: base
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: prijs met regels request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
         required: true
@@ -2620,7 +3037,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
               examples:
-                PrijsResponse:
+                PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
@@ -2629,7 +3046,17 @@ paths:
                       bedrag: '50.99'
                       beschrijving: normaal
                     actief_vanaf: '2019-08-24'
-                  summary: prijs response
+                  summary: prijs met opties response
+                PrijsMetRegelsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsregels:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                      beschrijving: base
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs met regels response
           description: ''
         '400':
           content:
@@ -2676,7 +3103,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
               examples:
-                PrijsResponse:
+                PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
@@ -2685,7 +3112,17 @@ paths:
                       bedrag: '50.99'
                       beschrijving: normaal
                     actief_vanaf: '2019-08-24'
-                  summary: prijs response
+                  summary: prijs met opties response
+                PrijsMetRegelsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsregels:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                      beschrijving: base
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs met regels response
           description: ''
         '400':
           content:
@@ -2728,7 +3165,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PrijsRequest'
             examples:
-              PrijsRequest:
+              PrijsMetOptiesRequest:
                 value:
                   prijsopties:
                   - bedrag: '50.99'
@@ -2737,7 +3174,18 @@ paths:
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
-                summary: prijs request
+                summary: prijs met opties request
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
+              PrijsMetRegelsRequest:
+                value:
+                  prijsregels:
+                  - tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
+                    dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                    beschrijving: base
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: prijs met regels request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
         required: true
@@ -2750,7 +3198,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
               examples:
-                PrijsResponse:
+                PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
@@ -2759,7 +3207,17 @@ paths:
                       bedrag: '50.99'
                       beschrijving: normaal
                     actief_vanaf: '2019-08-24'
-                  summary: prijs response
+                  summary: prijs met opties response
+                PrijsMetRegelsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsregels:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                      beschrijving: base
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs met regels response
           description: ''
         '400':
           content:
@@ -2802,7 +3260,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedPrijsRequest'
             examples:
-              PrijsRequest:
+              PrijsMetOptiesRequest:
                 value:
                   prijsopties:
                   - bedrag: '50.99'
@@ -2811,7 +3269,18 @@ paths:
                     beschrijving: spoed
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
-                summary: prijs request
+                summary: prijs met opties request
+                description: prijsOptie bedragen kunnen worden ingevuld als een getal
+                  of als string met een . of , voor de decimalen
+              PrijsMetRegelsRequest:
+                value:
+                  prijsregels:
+                  - tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
+                    dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                    beschrijving: base
+                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  actief_vanaf: '2024-12-01'
+                summary: prijs met regels request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
       security:
@@ -2823,7 +3292,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Prijs'
               examples:
-                PrijsResponse:
+                PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
@@ -2832,7 +3301,17 @@ paths:
                       bedrag: '50.99'
                       beschrijving: normaal
                     actief_vanaf: '2019-08-24'
-                  summary: prijs response
+                  summary: prijs met opties response
+                PrijsMetRegelsResponse:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    prijsregels:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
+                      beschrijving: base
+                    actief_vanaf: '2019-08-24'
+                  summary: prijs met regels response
           description: ''
         '400':
           content:
@@ -3107,6 +3586,10 @@ paths:
                       - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                         naam: Open Producten
                         url: https://github.com/maykinmedia/open-producten
+                      acties:
+                      - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                        naam: Parkeervergunning opzegging
+                        url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                       bestanden:
                       - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                         bestand: https://gemeente.open-producten.nl/media/test.txt
@@ -3284,6 +3767,10 @@ paths:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       naam: Open Producten
                       url: https://github.com/maykinmedia/open-producten
+                    acties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeervergunning opzegging
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     bestanden:
                     - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                       bestand: https://gemeente.open-producten.nl/media/test.txt
@@ -3431,6 +3918,10 @@ paths:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       naam: Open Producten
                       url: https://github.com/maykinmedia/open-producten
+                    acties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeervergunning opzegging
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     bestanden:
                     - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                       bestand: https://gemeente.open-producten.nl/media/test.txt
@@ -3616,6 +4107,10 @@ paths:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       naam: Open Producten
                       url: https://github.com/maykinmedia/open-producten
+                    acties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeervergunning opzegging
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     bestanden:
                     - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                       bestand: https://gemeente.open-producten.nl/media/test.txt
@@ -3802,6 +4297,10 @@ paths:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       naam: Open Producten
                       url: https://github.com/maykinmedia/open-producten
+                    acties:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      naam: Parkeervergunning opzegging
+                      url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     bestanden:
                     - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                       bestand: https://gemeente.open-producten.nl/media/test.txt
@@ -5085,6 +5584,58 @@ paths:
           description: ''
 components:
   schemas:
+    Actie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: naam van de actie.
+          maxLength: 255
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De url naar de dmn tabel.
+        product_type_id:
+          type: string
+          format: uuid
+      required:
+      - id
+      - naam
+      - product_type_id
+      - url
+    ActieRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: naam van de actie.
+          maxLength: 255
+        tabel_endpoint:
+          type: string
+          format: uri
+          minLength: 1
+          title: Url
+          description: tabel endpoint van een bestaande dmn config.
+          writeOnly: true
+        dmn_tabel_id:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: id van de dmn tabel binnen de dmn instantie.
+        product_type_id:
+          type: string
+          format: uuid
+      required:
+      - dmn_tabel_id
+      - naam
+      - product_type_id
+      - tabel_endpoint
     Bestand:
       type: object
       properties:
@@ -5430,6 +5981,36 @@ components:
         stad:
           type: string
           nullable: true
+          maxLength: 255
+      required:
+      - naam
+    NestedActie:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+          description: naam van de actie.
+          maxLength: 255
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De url naar de dmn tabel.
+      required:
+      - id
+      - naam
+      - url
+    NestedActieRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: naam van de actie.
           maxLength: 255
       required:
       - naam
@@ -5834,6 +6415,29 @@ components:
       required:
       - code
       - naam
+    PaginatedActieList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actie'
     PaginatedBestandList:
       type: object
       required:
@@ -6064,6 +6668,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Thema'
+    PatchedActieRequest:
+      type: object
+      properties:
+        naam:
+          type: string
+          minLength: 1
+          description: naam van de actie.
+          maxLength: 255
+        tabel_endpoint:
+          type: string
+          format: uri
+          minLength: 1
+          title: Url
+          description: tabel endpoint van een bestaande dmn config.
+          writeOnly: true
+        dmn_tabel_id:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: id van de dmn tabel binnen de dmn instantie.
+        product_type_id:
+          type: string
+          format: uuid
     PatchedBestandRequest:
       type: object
       properties:
@@ -6436,38 +7063,45 @@ components:
         id:
           type: string
           format: uuid
-        dmn_url:
+        url:
           type: string
           format: uri
-          description: Url om de dmn tabel te evalueren
-          maxLength: 200
+          readOnly: true
+          description: De url naar de dmn tabel.
         beschrijving:
           type: string
-          description: Korte beschrijving van de prijs regel en dmn tabel.
+          description: Korte beschrijving van de prijs regel.
           maxLength: 255
       required:
       - beschrijving
-      - dmn_url
+      - url
     PrijsRegelRequest:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        dmn_url:
-          type: string
-          format: uri
-          minLength: 1
-          description: Url om de dmn tabel te evalueren
-          maxLength: 200
         beschrijving:
           type: string
           minLength: 1
-          description: Korte beschrijving van de prijs regel en dmn tabel.
+          description: Korte beschrijving van de prijs regel.
           maxLength: 255
+        dmn_tabel_id:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: id van de dmn tabel binnen de dmn instantie.
+        tabel_endpoint:
+          type: string
+          format: uri
+          minLength: 1
+          title: Url
+          description: tabel endpoint van een bestaande dmn config.
+          writeOnly: true
       required:
       - beschrijving
-      - dmn_url
+      - dmn_tabel_id
+      - tabel_endpoint
     PrijsRequest:
       type: object
       properties:
@@ -6536,6 +7170,11 @@ components:
           items:
             $ref: '#/components/schemas/NestedBestand'
           readOnly: true
+        acties:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestedActie'
+          readOnly: true
         verbruiksobject_schema:
           allOf:
           - $ref: '#/components/schemas/JsonSchema'
@@ -6596,6 +7235,7 @@ components:
           description: Interne opmerkingen over het product type.
       required:
       - aanmaak_datum
+      - acties
       - bestanden
       - code
       - contacten

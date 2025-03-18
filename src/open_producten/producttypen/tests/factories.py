@@ -2,6 +2,7 @@ import factory.fuzzy
 from faker import Faker
 
 from ..models import (
+    Actie,
     Bestand,
     ContentElement,
     ContentLabel,
@@ -152,3 +153,13 @@ class JsonSchemaFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = JsonSchema
+
+
+class ActieFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    naam = factory.Sequence(lambda n: f"actie {n}")
+    dmn_config = factory.SubFactory(DmnConfigFactory)
+    dmn_tabel_id = factory.Faker("word")
+
+    class Meta:
+        model = Actie

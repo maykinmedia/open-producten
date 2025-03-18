@@ -12,7 +12,7 @@ class DmnConfig(BaseModel):
     )
 
     tabel_endpoint = models.URLField(
-        _("url"), help_text=_("basis endpoint voor de dnm tabellen."), unique=True
+        _("url"), help_text=_("basis endpoint voor de dmn tabellen."), unique=True
     )
 
     def __str__(self):
