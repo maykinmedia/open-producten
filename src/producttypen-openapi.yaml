@@ -2912,6 +2912,16 @@ paths:
           type: string
         description: Korte beschrijving van de optie.
       - in: query
+        name: prijsregels__beschrijving
+        schema:
+          type: string
+        description: Korte beschrijving van de prijs regel.
+      - in: query
+        name: prijsregels__dmn_tabel_id
+        schema:
+          type: string
+        description: id van de dmn tabel binnen de dmn instantie.
+      - in: query
         name: product_type__code
         schema:
           type: string

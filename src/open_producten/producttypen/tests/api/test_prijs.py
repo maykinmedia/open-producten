@@ -170,6 +170,28 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(PrijsOptie.objects.count(), 1)
         self.assertNotEqual(PrijsOptie.objects.get().id, id)
 
+    def test_create_prijs_with_regel_with_id(self):
+        id = uuid.uuid4()
+        data = {
+            "actief_vanaf": datetime.date(2024, 1, 3),
+            "prijsregels": [
+                {
+                    "id": id,
+                    "tabel_endpoint": "https://maykinmedia.nl",
+                    "dmn_tabel_id": "iqjowijdoanwda",
+                    "beschrijving": "base",
+                }
+            ],
+            "product_type_id": self.product_type.id,
+        }
+
+        response = self.client.post(self.path, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Prijs.objects.count(), 2)
+        self.assertEqual(PrijsRegel.objects.count(), 1)
+        self.assertNotEqual(PrijsRegel.objects.get().id, id)
+
     def test_create_prijs_with_prijs_regels(self):
         data = {
             "actief_vanaf": datetime.date(2024, 1, 3),
@@ -189,7 +211,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 2)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(
-            response.data["prijsregels"][0]["dmn_url"],
+            response.data["prijsregels"][0]["url"],
             "https://maykinmedia.nl/iqjowijdoanwda",
         )
 
@@ -367,7 +389,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(
-            response.data["prijsregels"][0]["dmn_url"],
+            response.data["prijsregels"][0]["url"],
             "https://maykinmedia.nl/iqjowijdoanwda",
         )
         self.assertEqual(PrijsRegel.objects.get().id, regel_to_be_updated.id)
@@ -411,7 +433,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(
-            response.data["prijsregels"][0]["dmn_url"],
+            response.data["prijsregels"][0]["url"],
             "https://maykinmedia.nl/iqjowijdoanwda",
         )
 
@@ -699,7 +721,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         self.assertEqual(Prijs.objects.count(), 1)
         self.assertEqual(PrijsRegel.objects.count(), 1)
         self.assertEqual(
-            response.data["prijsregels"][0]["dmn_url"],
+            response.data["prijsregels"][0]["url"],
             "https://maykinmedia.nl/iqjowijdoanwda",
         )
         self.assertEqual(PrijsRegel.objects.get().id, regel_to_be_updated.id)

@@ -33,6 +33,8 @@ class PrijsFilterSet(FilterSet):
             "actief_vanaf": ["exact", "gte", "lte"],
             "prijsopties__bedrag": ["exact", "gte", "lte"],
             "prijsopties__beschrijving": ["exact"],
+            "prijsregels__dmn_tabel_id": ["exact"],
+            "prijsregels__beschrijving": ["exact"],
         }
 
 
