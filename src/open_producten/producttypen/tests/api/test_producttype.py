@@ -559,6 +559,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ExterneCode.objects.count(), 0)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
+    def test_update_product_type_existing_externe_codes_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        ExterneCodeFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), self.data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ExterneCode.objects.count(), 1)
+
     def test_update_product_type_with_parameter(self):
         product_type = ProductTypeFactory.create()
 
@@ -603,15 +612,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
-
-    def test_update_product_type_existing_externe_codes_are_kept(self):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
-
-        response = self.client.patch(self.detail_path(product_type), self.data)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ExterneCode.objects.count(), 1)
 
     def test_partial_update_product_type(self):
         product_type = ProductTypeFactory.create()
@@ -704,6 +704,15 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ExterneCode.objects.count(), 0)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
+    def test_partial_update_product_type_existing_externe_codes_are_kept(self):
+        product_type = ProductTypeFactory.create()
+        ExterneCodeFactory.create(product_type=product_type)
+
+        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ExterneCode.objects.count(), 1)
+
     def test_partial_update_product_type_with_parameter(self):
         product_type = ProductTypeFactory.create()
 
@@ -748,15 +757,6 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
-
-    def test_partial_update_product_type_existing_externe_codes_are_kept(self):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
-
-        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(ExterneCode.objects.count(), 1)
 
     def test_read_product_type_link(self):
         product_type = ProductTypeFactory.create()

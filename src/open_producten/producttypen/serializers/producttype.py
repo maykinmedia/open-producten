@@ -384,17 +384,19 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 
         if externe_codes is not None:
             instance.externe_codes.all().delete()
-            self.set_externe_codes(
+            set_nested_serializer(
                 [
                     externe_code | {"product_type": instance.id}
                     for externe_code in externe_codes
-                ]
+                ],
+                ExterneCodeSerializer,
             )
 
         if parameters is not None:
             instance.parameters.all().delete()
-            self.set_parameters(
-                [parameter | {"product_type": instance.id} for parameter in parameters]
+            set_nested_serializer(
+                [parameter | {"product_type": instance.id} for parameter in parameters],
+                ParameterSerializer,
             )
 
         instance.set_current_language("nl")
@@ -405,22 +407,6 @@ class ProductTypeSerializer(TranslatableModelSerializer):
 
         instance.add_contact_organisaties()
         return instance
-
-    def set_externe_codes(self, externe_codes: list[dict]):
-        externe_code_serializer = ExterneCodeSerializer(
-            data=externe_codes,
-            many=True,
-        )
-        externe_code_serializer.is_valid(raise_exception=True)
-        externe_code_serializer.save()
-
-    def set_parameters(self, parameters: list[dict]):
-        parameter_serializer = ParameterSerializer(
-            data=parameters,
-            many=True,
-        )
-        parameter_serializer.is_valid(raise_exception=True)
-        parameter_serializer.save()
 
 
 class ProductTypeActuelePrijsSerializer(serializers.ModelSerializer):
