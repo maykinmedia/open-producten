@@ -28,7 +28,7 @@ class ContentElement(TranslatableModel, OrderedModel, BaseModel):
         ContentLabel,
         verbose_name=_("labels"),
         blank=True,
-        related_name="content_elements",
+        related_name="content_elementen",
         help_text=_("De labels van dit content element"),
     )
     product_type = models.ForeignKey(

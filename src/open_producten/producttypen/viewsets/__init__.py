@@ -1,3 +1,4 @@
+from .actie import ActieViewSet
 from .bestand import BestandViewSet
 from .content import ContentElementViewSet, ContentLabelViewSet
 from .jsonschema import JsonSchemaViewSet
@@ -15,4 +16,5 @@ __all__ = [
     "BestandViewSet",
     "LinkViewSet",
     "JsonSchemaViewSet",
+    "ActieViewSet",
 ]

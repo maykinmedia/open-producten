@@ -54,7 +54,7 @@ class Product(BasePublishableModel):
     )
 
     prijs = models.DecimalField(
-        verbose_name=_("bedrag"),
+        verbose_name=_("prijs"),
         decimal_places=2,
         max_digits=8,
         validators=[MinValueValidator(Decimal("0.01"))],

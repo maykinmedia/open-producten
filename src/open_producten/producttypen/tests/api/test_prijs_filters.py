@@ -6,7 +6,11 @@ from django.urls import reverse_lazy
 
 from rest_framework import status
 
-from open_producten.producttypen.tests.factories import PrijsFactory, PrijsOptieFactory
+from open_producten.producttypen.tests.factories import (
+    PrijsFactory,
+    PrijsOptieFactory,
+    PrijsRegelFactory,
+)
 from open_producten.utils.tests.cases import BaseApiTestCase
 
 
@@ -49,6 +53,35 @@ class TestPrijsFilters(BaseApiTestCase):
         PrijsOptieFactory.create(prijs=prijs, beschrijving="spoed")
 
         response = self.client.get(self.path, {"prijsopties__beschrijving": "spoed"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(prijs.id))
+
+    def test_prijs_regels_dmn_tabel_id_filter(self):
+        prijs = PrijsFactory.create()
+        PrijsFactory.create()
+
+        PrijsRegelFactory.create(
+            prijs=prijs, dmn_tabel_id="a4dcf122-e224-48f9-8c09-79e5bbb10154"
+        )
+
+        response = self.client.get(
+            self.path,
+            {"prijsregels__dmn_tabel_id": "a4dcf122-e224-48f9-8c09-79e5bbb10154"},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["id"], str(prijs.id))
+
+    def test_prijs_regels_beschrijving_filter(self):
+        prijs = PrijsFactory.create()
+        PrijsFactory.create()
+
+        PrijsRegelFactory.create(prijs=prijs, beschrijving="base")
+
+        response = self.client.get(self.path, {"prijsregels__beschrijving": "base"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
