@@ -14,6 +14,8 @@ from .content import ContentElementInline
 from .externe_code import ExterneCodeInline
 from .link import LinkInline
 from .parameter import ParameterInline
+from .proces import ProcesInline
+from .zaaktype import ZaakTypeInline
 
 
 class ProductTypeAdminForm(TranslatableModelForm):
@@ -69,6 +71,8 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         ContentElementInline,
         ExterneCodeInline,
         ParameterInline,
+        ProcesInline,
+        ZaakTypeInline,
     )
     fields = (
         "naam",
