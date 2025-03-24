@@ -58,6 +58,8 @@ paths:
       tags:
       - bestanden
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -117,6 +119,8 @@ paths:
                 summary: bestand request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -169,6 +173,8 @@ paths:
       tags:
       - bestanden
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -232,6 +238,8 @@ paths:
                 summary: bestand request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -294,6 +302,8 @@ paths:
                   product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                 summary: bestand request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -345,6 +355,8 @@ paths:
       tags:
       - bestanden
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -426,6 +438,8 @@ paths:
       tags:
       - contacten
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -502,6 +516,8 @@ paths:
                 summary: contact request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -567,6 +583,8 @@ paths:
       tags:
       - contacten
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -647,6 +665,8 @@ paths:
                 summary: contact request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -727,6 +747,8 @@ paths:
                   rol: medewerker
                 summary: contact request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -791,6 +813,8 @@ paths:
       tags:
       - contacten
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -838,6 +862,8 @@ paths:
                 summary: content element request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -893,6 +919,8 @@ paths:
       tags:
       - content
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -961,6 +989,8 @@ paths:
                 summary: content element request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1030,6 +1060,8 @@ paths:
                   product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                 summary: content element request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1084,6 +1116,8 @@ paths:
       tags:
       - content
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -1137,6 +1171,8 @@ paths:
               $ref: '#/components/schemas/ContentElementTranslationRequest'
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1187,6 +1223,8 @@ paths:
       tags:
       - content
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -1234,6 +1272,8 @@ paths:
       tags:
       - contentlabels
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1325,6 +1365,8 @@ paths:
       tags:
       - links
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1386,6 +1428,8 @@ paths:
                 summary: link request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -1439,6 +1483,8 @@ paths:
       tags:
       - links
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1504,6 +1550,8 @@ paths:
                 summary: link request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1568,6 +1616,8 @@ paths:
                   url: https://github.com/maykinmedia/open-producten
                 summary: link request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1620,6 +1670,8 @@ paths:
       tags:
       - links
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -1695,6 +1747,8 @@ paths:
       tags:
       - locaties
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1764,6 +1818,8 @@ paths:
                 summary: locatie request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -1821,6 +1877,8 @@ paths:
       tags:
       - locaties
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1894,6 +1952,8 @@ paths:
                 summary: locatie request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -1966,6 +2026,8 @@ paths:
                   stad: Amsterdam
                 summary: locatie request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2022,6 +2084,8 @@ paths:
       tags:
       - locaties
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -2102,6 +2166,8 @@ paths:
       tags:
       - organisaties
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2173,6 +2239,8 @@ paths:
                 summary: organisatie request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -2231,6 +2299,8 @@ paths:
       tags:
       - organisaties
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2306,6 +2376,8 @@ paths:
                 summary: organisatie request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2380,6 +2452,8 @@ paths:
                   stad: Amsterdam
                 summary: organisatie request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2437,6 +2511,8 @@ paths:
       tags:
       - organisaties
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -2542,6 +2618,8 @@ paths:
       tags:
       - prijzen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2612,6 +2690,8 @@ paths:
                   of als string met een . of , voor de decimalen
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -2668,6 +2748,8 @@ paths:
       tags:
       - prijzen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2742,6 +2824,8 @@ paths:
                   of als string met een . of , voor de decimalen
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2815,6 +2899,8 @@ paths:
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
                   of als string met een . of , voor de decimalen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -2870,6 +2956,8 @@ paths:
       tags:
       - prijzen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -3036,6 +3124,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -3217,6 +3307,8 @@ paths:
                 summary: product type request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -3364,6 +3456,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -3549,6 +3643,8 @@ paths:
                 summary: product type request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -3735,6 +3831,8 @@ paths:
                   dataobject_schema: data_schema
                 summary: product type request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -3881,6 +3979,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -3923,6 +4023,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -3985,6 +4087,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4052,6 +4156,8 @@ paths:
               $ref: '#/components/schemas/ProductTypeTranslationRequest'
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4107,6 +4213,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProductTypeTranslationRequest'
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4157,6 +4265,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -4191,6 +4301,8 @@ paths:
       tags:
       - producttypen
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4252,6 +4364,8 @@ paths:
       tags:
       - schemas
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4322,6 +4436,8 @@ paths:
                 summary: schema request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -4378,6 +4494,8 @@ paths:
       tags:
       - schemas
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4451,6 +4569,8 @@ paths:
                 summary: schema request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4523,6 +4643,8 @@ paths:
                     - uren
                 summary: schema request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4578,6 +4700,8 @@ paths:
       tags:
       - schemas
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -4681,6 +4805,8 @@ paths:
       tags:
       - themas
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4759,6 +4885,8 @@ paths:
                 summary: thema request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '201':
@@ -4826,6 +4954,8 @@ paths:
       tags:
       - themas
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4908,6 +5038,8 @@ paths:
                 summary: thema request
         required: true
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -4991,6 +5123,8 @@ paths:
                   beschrijving: Parkeren in gemeente ABC
                 summary: thema request
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '200':
@@ -5057,6 +5191,8 @@ paths:
       tags:
       - themas
       security:
+      - jwtAuth: []
+      - cookieAuth: []
       - tokenAuth: []
       responses:
         '204':
@@ -6811,6 +6947,14 @@ components:
         * `geweigerd` - Geweigerd
         * `verlopen` - Verlopen
   securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: open_producten_sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
     tokenAuth:
       type: apiKey
       in: header
