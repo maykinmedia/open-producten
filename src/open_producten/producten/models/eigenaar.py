@@ -1,9 +1,12 @@
-from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from open_producten.producten.models.validators import validate_bsn
+from open_producten.producten.models.validators import (
+    validate_bsn,
+    validate_eigenaar_identifier,
+    validate_eigenaar_vestingsnummer_only_with_kvk,
+)
 from open_producten.utils.models import BaseModel
 
 from .product import Product
@@ -51,8 +54,10 @@ class Eigenaar(BaseModel):
     )
 
     def clean(self):
-        validate_vestingsnummer_only_with_kvk(self.kvk_nummer, self.vestigingsnummer)
-        validate_identifier(self.bsn, self.kvk_nummer, self.klantnummer)
+        validate_eigenaar_vestingsnummer_only_with_kvk(
+            self.kvk_nummer, self.vestigingsnummer
+        )
+        validate_eigenaar_identifier(self.bsn, self.kvk_nummer, self.klantnummer)
 
     def __str__(self):
         if self.bsn:
@@ -71,26 +76,3 @@ class Eigenaar(BaseModel):
     class Meta:
         verbose_name = _("Eigenaar")
         verbose_name_plural = _("Eigenaren")
-
-
-def validate_identifier(bsn, kvk_nummer, klantnummer):
-
-    if (not (bsn or klantnummer) and not kvk_nummer) or (
-        (bsn or klantnummer) and kvk_nummer
-    ):
-        raise ValidationError(
-            _(
-                "Een eigenaar moet een bsn (en/of klantnummer) of een kvk nummer (met of zonder vestigingsnummer) hebben."
-            )
-        )
-
-
-def validate_vestingsnummer_only_with_kvk(kvk_nummer, vestigingsnummer):
-    if vestigingsnummer and not kvk_nummer:
-        raise ValidationError(
-            {
-                "vestigingsnummer": _(
-                    "Een vestigingsnummer kan alleen in combinatie met een kvk nummer worden ingevuld."
-                )
-            }
-        )

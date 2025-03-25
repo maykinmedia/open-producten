@@ -5,12 +5,12 @@ from django.utils.translation import gettext_lazy as _
 
 from open_producten.logging.service import AdminAuditLogMixin, get_logs_link
 from open_producten.producten.models import Product
-from open_producten.producten.models.product import (
-    validate_dataobject,
-    validate_eind_datum,
-    validate_start_datum,
-    validate_status,
-    validate_verbruiksobject,
+from open_producten.producten.models.validators import (
+    validate_product_dataobject,
+    validate_product_eind_datum,
+    validate_product_start_datum,
+    validate_product_status,
+    validate_product_verbruiksobject,
 )
 from open_producten.producttypen.models.producttype import (
     ProductStateChoices,
@@ -70,28 +70,28 @@ class ProductAdminForm(forms.ModelForm):
         if self.errors:
             return
 
-        validate_verbruiksobject(
+        validate_product_verbruiksobject(
             self.cleaned_data["verbruiksobject"], self.cleaned_data["product_type"]
         )
 
-        validate_dataobject(
+        validate_product_dataobject(
             self.cleaned_data["dataobject"], self.cleaned_data["product_type"]
         )
 
         product_type_changed = "product_type" in self.changed_data
 
         if "status" in self.changed_data or product_type_changed:
-            validate_status(
+            validate_product_status(
                 self.cleaned_data["status"], self.cleaned_data["product_type"]
             )
 
         if "start_datum" in self.changed_data or product_type_changed:
-            validate_start_datum(
+            validate_product_start_datum(
                 self.cleaned_data["start_datum"], self.cleaned_data["product_type"]
             )
 
         if "eind_datum" in self.changed_data or product_type_changed:
-            validate_eind_datum(
+            validate_product_eind_datum(
                 self.cleaned_data["eind_datum"], self.cleaned_data["product_type"]
             )
 

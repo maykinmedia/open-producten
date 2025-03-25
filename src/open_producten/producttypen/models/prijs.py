@@ -1,7 +1,6 @@
 import datetime
 from decimal import Decimal
 
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -103,14 +102,3 @@ class PrijsRegel(BaseModel):
 
     def __str__(self):
         return f"{self.beschrijving} {self.url}"
-
-
-def validate_optie_xor_regel(optie_count: int, regel_count: int):
-
-    if optie_count and regel_count:
-        raise ValidationError(_("Een prijs kan niet zowel opties als regels hebben."))
-
-    if optie_count == 0 and regel_count == 0:
-        raise ValidationError(
-            _("Een prijs moet één of meerdere opties of regels hebben.")
-        )

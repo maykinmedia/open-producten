@@ -3,8 +3,10 @@ from datetime import date
 from django import forms
 from django.contrib import admin
 
+from open_producten.producttypen.models.validators import validate_prijs_optie_xor_regel
+
 from ..models import Prijs, PrijsOptie
-from ..models.prijs import PrijsRegel, validate_optie_xor_regel
+from ..models.prijs import PrijsRegel
 
 
 class PrijsOptieInline(admin.TabularInline):
@@ -27,7 +29,7 @@ class PrijsAdminForm(forms.ModelForm):
         fields = "__all__"
 
     def get_entry_count(self, inline: str, unique_field: str) -> int:
-        assert self.data.get(f"{inline}-0-{unique_field}") is not None
+        # assert self.data.get(f"{inline}-0-{unique_field}") is not None
 
         count = 0
         for i in range(int(self.data.get(f"{inline}-TOTAL_FORMS"))):
@@ -43,15 +45,16 @@ class PrijsAdminForm(forms.ModelForm):
         if self.errors:
             return
 
-        regel_count = self.get_entry_count("prijsregels", "dmn_url")
+        regel_count = self.get_entry_count("prijsregels", "dmn_tabel_id")
         opties_count = self.get_entry_count("prijsopties", "bedrag")
 
-        validate_optie_xor_regel(regel_count, opties_count)
+        validate_prijs_optie_xor_regel(regel_count, opties_count)
 
 
 @admin.register(Prijs)
 class PrijsAdmin(admin.ModelAdmin):
     model = Prijs
+    form = PrijsAdminForm
     inlines = [PrijsOptieInline, PrijsRegelInline]
     list_display = ("__str__", "actief_vanaf")
     list_filter = ("product_type__code", "actief_vanaf")

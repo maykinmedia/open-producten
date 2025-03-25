@@ -23,7 +23,7 @@ class TestPrijsAdmin(TestCase):
             "actief_vanaf": "2025-01-01",
             "prijsregels-TOTAL_FORMS": "1",
             "prijsregels-INITIAL_FORMS": "0",
-            "prijsregels-0-dmn_url": "",
+            "prijsregels-0-dmn_tabel_id": "",
             "prijsopties-TOTAL_FORMS": "1",
             "prijsopties-INITIAL_FORMS": "0",
             "prijsopties-0-bedrag": "",
@@ -63,7 +63,7 @@ class TestPrijsAdmin(TestCase):
 
     def test_prijs_cannot_have_optie_and_regel(self):
         data = self.data | {
-            "prijsregels-0-dmn_url": "https://www.maykinmedia.nl",
+            "prijsregels-0-dmn_tabel_id": "809e1b4b-b027-42b6-a5df-2d3156e8c032",
             "prijsopties-0-bedrag": "10",
         }
         form = PrijsAdminForm(data=data)
@@ -75,7 +75,7 @@ class TestPrijsAdmin(TestCase):
 
     def test_prijs_deleting_only_regel(self):
         data = self.data | {
-            "prijsregels-0-dmn_url": "https://www.maykinmedia.nl",
+            "prijsregels-0-dmn_tabel_id": "809e1b4b-b027-42b6-a5df-2d3156e8c032",
             "prijsregels-0-DELETE": "on",
         }
         form = PrijsAdminForm(data=data)
@@ -99,7 +99,7 @@ class TestPrijsAdmin(TestCase):
 
     def test_prijs_removing_optie_adding_regel(self):
         data = self.data | {
-            "prijsregels-0-dmn_url": "https://www.maykinmedia.nl",
+            "prijsregels-0-dmn_tabel_id": "809e1b4b-b027-42b6-a5df-2d3156e8c032",
             "prijsopties-0-bedrag": "10",
             "prijsopties-0-DELETE": "on",
         }
@@ -109,7 +109,7 @@ class TestPrijsAdmin(TestCase):
 
     def test_prijs_removing_regel_adding_optie(self):
         data = self.data | {
-            "prijsregels-0-dmn_url": "https://www.maykinmedia.nl",
+            "prijsregels-0-dmn_tabel_id": "809e1b4b-b027-42b6-a5df-2d3156e8c032",
             "prijsregels-0-DELETE": "on",
             "prijsopties-0-bedrag": "10",
         }

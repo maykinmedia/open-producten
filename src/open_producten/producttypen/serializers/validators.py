@@ -4,8 +4,11 @@ from django.db import models
 from rest_framework import serializers
 
 from ...utils.serializers import get_from_serializer_data_or_instance
-from ..models.prijs import validate_optie_xor_regel
-from ..models.thema import disallow_self_reference, validate_gepubliceerd_state
+from ..models.validators import (
+    disallow_hoofd_thema_self_reference,
+    validate_prijs_optie_xor_regel,
+    validate_thema_gepubliceerd_state,
+)
 
 
 class ThemaGepubliceerdStateValidator:
@@ -21,7 +24,7 @@ class ThemaGepubliceerdStateValidator:
         sub_themas = serializer.instance.sub_themas if serializer.instance else None
 
         try:
-            validate_gepubliceerd_state(hoofd_thema, gepubliceerd, sub_themas)
+            validate_thema_gepubliceerd_state(hoofd_thema, gepubliceerd, sub_themas)
         except ValidationError as e:
             raise serializers.ValidationError({"hoofd_thema": e.message})
 
@@ -36,7 +39,7 @@ class ThemaSelfReferenceValidator:
         )
 
         try:
-            disallow_self_reference(thema, hoofd_thema)
+            disallow_hoofd_thema_self_reference(thema, hoofd_thema)
         except ValidationError as e:
             raise serializers.ValidationError({"hoofd_thema": e.message})
 
@@ -48,7 +51,7 @@ class PrijsOptieRegelValidator:
         opties = get_from_serializer_data_or_instance("prijsopties", value, serializer)
         regels = get_from_serializer_data_or_instance("prijsregels", value, serializer)
         try:
-            validate_optie_xor_regel(get_count(opties), get_count(regels))
+            validate_prijs_optie_xor_regel(get_count(opties), get_count(regels))
         except ValidationError as e:
             raise serializers.ValidationError({"opties_or_regels": e.message})
 

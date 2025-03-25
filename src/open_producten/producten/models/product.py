@@ -1,11 +1,12 @@
 from datetime import date
 from decimal import Decimal
 
-from django.core.validators import MinValueValidator, ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from open_producten.logging.logevent import audit_automation_update
+from open_producten.producten.models.validators import validate_product_dates
 from open_producten.producttypen.models import ProductType
 from open_producten.producttypen.models.producttype import ProductStateChoices
 from open_producten.utils.models import BasePublishableModel
@@ -91,7 +92,7 @@ class Product(BasePublishableModel):
         verbose_name_plural = _("Producten")
 
     def clean(self):
-        validate_dates(self.start_datum, self.eind_datum)
+        validate_product_dates(self.start_datum, self.eind_datum)
 
     def save(self, *args, **kwargs):
         self.handle_start_datum()
@@ -128,89 +129,3 @@ class Product(BasePublishableModel):
 
     def __str__(self):
         return f"{self.product_type.naam} instantie."
-
-
-def validate_status(status, product_type):
-    if (
-        status != ProductStateChoices.INITIEEL
-        and status not in product_type.toegestane_statussen
-    ):
-        raise ValidationError(
-            {
-                "status": _(
-                    "Status '{}' is niet toegestaan voor het product type {}."
-                ).format(
-                    ProductStateChoices(status).label,
-                    product_type.naam,
-                )
-            }
-        )
-
-
-def validate_dates(start_datum, eind_datum):
-    if start_datum and eind_datum and (start_datum >= eind_datum):
-        raise ValidationError(
-            _(
-                "De eind datum van een product mag niet op een eerdere of dezelfde dag vallen als de start datum."
-            )
-        )
-
-
-def validate_start_datum(start_datum, product_type):
-
-    if (
-        start_datum
-        and ProductStateChoices.ACTIEF not in product_type.toegestane_statussen
-    ):
-        raise ValidationError(
-            {
-                "start_datum": _(
-                    "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
-                )
-            }
-        )
-
-
-def validate_eind_datum(eind_datum, product_type):
-    if (
-        eind_datum
-        and ProductStateChoices.VERLOPEN not in product_type.toegestane_statussen
-    ):
-        raise ValidationError(
-            {
-                "eind_datum": _(
-                    "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
-                )
-            }
-        )
-
-
-def validate_verbruiksobject(verbruiksobject, product_type):
-    try:
-        if (
-            verbruiksobject is not None
-            and product_type.verbruiksobject_schema is not None
-        ):
-            product_type.verbruiksobject_schema.validate(verbruiksobject)
-    except ValidationError:
-        raise ValidationError(
-            {
-                "verbruiksobject": _(
-                    "Het verbruiksobject komt niet overeen met het schema gedefinieerd op het product type."
-                )
-            },
-        )
-
-
-def validate_dataobject(dataobject, product_type):
-    try:
-        if dataobject is not None and product_type.dataobject_schema is not None:
-            product_type.dataobject_schema.validate(dataobject)
-    except ValidationError:
-        raise ValidationError(
-            {
-                "dataobject": _(
-                    "Het dataobject komt niet overeen met het schema gedefinieerd op het product type."
-                )
-            },
-        )

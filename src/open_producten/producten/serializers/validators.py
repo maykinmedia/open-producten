@@ -3,17 +3,15 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.serializers import Serializer
 
-from open_producten.producten.models.eigenaar import (
-    validate_identifier,
-    validate_vestingsnummer_only_with_kvk,
-)
-from open_producten.producten.models.product import (
-    validate_dataobject,
-    validate_dates,
-    validate_eind_datum,
-    validate_start_datum,
-    validate_status,
-    validate_verbruiksobject,
+from open_producten.producten.models.validators import (
+    validate_eigenaar_identifier,
+    validate_eigenaar_vestingsnummer_only_with_kvk,
+    validate_product_dataobject,
+    validate_product_dates,
+    validate_product_eind_datum,
+    validate_product_start_datum,
+    validate_product_status,
+    validate_product_verbruiksobject,
 )
 from open_producten.utils.serializers import get_from_serializer_data_or_instance
 
@@ -30,7 +28,7 @@ class EigenaarIdentifierValidator:
             "klantnummer", value, serializer
         )
         try:
-            validate_identifier(bsn, kvk_nummer, klantnummer)
+            validate_eigenaar_identifier(bsn, kvk_nummer, klantnummer)
         except ValidationError as e:
             raise serializers.ValidationError(e.message)
 
@@ -46,7 +44,7 @@ class EigenaarVestigingsnummerValidator:
             "vestigingsnummer", value, serializer
         )
         try:
-            validate_vestingsnummer_only_with_kvk(kvk_nummer, vestigingsnummer)
+            validate_eigenaar_vestingsnummer_only_with_kvk(kvk_nummer, vestigingsnummer)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
 
@@ -77,7 +75,7 @@ class StatusValidator:
 
         try:
             if status_changed or product_type_changed:
-                validate_status(status, product_type)
+                validate_product_status(status, product_type)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
 
@@ -103,10 +101,10 @@ class DateValidator:
         )
         try:
             if start_datum_changed or product_type_changed:
-                validate_start_datum(start_datum, product_type)
+                validate_product_start_datum(start_datum, product_type)
             if eind_datum_changed or product_type_changed:
-                validate_eind_datum(eind_datum, product_type)
-            validate_dates(start_datum, eind_datum)
+                validate_product_eind_datum(eind_datum, product_type)
+            validate_product_dates(start_datum, eind_datum)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
 
@@ -122,7 +120,7 @@ class VerbruiksObjectValidator:
             "product_type", value, serializer
         )
         try:
-            validate_verbruiksobject(verbruiksobject, product_type)
+            validate_product_verbruiksobject(verbruiksobject, product_type)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
 
@@ -138,6 +136,6 @@ class DataObjectValidator:
             "product_type", value, serializer
         )
         try:
-            validate_dataobject(dataobject, product_type)
+            validate_product_dataobject(dataobject, product_type)
         except ValidationError as e:
             raise serializers.ValidationError(e.message_dict)
