@@ -37,6 +37,38 @@ paths:
           format: date-time
         description: De datum waarop het object is aangemaakt.
       - in: query
+        name: dataobject_attr
+        schema:
+          type: string
+        description: |2
+
+          Only include objects that have attributes with certain values.
+
+          een json filter parameter heeft de format `key__operator__waarde`.
+          `key` is de naam van de attribuut, `operator` is de operator die gebruikt moet worden en `waarde` is de waarde waarop zal worden gezocht.
+
+          Waardes kunnen een string, nummer of datum (ISO format; YYYY-MM-DD) zijn.
+
+          De ondersteunde operators zijn:
+          * `exact` - gelijk aan
+          * `gt` - grooter dan
+          * `gte` - grooter dan of gelijk aan
+          * `lt` - kleiner dan
+          * `lte` - kleiner dan of gelijk aan
+          * `icontains` - case-insensitive partial match
+          * `in` - in een lijst van waarden gescheiden door `|`
+
+          `value` mag geen dubbele underscore of komma's bevatten.
+          `key` mag ook geen komma's bevatten maar kan dubbele underscores gebruiken voor geneste attributen.
+
+          Voorbeeld: om producten met `kenteken`: `AA-111-B` in het dataobject vinden: `dataobject_attr=kenteken__exact__AA-111-B`.
+          Als `kenteken` genest zit in `auto`: `dataobject_attr=auto__kenteken__exact__AA-111-B`
+
+
+
+          Meerdere filters kunnen worden toegevoegd door `dataobject_attr` meerdere keren aan het request toe te voegen.
+          Bijvoorbeeld: `dataobject_attr=kenteken__exact__AA-111-B&objectdata_attr=zone__exact__B`
+      - in: query
         name: eind_datum
         schema:
           type: string
@@ -192,6 +224,38 @@ paths:
           type: string
           format: date-time
         description: De datum waarop het object voor het laatst is gewijzigd.
+      - in: query
+        name: verbruiksobject_attr
+        schema:
+          type: string
+        description: |2
+
+          Only include objects that have attributes with certain values.
+
+          een json filter parameter heeft de format `key__operator__waarde`.
+          `key` is de naam van de attribuut, `operator` is de operator die gebruikt moet worden en `waarde` is de waarde waarop zal worden gezocht.
+
+          Waardes kunnen een string, nummer of datum (ISO format; YYYY-MM-DD) zijn.
+
+          De ondersteunde operators zijn:
+          * `exact` - gelijk aan
+          * `gt` - grooter dan
+          * `gte` - grooter dan of gelijk aan
+          * `lt` - kleiner dan
+          * `lte` - kleiner dan of gelijk aan
+          * `icontains` - case-insensitive partial match
+          * `in` - in een lijst van waarden gescheiden door `|`
+
+          `value` mag geen dubbele underscore of komma's bevatten.
+          `key` mag ook geen komma's bevatten maar kan dubbele underscores gebruiken voor geneste attributen.
+
+          Voorbeeld: om producten met `kenteken`: `AA-111-B` in het dataobject vinden: `dataobject_attr=kenteken__exact__AA-111-B`.
+          Als `kenteken` genest zit in `auto`: `dataobject_attr=auto__kenteken__exact__AA-111-B`
+
+
+
+          Meerdere filters kunnen worden toegevoegd door `dataobject_attr` meerdere keren aan het request toe te voegen.
+          Bijvoorbeeld: `dataobject_attr=kenteken__exact__AA-111-B&objectdata_attr=zone__exact__B`
       tags:
       - producten
       security:
