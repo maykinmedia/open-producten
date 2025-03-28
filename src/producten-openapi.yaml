@@ -58,8 +58,7 @@ paths:
           * `icontains` - case-insensitive partial match
           * `in` - in een lijst van waarden gescheiden door `|`
 
-          `value` mag geen dubbele underscore of komma's bevatten.
-          `key` mag ook geen komma's bevatten maar kan dubbele underscores gebruiken voor geneste attributen.
+          `key` mag ook geen komma's bevatten.
 
           Voorbeeld: om producten met `kenteken`: `AA-111-B` in het dataobject vinden: `dataobject_attr=kenteken__exact__AA-111-B`.
           Als `kenteken` genest zit in `auto`: `dataobject_attr=auto__kenteken__exact__AA-111-B`
@@ -246,8 +245,7 @@ paths:
           * `icontains` - case-insensitive partial match
           * `in` - in een lijst van waarden gescheiden door `|`
 
-          `value` mag geen dubbele underscore of komma's bevatten.
-          `key` mag ook geen komma's bevatten maar kan dubbele underscores gebruiken voor geneste attributen.
+          `key` mag ook geen komma's bevatten.
 
           Voorbeeld: om producten met `kenteken`: `AA-111-B` in het dataobject vinden: `dataobject_attr=kenteken__exact__AA-111-B`.
           Als `kenteken` genest zit in `auto`: `dataobject_attr=auto__kenteken__exact__AA-111-B`

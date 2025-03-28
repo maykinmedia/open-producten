@@ -2,7 +2,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.core.validators import MinValueValidator, ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
