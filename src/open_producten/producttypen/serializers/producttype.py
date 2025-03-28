@@ -46,7 +46,7 @@ class NestedThemaSerializer(serializers.ModelSerializer):
 @extend_schema_serializer(
     examples=[
         OpenApiExample(
-            "product type response",
+            "producttype response",
             value={
                 "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
                 "uniforme_product_naam": "parkeervergunning",
@@ -177,7 +177,7 @@ class NestedThemaSerializer(serializers.ModelSerializer):
             response_only=True,
         ),
         OpenApiExample(
-            "product type request",
+            "producttype request",
             value={
                 "uniforme_product_naam": "aanleunwoning",
                 "thema_ids": ["497f6eca-6276-4993-bfeb-53cbbbba6f08"],
@@ -275,15 +275,15 @@ class ProductTypeSerializer(TranslatableModelSerializer):
     )
 
     naam = serializers.CharField(
-        required=True, max_length=255, help_text=_("naam van het product type.")
+        required=True, max_length=255, help_text=_("naam van het producttype.")
     )
     samenvatting = serializers.CharField(
         required=True,
-        help_text=_("Korte beschrijving van het product type."),
+        help_text=_("Korte beschrijving van het producttype."),
     )
 
     taal = serializers.SerializerMethodField(
-        read_only=True, help_text=_("De huidige taal van het product type.")
+        read_only=True, help_text=_("De huidige taal van het producttype.")
     )
 
     @extend_schema_field(OpenApiTypes.STR)
@@ -333,31 +333,31 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         externe_codes = validated_data.pop("externe_codes", [])
         parameters = validated_data.pop("parameters", [])
 
-        product_type = ProductType.objects.create(**validated_data)
-        product_type.themas.set(themas)
-        product_type.locaties.set(locaties)
-        product_type.organisaties.set(organisaties)
-        product_type.contacten.set(contacten)
+        producttype = ProductType.objects.create(**validated_data)
+        producttype.themas.set(themas)
+        producttype.locaties.set(locaties)
+        producttype.organisaties.set(organisaties)
+        producttype.contacten.set(contacten)
 
         set_nested_serializer(
             [
-                externe_code | {"product_type": product_type.id}
+                externe_code | {"producttype": producttype.id}
                 for externe_code in externe_codes
             ],
             ExterneCodeSerializer,
         )
 
         set_nested_serializer(
-            [parameter | {"product_type": product_type.id} for parameter in parameters],
+            [parameter | {"producttype": producttype.id} for parameter in parameters],
             ParameterSerializer,
         )
 
-        product_type.set_current_language("nl")
-        product_type.naam = naam
-        product_type.samenvatting = samenvatting
+        producttype.set_current_language("nl")
+        producttype.naam = naam
+        producttype.samenvatting = samenvatting
 
-        product_type.add_contact_organisaties()
-        return product_type
+        producttype.add_contact_organisaties()
+        return producttype
 
     @transaction.atomic()
     def update(self, instance, validated_data):
@@ -386,7 +386,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
             instance.externe_codes.all().delete()
             set_nested_serializer(
                 [
-                    externe_code | {"product_type": instance.id}
+                    externe_code | {"producttype": instance.id}
                     for externe_code in externe_codes
                 ],
                 ExterneCodeSerializer,
@@ -395,7 +395,7 @@ class ProductTypeSerializer(TranslatableModelSerializer):
         if parameters is not None:
             instance.parameters.all().delete()
             set_nested_serializer(
-                [parameter | {"product_type": instance.id} for parameter in parameters],
+                [parameter | {"producttype": instance.id} for parameter in parameters],
                 ParameterSerializer,
             )
 

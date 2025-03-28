@@ -32,13 +32,13 @@ class TestProductTypePrijs(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
-        self.product_type = ProductTypeFactory()
+        self.producttype = ProductTypeFactory()
         self.prijs_data = {
             "actief_vanaf": datetime.date(2024, 1, 2),
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
         self.prijs = PrijsFactory.create(
-            product_type=self.product_type, actief_vanaf=datetime.date(2024, 1, 2)
+            producttype=self.producttype, actief_vanaf=datetime.date(2024, 1, 2)
         )
 
         DmnConfigFactory.create(tabel_endpoint="https://maykinmedia.nl")
@@ -60,7 +60,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "actief_vanaf": [
                     ErrorDetail(string=_("This field is required."), code="required")
                 ],
-                "product_type_id": [
+                "producttype_id": [
                     ErrorDetail(_("This field is required."), code="required")
                 ],
             },
@@ -142,7 +142,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": datetime.date(2024, 1, 3),
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.post(self.path, data)
@@ -160,7 +160,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": datetime.date(2024, 1, 3),
             "prijsopties": [{"id": id, "bedrag": "74.99", "beschrijving": "spoed"}],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.post(self.path, data)
@@ -182,7 +182,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     "beschrijving": "base",
                 }
             ],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.post(self.path, data)
@@ -202,7 +202,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     "beschrijving": "spoed",
                 }
             ],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.post(self.path, data)
@@ -226,7 +226,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     "beschrijving": "spoed",
                 }
             ],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.post(self.path, data)
@@ -250,7 +250,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsopties": [],
         }
 
@@ -277,7 +277,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsregels": [],
         }
 
@@ -303,7 +303,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsregels": [
                 {
                     "tabel_endpoint": "https://maykinmedia.nl",
@@ -327,7 +327,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsregels": [],
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
         }
@@ -347,7 +347,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsopties": [
                 {
                     "id": optie_to_be_updated.id,
@@ -372,7 +372,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsregels": [
                 {
                     "id": regel_to_be_updated.id,
@@ -401,7 +401,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
             "prijsopties": [{"bedrag": "20", "beschrijving": "test"}],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.put(self.detail_path, data)
@@ -424,7 +424,7 @@ class TestProductTypePrijs(BaseApiTestCase):
                     "beschrijving": "test",
                 }
             ],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
 
         response = self.client.put(self.detail_path, data)
@@ -443,7 +443,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving}
             ],
@@ -472,7 +472,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsregels": [
                 {
                     "id": regel.id,
@@ -505,7 +505,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         non_existing_id = uuid.uuid4()
 
         data = {
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "actief_vanaf": self.prijs.actief_vanaf,
             "prijsopties": [
                 {"id": non_existing_id, "bedrag": "20", "beschrijving": "test"}
@@ -534,7 +534,7 @@ class TestProductTypePrijs(BaseApiTestCase):
         non_existing_id = uuid.uuid4()
 
         data = {
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "actief_vanaf": self.prijs.actief_vanaf,
             "prijsregels": [
                 {
@@ -569,7 +569,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsopties": [
                 {"id": optie.id, "bedrag": "20", "beschrijving": optie.beschrijving},
                 {"id": optie.id, "bedrag": "40", "beschrijving": optie.beschrijving},
@@ -597,7 +597,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsregels": [
                 {
                     "id": regel.id,
@@ -632,7 +632,7 @@ class TestProductTypePrijs(BaseApiTestCase):
     def test_update_prijs_with_opties_and_regels(self):
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "prijsregels": [
                 {
@@ -883,7 +883,7 @@ class TestProductTypePrijs(BaseApiTestCase):
     def test_partial_update_prijs_with_opties_and_regels(self):
         data = {
             "actief_vanaf": self.prijs.actief_vanaf,
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
             "prijsopties": [{"bedrag": "74.99", "beschrijving": "spoed"}],
             "prijsregels": [
                 {
@@ -911,7 +911,7 @@ class TestProductTypePrijs(BaseApiTestCase):
 
     def test_read_prijzen(self):
         prijs = PrijsFactory.create(
-            product_type=self.product_type, actief_vanaf=datetime.date(2024, 2, 2)
+            producttype=self.producttype, actief_vanaf=datetime.date(2024, 2, 2)
         )
         response = self.client.get(self.path)
 
@@ -923,14 +923,14 @@ class TestProductTypePrijs(BaseApiTestCase):
                 "actief_vanaf": str(self.prijs.actief_vanaf),
                 "prijsopties": [],
                 "prijsregels": [],
-                "product_type_id": self.product_type.id,
+                "producttype_id": self.producttype.id,
             },
             {
                 "id": str(prijs.id),
                 "actief_vanaf": str(prijs.actief_vanaf),
                 "prijsopties": [],
                 "prijsregels": [],
-                "product_type_id": self.product_type.id,
+                "producttype_id": self.producttype.id,
             },
         ]
         self.assertCountEqual(response.data["results"], expected_data)
@@ -943,7 +943,7 @@ class TestProductTypePrijs(BaseApiTestCase):
             "actief_vanaf": str(self.prijs.actief_vanaf),
             "prijsopties": [],
             "prijsregels": [],
-            "product_type_id": self.product_type.id,
+            "producttype_id": self.producttype.id,
         }
         self.assertEqual(response.data, expected_data)
 

@@ -21,7 +21,7 @@ class Parameter(BaseModel):
         validators=[RegexValidator(r"^[^:\[\]]+$")],
     )
 
-    product_type = models.ForeignKey(
+    producttype = models.ForeignKey(
         "ProductType",
         verbose_name=_("producttype"),
         on_delete=models.CASCADE,
@@ -32,4 +32,4 @@ class Parameter(BaseModel):
     class Meta:
         verbose_name = _("parameter")
         verbose_name_plural = _("parameters")
-        unique_together = (("product_type", "naam"),)
+        unique_together = (("producttype", "naam"),)

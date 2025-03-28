@@ -14,7 +14,7 @@ class Actie(BaseModel):
         help_text=_("naam van de actie."),
     )
 
-    product_type = models.ForeignKey(
+    producttype = models.ForeignKey(
         ProductType,
         verbose_name=_("Producttype"),
         on_delete=models.CASCADE,

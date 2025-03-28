@@ -2,9 +2,6 @@ openapi: 3.0.3
 info:
   title: Open Producten API
   version: 0.0.0
-  description: |2
-
-    Open Producten is an API to manage product types and products.
   contact:
     email: support@maykinmedia.nl
     url: https://www.maykinmedia.nl
@@ -56,20 +53,20 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type__code
+        name: producttype__code
         schema:
           type: string
-        description: code van het product type.
+        description: code van het producttype.
       - in: query
-        name: product_type__id
+        name: producttype__id
         schema:
           type: string
           format: uuid
       - in: query
-        name: product_type__naam
+        name: producttype__naam
         schema:
           type: string
-        description: Naam van het product type.
+        description: Naam van het producttype.
       - in: query
         name: uniforme_product_naam
         schema:
@@ -93,7 +90,7 @@ paths:
                     previous: http://api.example.org/accounts/?page=2
                     results:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                       naam: Parkeervergunning opzegging
                       url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                   summary: actie response
@@ -135,7 +132,7 @@ paths:
             examples:
               ActieRequest:
                 value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Parkeervergunning opzegging
                   tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
                   dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -153,7 +150,7 @@ paths:
                 ActieResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Parkeervergunning opzegging
                     url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                   summary: actie response
@@ -206,7 +203,7 @@ paths:
                 ActieResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Parkeervergunning opzegging
                     url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                   summary: actie response
@@ -254,7 +251,7 @@ paths:
             examples:
               ActieRequest:
                 value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Parkeervergunning opzegging
                   tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
                   dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -272,7 +269,7 @@ paths:
                 ActieResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Parkeervergunning opzegging
                     url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                   summary: actie response
@@ -320,7 +317,7 @@ paths:
             examples:
               ActieRequest:
                 value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Parkeervergunning opzegging
                   tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
                   dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -337,7 +334,7 @@ paths:
                 ActieResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Parkeervergunning opzegging
                     url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                   summary: actie response
@@ -428,20 +425,20 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type__code
+        name: producttype__code
         schema:
           type: string
-        description: code van het product type.
+        description: code van het producttype.
       - in: query
-        name: product_type__id
+        name: producttype__id
         schema:
           type: string
           format: uuid
       - in: query
-        name: product_type__naam
+        name: producttype__naam
         schema:
           type: string
-        description: Naam van het product type.
+        description: Naam van het producttype.
       - in: query
         name: uniforme_product_naam
         schema:
@@ -466,7 +463,7 @@ paths:
                     results:
                     - id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                       bestand: https://gemeente.open-producten.nl/media/test.txt
-                      product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                      producttype_id: b035578b-e855-4b72-9f63-7868b8c4b630
                   summary: bestand response
           description: ''
         '400':
@@ -505,7 +502,7 @@ paths:
               BestandRequest:
                 value:
                   bestand: test.txt
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                 summary: bestand request
         required: true
       security:
@@ -521,7 +518,7 @@ paths:
                   value:
                     id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                     bestand: https://gemeente.open-producten.nl/media/test.txt
-                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                    producttype_id: b035578b-e855-4b72-9f63-7868b8c4b630
                   summary: bestand response
           description: ''
         '400':
@@ -556,7 +553,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type bestand.
+        description: A UUID string identifying this Producttype bestand.
         required: true
       tags:
       - bestanden
@@ -573,7 +570,7 @@ paths:
                   value:
                     id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                     bestand: https://gemeente.open-producten.nl/media/test.txt
-                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                    producttype_id: b035578b-e855-4b72-9f63-7868b8c4b630
                   summary: bestand response
           description: ''
         '400':
@@ -607,7 +604,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type bestand.
+        description: A UUID string identifying this Producttype bestand.
         required: true
       tags:
       - bestanden
@@ -620,7 +617,7 @@ paths:
               BestandRequest:
                 value:
                   bestand: test.txt
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                 summary: bestand request
         required: true
       security:
@@ -636,7 +633,7 @@ paths:
                   value:
                     id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                     bestand: https://gemeente.open-producten.nl/media/test.txt
-                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                    producttype_id: b035578b-e855-4b72-9f63-7868b8c4b630
                   summary: bestand response
           description: ''
         '400':
@@ -670,7 +667,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type bestand.
+        description: A UUID string identifying this Producttype bestand.
         required: true
       tags:
       - bestanden
@@ -683,7 +680,7 @@ paths:
               BestandRequest:
                 value:
                   bestand: test.txt
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                 summary: bestand request
       security:
       - tokenAuth: []
@@ -698,7 +695,7 @@ paths:
                   value:
                     id: da0df49a-cd71-4e24-9bae-5be8b01f2c36
                     bestand: https://gemeente.open-producten.nl/media/test.txt
-                    product_type_id: b035578b-e855-4b72-9f63-7868b8c4b630
+                    producttype_id: b035578b-e855-4b72-9f63-7868b8c4b630
                   summary: bestand response
           description: ''
         '400':
@@ -732,7 +729,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type bestand.
+        description: A UUID string identifying this Producttype bestand.
         required: true
       tags:
       - bestanden
@@ -1226,7 +1223,7 @@ paths:
                   labels:
                   - openingstijden
                   content: ma-vr 8:00-17:00
-                  product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                 summary: content element request
         required: true
       security:
@@ -1245,7 +1242,7 @@ paths:
                     - openingstijden
                     content: ma-vr 8:00-17:00
                     taal: nl
-                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                    producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                   summary: content element response
           description: ''
         '400':
@@ -1300,7 +1297,7 @@ paths:
                     - openingstijden
                     content: ma-vr 8:00-17:00
                     taal: nl
-                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                    producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                   summary: content element response
           description: ''
         '400':
@@ -1349,7 +1346,7 @@ paths:
                   labels:
                   - openingstijden
                   content: ma-vr 8:00-17:00
-                  product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                 summary: content element request
         required: true
       security:
@@ -1368,7 +1365,7 @@ paths:
                     - openingstijden
                     content: ma-vr 8:00-17:00
                     taal: nl
-                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                    producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                   summary: content element response
           description: ''
         '400':
@@ -1395,7 +1392,7 @@ paths:
           description: ''
     patch:
       operationId: content_partial_update
-      description: Als product_type_ids in een patch request wordt meegegeven wordt
+      description: Als producttype_ids in een patch request wordt meegegeven wordt
         deze lijst geheel overschreven.
       summary: Werk een CONTENTELEMENT deels bij.
       parameters:
@@ -1419,7 +1416,7 @@ paths:
                   labels:
                   - openingstijden
                   content: ma-vr 8:00-17:00
-                  product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                  producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                 summary: content element request
       security:
       - tokenAuth: []
@@ -1437,7 +1434,7 @@ paths:
                     - openingstijden
                     content: ma-vr 8:00-17:00
                     taal: nl
-                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                    producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                   summary: content element response
           description: ''
         '400':
@@ -1685,20 +1682,20 @@ paths:
         schema:
           type: integer
       - in: query
-        name: product_type__code
+        name: producttype__code
         schema:
           type: string
-        description: code van het product type.
+        description: code van het producttype.
       - in: query
-        name: product_type__id
+        name: producttype__id
         schema:
           type: string
           format: uuid
       - in: query
-        name: product_type__naam
+        name: producttype__naam
         schema:
           type: string
-        description: Naam van het product type.
+        description: Naam van het producttype.
       - in: query
         name: uniforme_product_naam
         schema:
@@ -1732,7 +1729,7 @@ paths:
                     previous: http://api.example.org/accounts/?page=2
                     results:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                       naam: Open Producten
                       url: https://github.com/maykinmedia/open-producten
                   summary: link response
@@ -1772,7 +1769,7 @@ paths:
             examples:
               LinkRequest:
                 value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Open Producten
                   url: https://github.com/maykinmedia/open-producten
                 summary: link request
@@ -1789,7 +1786,7 @@ paths:
                 LinkResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Open Producten
                     url: https://github.com/maykinmedia/open-producten
                   summary: link response
@@ -1826,7 +1823,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type link.
+        description: A UUID string identifying this Producttype link.
         required: true
       tags:
       - links
@@ -1842,7 +1839,7 @@ paths:
                 LinkResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Open Producten
                     url: https://github.com/maykinmedia/open-producten
                   summary: link response
@@ -1878,7 +1875,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type link.
+        description: A UUID string identifying this Producttype link.
         required: true
       tags:
       - links
@@ -1890,7 +1887,7 @@ paths:
             examples:
               LinkRequest:
                 value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Open Producten
                   url: https://github.com/maykinmedia/open-producten
                 summary: link request
@@ -1907,7 +1904,7 @@ paths:
                 LinkResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Open Producten
                     url: https://github.com/maykinmedia/open-producten
                   summary: link response
@@ -1943,7 +1940,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type link.
+        description: A UUID string identifying this Producttype link.
         required: true
       tags:
       - links
@@ -1955,7 +1952,7 @@ paths:
             examples:
               LinkRequest:
                 value:
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   naam: Open Producten
                   url: https://github.com/maykinmedia/open-producten
                 summary: link request
@@ -1971,7 +1968,7 @@ paths:
                 LinkResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     naam: Open Producten
                     url: https://github.com/maykinmedia/open-producten
                   summary: link response
@@ -2007,7 +2004,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type link.
+        description: A UUID string identifying this Producttype link.
         required: true
       tags:
       - links
@@ -2922,20 +2919,20 @@ paths:
           type: string
         description: id van de dmn tabel binnen de dmn instantie.
       - in: query
-        name: product_type__code
+        name: producttype__code
         schema:
           type: string
-        description: code van het product type.
+        description: code van het producttype.
       - in: query
-        name: product_type__id
+        name: producttype__id
         schema:
           type: string
           format: uuid
       - in: query
-        name: product_type__naam
+        name: producttype__naam
         schema:
           type: string
-        description: Naam van het product type.
+        description: Naam van het producttype.
       - in: query
         name: uniforme_product_naam
         schema:
@@ -2959,7 +2956,7 @@ paths:
                     previous: http://api.example.org/accounts/?page=2
                     results:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                       prijsopties:
                       - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                         bedrag: '50.99'
@@ -2973,7 +2970,7 @@ paths:
                     previous: http://api.example.org/accounts/?page=2
                     results:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                      product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                      producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                       prijsregels:
                       - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                         url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -3021,7 +3018,7 @@ paths:
                     beschrijving: normaal
                   - bedrag: '70.99'
                     beschrijving: spoed
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
                 summary: prijs met opties request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
@@ -3032,7 +3029,7 @@ paths:
                   - tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
                     dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     beschrijving: base
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
                 summary: prijs met regels request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
@@ -3050,7 +3047,7 @@ paths:
                 PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsopties:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       bedrag: '50.99'
@@ -3060,7 +3057,7 @@ paths:
                 PrijsMetRegelsResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsregels:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -3116,7 +3113,7 @@ paths:
                 PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsopties:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       bedrag: '50.99'
@@ -3126,7 +3123,7 @@ paths:
                 PrijsMetRegelsResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsregels:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -3182,7 +3179,7 @@ paths:
                     beschrijving: normaal
                   - bedrag: '70.99'
                     beschrijving: spoed
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
                 summary: prijs met opties request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
@@ -3193,7 +3190,7 @@ paths:
                   - tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
                     dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     beschrijving: base
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
                 summary: prijs met regels request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
@@ -3211,7 +3208,7 @@ paths:
                 PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsopties:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       bedrag: '50.99'
@@ -3221,7 +3218,7 @@ paths:
                 PrijsMetRegelsResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsregels:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -3277,7 +3274,7 @@ paths:
                     beschrijving: normaal
                   - bedrag: '70.99'
                     beschrijving: spoed
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
                 summary: prijs met opties request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
@@ -3288,7 +3285,7 @@ paths:
                   - tabel_endpoint: https://gemeente-a-flowable/dmn-repository/decision-tables
                     dmn_tabel_id: 46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
                     beschrijving: base
-                  product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                  producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                   actief_vanaf: '2024-12-01'
                 summary: prijs met regels request
                 description: prijsOptie bedragen kunnen worden ingevuld als een getal
@@ -3305,7 +3302,7 @@ paths:
                 PrijsMetOptiesResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsopties:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       bedrag: '50.99'
@@ -3315,7 +3312,7 @@ paths:
                 PrijsMetRegelsResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
-                    product_type_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
+                    producttype_id: 95792000-d57f-4d3a-b14c-c4c7aa964907
                     prijsregels:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       url: https://gemeente-a-flowable/dmn-repository/decision-tables/46aa6b3a-c0a1-11e6-bc93-6ab56fad108a
@@ -3413,7 +3410,7 @@ paths:
         name: code
         schema:
           type: string
-        description: code van het product type.
+        description: code van het producttype.
       - in: query
         name: externe_code
         schema:
@@ -3533,7 +3530,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductTypeList'
               examples:
-                ProductTypeResponse:
+                ProducttypeResponse:
                   value:
                     count: 123
                     next: http://api.example.org/accounts/?page=4
@@ -3641,7 +3638,7 @@ paths:
                       keywords:
                       - auto
                       interne_opmerkingen: interne opmerkingen...
-                  summary: product type response
+                  summary: producttype response
           description: ''
         '400':
           content:
@@ -3676,7 +3673,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
             examples:
-              ProductTypeRequest:
+              ProducttypeRequest:
                 value:
                   uniforme_product_naam: aanleunwoning
                   thema_ids:
@@ -3707,7 +3704,7 @@ paths:
                     waarde: inwoners
                   verbruiksobject_schema_naam: verbruik_schema
                   dataobject_schema: data_schema
-                summary: product type request
+                summary: producttype request
         required: true
       security:
       - tokenAuth: []
@@ -3718,7 +3715,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
               examples:
-                ProductTypeResponse:
+                ProducttypeResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     uniforme_product_naam: parkeervergunning
@@ -3822,7 +3819,7 @@ paths:
                     keywords:
                     - auto
                     interne_opmerkingen: interne opmerkingen...
-                  summary: product type response
+                  summary: producttype response
           description: ''
         '400':
           content:
@@ -3856,7 +3853,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       tags:
       - producttypen
@@ -3869,7 +3866,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
               examples:
-                ProductTypeResponse:
+                ProducttypeResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     uniforme_product_naam: parkeervergunning
@@ -3973,7 +3970,7 @@ paths:
                     keywords:
                     - auto
                     interne_opmerkingen: interne opmerkingen...
-                  summary: product type response
+                  summary: producttype response
           description: ''
         '400':
           content:
@@ -4006,7 +4003,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       tags:
       - producttypen
@@ -4016,7 +4013,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ProductTypeRequest'
             examples:
-              ProductTypeRequest:
+              ProducttypeRequest:
                 value:
                   uniforme_product_naam: aanleunwoning
                   thema_ids:
@@ -4047,7 +4044,7 @@ paths:
                     waarde: inwoners
                   verbruiksobject_schema_naam: verbruik_schema
                   dataobject_schema: data_schema
-                summary: product type request
+                summary: producttype request
         required: true
       security:
       - tokenAuth: []
@@ -4058,7 +4055,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
               examples:
-                ProductTypeResponse:
+                ProducttypeResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     uniforme_product_naam: parkeervergunning
@@ -4162,7 +4159,7 @@ paths:
                     keywords:
                     - auto
                     interne_opmerkingen: interne opmerkingen...
-                  summary: product type response
+                  summary: producttype response
           description: ''
         '400':
           content:
@@ -4197,7 +4194,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       tags:
       - producttypen
@@ -4207,7 +4204,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedProductTypeRequest'
             examples:
-              ProductTypeRequest:
+              ProducttypeRequest:
                 value:
                   uniforme_product_naam: aanleunwoning
                   thema_ids:
@@ -4238,7 +4235,7 @@ paths:
                     waarde: inwoners
                   verbruiksobject_schema_naam: verbruik_schema
                   dataobject_schema: data_schema
-                summary: product type request
+                summary: producttype request
       security:
       - tokenAuth: []
       responses:
@@ -4248,7 +4245,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductType'
               examples:
-                ProductTypeResponse:
+                ProducttypeResponse:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     uniforme_product_naam: parkeervergunning
@@ -4352,7 +4349,7 @@ paths:
                     keywords:
                     - auto
                     interne_opmerkingen: interne opmerkingen...
-                  summary: product type response
+                  summary: producttype response
           description: ''
         '400':
           content:
@@ -4385,7 +4382,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       tags:
       - producttypen
@@ -4427,7 +4424,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       tags:
       - producttypen
@@ -4481,7 +4478,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       - in: query
         name: labels
@@ -4509,7 +4506,7 @@ paths:
                     - openingstijden
                     content: ma-vr 8:00-17:00
                     taal: nl
-                    product_type_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
+                    producttype_id: 5f6a2219-5768-4e11-8a8e-ffbafff32482
                   summary: content element response
           description: ''
         '400':
@@ -4545,7 +4542,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       - in: path
         name: taal
@@ -4601,7 +4598,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       - in: path
         name: taal
@@ -4656,7 +4653,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: A UUID string identifying this Product type.
+        description: A UUID string identifying this Producttype.
         required: true
       - in: path
         name: taal
@@ -5211,7 +5208,7 @@ paths:
                       aanmaak_datum: '2019-08-24T14:15:22Z'
                       update_datum: '2019-08-24T14:15:22Z'
                       hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
-                      product_typen:
+                      producttypen:
                       - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                         code: 129380-c21231
                         keywords:
@@ -5260,7 +5257,7 @@ paths:
               ThemaRequest:
                 value:
                   hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
-                  product_type_ids:
+                  producttype_ids:
                   - 95792000-d57f-4d3a-b14c-c4c7aa964907
                   gepubliceerd: true
                   naam: Parkeren
@@ -5285,7 +5282,7 @@ paths:
                     aanmaak_datum: '2019-08-24T14:15:22Z'
                     update_datum: '2019-08-24T14:15:22Z'
                     hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
-                    product_typen:
+                    producttypen:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       code: 129380-c21231
                       keywords:
@@ -5352,7 +5349,7 @@ paths:
                     aanmaak_datum: '2019-08-24T14:15:22Z'
                     update_datum: '2019-08-24T14:15:22Z'
                     hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
-                    product_typen:
+                    producttypen:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       code: 129380-c21231
                       keywords:
@@ -5409,7 +5406,7 @@ paths:
               ThemaRequest:
                 value:
                   hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
-                  product_type_ids:
+                  producttype_ids:
                   - 95792000-d57f-4d3a-b14c-c4c7aa964907
                   gepubliceerd: true
                   naam: Parkeren
@@ -5434,7 +5431,7 @@ paths:
                     aanmaak_datum: '2019-08-24T14:15:22Z'
                     update_datum: '2019-08-24T14:15:22Z'
                     hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
-                    product_typen:
+                    producttypen:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       code: 129380-c21231
                       keywords:
@@ -5471,7 +5468,7 @@ paths:
           description: ''
     patch:
       operationId: themas_partial_update
-      description: Als product_type_ids in een patch request wordt meegegeven wordt
+      description: Als producttype_ids in een patch request wordt meegegeven wordt
         deze lijst geheel overschreven.
       summary: Werk een THEMA deels bij.
       parameters:
@@ -5493,7 +5490,7 @@ paths:
               ThemaRequest:
                 value:
                   hoofd_thema: 5f6a2219-5768-4e11-8a8e-ffbafff32482
-                  product_type_ids:
+                  producttype_ids:
                   - 95792000-d57f-4d3a-b14c-c4c7aa964907
                   gepubliceerd: true
                   naam: Parkeren
@@ -5517,7 +5514,7 @@ paths:
                     aanmaak_datum: '2019-08-24T14:15:22Z'
                     update_datum: '2019-08-24T14:15:22Z'
                     hoofd_thema: 41ec14a8-ca7d-43a9-a4a8-46f9587c8d91
-                    product_typen:
+                    producttypen:
                     - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                       code: 129380-c21231
                       keywords:
@@ -5610,13 +5607,13 @@ components:
           format: uri
           readOnly: true
           description: De url naar de dmn tabel.
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - id
       - naam
-      - product_type_id
+      - producttype_id
       - url
     ActieRequest:
       type: object
@@ -5638,13 +5635,13 @@ components:
           writeOnly: true
           minLength: 1
           description: id van de dmn tabel binnen de dmn instantie.
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - dmn_tabel_id
       - naam
-      - product_type_id
+      - producttype_id
       - tabel_endpoint
     Bestand:
       type: object
@@ -5656,25 +5653,25 @@ components:
         bestand:
           type: string
           format: uri
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - bestand
       - id
-      - product_type_id
+      - producttype_id
     BestandRequest:
       type: object
       properties:
         bestand:
           type: string
           format: binary
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - bestand
-      - product_type_id
+      - producttype_id
     Contact:
       type: object
       properties:
@@ -5763,7 +5760,7 @@ components:
           type: array
           items:
             type: string
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
         taal:
@@ -5773,7 +5770,7 @@ components:
       required:
       - content
       - id
-      - product_type_id
+      - producttype_id
       - taal
     ContentElementRequest:
       type: object
@@ -5789,12 +5786,12 @@ components:
           items:
             type: string
             minLength: 1
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - content
-      - product_type_id
+      - producttype_id
     ContentElementTranslation:
       type: object
       properties:
@@ -5889,13 +5886,13 @@ components:
           format: uri
           description: Url van de link.
           maxLength: 200
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - id
       - naam
-      - product_type_id
+      - producttype_id
       - url
     LinkRequest:
       type: object
@@ -5911,12 +5908,12 @@ components:
           minLength: 1
           description: Url van de link.
           maxLength: 200
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
       required:
       - naam
-      - product_type_id
+      - producttype_id
       - url
     Locatie:
       type: object
@@ -6216,7 +6213,7 @@ components:
           readOnly: true
         code:
           type: string
-          description: code van het product type.
+          description: code van het producttype.
           maxLength: 255
         keywords:
           type: array
@@ -6257,7 +6254,7 @@ components:
         code:
           type: string
           minLength: 1
-          description: code van het product type.
+          description: code van het producttype.
           maxLength: 255
         keywords:
           type: array
@@ -6698,7 +6695,7 @@ components:
           writeOnly: true
           minLength: 1
           description: id van de dmn tabel binnen de dmn instantie.
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
     PatchedBestandRequest:
@@ -6707,7 +6704,7 @@ components:
         bestand:
           type: string
           format: binary
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
     PatchedContactRequest:
@@ -6755,7 +6752,7 @@ components:
           items:
             type: string
             minLength: 1
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
     PatchedJsonSchemaRequest:
@@ -6783,7 +6780,7 @@ components:
           minLength: 1
           description: Url van de link.
           maxLength: 200
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
     PatchedLocatieRequest:
@@ -6862,7 +6859,7 @@ components:
     PatchedPrijsRequest:
       type: object
       properties:
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
         prijsopties:
@@ -6929,12 +6926,12 @@ components:
         naam:
           type: string
           minLength: 1
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
           minLength: 1
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
         externe_codes:
           type: array
           items:
@@ -6949,7 +6946,7 @@ components:
         code:
           type: string
           minLength: 1
-          description: code van het product type.
+          description: code van het producttype.
           maxLength: 255
         toegestane_statussen:
           type: array
@@ -6964,7 +6961,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         interne_opmerkingen:
           type: string
-          description: Interne opmerkingen over het product type.
+          description: Interne opmerkingen over het producttype.
     PatchedProductTypeTranslationRequest:
       type: object
       properties:
@@ -6996,7 +6993,7 @@ components:
           format: uuid
           nullable: true
           description: Het hoofd thema waaronder dit thema valt.
-        product_type_ids:
+        producttype_ids:
           type: array
           items:
             type: string
@@ -7010,7 +7007,7 @@ components:
           type: string
           format: uuid
           readOnly: true
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
         prijsopties:
@@ -7029,7 +7026,7 @@ components:
       required:
       - actief_vanaf
       - id
-      - product_type_id
+      - producttype_id
     PrijsOptie:
       type: object
       properties:
@@ -7115,7 +7112,7 @@ components:
     PrijsRequest:
       type: object
       properties:
-        product_type_id:
+        producttype_id:
           type: string
           format: uuid
         prijsopties:
@@ -7133,7 +7130,7 @@ components:
           description: De datum vanaf wanneer de prijs actief is.
       required:
       - actief_vanaf
-      - product_type_id
+      - producttype_id
     ProductType:
       type: object
       description: Serializer that saves :class:`TranslatedFieldsField` automatically.
@@ -7195,15 +7192,15 @@ components:
           readOnly: true
         naam:
           type: string
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
         taal:
           type: string
           readOnly: true
-          description: De huidige taal van het product type.
+          description: De huidige taal van het producttype.
         externe_codes:
           type: array
           items:
@@ -7227,7 +7224,7 @@ components:
           description: De datum waarop het object voor het laatst is gewijzigd.
         code:
           type: string
-          description: code van het product type.
+          description: code van het producttype.
           maxLength: 255
         toegestane_statussen:
           type: array
@@ -7242,7 +7239,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         interne_opmerkingen:
           type: string
-          description: Interne opmerkingen over het product type.
+          description: Interne opmerkingen over het producttype.
       required:
       - aanmaak_datum
       - acties
@@ -7271,7 +7268,7 @@ components:
           readOnly: true
         code:
           type: string
-          description: code van het product type.
+          description: code van het producttype.
           maxLength: 255
         upl_naam:
           type: string
@@ -7343,12 +7340,12 @@ components:
         naam:
           type: string
           minLength: 1
-          description: naam van het product type.
+          description: naam van het producttype.
           maxLength: 255
         samenvatting:
           type: string
           minLength: 1
-          description: Korte beschrijving van het product type.
+          description: Korte beschrijving van het producttype.
         externe_codes:
           type: array
           items:
@@ -7363,7 +7360,7 @@ components:
         code:
           type: string
           minLength: 1
-          description: code van het product type.
+          description: code van het producttype.
           maxLength: 255
         toegestane_statussen:
           type: array
@@ -7378,7 +7375,7 @@ components:
           description: Lijst van keywords waarop kan worden gezocht.
         interne_opmerkingen:
           type: string
-          description: Interne opmerkingen over het product type.
+          description: Interne opmerkingen over het producttype.
       required:
       - code
       - naam
@@ -7450,7 +7447,7 @@ components:
           format: uuid
           nullable: true
           description: Het hoofd thema waaronder dit thema valt.
-        product_typen:
+        producttypen:
           type: array
           items:
             $ref: '#/components/schemas/NestedProductType'
@@ -7460,7 +7457,7 @@ components:
       - hoofd_thema
       - id
       - naam
-      - product_typen
+      - producttypen
       - update_datum
     ThemaRequest:
       type: object
@@ -7481,7 +7478,7 @@ components:
           format: uuid
           nullable: true
           description: Het hoofd thema waaronder dit thema valt.
-        product_type_ids:
+        producttype_ids:
           type: array
           items:
             type: string
@@ -7491,7 +7488,7 @@ components:
       required:
       - hoofd_thema
       - naam
-      - product_type_ids
+      - producttype_ids
     ToegestaneStatussenEnum:
       enum:
       - gereed

@@ -7,18 +7,18 @@ from .producttype import ProductType
 
 
 class Bestand(BaseModel):
-    product_type = models.ForeignKey(
+    producttype = models.ForeignKey(
         ProductType,
-        verbose_name=_("product type"),
+        verbose_name=_("producttype"),
         related_name="bestanden",
         on_delete=models.CASCADE,
-        help_text=_("Het product type waarbij dit bestand hoort."),
+        help_text=_("Het producttype waarbij dit bestand hoort."),
     )
     bestand = models.FileField(verbose_name=_("bestand"))
 
     class Meta:
-        verbose_name = _("Product type bestand")
-        verbose_name_plural = _("Product type bestanden")
+        verbose_name = _("Producttype bestand")
+        verbose_name_plural = _("Producttype bestanden")
 
     def __str__(self):
-        return f"{self.product_type}: {self.bestand.name}"
+        return f"{self.producttype}: {self.bestand.name}"

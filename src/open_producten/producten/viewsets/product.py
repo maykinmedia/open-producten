@@ -14,15 +14,15 @@ from open_producten.utils.views import OrderedModelViewSet
 
 class ProductFilterSet(FilterSet):
     uniforme_product_naam = django_filters.CharFilter(
-        field_name="product_type__uniforme_product_naam__naam",
+        field_name="producttype__uniforme_product_naam__naam",
         lookup_expr="exact",
         help_text=_("Uniforme product naam vanuit de UPL."),
     )
 
-    product_type__naam = TranslationFilter(
-        field_name="product_type__naam",
+    producttype__naam = TranslationFilter(
+        field_name="producttype__naam",
         lookup_expr="exact",
-        help_text=_("Naam van het product type."),
+        help_text=_("Naam van het producttype."),
     )
 
     class Meta:
@@ -32,8 +32,8 @@ class ProductFilterSet(FilterSet):
             "status": ["exact"],
             "frequentie": ["exact"],
             "prijs": ["exact", "gte", "lte"],
-            "product_type__code": ["exact"],
-            "product_type__id": ["exact"],
+            "producttype__code": ["exact"],
+            "producttype__id": ["exact"],
             "start_datum": ["exact", "gte", "lte"],
             "eind_datum": ["exact", "gte", "lte"],
             "aanmaak_datum": ["exact", "gte", "lte"],
