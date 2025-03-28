@@ -1,4 +1,3 @@
-from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 import django_filters
@@ -24,6 +23,8 @@ from open_producten.utils.filters import (
     CharArrayFilter,
     ChoiceArrayFilter,
     FilterSet,
+    ManyCharFilter,
+    ManyRegexValidator,
     TranslationFilter,
 )
 from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetMixin
@@ -32,15 +33,15 @@ from open_producten.utils.views import OrderedModelViewSet, TranslatableViewSetM
 class ProductTypeFilterSet(FilterSet):
     regex = r"^\[([^:\[\]]+):([^:\[\]]+)\]$"  # [key:value] where the key and value cannot contain `[`, `]` or `:`
 
-    externe_code = django_filters.CharFilter(
+    externe_code = ManyCharFilter(
         method="filter_by_externe_code",
-        validators=[RegexValidator(regex)],
+        validators=[ManyRegexValidator(regex)],
         help_text=_("Producttype codes uit externe omgevingen. [naam:code]"),
     )
 
-    parameter = django_filters.CharFilter(
+    parameter = ManyCharFilter(
         method="filter_by_parameter",
-        validators=[RegexValidator(regex)],
+        validators=[ManyRegexValidator(regex)],
         help_text=_("Producttype parameters. [naam:waarde]"),
     )
 
@@ -73,9 +74,7 @@ class ProductTypeFilterSet(FilterSet):
     )
 
     def filter_by_externe_code(self, queryset, name, value):
-        values = self.request.GET.getlist(name)
-
-        for val in values:
+        for val in value:
             value_list = val.strip("[]").split(":")
             if len(value_list) != 2:
                 raise ParseError(_("Invalid format for externe_code query parameter."))
@@ -87,9 +86,7 @@ class ProductTypeFilterSet(FilterSet):
         return queryset
 
     def filter_by_parameter(self, queryset, name, value):
-        values = self.request.GET.getlist(name)
-
-        for val in values:
+        for val in value:
             value_list = val.strip("[]").split(":")
             if len(value_list) != 2:
                 raise ParseError(_("Invalid format for parameter query parameter."))
