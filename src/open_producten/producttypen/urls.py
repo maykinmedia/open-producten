@@ -10,6 +10,7 @@ from rest_framework.routers import DefaultRouter
 
 from open_producten.locaties.urls import LocatieRouter
 from open_producten.producttypen.viewsets import (
+    ActieViewSet,
     BestandViewSet,
     ContentElementViewSet,
     ContentLabelViewSet,
@@ -34,6 +35,7 @@ ProductTypenRouter.register("bestanden", BestandViewSet, basename="bestand")
 ProductTypenRouter.register("schemas", JsonSchemaViewSet, basename="schema")
 
 ProductTypenRouter.register("content", ContentElementViewSet, basename="content")
+ProductTypenRouter.register("acties", ActieViewSet, basename="actie")
 
 ProductTypenRouter.register(
     "contentlabels", ContentLabelViewSet, basename="contentlabel"

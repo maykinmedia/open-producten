@@ -44,6 +44,30 @@ def model_to_dict_with_related_ids(model: BaseModel) -> dict:
     return model_dict
 
 
+def set_nested_serializer(data: list[dict], serializer: type[Serializer]):
+    serializer_instance = serializer(
+        data=data,
+        many=True,
+    )
+    serializer_instance.is_valid(raise_exception=True)
+    serializer_instance.save()
+
+
+def validate_key_value_model_keys(
+    data_list: list[dict], unique_field: str, error_message: str
+):
+    seen = set()
+
+    for data in data_list:
+        if data[unique_field] in seen:
+            raise serializers.ValidationError(
+                error_message.format(data[unique_field]), code="unique"
+            )
+        seen.add(data[unique_field])
+
+    return data_list
+
+
 class DetailErrorSerializer(serializers.Serializer):
     detail = serializers.CharField()
 

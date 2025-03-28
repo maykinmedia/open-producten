@@ -32,11 +32,14 @@ class TestProductAdminForm(TestCase):
 
         form.full_clean()
 
-    @patch("open_producten.producten.admin.product.validate_status")
-    @patch("open_producten.producten.admin.product.validate_start_datum")
-    @patch("open_producten.producten.admin.product.validate_eind_datum")
+    @patch("open_producten.producten.admin.product.validate_product_status")
+    @patch("open_producten.producten.admin.product.validate_product_start_datum")
+    @patch("open_producten.producten.admin.product.validate_product_eind_datum")
     def test_status_and_dates_are_validated_when_changed(
-        self, mock_validate_status, mock_validate_start_datum, mock_validate_eind_datum
+        self,
+        mock_validate_product_status,
+        mock_validate_product_start_datum,
+        mock_validate_product_eind_datum,
     ):
         data = {
             "product_type": ProductTypeFactory.create(toegestane_statussen=["gereed"]),
@@ -55,15 +58,18 @@ class TestProductAdminForm(TestCase):
         form = ProductAdminForm(data=data, instance=product)
 
         form.full_clean()
-        mock_validate_status.assert_called_once()
-        mock_validate_start_datum.assert_called_once()
-        mock_validate_eind_datum.assert_called_once()
+        mock_validate_product_status.assert_called_once()
+        mock_validate_product_start_datum.assert_called_once()
+        mock_validate_product_eind_datum.assert_called_once()
 
-    @patch("open_producten.producten.admin.product.validate_status")
-    @patch("open_producten.producten.admin.product.validate_start_datum")
-    @patch("open_producten.producten.admin.product.validate_eind_datum")
+    @patch("open_producten.producten.admin.product.validate_product_status")
+    @patch("open_producten.producten.admin.product.validate_product_start_datum")
+    @patch("open_producten.producten.admin.product.validate_product_eind_datum")
     def test_status__and_dates_are_validated_when_product_type_is_changed(
-        self, mock_validate_status, mock_validate_start_datum, mock_validate_eind_datum
+        self,
+        mock_validate_product_status,
+        mock_validate_product_start_datum,
+        mock_validate_product_eind_datum,
     ):
         data = {
             "product_type": ProductTypeFactory.create(toegestane_statussen=["gereed"]),
@@ -79,9 +85,9 @@ class TestProductAdminForm(TestCase):
         form = ProductAdminForm(data=data, instance=product)
 
         form.full_clean()
-        mock_validate_status.assert_called_once()
-        mock_validate_start_datum.assert_called_once()
-        mock_validate_eind_datum.assert_called_once()
+        mock_validate_product_status.assert_called_once()
+        mock_validate_product_start_datum.assert_called_once()
+        mock_validate_product_eind_datum.assert_called_once()
 
     def test_get_status_choices_with_instance(self):
         product_type = ProductTypeFactory.create(toegestane_statussen=["actief"])

@@ -10,7 +10,11 @@ from freezegun import freeze_time
 from open_producten.producttypen.tests.factories import ProductTypeFactory
 
 from ...producttypen.models.producttype import ProductStateChoices
-from ..models.product import validate_eind_datum, validate_start_datum, validate_status
+from ..models.validators import (
+    validate_product_eind_datum,
+    validate_product_start_datum,
+    validate_product_status,
+)
 from .factories import ProductFactory
 
 
@@ -166,7 +170,7 @@ class TestProductStateTask(TestCase):
 
 
 class TestProductValidateMethods(TestCase):
-    def test_validate_start_datum_raises_when_start_datum_is_set_and_actief_not_in_toegestane_statussen(
+    def test_validate_product_start_datum_raises_when_start_datum_is_set_and_actief_not_in_toegestane_statussen(
         self,
     ):
         product_type = ProductTypeFactory.create(toegestane_statussen=[])
@@ -177,9 +181,9 @@ class TestProductValidateMethods(TestCase):
                 "De start datum van het product kan niet worden gezet omdat de status ACTIEF niet is toegestaan op het product type."
             ),
         ):
-            validate_start_datum(date(2024, 1, 1), product_type)
+            validate_product_start_datum(date(2024, 1, 1), product_type)
 
-    def test_validate_eind_datum_raises_when_eind_datum_is_set_and_verlopen_not_in_toegestane_statussen(
+    def test_validate_product_eind_datum_raises_when_eind_datum_is_set_and_verlopen_not_in_toegestane_statussen(
         self,
     ):
         product_type = ProductTypeFactory.create(toegestane_statussen=[])
@@ -190,9 +194,11 @@ class TestProductValidateMethods(TestCase):
                 "De eind datum van het product kan niet worden gezet omdat de status VERLOPEN niet is toegestaan op het product type."
             ),
         ):
-            validate_eind_datum(date(2024, 1, 1), product_type)
+            validate_product_eind_datum(date(2024, 1, 1), product_type)
 
-    def test_validate_status_raises_when_given_status_not_in_toegestane_statussen(self):
+    def test_validate_product_status_raises_when_given_status_not_in_toegestane_statussen(
+        self,
+    ):
         product_type = ProductTypeFactory.create(toegestane_statussen=[])
 
         with self.assertRaisesMessage(
@@ -201,9 +207,9 @@ class TestProductValidateMethods(TestCase):
                 product_type.naam
             ),
         ):
-            validate_status("gereed", product_type)
+            validate_product_status("gereed", product_type)
 
-    def test_validate_status_does_not_raise_error_on_status_initieel(self):
+    def test_validate_product_status_does_not_raise_error_on_status_initieel(self):
         product_type = ProductTypeFactory.create(toegestane_statussen=[])
 
-        validate_status("initieel", product_type)
+        validate_product_status("initieel", product_type)

@@ -1,5 +1,7 @@
+from .actie import ActieInline
 from .bestand import BestandAdmin
 from .content import ContentLabelAdmin
+from .dmn_config import DmnConfigAdmin
 from .jsonschema import JsonSchemaAdmin
 from .link import LinkAdmin
 from .prijs import PrijsAdmin
@@ -16,4 +18,6 @@ __all__ = [
     "ThemaAdmin",
     "ContentLabelAdmin",
     "JsonSchemaAdmin",
+    "DmnConfigAdmin",
+    "ActieInline",
 ]

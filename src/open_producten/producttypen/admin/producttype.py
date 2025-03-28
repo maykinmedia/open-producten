@@ -9,6 +9,7 @@ from parler.forms import TranslatableModelForm
 
 from ...utils.widgets import WysimarkWidget
 from ..models import ProductType, Thema
+from . import ActieInline
 from .bestand import BestandInline
 from .content import ContentElementInline
 from .externe_code import ExterneCodeInline
@@ -69,6 +70,7 @@ class ProductTypeAdmin(OrderedInlineModelAdminMixin, TranslatableAdmin):
         ContentElementInline,
         ExterneCodeInline,
         ParameterInline,
+        ActieInline,
     )
     fields = (
         "naam",

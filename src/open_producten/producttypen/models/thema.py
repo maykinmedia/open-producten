@@ -1,7 +1,10 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from open_producten.producttypen.models.validators import (
+    disallow_hoofd_thema_self_reference,
+    validate_thema_gepubliceerd_state,
+)
 from open_producten.utils.models import BasePublishableModel
 
 
@@ -36,33 +39,8 @@ class Thema(BasePublishableModel):
         return self.naam
 
     def clean(self):
-        disallow_self_reference(self, self.hoofd_thema)
+        disallow_hoofd_thema_self_reference(self, self.hoofd_thema)
 
-        validate_gepubliceerd_state(
+        validate_thema_gepubliceerd_state(
             self.hoofd_thema, self.gepubliceerd, self.sub_themas
         )
-
-
-def validate_gepubliceerd_state(hoofd_thema, gepubliceerd, sub_themas=None):
-    if gepubliceerd and hoofd_thema and not hoofd_thema.gepubliceerd:
-        raise ValidationError(
-            _(
-                "Thema's moeten gepubliceerd zijn voordat sub-thema's kunnen worden gepubliceerd."
-            )
-        )
-
-    if (
-        not gepubliceerd
-        and sub_themas
-        and sub_themas.filter(gepubliceerd=True).exists()
-    ):
-        raise ValidationError(
-            _(
-                "Thema's kunnen niet ongepubliceerd worden als ze gepubliceerde sub-thema's hebben."
-            )
-        )
-
-
-def disallow_self_reference(thema, hoofd_thema):
-    if thema and hoofd_thema and thema.id == hoofd_thema.id:
-        raise ValidationError("Een thema kan niet zijn eigen hoofd thema zijn.")

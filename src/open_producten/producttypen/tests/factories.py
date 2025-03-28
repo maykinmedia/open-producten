@@ -2,6 +2,7 @@ import factory.fuzzy
 from faker import Faker
 
 from ..models import (
+    Actie,
     Bestand,
     ContentElement,
     ContentLabel,
@@ -11,10 +12,12 @@ from ..models import (
     Parameter,
     Prijs,
     PrijsOptie,
+    PrijsRegel,
     ProductType,
     Thema,
     UniformeProductNaam,
 )
+from ..models.dmn_config import DmnConfig
 
 fake = Faker()
 
@@ -71,6 +74,23 @@ class PrijsOptieFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PrijsOptie
+
+
+class DmnConfigFactory(factory.django.DjangoModelFactory):
+    naam = factory.Sequence(lambda n: f"dmn config {n}")
+    tabel_endpoint = factory.Sequence(lambda n: f"{fake.url()}/{n}")
+
+    class Meta:
+        model = DmnConfig
+
+
+class PrijsRegelFactory(factory.django.DjangoModelFactory):
+    beschrijving = factory.Faker("sentence")
+    dmn_config = factory.SubFactory(DmnConfigFactory)
+    dmn_tabel_id = factory.Faker("word")
+
+    class Meta:
+        model = PrijsRegel
 
 
 class BestandFactory(factory.django.DjangoModelFactory):
@@ -133,3 +153,13 @@ class JsonSchemaFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = JsonSchema
+
+
+class ActieFactory(factory.django.DjangoModelFactory):
+    product_type = factory.SubFactory(ProductTypeFactory)
+    naam = factory.Sequence(lambda n: f"actie {n}")
+    dmn_config = factory.SubFactory(DmnConfigFactory)
+    dmn_tabel_id = factory.Faker("word")
+
+    class Meta:
+        model = Actie
