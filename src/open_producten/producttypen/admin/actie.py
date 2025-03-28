@@ -11,5 +11,5 @@ class ActieInline(admin.TabularInline):
 
 @admin.register(Actie)
 class ActieAdmin(admin.ModelAdmin):
-    list_display = ("product_type", "naam", "url")
-    list_filter = ("product_type__code", "dmn_config__naam")
+    list_display = ("producttype", "naam", "url")
+    list_filter = ("producttype__code", "dmn_config__naam")

@@ -21,7 +21,7 @@ class ExterneCode(BaseModel):
         validators=[RegexValidator(r"^[^:\[\]]+$")],
     )
 
-    product_type = models.ForeignKey(
+    producttype = models.ForeignKey(
         "ProductType",
         verbose_name=_("producttype"),
         on_delete=models.CASCADE,
@@ -32,4 +32,4 @@ class ExterneCode(BaseModel):
     class Meta:
         verbose_name = _("externe producttype code")
         verbose_name_plural = _("externe producttype codes")
-        unique_together = (("product_type", "naam"),)
+        unique_together = (("producttype", "naam"),)

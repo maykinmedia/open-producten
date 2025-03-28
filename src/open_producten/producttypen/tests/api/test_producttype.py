@@ -46,10 +46,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "thema_ids": [self.thema.id],
         }
 
-    def detail_path(self, product_type):
-        return reverse("producttype-detail", args=[product_type.id])
+    def detail_path(self, producttype):
+        return reverse("producttype-detail", args=[producttype.id])
 
-    def test_read_product_type_without_credentials_returns_error(self):
+    def test_read_producttype_without_credentials_returns_error(self):
         response = APIClient().get(self.path)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -78,22 +78,22 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_create_minimal_product_type(self):
+    def test_create_minimal_producttype(self):
         response = self.client.post(self.path, self.data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ProductType.objects.count(), 1)
 
-        product_type = ProductType.objects.first()
-        thema = product_type.themas.first()
+        producttype = ProductType.objects.first()
+        thema = producttype.themas.first()
         expected_data = {
-            "id": str(product_type.id),
-            "naam": product_type.naam,
-            "code": product_type.code,
-            "samenvatting": product_type.samenvatting,
-            "interne_opmerkingen": product_type.interne_opmerkingen,
+            "id": str(producttype.id),
+            "naam": producttype.naam,
+            "code": producttype.code,
+            "samenvatting": producttype.samenvatting,
+            "interne_opmerkingen": producttype.interne_opmerkingen,
             "taal": "nl",
-            "uniforme_product_naam": product_type.uniforme_product_naam.naam,
+            "uniforme_product_naam": producttype.uniforme_product_naam.naam,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
             "dataobject_schema": None,
@@ -107,8 +107,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "externe_codes": [],
             "parameters": [],
             "gepubliceerd": False,
-            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
-            "update_datum": product_type.update_datum.astimezone().isoformat(),
+            "aanmaak_datum": producttype.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": producttype.update_datum.astimezone().isoformat(),
             "keywords": [],
             "themas": [
                 {
@@ -124,7 +124,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         }
         self.assertEqual(response.data, expected_data)
 
-    def test_create_product_type_without_thema_returns_error(self):
+    def test_create_producttype_without_thema_returns_error(self):
         data = self.data.copy()
         data["thema_ids"] = []
         response = self.client.post(self.path, data)
@@ -141,7 +141,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_create_product_type_with_location(self):
+    def test_create_producttype_with_location(self):
         locatie = LocatieFactory.create()
 
         data = self.data | {"locatie_ids": [locatie.id]}
@@ -154,7 +154,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [locatie.naam],
         )
 
-    def test_create_product_type_with_organisatie(self):
+    def test_create_producttype_with_organisatie(self):
         organisatie = OrganisatieFactory.create()
 
         data = self.data | {"organisatie_ids": [organisatie.id]}
@@ -167,7 +167,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [organisatie.naam],
         )
 
-    def test_create_product_type_with_contact(self):
+    def test_create_producttype_with_contact(self):
         contact = ContactFactory.create()
 
         data = self.data | {"contact_ids": [contact.id]}
@@ -183,7 +183,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         # contact org is added in ProductType clean
         self.assertEqual(ProductType.objects.get().organisaties.count(), 1)
 
-    def test_create_product_type_with_toegestane_statussen(self):
+    def test_create_producttype_with_toegestane_statussen(self):
         response = self.client.post(
             self.path, self.data | {"toegestane_statussen": ["gereed"]}
         )
@@ -192,7 +192,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(ProductType.objects.count(), 1)
         self.assertEqual(response.data["toegestane_statussen"], ["gereed"])
 
-    def test_create_product_type_with_duplicate_externe_code_systemen_returns_error(
+    def test_create_producttype_with_duplicate_externe_code_systemen_returns_error(
         self,
     ):
         data = self.data | {
@@ -218,7 +218,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_create_product_type_with_duplicate_parameter_names_returns_error(
+    def test_create_producttype_with_duplicate_parameter_names_returns_error(
         self,
     ):
         data = self.data | {
@@ -242,7 +242,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_create_product_type_with_duplicate_ids_returns_error(self):
+    def test_create_producttype_with_duplicate_ids_returns_error(self):
         thema = ThemaFactory.create()
 
         locatie = LocatieFactory.create()
@@ -273,7 +273,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_create_complete_product_type(self):
+    def test_create_complete_producttype(self):
         locatie = LocatieFactory.create()
         organisatie = OrganisatieFactory.create()
         contact = ContactFactory.create()
@@ -300,17 +300,17 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ProductType.objects.count(), 1)
 
-        product_type = ProductType.objects.first()
-        thema = product_type.themas.first()
+        producttype = ProductType.objects.first()
+        thema = producttype.themas.first()
 
         expected_data = {
-            "id": str(product_type.id),
-            "naam": product_type.naam,
-            "code": product_type.code,
-            "samenvatting": product_type.samenvatting,
-            "interne_opmerkingen": product_type.interne_opmerkingen,
+            "id": str(producttype.id),
+            "naam": producttype.naam,
+            "code": producttype.code,
+            "samenvatting": producttype.samenvatting,
+            "interne_opmerkingen": producttype.interne_opmerkingen,
             "taal": "nl",
-            "uniforme_product_naam": product_type.uniforme_product_naam.naam,
+            "uniforme_product_naam": producttype.uniforme_product_naam.naam,
             "verbruiksobject_schema": {
                 "naam": "test",
                 "schema": {
@@ -392,8 +392,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "externe_codes": [{"naam": "ISO", "code": "123"}],
             "parameters": [{"naam": "doelgroep", "waarde": "inwoners"}],
             "gepubliceerd": False,
-            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
-            "update_datum": product_type.update_datum.astimezone().isoformat(),
+            "aanmaak_datum": producttype.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": producttype.update_datum.astimezone().isoformat(),
             "keywords": [],
             "themas": [
                 {
@@ -409,19 +409,19 @@ class TestProducttypeViewSet(BaseApiTestCase):
         }
         self.assertEqual(response.data, expected_data)
 
-    def test_update_minimal_product_type(self):
-        product_type = ProductTypeFactory.create()
-        response = self.client.put(self.detail_path(product_type), self.data)
+    def test_update_minimal_producttype(self):
+        producttype = ProductTypeFactory.create()
+        response = self.client.put(self.detail_path(producttype), self.data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
 
-    def test_update_product_type_with_thema(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_thema(self):
+        producttype = ProductTypeFactory.create()
         thema = ThemaFactory.create()
 
         data = self.data | {"thema_ids": [thema.id]}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
@@ -430,10 +430,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [thema.naam],
         )
 
-    def test_update_product_type_removing_thema(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_removing_thema(self):
+        producttype = ProductTypeFactory.create()
         data = self.data | {"thema_ids": []}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -447,12 +447,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_update_product_type_with_location(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_location(self):
+        producttype = ProductTypeFactory.create()
         locatie = LocatieFactory.create()
 
         data = self.data | {"locatie_ids": [locatie.id]}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
@@ -461,12 +461,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [locatie.naam],
         )
 
-    def test_update_product_type_with_organisatie(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_organisatie(self):
+        producttype = ProductTypeFactory.create()
         organisatie = OrganisatieFactory.create()
 
         data = self.data | {"organisatie_ids": [organisatie.id]}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
@@ -475,12 +475,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
             [organisatie.naam],
         )
 
-    def test_update_product_type_with_contact(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_contact(self):
+        producttype = ProductTypeFactory.create()
         contact = ContactFactory.create()
 
         data = self.data | {"contact_ids": [contact.id]}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ProductType.objects.count(), 1)
@@ -492,8 +492,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
         # contact org is added in ProductType clean
         self.assertEqual(ProductType.objects.get().organisaties.count(), 1)
 
-    def test_update_product_type_with_duplicate_ids_returns_error(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_duplicate_ids_returns_error(self):
+        producttype = ProductTypeFactory.create()
         thema = ThemaFactory.create()
         locatie = LocatieFactory.create()
 
@@ -502,7 +502,7 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "locatie_ids": [locatie.id, locatie.id],
         }
 
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -523,120 +523,120 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_update_product_type_with_externe_code(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_externe_code(self):
+        producttype = ProductTypeFactory.create()
 
         externe_codes = [{"naam": "ISO", "code": "123"}]
         data = self.data | {"externe_codes": externe_codes}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_update_product_type_with_externe_code_replacing_existing(self):
-        product_type = ProductTypeFactory.create()
-        externe_code = ExterneCodeFactory.create(product_type=product_type)
+    def test_update_producttype_with_externe_code_replacing_existing(self):
+        producttype = ProductTypeFactory.create()
+        externe_code = ExterneCodeFactory.create(producttype=producttype)
 
         externe_codes = [{"naam": externe_code.naam, "code": "456"}]
         data = self.data | {"externe_codes": externe_codes}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_update_product_type_removing_externe_codes(self):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
-        ExterneCodeFactory.create(product_type=product_type)
+    def test_update_producttype_removing_externe_codes(self):
+        producttype = ProductTypeFactory.create()
+        ExterneCodeFactory.create(producttype=producttype)
+        ExterneCodeFactory.create(producttype=producttype)
 
         externe_codes = []
         data = self.data | {"externe_codes": externe_codes}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 0)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_update_product_type_existing_externe_codes_are_kept(self):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
+    def test_update_producttype_existing_externe_codes_are_kept(self):
+        producttype = ProductTypeFactory.create()
+        ExterneCodeFactory.create(producttype=producttype)
 
-        response = self.client.patch(self.detail_path(product_type), self.data)
+        response = self.client.patch(self.detail_path(producttype), self.data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
 
-    def test_update_product_type_with_parameter(self):
-        product_type = ProductTypeFactory.create()
+    def test_update_producttype_with_parameter(self):
+        producttype = ProductTypeFactory.create()
 
         parameters = [{"naam": "doelgroep", "waarde": "inwoners"}]
         data = self.data | {"parameters": parameters}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
         self.assertEqual(response.data["parameters"], parameters)
 
-    def test_update_product_type_with_parameter_replacing_existing(self):
-        product_type = ProductTypeFactory.create()
-        parameter = ParameterFactory.create(product_type=product_type)
+    def test_update_producttype_with_parameter_replacing_existing(self):
+        producttype = ProductTypeFactory.create()
+        parameter = ParameterFactory.create(producttype=producttype)
 
         parameters = [{"naam": parameter.naam, "waarde": "test"}]
         data = self.data | {"parameters": parameters}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
         self.assertEqual(response.data["parameters"], parameters)
 
-    def test_update_product_type_removing_parameters(self):
-        product_type = ProductTypeFactory.create()
-        ParameterFactory.create(product_type=product_type)
-        ParameterFactory.create(product_type=product_type)
+    def test_update_producttype_removing_parameters(self):
+        producttype = ProductTypeFactory.create()
+        ParameterFactory.create(producttype=producttype)
+        ParameterFactory.create(producttype=producttype)
 
         parameters = []
         data = self.data | {"parameters": parameters}
-        response = self.client.put(self.detail_path(product_type), data)
+        response = self.client.put(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 0)
         self.assertEqual(response.data["parameters"], parameters)
 
-    def test_update_product_type_existing_parameters_are_kept(self):
-        product_type = ProductTypeFactory.create()
-        ParameterFactory.create(product_type=product_type)
+    def test_update_producttype_existing_parameters_are_kept(self):
+        producttype = ProductTypeFactory.create()
+        ParameterFactory.create(producttype=producttype)
 
-        response = self.client.patch(self.detail_path(product_type), self.data)
+        response = self.client.patch(self.detail_path(producttype), self.data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
 
-    def test_partial_update_product_type(self):
-        product_type = ProductTypeFactory.create()
+    def test_partial_update_producttype(self):
+        producttype = ProductTypeFactory.create()
         locatie = LocatieFactory.create()
 
-        product_type.locaties.add(locatie)
-        product_type.save()
+        producttype.locaties.add(locatie)
+        producttype.save()
 
         data = {"naam": "update"}
 
-        response = self.client.patch(self.detail_path(product_type), data)
-        product_type.refresh_from_db()
+        response = self.client.patch(self.detail_path(producttype), data)
+        producttype.refresh_from_db()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(product_type.locaties.count(), 1)
-        self.assertEqual(product_type.naam, "update")
+        self.assertEqual(producttype.locaties.count(), 1)
+        self.assertEqual(producttype.naam, "update")
 
-    def test_partial_update_product_type_with_duplicate_ids_returns_error(self):
-        product_type = ProductTypeFactory.create()
+    def test_partial_update_producttype_with_duplicate_ids_returns_error(self):
+        producttype = ProductTypeFactory.create()
         thema = ThemaFactory.create()
 
         data = {
             "thema_ids": [thema.id, thema.id],
         }
 
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -651,10 +651,10 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_partial_update_product_type_removing_thema(self):
-        product_type = ProductTypeFactory.create()
+    def test_partial_update_producttype_removing_thema(self):
+        producttype = ProductTypeFactory.create()
         data = {"thema_ids": []}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -668,101 +668,101 @@ class TestProducttypeViewSet(BaseApiTestCase):
             },
         )
 
-    def test_partial_update_product_type_with_externe_code(self):
-        product_type = ProductTypeFactory.create()
+    def test_partial_update_producttype_with_externe_code(self):
+        producttype = ProductTypeFactory.create()
 
         externe_codes = [{"naam": "ISO", "code": "123"}]
         data = {"externe_codes": externe_codes}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_partial_update_product_type_with_externe_code_replacing_existing(self):
-        product_type = ProductTypeFactory.create()
-        externe_code = ExterneCodeFactory.create(product_type=product_type)
+    def test_partial_update_producttype_with_externe_code_replacing_existing(self):
+        producttype = ProductTypeFactory.create()
+        externe_code = ExterneCodeFactory.create(producttype=producttype)
 
         externe_codes = [{"naam": externe_code.naam, "code": "456"}]
         data = {"externe_codes": externe_codes}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_partial_update_product_type_removing_externe_codes(self):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
-        ExterneCodeFactory.create(product_type=product_type)
+    def test_partial_update_producttype_removing_externe_codes(self):
+        producttype = ProductTypeFactory.create()
+        ExterneCodeFactory.create(producttype=producttype)
+        ExterneCodeFactory.create(producttype=producttype)
 
         externe_codes = []
         data = {"externe_codes": externe_codes}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 0)
         self.assertEqual(response.data["externe_codes"], externe_codes)
 
-    def test_partial_update_product_type_existing_externe_codes_are_kept(self):
-        product_type = ProductTypeFactory.create()
-        ExterneCodeFactory.create(product_type=product_type)
+    def test_partial_update_producttype_existing_externe_codes_are_kept(self):
+        producttype = ProductTypeFactory.create()
+        ExterneCodeFactory.create(producttype=producttype)
 
-        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
+        response = self.client.patch(self.detail_path(producttype), {"naam": "test"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ExterneCode.objects.count(), 1)
 
-    def test_partial_update_product_type_with_parameter(self):
-        product_type = ProductTypeFactory.create()
+    def test_partial_update_producttype_with_parameter(self):
+        producttype = ProductTypeFactory.create()
 
         parameters = [{"naam": "doelgroep", "waarde": "inwoners"}]
         data = {"parameters": parameters}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
         self.assertEqual(response.data["parameters"], parameters)
 
-    def test_partial_update_product_type_with_parameter_replacing_existing(self):
-        product_type = ProductTypeFactory.create()
-        parameter = ParameterFactory.create(product_type=product_type)
+    def test_partial_update_producttype_with_parameter_replacing_existing(self):
+        producttype = ProductTypeFactory.create()
+        parameter = ParameterFactory.create(producttype=producttype)
 
         parameters = [{"naam": parameter.naam, "waarde": "test"}]
         data = {"parameters": parameters}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
         self.assertEqual(response.data["parameters"], parameters)
 
-    def test_partial_update_product_type_removing_parameters(self):
-        product_type = ProductTypeFactory.create()
-        ParameterFactory.create(product_type=product_type)
-        ParameterFactory.create(product_type=product_type)
+    def test_partial_update_producttype_removing_parameters(self):
+        producttype = ProductTypeFactory.create()
+        ParameterFactory.create(producttype=producttype)
+        ParameterFactory.create(producttype=producttype)
 
         parameters = []
         data = {"parameters": parameters}
-        response = self.client.patch(self.detail_path(product_type), data)
+        response = self.client.patch(self.detail_path(producttype), data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 0)
         self.assertEqual(response.data["parameters"], parameters)
 
-    def test_partial_update_product_type_existing_parameters_are_kept(self):
-        product_type = ProductTypeFactory.create()
-        ParameterFactory.create(product_type=product_type)
+    def test_partial_update_producttype_existing_parameters_are_kept(self):
+        producttype = ProductTypeFactory.create()
+        ParameterFactory.create(producttype=producttype)
 
-        response = self.client.patch(self.detail_path(product_type), {"naam": "test"})
+        response = self.client.patch(self.detail_path(producttype), {"naam": "test"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Parameter.objects.count(), 1)
 
-    def test_read_product_type_link(self):
-        product_type = ProductTypeFactory.create()
-        link = LinkFactory.create(product_type=product_type)
+    def test_read_producttype_link(self):
+        producttype = ProductTypeFactory.create()
+        link = LinkFactory.create(producttype=producttype)
 
-        response = self.client.get(self.detail_path(product_type))
+        response = self.client.get(self.detail_path(producttype))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
@@ -775,11 +775,11 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.data["links"], expected_data)
 
-    def test_read_product_type_bestand(self):
-        product_type = ProductTypeFactory.create()
-        bestand = BestandFactory.create(product_type=product_type)
+    def test_read_producttype_bestand(self):
+        producttype = ProductTypeFactory.create()
+        bestand = BestandFactory.create(producttype=producttype)
 
-        response = self.client.get(self.detail_path(product_type))
+        response = self.client.get(self.detail_path(producttype))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
@@ -790,12 +790,12 @@ class TestProducttypeViewSet(BaseApiTestCase):
         ]
         self.assertEqual(response.data["bestanden"], expected_data)
 
-    def test_read_product_type_prijs(self):
-        product_type = ProductTypeFactory.create()
-        prijs = PrijsFactory.create(product_type=product_type)
+    def test_read_producttype_prijs(self):
+        producttype = ProductTypeFactory.create()
+        prijs = PrijsFactory.create(producttype=producttype)
         prijs_optie = PrijsOptieFactory.create(prijs=prijs)
 
-        response = self.client.get(self.detail_path(product_type))
+        response = self.client.get(self.detail_path(producttype))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = [
@@ -813,14 +813,14 @@ class TestProducttypeViewSet(BaseApiTestCase):
         ]
         self.assertEqual(response.data["prijzen"], expected_data)
 
-    def test_read_product_typen(self):
-        product_type1 = ProductTypeFactory.create()
-        product_type1.themas.add(self.thema)
-        product_type1.save()
+    def test_read_producttypen(self):
+        producttype1 = ProductTypeFactory.create()
+        producttype1.themas.add(self.thema)
+        producttype1.save()
 
-        product_type2 = ProductTypeFactory.create()
-        product_type2.themas.add(self.thema)
-        product_type2.save()
+        producttype2 = ProductTypeFactory.create()
+        producttype2.themas.add(self.thema)
+        producttype2.save()
 
         response = self.client.get(self.path)
 
@@ -828,13 +828,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
         self.assertEqual(response.data["count"], 2)
         expected_data = [
             {
-                "id": str(product_type1.id),
-                "naam": product_type1.naam,
-                "code": product_type1.code,
-                "samenvatting": product_type1.samenvatting,
-                "interne_opmerkingen": product_type1.interne_opmerkingen,
+                "id": str(producttype1.id),
+                "naam": producttype1.naam,
+                "code": producttype1.code,
+                "samenvatting": producttype1.samenvatting,
+                "interne_opmerkingen": producttype1.interne_opmerkingen,
                 "taal": "nl",
-                "uniforme_product_naam": product_type1.uniforme_product_naam.naam,
+                "uniforme_product_naam": producttype1.uniforme_product_naam.naam,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
                 "dataobject_schema": None,
@@ -848,8 +848,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "externe_codes": [],
                 "parameters": [],
                 "gepubliceerd": True,
-                "aanmaak_datum": product_type1.aanmaak_datum.astimezone().isoformat(),
-                "update_datum": product_type1.update_datum.astimezone().isoformat(),
+                "aanmaak_datum": producttype1.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": producttype1.update_datum.astimezone().isoformat(),
                 "keywords": [],
                 "themas": [
                     {
@@ -864,13 +864,13 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 ],
             },
             {
-                "id": str(product_type2.id),
-                "naam": product_type2.naam,
-                "code": product_type2.code,
-                "samenvatting": product_type2.samenvatting,
-                "interne_opmerkingen": product_type2.interne_opmerkingen,
+                "id": str(producttype2.id),
+                "naam": producttype2.naam,
+                "code": producttype2.code,
+                "samenvatting": producttype2.samenvatting,
+                "interne_opmerkingen": producttype2.interne_opmerkingen,
                 "taal": "nl",
-                "uniforme_product_naam": product_type2.uniforme_product_naam.naam,
+                "uniforme_product_naam": producttype2.uniforme_product_naam.naam,
                 "toegestane_statussen": [],
                 "verbruiksobject_schema": None,
                 "dataobject_schema": None,
@@ -884,8 +884,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
                 "externe_codes": [],
                 "parameters": [],
                 "gepubliceerd": True,
-                "aanmaak_datum": product_type2.aanmaak_datum.astimezone().isoformat(),
-                "update_datum": product_type2.update_datum.astimezone().isoformat(),
+                "aanmaak_datum": producttype2.aanmaak_datum.astimezone().isoformat(),
+                "update_datum": producttype2.update_datum.astimezone().isoformat(),
                 "keywords": [],
                 "themas": [
                     {
@@ -902,22 +902,22 @@ class TestProducttypeViewSet(BaseApiTestCase):
         ]
         self.assertCountEqual(response.data["results"], expected_data)
 
-    def test_read_product_type(self):
-        product_type = ProductTypeFactory.create()
-        product_type.themas.add(self.thema)
-        product_type.save()
+    def test_read_producttype(self):
+        producttype = ProductTypeFactory.create()
+        producttype.themas.add(self.thema)
+        producttype.save()
 
-        response = self.client.get(self.detail_path(product_type))
+        response = self.client.get(self.detail_path(producttype))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected_data = {
-            "id": str(product_type.id),
-            "naam": product_type.naam,
-            "code": product_type.code,
-            "samenvatting": product_type.samenvatting,
-            "interne_opmerkingen": product_type.interne_opmerkingen,
+            "id": str(producttype.id),
+            "naam": producttype.naam,
+            "code": producttype.code,
+            "samenvatting": producttype.samenvatting,
+            "interne_opmerkingen": producttype.interne_opmerkingen,
             "taal": "nl",
-            "uniforme_product_naam": product_type.uniforme_product_naam.naam,
+            "uniforme_product_naam": producttype.uniforme_product_naam.naam,
             "toegestane_statussen": [],
             "verbruiksobject_schema": None,
             "dataobject_schema": None,
@@ -926,8 +926,8 @@ class TestProducttypeViewSet(BaseApiTestCase):
             "acties": [],
             "bestanden": [],
             "gepubliceerd": True,
-            "aanmaak_datum": product_type.aanmaak_datum.astimezone().isoformat(),
-            "update_datum": product_type.update_datum.astimezone().isoformat(),
+            "aanmaak_datum": producttype.aanmaak_datum.astimezone().isoformat(),
+            "update_datum": producttype.update_datum.astimezone().isoformat(),
             "keywords": [],
             "locaties": [],
             "organisaties": [],
@@ -949,45 +949,45 @@ class TestProducttypeViewSet(BaseApiTestCase):
 
         self.assertEqual(response.data, expected_data)
 
-    def test_read_product_type_in_other_language(self):
-        product_type = ProductTypeFactory.create()
-        product_type.themas.add(self.thema)
-        product_type.set_current_language("en")
-        product_type.naam = "product type EN"
-        product_type.samenvatting = "summary"
-        product_type.save()
+    def test_read_producttype_in_other_language(self):
+        producttype = ProductTypeFactory.create()
+        producttype.themas.add(self.thema)
+        producttype.set_current_language("en")
+        producttype.naam = "producttype EN"
+        producttype.samenvatting = "summary"
+        producttype.save()
 
         response = self.client.get(
-            self.detail_path(product_type), headers={"Accept-Language": "en"}
+            self.detail_path(producttype), headers={"Accept-Language": "en"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["naam"], "product type EN")
+        self.assertEqual(response.data["naam"], "producttype EN")
         self.assertEqual(response.data["samenvatting"], "summary")
         self.assertEqual(response.data["taal"], "en")
 
-    def test_read_product_type_in_fallback_language(self):
-        product_type = ProductTypeFactory.create(
-            naam="product type NL", samenvatting="samenvatting"
+    def test_read_producttype_in_fallback_language(self):
+        producttype = ProductTypeFactory.create(
+            naam="producttype NL", samenvatting="samenvatting"
         )
-        product_type.themas.add(self.thema)
-        product_type.save()
+        producttype.themas.add(self.thema)
+        producttype.save()
 
         response = self.client.get(
-            self.detail_path(product_type), headers={"Accept-Language": "de"}
+            self.detail_path(producttype), headers={"Accept-Language": "de"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["naam"], "product type NL")
+        self.assertEqual(response.data["naam"], "producttype NL")
         self.assertEqual(response.data["samenvatting"], "samenvatting")
         self.assertEqual(response.data["taal"], "nl")
 
-    def test_delete_product_type(self):
-        product_type = ProductTypeFactory.create()
+    def test_delete_producttype(self):
+        producttype = ProductTypeFactory.create()
 
-        LinkFactory.create(product_type=product_type)
+        LinkFactory.create(producttype=producttype)
 
-        response = self.client.delete(self.detail_path(product_type))
+        response = self.client.delete(self.detail_path(producttype))
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(ProductType.objects.count(), 0)
@@ -999,21 +999,21 @@ class TestProductTypeActions(BaseApiTestCase):
 
     def setUp(self):
         super().setUp()
-        self.product_type = ProductTypeFactory.create()
+        self.producttype = ProductTypeFactory.create()
         self.list_path = reverse("producttype-actuele-prijzen")
         self.detail_path = reverse(
-            "producttype-actuele-prijs", args=(self.product_type.id,)
+            "producttype-actuele-prijs", args=(self.producttype.id,)
         )
 
         self.expected_data = {
-            "id": str(self.product_type.id),
-            "code": self.product_type.code,
-            "upl_naam": self.product_type.uniforme_product_naam.naam,
-            "upl_uri": self.product_type.uniforme_product_naam.uri,
+            "id": str(self.producttype.id),
+            "code": self.producttype.code,
+            "upl_naam": self.producttype.uniforme_product_naam.naam,
+            "upl_uri": self.producttype.uniforme_product_naam.uri,
             "actuele_prijs": None,
         }
 
-    def test_get_actuele_prijzen_when_product_type_has_no_prijzen(self):
+    def test_get_actuele_prijzen_when_producttype_has_no_prijzen(self):
         response = self.client.get(self.list_path)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -1023,7 +1023,7 @@ class TestProductTypeActions(BaseApiTestCase):
             ],
         )
 
-    def test_get_actuele_prijs_when_product_type_has_no_prijzen(self):
+    def test_get_actuele_prijs_when_producttype_has_no_prijzen(self):
         response = self.client.get(self.detail_path)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -1031,9 +1031,9 @@ class TestProductTypeActions(BaseApiTestCase):
             self.expected_data,
         )
 
-    def test_get_actuele_prijzen_when_product_type_only_has_prijs_in_future(self):
+    def test_get_actuele_prijzen_when_producttype_only_has_prijs_in_future(self):
         PrijsFactory.create(
-            product_type=self.product_type, actief_vanaf=datetime.date(2024, 2, 2)
+            producttype=self.producttype, actief_vanaf=datetime.date(2024, 2, 2)
         )
 
         response = self.client.get(self.list_path)
@@ -1046,9 +1046,9 @@ class TestProductTypeActions(BaseApiTestCase):
             ],
         )
 
-    def test_get_actuele_prijzen_when_product_type_has_actuele_prijs(self):
+    def test_get_actuele_prijzen_when_producttype_has_actuele_prijs(self):
         prijs = PrijsFactory.create(
-            product_type=self.product_type,
+            producttype=self.producttype,
             actief_vanaf=datetime.date(2024, 1, 1),
         )
 
@@ -1077,9 +1077,9 @@ class TestProductTypeActions(BaseApiTestCase):
             ],
         )
 
-    def test_get_actuele_prijs_when_product_type_has_actuele_prijs(self):
+    def test_get_actuele_prijs_when_producttype_has_actuele_prijs(self):
         prijs = PrijsFactory.create(
-            product_type=self.product_type,
+            producttype=self.producttype,
             actief_vanaf=datetime.date(2024, 1, 1),
         )
 
@@ -1107,7 +1107,7 @@ class TestProductTypeActions(BaseApiTestCase):
         )
 
     def test_put_vertaling(self):
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "en"))
 
         data = {"naam": "name EN", "samenvatting": "summary EN"}
         response = self.client.put(path, data)
@@ -1116,19 +1116,19 @@ class TestProductTypeActions(BaseApiTestCase):
         self.assertEqual(
             response.data,
             {
-                "id": str(self.product_type.id),
+                "id": str(self.producttype.id),
                 "naam": "name EN",
                 "samenvatting": "summary EN",
             },
         )
-        self.product_type.set_current_language("en")
-        self.assertEqual(self.product_type.naam, "name EN")
+        self.producttype.set_current_language("en")
+        self.assertEqual(self.producttype.naam, "name EN")
 
-        self.product_type.set_current_language("nl")
-        self.assertNotEqual(self.product_type.naam, "name EN")
+        self.producttype.set_current_language("nl")
+        self.assertNotEqual(self.producttype.naam, "name EN")
 
     def test_put_nl_vertaling(self):
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "nl"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "nl"))
 
         data = {"naam": "name NL", "samenvatting": "summary NL"}
         response = self.client.put(path, data)
@@ -1136,7 +1136,7 @@ class TestProductTypeActions(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_put_vertaling_with_unsupported_language(self):
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "fr"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "fr"))
 
         data = {"naam": "name FR", "samenvatting": "summary FR"}
         response = self.client.put(path, data)
@@ -1144,53 +1144,53 @@ class TestProductTypeActions(BaseApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_patch_vertaling(self):
-        self.product_type.set_current_language("en")
-        self.product_type.naam = "name EN"
-        self.product_type.samenvatting = "summary EN"
-        self.product_type.save()
+        self.producttype.set_current_language("en")
+        self.producttype.naam = "name EN"
+        self.producttype.samenvatting = "summary EN"
+        self.producttype.save()
 
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "en"))
 
         data = {"naam": "name EN 2"}
         response = self.client.patch(path, data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.product_type.refresh_from_db()
-        self.assertEqual(self.product_type.naam, "name EN 2")
+        self.producttype.refresh_from_db()
+        self.assertEqual(self.producttype.naam, "name EN 2")
 
     def test_delete_nonexistent_vertaling(self):
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "en"))
 
         response = self.client.delete(path)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_nl_vertaling(self):
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "nl"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "nl"))
 
         response = self.client.delete(path)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_vertaling(self):
-        self.product_type.set_current_language("en")
-        self.product_type.naam = "name EN"
-        self.product_type.samenvatting = "summary EN"
-        self.product_type.save()
+        self.producttype.set_current_language("en")
+        self.producttype.naam = "name EN"
+        self.producttype.samenvatting = "summary EN"
+        self.producttype.save()
 
-        path = reverse("producttype-vertaling", args=(self.product_type.id, "en"))
+        path = reverse("producttype-vertaling", args=(self.producttype.id, "en"))
 
         response = self.client.delete(path)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        self.product_type.refresh_from_db()
-        self.assertFalse(self.product_type.has_translation("en"))
+        self.producttype.refresh_from_db()
+        self.assertFalse(self.producttype.has_translation("en"))
 
     def test_nl_content(self):
-        element1 = ContentElementFactory.create(product_type=self.product_type)
-        element2 = ContentElementFactory.create(product_type=self.product_type)
+        element1 = ContentElementFactory.create(producttype=self.producttype)
+        element2 = ContentElementFactory.create(producttype=self.producttype)
 
-        path = reverse("producttype-content", args=(self.product_type.id,))
+        path = reverse("producttype-content", args=(self.producttype.id,))
         response = self.client.get(path, headers={"Accept-Language": "nl"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -1214,14 +1214,14 @@ class TestProductTypeActions(BaseApiTestCase):
         )
 
     def test_en_content_and_fallback(self):
-        element1 = ContentElementFactory.create(product_type=self.product_type)
+        element1 = ContentElementFactory.create(producttype=self.producttype)
         element1.set_current_language("en")
         element1.content = "EN content"
         element1.save()
 
-        element2 = ContentElementFactory.create(product_type=self.product_type)
+        element2 = ContentElementFactory.create(producttype=self.producttype)
 
-        path = reverse("producttype-content", args=(self.product_type.id,))
+        path = reverse("producttype-content", args=(self.producttype.id,))
         response = self.client.get(path, headers={"Accept-Language": "en"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

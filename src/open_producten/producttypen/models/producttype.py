@@ -30,7 +30,7 @@ class ProductType(BasePublishableModel, TranslatableModel):
     code = models.CharField(
         verbose_name=_("code"),
         max_length=255,
-        help_text=_("code van het product type."),
+        help_text=_("code van het producttype."),
         unique=True,
     )
 
@@ -43,7 +43,7 @@ class ProductType(BasePublishableModel, TranslatableModel):
         ),
         null=True,
         blank=True,
-        related_name="product_typen_verbruiksobject_schemas",
+        related_name="producttypen_verbruiksobject_schemas",
     )
 
     dataobject_schema = models.ForeignKey(
@@ -55,7 +55,7 @@ class ProductType(BasePublishableModel, TranslatableModel):
         ),
         null=True,
         blank=True,
-        related_name="product_typen_dataobject_schemas",
+        related_name="producttypen_dataobject_schemas",
     )
 
     toegestane_statussen = ChoiceArrayField(
@@ -85,37 +85,37 @@ class ProductType(BasePublishableModel, TranslatableModel):
         verbose_name=_("Uniforme Product naam"),
         on_delete=models.CASCADE,
         help_text=_("Uniforme product naam gedefinieerd door de overheid."),
-        related_name="product_typen",
+        related_name="producttypen",
     )
 
     themas = models.ManyToManyField(
         Thema,
         verbose_name=_("thema's"),
         blank=True,
-        related_name="product_typen",
-        help_text=_("thema's waaraan het product type is gelinkt."),
+        related_name="producttypen",
+        help_text=_("thema's waaraan het producttype is gelinkt."),
     )
 
     organisaties = models.ManyToManyField(
         Organisatie,
         verbose_name=_("organisaties"),
         blank=True,
-        related_name="product_typen",
+        related_name="producttypen",
         help_text=_("organisaties die dit het product aanbieden."),
     )
 
     contacten = models.ManyToManyField(
         Contact,
         verbose_name=_("contacten"),
-        related_name="product_typen",
+        related_name="producttypen",
         blank=True,
-        help_text=_("De contacten verantwoordelijk voor het product type."),
+        help_text=_("De contacten verantwoordelijk voor het producttype."),
     )
 
     locaties = models.ManyToManyField(
         Locatie,
         verbose_name=_("locaties"),
-        related_name="product_typen",
+        related_name="producttypen",
         blank=True,
         help_text=_("De locaties waar het product beschikbaar is."),
     )
@@ -123,25 +123,25 @@ class ProductType(BasePublishableModel, TranslatableModel):
     interne_opmerkingen = models.TextField(
         verbose_name=_("interne opmerkingen"),
         blank=True,
-        help_text=_("Interne opmerkingen over het product type."),
+        help_text=_("Interne opmerkingen over het producttype."),
     )
 
     translations = TranslatedFields(
         samenvatting=models.TextField(
             verbose_name=_("samenvatting"),
             default="",
-            help_text=_("Korte samenvatting van het product type."),
+            help_text=_("Korte samenvatting van het producttype."),
         ),
         naam=models.CharField(
-            verbose_name=_("product type naam"),
+            verbose_name=_("producttypenaam"),
             max_length=255,
-            help_text=_("naam van het product type."),
+            help_text=_("naam van het producttype."),
         ),
     )
 
     class Meta:
-        verbose_name = _("Product type")
-        verbose_name_plural = _("Product typen")
+        verbose_name = _("Producttype")
+        verbose_name_plural = _("Producttypen")
 
     def __str__(self):
         return self.naam

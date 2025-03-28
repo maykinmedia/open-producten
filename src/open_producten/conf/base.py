@@ -137,17 +137,12 @@ PRODUCTTYPEN_API_MAJOR_VERSION = PRODUCTTYPEN_API_VERSION.split(".")[0]
 # SPECTACULAR - OpenAPI schema generation
 #
 
-_DESCRIPTION = """
-Open Producten is an API to manage product types and products.
-"""
-
 OPEN_PRODUCTEN_API_CONTACT_EMAIL = "support@maykinmedia.nl"
 OPEN_PRODUCTEN_API_CONTACT_URL = "https://www.maykinmedia.nl"
 
 SPECTACULAR_SETTINGS = {  # TODO: may need to be expanded.
     "SCHEMA_PATH_PREFIX": "/api/v1",
     "TITLE": "Open Producten API",
-    "DESCRIPTION": _DESCRIPTION,
     "LICENSE": {"name": "EUPL 1.2", "url": "https://opensource.org/licenses/EUPL-1.2"},
     "CONTACT": {
         "email": OPEN_PRODUCTEN_API_CONTACT_EMAIL,

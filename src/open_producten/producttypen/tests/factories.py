@@ -31,7 +31,7 @@ class UniformeProductNaamFactory(factory.django.DjangoModelFactory):
 
 
 class ProductTypeFactory(factory.django.DjangoModelFactory):
-    code = factory.Sequence(lambda n: f"product type code {n}")
+    code = factory.Sequence(lambda n: f"producttype code {n}")
     gepubliceerd = True
     uniforme_product_naam = factory.SubFactory(UniformeProductNaamFactory)
 
@@ -62,7 +62,7 @@ class ThemaFactory(factory.django.DjangoModelFactory):
 
 class PrijsFactory(factory.django.DjangoModelFactory):
     actief_vanaf = factory.Faker("date")
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
 
     class Meta:
         model = Prijs
@@ -94,7 +94,7 @@ class PrijsRegelFactory(factory.django.DjangoModelFactory):
 
 
 class BestandFactory(factory.django.DjangoModelFactory):
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
     bestand = factory.django.FileField(filename="test_bestand.txt")
 
     class Meta:
@@ -102,7 +102,7 @@ class BestandFactory(factory.django.DjangoModelFactory):
 
 
 class LinkFactory(factory.django.DjangoModelFactory):
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
     naam = factory.Sequence(lambda n: f"link {n}")
     url = factory.Faker("url")
 
@@ -111,7 +111,7 @@ class LinkFactory(factory.django.DjangoModelFactory):
 
 
 class ContentElementFactory(factory.django.DjangoModelFactory):
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
 
     class Meta:
         model = ContentElement
@@ -131,7 +131,7 @@ class ContentLabelFactory(factory.django.DjangoModelFactory):
 
 
 class ExterneCodeFactory(factory.django.DjangoModelFactory):
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
     naam = factory.Sequence(lambda n: f"systeem {n}")
     code = factory.Faker("word")
 
@@ -140,7 +140,7 @@ class ExterneCodeFactory(factory.django.DjangoModelFactory):
 
 
 class ParameterFactory(factory.django.DjangoModelFactory):
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
     naam = factory.Sequence(lambda n: f"parameter {n}")
     waarde = factory.Faker("word")
 
@@ -156,7 +156,7 @@ class JsonSchemaFactory(factory.django.DjangoModelFactory):
 
 
 class ActieFactory(factory.django.DjangoModelFactory):
-    product_type = factory.SubFactory(ProductTypeFactory)
+    producttype = factory.SubFactory(ProductTypeFactory)
     naam = factory.Sequence(lambda n: f"actie {n}")
     dmn_config = factory.SubFactory(DmnConfigFactory)
     dmn_tabel_id = factory.Faker("word")

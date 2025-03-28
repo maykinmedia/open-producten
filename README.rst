@@ -15,12 +15,12 @@ Ontwikkeld door `Maykin B.V.`_.
 Introductie
 ===========
 
-Open Producten is een applicatie waarin product typen en producten op een enkele plek kunnen worden beheerd.
-Andere applicaties zoals Open Inwoner en Open Formulieren kunnen met Open Producten via een REST API integreren om bijvoorbeeld product typen informatie te tonen, producten aan te maken of om de actuele prijs van een product type op te halen.
+Open Producten is een applicatie waarin producttypen en producten op een enkele plek kunnen worden beheerd.
+Andere applicaties zoals Open Inwoner en Open Formulieren kunnen met Open Producten via een REST API integreren om bijvoorbeeld producttypen informatie te tonen, producten aan te maken of om de actuele prijs van een producttype op te halen.
 
 Dit project zit op dit moment in de ontwikkelingsfase.
 
-In Open Producten worden product typen en producten opgeslagen. Een product type is bijvoorbeeld een parkeervergunning en bevat alle relevante informatie zoals wat de regels zijn, hoe verschillende zones werken enz.
+In Open Producten worden producttypen en producten opgeslagen. Een producttype is bijvoorbeeld een parkeervergunning en bevat alle relevante informatie zoals wat de regels zijn, hoe verschillende zones werken enz.
 Een product is in dit voorbeeld een parkeervergunning van een persoon en bevat in dit geval het kenteken en de persoonsgegevens.
 
 Informatiemodel
@@ -57,7 +57,7 @@ het project zelf bouwen van de broncode. Zie hiervoor
 
 Open producten bestaat uit drie apps:
 
-* product types
+* producttypen
 * products
 * locations (& organisations)
 
@@ -79,7 +79,7 @@ Quickstart
 
 Links
 =====
-
+* `Documentatie <https://open-producten.readthedocs.io/en/latest/>`_
 * `Docker image <https://hub.docker.com/r/maykinmedia/open-producten>`_
 * `Issues <https://github.com/maykinmedia/open-producten/issues>`_
 * `Code <https://github.com/maykinmedia/open-producten>`_
