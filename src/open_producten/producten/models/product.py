@@ -23,7 +23,7 @@ class Product(BasePublishableModel):
     product_type = models.ForeignKey(
         ProductType,
         verbose_name=_("Product type"),
-        on_delete=models.RESTRICT,
+        on_delete=models.PROTECT,
         help_text=_("Het type van dit product"),
         related_name="producten",
     )

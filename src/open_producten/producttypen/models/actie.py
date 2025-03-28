@@ -17,7 +17,7 @@ class Actie(BaseModel):
     product_type = models.ForeignKey(
         ProductType,
         verbose_name=_("Producttype"),
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         help_text=_("Het producttype waarbij deze actie hoort."),
         related_name="acties",
     )
@@ -25,8 +25,8 @@ class Actie(BaseModel):
     dmn_config = models.ForeignKey(
         DmnConfig,
         verbose_name=_("dmn config"),
-        on_delete=models.CASCADE,
-        related_name="%(class)s",
+        on_delete=models.PROTECT,
+        related_name="acties",
         help_text=_("de dmn engine waar de tabel is gedefinieerd."),
     )
 

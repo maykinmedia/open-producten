@@ -29,7 +29,6 @@ class PrijsAdminForm(forms.ModelForm):
         fields = "__all__"
 
     def get_entry_count(self, inline: str, unique_field: str) -> int:
-        # assert self.data.get(f"{inline}-0-{unique_field}") is not None
 
         count = 0
         for i in range(int(self.data.get(f"{inline}-TOTAL_FORMS"))):
