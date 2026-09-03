@@ -33,6 +33,7 @@ from openproduct.utils.helpers import display_choice_values_for_help_text
 from openproduct.utils.validators import validate_data_attr
 
 from ..cloudevents import (
+    send_einddatum_bijgewerkt_cloudevent,
     send_zaak_gekoppeld_cloudevent,
     send_zaak_ontkoppeld_cloudevent,
 )
@@ -300,6 +301,9 @@ class ProductViewSet(AuditTrailViewSetMixin, NotificationViewSetMixin, ModelView
             # and then create a new one.
             send_zaak_ontkoppeld_cloudevent(old_product, link_to)
             send_zaak_gekoppeld_cloudevent(new_product, link_to)
+
+        if old_product.eind_datum != new_product.eind_datum:
+            send_einddatum_bijgewerkt_cloudevent(new_product)
 
     @transaction.atomic
     def perform_destroy(self, instance: Product):
