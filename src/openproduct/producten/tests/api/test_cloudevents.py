@@ -18,7 +18,7 @@ from openproduct.utils.tests.cases import BaseApiTestCase
 from ...cloudevents import (
     ZAAK_GEKOPPELD,
     ZAAK_ONTKOPPELD,
-    ZAAKOBJECT_EINDDATUM_BIJGEWERKT,
+    ZAAKOBJECT_DATUM_BIJGEWERKT,
 )
 from ...models import Product
 from ..factories import ProductFactory
@@ -375,13 +375,14 @@ class TestProductCloudEvents(BaseApiTestCase):
             "id": MOCK_CLOUDEVENT_ID,
             "source": "test",
             "specversion": "1.0",
-            "type": ZAAKOBJECT_EINDDATUM_BIJGEWERKT,
+            "type": ZAAKOBJECT_DATUM_BIJGEWERKT,
             "subject": "d42613cd-ee22-4455-808c-c19c7b8442a1",
             "time": "2026-08-24T11:27:00Z",
             "dataref": None,
             "datacontenttype": "application/json",
             "data": {
                 "zaak": "https://maykin.ztc.com/api/v1/zaken/d42613cd-ee22-4455-808c-c19c7b8442a1",
+                "linkTo": f"http://testserver/producten/api/v1/producten/{product.uuid}",
             },
         }
         self.assertEqual(

@@ -85,6 +85,7 @@ Voorbeeld van een ``nl.overheid.zaken.zaakobject-einddatum-bijgewerkt``-event:
         "datacontenttype": "application/json",
         "data": {
             "zaak": "https//open-zaak.local.nl/api/v1/zaken/2cb84d34-74a6-4515-bd12-6d50f45d45b5",
+            "linkTo": "https://open-product.local.nl/producten/api/v1/producten/c1e18e83-c3e3-44a6-b457-48845a8946c4",
         }
     }
 

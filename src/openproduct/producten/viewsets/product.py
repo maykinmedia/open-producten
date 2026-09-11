@@ -303,7 +303,7 @@ class ProductViewSet(AuditTrailViewSetMixin, NotificationViewSetMixin, ModelView
             send_zaak_gekoppeld_cloudevent(new_product, link_to)
 
         if old_product.eind_datum != new_product.eind_datum:
-            send_einddatum_bijgewerkt_cloudevent(new_product)
+            send_einddatum_bijgewerkt_cloudevent(new_product, link_to)
 
     @transaction.atomic
     def perform_destroy(self, instance: Product):
